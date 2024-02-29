@@ -38,15 +38,18 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
   rowItemDvSuDung: KtDtxdBbNghiemThuDtl = new KtDtxdBbNghiemThuDtl();
   rowItemDvGiamSat: KtDtxdBbNghiemThuDtl = new KtDtxdBbNghiemThuDtl();
   rowItemDvThiCong: KtDtxdBbNghiemThuDtl = new KtDtxdBbNghiemThuDtl();
+  rowItemDvQuanLy: KtDtxdBbNghiemThuDtl = new KtDtxdBbNghiemThuDtl();
   dataEditChuDauTu: { [key: string]: { edit: boolean; data: KtDtxdBbNghiemThuDtl } } = {};
   dataEditDvSuDung: { [key: string]: { edit: boolean; data: KtDtxdBbNghiemThuDtl } } = {};
   dataEditDvGiamSat: { [key: string]: { edit: boolean; data: KtDtxdBbNghiemThuDtl } } = {};
   dataEditDvThiCong: { [key: string]: { edit: boolean; data: KtDtxdBbNghiemThuDtl } } = {};
+  dataEditDvQuanLy: { [key: string]: { edit: boolean; data: KtDtxdBbNghiemThuDtl } } = {};
   listHopDong: any[] = [];
   talbeChuDauTu: any[] = [];
   tableDvSuDung: any[] = [];
   talbeDvGiamSat: any[] = [];
   talbeDvThiCong: any[] = [];
+  talbeDvQuanLy: any[] = [];
   maBb: string
 
 
@@ -66,19 +69,20 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
       maDvi: [null],
       namKeHoach: [dayjs().get('year')],
       soBienBan: [null, Validators.required],
-      soHopDong: [null , Validators.required],
+      soHopDong: [null, Validators.required],
       tenHopDong: [null],
       idHopDong: [null],
       tenDuAn: [null],
-      ngayKy: [null , Validators.required],
+      ngayKy: [null, Validators.required],
       chuDauTu: [null],
       dvGiamSat: [null],
       dvSuDung: [null],
       dvThiCong: [null],
+      dvQuanLy: [null],
       ngayKhoiCong: [null],
       ngayHoanThanh: [null],
-      thoiGianBatDau: [null , Validators.required],
-      thoiGianKetThuc: [null , Validators.required],
+      thoiGianBatDau: [null, Validators.required],
+      thoiGianKetThuc: [null, Validators.required],
       chatLuong: [null],
       ketLuan: [null],
       trangThai: ['00'],
@@ -107,9 +111,9 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
     this.spinner.show();
     try {
       let body = {
-        "namKh" : this.formData.value.namKeHoach,
-        "idDuAn" : this.itemDuAn.id,
-        "page" : "01"
+        "namKh": this.formData.value.namKeHoach,
+        "idDuAn": this.itemDuAn.id,
+        "page": "01"
       }
       let res = await this.hopdongService.listHopDong(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -133,12 +137,12 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
         if (res.data) {
           const data = res.data;
           let dataSobb = data.soBienBan?.split('/');
-          this.maBb = dataSobb && dataSobb.length > 0 ? '/' + dataSobb[1] + '/' +  dataSobb[2] : null
+          this.maBb = dataSobb && dataSobb.length > 0 ? '/' + dataSobb[1] + '/' + dataSobb[2] : null
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.listFileDinhKems;
           this.formData.patchValue({
             soBienBan: dataSobb && dataSobb.length > 0 ? dataSobb[0] : null,
-            tenHopDong : data && data.hopDong && data.hopDong.tenHd ? data.hopDong.tenHd : ''
+            tenHopDong: data && data.hopDong && data.hopDong.tenHd ? data.hopDong.tenHd : ''
           })
           let dataList = data.listKtTdscBienbanNghiemthuDtl;
           if (dataList && dataList.length > 0) {
@@ -146,11 +150,13 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
             this.tableDvSuDung = dataList.filter(item => item.loai == '01');
             this.talbeDvGiamSat = dataList.filter(item => item.loai == '02');
             this.talbeDvThiCong = dataList.filter(item => item.loai == '03');
+            this.talbeDvQuanLy = dataList.filter(item => item.loai == '04');
           }
           this.updateEditCacheBgBn('chuDauTu')
           this.updateEditCacheBgBn('dvSuDung')
           this.updateEditCacheBgBn('dvGiamSat')
           this.updateEditCacheBgBn('dvThiCong')
+          this.updateEditCacheBgBn('dvQuanLy')
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -163,6 +169,7 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
       this.spinner.hide();
     }
   }
+
   async save(isKy?) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -176,7 +183,7 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
     body.fileDinhKems = this.fileDinhKem
     body.idDuAn = this.itemDuAn.id
     body.idQdPdKhlcnt = this.itemQdPdKhLcnt.id
-    body.listKtTdscBienbanNghiemthuDtl = [...this.talbeChuDauTu, this.talbeDvThiCong, this.tableDvSuDung, this.talbeDvGiamSat].flat();
+    body.listKtTdscBienbanNghiemthuDtl = [...this.talbeChuDauTu, this.talbeDvThiCong, this.tableDvSuDung, this.talbeDvGiamSat, this.talbeDvQuanLy].flat();
     if (isKy) {
       this.modal.confirm({
         nzClosable: false,
@@ -195,7 +202,7 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
                 id: res.id,
                 trangThai: STATUS.DA_KY,
               }
-              let resPd =  await this.bienBanSv.approve(body);
+              let resPd = await this.bienBanSv.approve(body);
               if (resPd) {
                 this.modal.closeAll()
               }
@@ -239,6 +246,12 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
       this.talbeDvThiCong = [...this.talbeDvThiCong, this.rowItemDvThiCong];
       this.rowItemDvThiCong = new KtDtxdBbNghiemThuDtl();
       this.updateEditCacheBgBn(type);
+    } else if (type == 'dvQuanLy') {
+      this.rowItemDvQuanLy.loai = '04'
+      this.rowItemDvQuanLy.id = null
+      this.talbeDvQuanLy = [...this.talbeDvQuanLy, this.rowItemDvQuanLy];
+      this.rowItemDvQuanLy = new KtDtxdBbNghiemThuDtl();
+      this.updateEditCacheBgBn(type);
     }
   }
 
@@ -279,6 +292,15 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
           };
         });
       }
+    } else if (type == 'dvQuanLy') {
+      if (this.talbeDvQuanLy) {
+        this.talbeDvThiCong.forEach((item, index) => {
+          this.dataEditDvQuanLy[index] = {
+            edit: false,
+            data: {...item},
+          };
+        });
+      }
     }
   }
 
@@ -291,6 +313,8 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
       this.rowItemDvGiamSat = new KtDtxdBbNghiemThuDtl();
     } else if (type == 'dvThiCong') {
       this.rowItemDvThiCong = new KtDtxdBbNghiemThuDtl();
+    } else if (type == 'dvQuanLy') {
+      this.rowItemDvQuanLy = new KtDtxdBbNghiemThuDtl();
     }
   }
 
@@ -303,6 +327,8 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
       this.dataEditDvGiamSat[stt].edit = true;
     } else if (type == 'dvThiCong') {
       this.dataEditDvThiCong[stt].edit = true;
+    } else if (type == 'dvQuanLy') {
+      this.dataEditDvQuanLy[stt].edit = true;
     }
   }
 
@@ -327,6 +353,11 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
         data: {...this.talbeDvThiCong[stt]},
         edit: false
       };
+    } else if (type == 'dvQuanLy') {
+      this.dataEditDvQuanLy[stt] = {
+        data: {...this.talbeDvQuanLy[stt]},
+        edit: false
+      };
     }
   }
 
@@ -335,17 +366,23 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
       this.dataEditChuDauTu[idx].edit = false;
       Object.assign(this.talbeChuDauTu[idx], this.dataEditChuDauTu[idx].data);
       this.updateEditCacheBgBn(type);
-    } else   if (type == 'dvSuDung') {
+    } else if (type == 'dvSuDung') {
       this.dataEditDvSuDung[idx].edit = false;
       Object.assign(this.tableDvSuDung[idx], this.dataEditDvSuDung[idx].data);
       this.updateEditCacheBgBn(type);
-    }   if (type == 'dvGiamSat') {
+    }
+    if (type == 'dvGiamSat') {
       this.dataEditDvGiamSat[idx].edit = false;
       Object.assign(this.talbeDvGiamSat[idx], this.dataEditDvGiamSat[idx].data);
       this.updateEditCacheBgBn(type);
-    }   if (type == 'dvThiCong') {
+    }
+    if (type == 'dvThiCong') {
       this.dataEditDvThiCong[idx].edit = false;
       Object.assign(this.talbeDvThiCong[idx], this.dataEditDvThiCong[idx].data);
+      this.updateEditCacheBgBn(type);
+    }  if (type == 'dvQuanLy') {
+      this.dataEditDvQuanLy[idx].edit = false;
+      Object.assign(this.talbeDvQuanLy[idx], this.dataEditDvQuanLy[idx].data);
       this.updateEditCacheBgBn(type);
     }
 
@@ -373,6 +410,9 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
             this.updateEditCacheBgBn(type);
           } else if (type == 'dvThiCong') {
             this.talbeDvThiCong.splice(index, 1);
+            this.updateEditCacheBgBn(type);
+          } else if (type == 'dvQuanLy') {
+            this.talbeDvQuanLy.splice(index, 1);
             this.updateEditCacheBgBn(type);
           }
         } catch (e) {
@@ -402,9 +442,9 @@ export class ThongTinBienBanSctxComponent extends Base2Component implements OnIn
           this.formData.patchValue({
             soHopDong: data.soHd,
             tenHopDong: data.tenHd,
-            tenDuAn : this.itemDuAn.tenCongTrinh,
-            idHopDong : data.id,
-            chuDauTu : data.cdtTen
+            tenDuAn: this.itemDuAn.tenCongTrinh,
+            idHopDong: data.id,
+            chuDauTu: data.cdtTen
           })
         }
       })

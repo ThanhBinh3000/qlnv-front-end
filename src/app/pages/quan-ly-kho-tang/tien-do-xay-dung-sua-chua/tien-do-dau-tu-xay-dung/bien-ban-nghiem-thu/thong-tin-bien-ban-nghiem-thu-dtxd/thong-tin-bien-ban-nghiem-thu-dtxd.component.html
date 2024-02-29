@@ -107,6 +107,69 @@
       </div>
       <div nz-row [nzGutter]="24" class="mg-t-10">
         <div nz-col nzSpan="3">
+          <h4> Đại diện đơn vị quản lý dự án </h4>
+        </div>
+        <div nz-col nzSpan="21">
+          <input nz-input [readonly]="isView"  formControlName="dvQuanLy"/>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-table class="nowrap pd-10" [nzData]="talbeDvThiCong" [nzFrontPagination]="false"
+                    [nzShowPagination]="false" nzBordered>
+            <thead>
+            <tr>
+              <th nzWidth="40px">STT</th>
+              <th>Họ và tên</th>
+              <th nzWidth="400px">Chức vụ</th>
+              <th nzWidth="100px" class="text-center" *ngIf="!isView">Hành động</th>
+            </tr>
+            <tr *ngIf="!isView">
+              <th></th>
+              <th><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItemDvThiCong.hoTen"></th>
+              <th><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItemDvThiCong.chucVu"></th>
+              <th class="text-center">
+                <a (click)="themMoiChiTiet('dvQuanLy')">
+                  <i class="icon htvbdh_dau-cong"></i>
+                </a>
+                <a (click)="refreshBgBn('dvQuanLy')">
+                  <i class="fa fa-refresh"></i>
+                </a>
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let data of talbeDvQuanLy; let idx = index">
+              <ng-container *ngIf="!dataEditDvQuanLy[idx].edit; else editTemplateDvQuanLy">
+                <td>{{ idx + 1 }}</td>
+                <td>{{ data.hoTen}}</td>
+                <td>{{ data.chucVu}}</td>
+                <td class="text-center" *ngIf="!isView">
+                  <a (click)="editRowBgBn(idx, 'dvQuanLy')">
+                    <i class="fa fa-pencil" title="Sửa"></i>
+                  </a>
+                  <a (click)="deleteItemBgBn(idx, 'dvQuanLy')">
+                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                  </a>
+                </td>
+              </ng-container>
+              <ng-template #editTemplateDvQuanLy>
+                <td></td>
+                <td><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEditDvThiCong[idx].data.hoTen">
+                </td>
+                <td><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEditDvThiCong[idx].data.chucVu">
+                </td>
+                <td class="text-center">
+                  <a (click)="saveEditBgBn(idx, 'dvQuanLy')" class="save">
+                    <i class="fa fa-save"></i>
+                  </a>
+                  <a (click)="cancelEditBgBn(idx, 'dvQuanLy')">
+                    <i class="fa fa-ban do"></i> </a>
+                </td>
+              </ng-template>
+            </tr>
+            </tbody>
+          </nz-table>
+        </div>
+        <div nz-col nzSpan="3">
           <h4> Đại diện chủ đầu tư </h4>
         </div>
         <div nz-col nzSpan="21">
@@ -182,7 +245,7 @@
             <tr>
               <th nzWidth="40px">STT</th>
               <th>Họ và tên</th>
-              <th nzWidth="250px">Chức vụ</th>
+              <th nzWidth="400px">Chức vụ</th>
               <th nzWidth="100px" class="text-center" *ngIf="!isView">Hành động</th>
             </tr>
             <tr *ngIf="!isView">
@@ -245,7 +308,7 @@
             <tr>
               <th nzWidth="40px">STT</th>
               <th>Họ và tên</th>
-              <th nzWidth="250px">Chức vụ</th>
+              <th nzWidth="400px">Chức vụ</th>
               <th nzWidth="100px" class="text-center" *ngIf="!isView">Hành động</th>
             </tr>
             <tr *ngIf="!isView">
@@ -308,7 +371,7 @@
             <tr>
               <th nzWidth="40px">STT</th>
               <th>Họ và tên</th>
-              <th nzWidth="250px">Chức vụ</th>
+              <th nzWidth="400px">Chức vụ</th>
               <th nzWidth="100px" class="text-center" *ngIf="!isView">Hành động</th>
             </tr>
             <tr *ngIf="!isView">
