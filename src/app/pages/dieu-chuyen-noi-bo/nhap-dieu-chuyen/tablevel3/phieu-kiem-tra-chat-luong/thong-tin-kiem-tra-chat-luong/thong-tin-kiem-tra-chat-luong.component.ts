@@ -42,7 +42,6 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
   dataTableView: any[] = []
   dataTableChiTieu: any[] = []
   listDanhSachQuyetDinh: any[] = [];
-
   dsKeHoach: any[] = []
   ppKtrCL: any[] = [];
   phieuKTCLDinhKem: any[] = [];
@@ -112,7 +111,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       maDiemKhoXuat: [],
       dsBBNTBQ: [],
       tongKinhPhiDaTh: [],
-
+      chiSoChatLuongTitle: [],
       nguoiGiaoHang: [],
       soCmt: [],
       dvgiaoHang: [],
@@ -196,6 +195,9 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
       let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.data.maChLoaiHangHoa);
       if (dmTieuChuan.data) {
         this.dataTableChiTieu = dmTieuChuan.data;
+        this.formData.patchValue({
+          chiSoChatLuongTitle: dmTieuChuan.data[0].soHieuQuyChuan || ''
+        })
         this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
           return {
             ...element,
@@ -404,6 +406,9 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
         let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh);
         if (dmTieuChuan.data) {
           this.dataTableChiTieu = dmTieuChuan.data;
+          this.formData.patchValue({
+            chiSoChatLuongTitle: dmTieuChuan.data[0].soHieuQuyChuan || ''
+          })
           this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
             return {
               ...element,
