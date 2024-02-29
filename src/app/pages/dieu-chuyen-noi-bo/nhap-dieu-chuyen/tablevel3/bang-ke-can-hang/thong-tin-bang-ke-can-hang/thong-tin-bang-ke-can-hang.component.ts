@@ -5,6 +5,7 @@ import * as dayjs from "dayjs";
 import { cloneDeep } from 'lodash';
 import { NzModalService } from "ng-zorro-antd/modal";
 import { NzNotificationService } from "ng-zorro-antd/notification";
+import { CurrencyMaskInputMode } from "ngx-currency";
 import { NgxSpinnerService } from "ngx-spinner";
 import { Base2Component } from "src/app/components/base2/base2.component";
 import {
@@ -19,7 +20,7 @@ import { PhieuNhapKhoService } from "src/app/services/dieu-chuyen-noi-bo/nhap-di
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
 import { DonviService } from "src/app/services/donvi.service";
 import { StorageService } from "src/app/services/storage.service";
-import { convertTienTobangChu } from "src/app/shared/commonFunction";
+import { convertTienTobangChu, convertTienTobangChuThapPhan } from "src/app/shared/commonFunction";
 import * as uuidv4 from "uuid";
 
 @Component({
@@ -40,17 +41,24 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
   chungTuDinhKem: any[] = [];
   fileDinhKemReq: any[] = [];
   listDanhSachQuyetDinh: any[] = [];
-  // listPhuongThucBaoQuan: any[] = [];
-  // listHinhThucBaoQuan: any[] = [];
-
   dsKeHoach: any[] = []
-
-  // danhSach: any[] = []
   dsHangTH = []
-  // dsHangPD = []
-  // typeData: string;
-  // typeAction: string;
   previewName: string = "nhap_xuat_lt_bang_ke_can_hang_nhap_lt";
+
+  AMOUNT = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 3,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 100000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -103,6 +111,9 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       cloaiVthh: [],
       tenCloaiVthh: [],
       donViTinh: [],
+      tlMotBaoCaBi: [],
+      tongSlBaoBi: [],
+      tlSoBaoKhongCan: [],
       tongTrongLuongBaoBi: [],
       tongTrongLuongCabaoBi: [],
       tongTrongLuongTruBi: [],
@@ -113,6 +124,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       loaiQdinh: [],
       thayDoiThuKho: [],
       lyDoTuChoi: [],
+      phuongPhapCan: ['CAN_GIAM_DINH'],
       maCan: [],
       soBaoBi: [],
       trongLuongCaBaoBi: [],
@@ -207,7 +219,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
     const tongTrongLuongCabaoBi = this.dsHangTH.reduce((previous, current) => previous + current.trongLuongCaBaoBi, 0);
 
     if (this.formData.value.tongTrongLuongBaoBi) {
-      const tongTrongLuongTruBi = Number(tongTrongLuongCabaoBi) - Number(this.formData.value.tongTrongLuongBaoBi)
+      const tongTrongLuongTruBi = tongTrongLuongCabaoBi - Number(this.formData.value.tongTrongLuongBaoBi)
       const tongTrongLuongTruBiText = this.convertTien(tongTrongLuongTruBi)
       this.formData.patchValue({
         tongTrongLuongTruBi,
@@ -254,7 +266,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
 
   convertTien(tien: number): string {
     if (tien) {
-      return convertTienTobangChu(tien);
+      return convertTienTobangChuThapPhan(tien) + ' ki lô gam';
     }
   }
 
