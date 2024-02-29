@@ -960,10 +960,11 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col [nzSpan]="24"></div>
               <div nz-col [nzSpan]="12">
-                <nz-form-label nzRequired [nzNoColon]="true"> Nội dung bảo đảm thực hiện hợp đồng</nz-form-label>
-                <div nz-row [nzGutter]="24" class="hd-custom-label">
+                <div nz-row [nzGutter]="24">
+                  <div nz-col [nzSpan]="24">
+                    <nz-form-label nzRequired [nzNoColon]="true"> Nội dung bảo đảm thực hiện hợp đồng</nz-form-label>
+                  </div>
                   <div nz-col [nzSpan]="16">
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true"> Giá trị</nz-form-label>
@@ -984,8 +985,8 @@
                   </div>
                   <div nz-col [nzSpan]="24">
                     <nz-form-item class="form-item display-block">
-                      <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
-                      <nz-form-control nz-col>
+                      <nz-form-label nzRequired [nzNoColon]="true"> Ghi chú</nz-form-label>
+                      <nz-form-control nz-col [nzErrorTip]="error">
                         <textarea nz-input [rows]="3" formControlName="ghiChuBaoDam" [readonly]="isView"></textarea>
                       </nz-form-control>
                     </nz-form-item>
