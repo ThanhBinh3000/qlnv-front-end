@@ -140,7 +140,7 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
       soHd: [''],
       ngayHd: [''],
       ngayLayMau: [dayjs().format('YYYY-MM-DD')],
-      dviKiemNghiem: [''],
+      dviKiemNghiem: ['Phòng KTBQ'],
       soBbNhapDayKho: [''],
       idBbNhapDayKho: [''],
       diaDiemLayMau: [''],
@@ -205,6 +205,11 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
     });
     if (this.idQdGiaoNvNh) {
       await this.bindingDataQd(this.idQdGiaoNvNh);
+    }
+    if (!this.loaiVthh.startsWith('02')){
+      this.formData.patchValue({
+        dviKiemNghiem: 'Phòng KTBQ'
+      });
     }
   }
 
@@ -574,6 +579,11 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
         idBbGuiHang: data.bienBanGuiHang?.id,
         tenNganLoKho: data.tenLoKho ? data.tenLoKho + " - " + data.tenNganKho : data.tenNganKho,
       });
+      if (!this.loaiVthh.startsWith('02')){
+        this.formData.patchValue({
+          diaDiemLayMau: this.formData.value.tenDvi + ' - ' + data.tenDiemKho
+        });
+      }
     }
   }
 

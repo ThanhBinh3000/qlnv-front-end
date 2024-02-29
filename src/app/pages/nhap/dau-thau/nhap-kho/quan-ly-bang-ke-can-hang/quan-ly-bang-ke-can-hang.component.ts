@@ -166,7 +166,7 @@ export class QuanLyBangKeCanHangComponent extends Base2Component implements OnIn
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyBangKeCanHangService.xoa(item.id).then((res) => {
+          this.quanLyBangKeCanHangService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
