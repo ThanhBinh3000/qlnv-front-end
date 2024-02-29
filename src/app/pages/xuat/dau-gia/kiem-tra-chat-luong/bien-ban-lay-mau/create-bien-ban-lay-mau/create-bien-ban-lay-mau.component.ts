@@ -169,6 +169,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       tenTrangThai: 'Dự Thảo',
       ketQuaNiemPhong: true,
       loaiBienBan: 'LBGM',
+      donViKnghiem: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? null : this.userInfo.TEN_PHONG_BAN,
     });
   }
 
@@ -204,7 +205,17 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       if (firstCheckedItem) {
         this.selectedItems = firstCheckedItem.ma;
       }
-      await this.loadDanhSachCtieuCluong();
+      const ctieuCluong = this.dataTable.filter(item => item.type === BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG)
+      if (ctieuCluong) {
+        this.danhSachCtieuCluong = ctieuCluong.map(item => ({
+          label: item.ten,
+          value: item.ma,
+          chiSoCl: item.chiSoCl,
+          phuongPhap: item.phuongPhap,
+          checked: item.checked,
+          type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
+        }));
+      }
       if (!this.isView) {
         await this.onChange(data.idQdNv)
       }
@@ -369,6 +380,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
           tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
+          diaDiemLayMau: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? null : data.tenDiemKho + ' - ' + this.formData.value.tenDvi,
           soLuong: data.soLuong,
         });
         await this.loadThuKho();
@@ -503,7 +515,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         value: item.id,
         chiSoCl: item.mucYeuCauXuat,
         phuongPhap: item.phuongPhapXd,
-        checked: true,
+        checked: false,
         type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
       }));
     } catch (e) {

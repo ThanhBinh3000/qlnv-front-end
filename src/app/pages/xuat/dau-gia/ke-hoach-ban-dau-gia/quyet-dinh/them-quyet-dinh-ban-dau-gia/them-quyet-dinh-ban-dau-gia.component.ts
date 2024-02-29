@@ -36,6 +36,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   @Input() idInput: number = 0;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
+  @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   @Output() removeDataInit: EventEmitter<any> = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
@@ -147,6 +148,10 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
 
   async save() {
     try {
+      if (this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
       await this.helperService.ignoreRequiredForm(this.formData);
       this.setValidator();
       const body = {
@@ -165,8 +170,12 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     }
   }
 
-  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+  async saveAndBrowse(trangThai: string, msg: string, msgSuccess?: string) {
     try {
+      if (this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
       if (!(await this.validateBanHanhQd(this.dataTable))) {
         return;
       }
@@ -179,7 +188,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         canCuPhapLy: this.canCuPhapLy,
         fileDinhKem: this.fileDinhKem,
       };
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
+      await this.saveAndSend(body, trangThai, msg, msgSuccess);
     } catch (error) {
       console.error("Lỗi khi lưu và gửi duyệt:", error);
     } finally {

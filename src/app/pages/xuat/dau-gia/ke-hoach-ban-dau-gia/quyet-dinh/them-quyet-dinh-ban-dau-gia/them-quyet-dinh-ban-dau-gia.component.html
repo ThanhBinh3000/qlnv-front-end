@@ -14,7 +14,7 @@
         *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU &&  userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_THEM') &&
        userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_BANHANH') && !isView"
         type="button" class="btn btn-sub xanh-nhat"
-        (click)="saveAndSend(STATUS.BAN_HANH, 'Bạn có muốn lưu và ban hành quyết định ?','Bạn đã lưu và ban hành quyết định thành công!')">
+        (click)="saveAndBrowse(STATUS.BAN_HANH, 'Bạn có muốn lưu và ban hành quyết định ?','Bạn đã lưu và ban hành quyết định thành công!')">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>

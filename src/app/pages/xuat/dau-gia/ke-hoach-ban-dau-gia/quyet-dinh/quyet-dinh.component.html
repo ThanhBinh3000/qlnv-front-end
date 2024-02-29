@@ -208,7 +208,7 @@
             </a>
             <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU
                 && (userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XOA')) && userService.isTongCuc()"
-               (click)="delete(data)">
+               (click)="delete(data, null, this.checkPrice)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
@@ -237,7 +237,8 @@
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
   <app-them-quyet-dinh-ban-dau-gia [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView" [dataInit]="dataInit"
-                                   (removeDataInit)="removeDataInit()" (showListEvent)="showList()">
+                                   [checkPrice]="checkPrice" (removeDataInit)="removeDataInit()"
+                                   (showListEvent)="showList()">
   </app-them-quyet-dinh-ban-dau-gia>
 </div>
 <!--xem -->

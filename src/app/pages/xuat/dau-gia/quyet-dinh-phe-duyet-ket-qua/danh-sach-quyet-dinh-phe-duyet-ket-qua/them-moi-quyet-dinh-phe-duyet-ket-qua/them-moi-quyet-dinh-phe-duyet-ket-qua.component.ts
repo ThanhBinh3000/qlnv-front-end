@@ -35,6 +35,7 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
+  @Input() checkPrice: any;
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   templateNameVt = "Quyết định kết quả bán đấu giá vật tư";
   templateNameLt = "Quyết định kết quả bán đấu giá lương thực";
@@ -152,6 +153,10 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
 
   async save() {
     try {
+      if (this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
       await this.helperService.ignoreRequiredForm(this.formData);
       this.formData.controls["maThongBao"].setValidators([Validators.required]);
       const soQdKq = this.formData.value.soQdKq;
@@ -167,19 +172,53 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
     }
   }
 
-  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+  async saveAndBrowse(trangThai: string, msg: string, msgSuccess?: string) {
     try {
+      if (this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
       this.setValidForm();
       const soQdKq = this.formData.value.soQdKq;
       const body = {
         ...this.formData.value,
         soQdKq: soQdKq ? soQdKq + this.maHauTo : null
       };
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
+      await this.saveAndSend(body, trangThai, msg, msgSuccess);
     } catch (e) {
       console.error('Error: ', e);
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
+    }
+  }
+
+  async status(trangThai: string, msgSuccess?: string) {
+    try {
+      if (this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
+      await this.approve(this.idInput, trangThai, msgSuccess)
+    } catch (error) {
+      console.error('error: ', error);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async refuse(trangThai: string) {
+    try {
+      if (this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
+      await this.reject(this.idInput, trangThai)
+    } catch (error) {
+      console.error('error: ', error);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
     }
   }
 
