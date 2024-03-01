@@ -40,7 +40,7 @@ export class BaoCaoBanThocThuocKeHoachNamComponent  extends Base2Component imple
     super(httpClient, storageService, notification, spinner, modal, bcNhapXuatMuaBanHangDTQGService);
     this.formData = this.fb.group(
       {
-        nam: [dayjs().get("year"), [Validators.required]],
+        namKh: [dayjs().get("year"), [Validators.required]],
       }
     );
   }
@@ -53,6 +53,7 @@ export class BaoCaoBanThocThuocKeHoachNamComponent  extends Base2Component imple
       await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+    console.log(this.userInfo.DON_VI,'aaaaaaaaaaaa');
     await this.spinner.hide();
   }
   downloadPdf() {
