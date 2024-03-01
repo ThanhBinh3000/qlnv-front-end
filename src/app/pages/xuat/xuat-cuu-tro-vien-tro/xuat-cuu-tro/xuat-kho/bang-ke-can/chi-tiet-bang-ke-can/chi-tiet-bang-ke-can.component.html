@@ -306,10 +306,10 @@
                 <th nzWidth="20%">Mã cân (A)</th>
                 <th>Số bao bì (1)</th>
                 <th>Trọng lượng cả bì (2)</th>
-                <th nzWidth="15%" *ngIf="!isView">Hành động</th>
+                <th nzWidth="15%" *ngIf="!isView || !isViewOnModal">Hành động</th>
               </tr>
               <!--create row-->
-              <tr>
+              <tr *ngIf="!isView || !isViewOnModal">
                 <th></th>
                 <th>
                   <input nz-input [(ngModel)]="bangKeDtlCreate.maCan" />
@@ -321,7 +321,7 @@
                   <input currencyMask class="money-input" [(ngModel)]="bangKeDtlCreate.trongLuongCaBi"
                     [options]="amount1" />
                 </th>
-                <th *ngIf="!isView" class="text-center">
+                <th class="text-center">
                   <a (click)="addRow()">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
@@ -339,7 +339,7 @@
                   <td>{{item.maCan}}</td>
                   <td class="text-right">{{item.soBaoBi|number: '1.0-1' : 'vi_VN'}}</td>
                   <td class="text-right">{{item.trongLuongCaBi|number: '1.0-1' : 'vi_VN'}}</td>
-                  <td *ngIf="!isView" class="text-center">
+                  <td *ngIf="!isView || !isViewOnModal" class="text-center">
                     <a (click)="editRow(i)">
                       <i class="fa fa-pencil" title="Sửa"></i>
                     </a>
@@ -368,6 +368,15 @@
                 </ng-template>
               </tr>
             </tbody>
+            <tfoot>
+            <tr>
+              <td></td>
+              <td class="bold text-blue text-uppercase">Tổng</td>
+              <td class="bold text-blue">{{tongSoBaoCan|number: '1.0-1' : 'vi_VN'}}</td>
+              <td class="bold text-blue">{{tongTrongLuongBaoCan|number: '1.0-1' : 'vi_VN'}}</td>
+              <td *ngIf="!isView || !isViewOnModal"></td>
+            </tr>
+            </tfoot>
           </nz-table>
         </div>
         <div nz-col nzSpan="12">
@@ -378,10 +387,10 @@
                 <th nzWidth="5%">STT</th>
                 <th>Lần</th>
                 <th>Số bao đếm</th>
-                <th nzWidth="15%" *ngIf="!isView">Hành động</th>
+                <th nzWidth="15%" *ngIf="!isView || !isViewOnModal">Hành động</th>
               </tr>
               <!--create row-->
-              <tr>
+              <tr *ngIf="!isView || !isViewOnModal">
                 <th></th>
                 <th>
                   <input nz-input [(ngModel)]="bangKeDtlKcCreate.lan" />
@@ -389,7 +398,7 @@
                 <th>
                   <input currencyMask class="money-input" [(ngModel)]="bangKeDtlKcCreate.soLuong" [options]="amount" />
                 </th>
-                <th *ngIf="!isView" class="text-center">
+                <th class="text-center">
                   <a (click)="addRowKc()">
                     <i class="icon htvbdh_dau-cong"></i>
                   </a>
@@ -434,6 +443,15 @@
                 </ng-template>
               </tr>
             </tbody>
+            <tfoot>
+            <tr>
+              <td></td>
+              <td class="bold text-blue text-uppercase">Tổng</td>
+              <td class="bold text-blue">{{tongSoBaoKc|number: '1.0-1' : 'vi_VN'}}</td>
+              <td *ngIf="!isView || !isViewOnModal"></td>
+            </tr>
+
+            </tfoot>
           </nz-table>
         </div>
         <form nz-form [formGroup]="formData">
@@ -517,10 +535,10 @@
               <th nzWidth="20%">Mã cân (A)</th>
               <th>Số bao bì (1)</th>
               <th>Trọng lượng cả bì (2)</th>
-              <th nzWidth="15%" *ngIf="!isView">Hành động</th>
+              <th nzWidth="15%" *ngIf="!isView || !isViewOnModal">Hành động</th>
             </tr>
             <!--create row-->
-            <tr>
+            <tr *ngIf="!isView || !isViewOnModal">
               <th></th>
               <th>
                 <input nz-input [(ngModel)]="bangKeDtlCreate.maCan" />
@@ -538,7 +556,7 @@
                 <input currencyMask class="money-input" [(ngModel)]="bangKeDtlCreate.trongLuongCaBi"
                   [options]="amount1" />
               </th>
-              <th *ngIf="!isView" class="text-center">
+              <th class="text-center">
                 <a (click)="addRow()">
                   <i class="icon htvbdh_dau-cong"></i>
                 </a>
@@ -591,6 +609,15 @@
               </ng-template>
             </tr>
           </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td class="bold text-blue text-uppercase">Tổng</td>
+              <td class="bold text-blue">{{tongSoBaoCan|number:'1.0-1' : 'vi_VN'}}</td>
+              <td class="bold text-blue">{{tongTrongLuongBaoCan|number:'1.0-1' : 'vi_VN'}}</td>
+              <td *ngIf="!isView || !isViewOnModal"></td>
+            </tr>
+          </tfoot>
         </nz-table>
       </nz-card>
       <form nz-form [formGroup]="formData">
