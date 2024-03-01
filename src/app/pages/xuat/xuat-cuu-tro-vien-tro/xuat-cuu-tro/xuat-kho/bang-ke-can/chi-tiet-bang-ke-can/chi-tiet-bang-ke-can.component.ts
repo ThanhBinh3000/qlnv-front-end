@@ -109,6 +109,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   bangKeDtlKcClone: any = {}
   tongSoBaoCan: number;
   tongSoBaoKc: number;
+  tongTrongLuongBaoCan:number;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -833,10 +834,10 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       const trongLuongMotBaoCaBi = this.formData.get("trongLuongMotBaoCaBi").value;
       this.tongSoBaoCan = dtl.reduce((prev, cur) => prev + cur.soBaoBi, 0);
       this.tongSoBaoKc = dltKc.reduce((prev, cur) => prev + cur.soLuong, 0);
-      const tongTrongLuongCaBiCan = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBi, 0);
+      this.tongTrongLuongBaoCan= dtl.reduce((prev, cur) => prev + cur.trongLuongCaBi, 0);
       const tongTrongLuongCaBiKc = (this.tongSoBaoKc || 0) * (trongLuongMotBaoCaBi || 0);
       const tongTrongLuongBaoBi = this.formData.get('tongTrongLuongBaoBi').value || 0;
-      const tongTrongLuongCaBi = tongTrongLuongCaBiCan + tongTrongLuongCaBiKc;
+      const tongTrongLuongCaBi = this.tongTrongLuongBaoCan + tongTrongLuongCaBiKc;
       const tongTrongLuongHang = tongTrongLuongCaBi - tongTrongLuongBaoBi;
       this.formData.patchValue({
         tongTrongLuongCaBiKc,
@@ -884,6 +885,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     this.tongSoBaoCan = null;
     this.tongSoBaoKc = null;
     this.tongTien = null;
+    this.tongTrongLuongBaoCan=null;
     this.formData.get("bangKeDtl").setValue([]);
     this.formData.get("bangKeDtlKc").setValue([]);
     this.formData.get('tongTrongLuong').setValue(null);

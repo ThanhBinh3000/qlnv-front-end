@@ -114,6 +114,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   dcnbBangKeCanHangDtlKcClone: any = {}
   tongSoBaoCan: number;
   tongSoBaoKc: number;
+  tongTrongLuongBaoCan: number;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -523,11 +524,11 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     // this.formData.value.dcnbBangKeCanHangDtl.forEach(s => s.isEdit = false);
     // this.formData.value.dcnbBangKeCanHangDtl[i].isEdit = true;
     // Object.assign(this.dcnbBangKeCanHangDtlClone, this.formData.value.dcnbBangKeCanHangDtl[i]);
-    const dcnbBangKeCanHangDtl = cloneDeep(this.formData.value.dcnbBangKeCanHangDtl);
-    dcnbBangKeCanHangDtl.forEach(s => s.isEdit = false);
-    dcnbBangKeCanHangDtl[i].isEdit = true;
-    Object.assign(this.dcnbBangKeCanHangDtlClone, this.formData.value.dcnbBangKeCanHangDtl[i]);
-    this.formData.patchValue({ dcnbBangKeCanHangDtl });
+    const dcnbBangKeCanHangDtlKc = cloneDeep(this.formData.value.dcnbBangKeCanHangDtlKc);
+    dcnbBangKeCanHangDtlKc.forEach(s => s.isEdit = false);
+    dcnbBangKeCanHangDtlKc[i].isEdit = true;
+    Object.assign(this.dcnbBangKeCanHangDtlKcClone, this.formData.value.dcnbBangKeCanHangDtlKc[i]);
+    this.formData.patchValue({ dcnbBangKeCanHangDtlKc });
   }
 
   async deleteRowKc(i: number) {
@@ -766,10 +767,10 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
       const tlMotBaoCaBi = this.formData.get("tlMotBaoCaBi").value;
       this.tongSoBaoCan = dtl.reduce((prev, cur) => prev + cur.soBaoBi, 0);
       this.tongSoBaoKc = dltKc.reduce((prev, cur) => prev + cur.soBaoDem, 0);
-      const tongTrongLuongCaBiCan = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBaoBi, 0);
+      this.tongTrongLuongBaoCan = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBaoBi, 0);
       const tlSoBaoKhongCan = (this.tongSoBaoKc || 0) * (tlMotBaoCaBi || 0);
       const tongTrongLuongBaoBi = this.formData.get('tongTrongLuongBaoBi').value || 0;
-      const tongTrongLuongCabaoBi = tongTrongLuongCaBiCan + tlSoBaoKhongCan;
+      const tongTrongLuongCabaoBi = this.tongTrongLuongBaoCan + tlSoBaoKhongCan;
       const tongTrongLuongTruBi = tongTrongLuongCabaoBi - tongTrongLuongBaoBi;
       this.formData.patchValue({
         tlSoBaoKhongCan,
@@ -814,6 +815,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     this.tongSl = null;
     this.tongSoBaoCan = null;
     this.tongSoBaoKc = null;
+    this.tongTrongLuongBaoCan = null;
     this.tongTien = null;
     this.formData.get("dcnbBangKeCanHangDtl").setValue([]);
     this.formData.get("dcnbBangKeCanHangDtlKc").setValue([]);
