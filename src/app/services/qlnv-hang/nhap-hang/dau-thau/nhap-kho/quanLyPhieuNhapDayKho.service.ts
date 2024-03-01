@@ -8,10 +8,10 @@ import {BaseLocalService} from "../../../../base-local.service";
 @Injectable({
   providedIn: 'root',
 })
-export class QuanLyPhieuNhapDayKhoService extends BaseLocalService {
+export class QuanLyPhieuNhapDayKhoService extends BaseService {
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'ql-bien-ban-nhap-day-kho-lt', '');
+    super(httpClient, 'ql-bien-ban-nhap-day-kho-lt', '/qlnv-hang');
   }
 
 }

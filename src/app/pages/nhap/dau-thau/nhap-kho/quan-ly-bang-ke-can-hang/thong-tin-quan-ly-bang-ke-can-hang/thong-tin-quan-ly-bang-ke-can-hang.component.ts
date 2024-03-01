@@ -31,7 +31,7 @@ import {
 import {PREVIEW} from "../../../../../../constants/fileType";
 import {DANH_MUC_LEVEL} from "../../../../../luu-kho/luu-kho.constant";
 import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
-import {AMOUNT_TWO_DECIMAL} from "../../../../../../Utility/utils";
+import {AMOUNT_THREE_DECIMAL, AMOUNT_TWO_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'thong-tin-quan-ly-bang-ke-can-hang',
@@ -66,7 +66,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   rowItemTbEdit: any[] = [];
   templateName = "9.C85-HD_Bảng kê cân hàng_nhập_LT";
   dataDdNhap: any;
-  amount = { ...AMOUNT_TWO_DECIMAL }
+  amount = { ...AMOUNT_THREE_DECIMAL }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
