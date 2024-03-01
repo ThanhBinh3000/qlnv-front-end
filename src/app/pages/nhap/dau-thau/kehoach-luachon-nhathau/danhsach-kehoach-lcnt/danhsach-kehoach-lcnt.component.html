@@ -100,9 +100,9 @@
                 [nzDisabled]="loaiVthh == '02' ? !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') : !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')"></label>
             </th>
             <th class="text-center" style="width: 2%;">STT</th>
+            <th class="text-center" style="width: 7%;">Năm kế hoạch</th>
             <th class="text-center" style="width: 7%;">Số công văn/tờ trình</th>
             <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 7%;">Cục DTNN KV</th>
-            <th class="text-center" style="width: 7%;">Năm KH</th>
             <th class="text-center" style="width: 7%;">Ngày lập KH</th>
             <th class="text-center" style="width: 7%;">Ngày duyệt KH</th>
             <th class="text-center" style="width: 9%;">Số QĐ giao chỉ tiêu</th>
@@ -126,6 +126,17 @@
             <th></th>
             <th>
               <nz-input-group>
+                <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
+                           (ngModelChange)="filterInTable('namKhoach',filterTable.namKhoach)">
+                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                </nz-select>
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo123>
+                <i nz-icon nzType="calendar"></i>
+              </ng-template>
+            </th>
+            <th>
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDxuat"
                   (input)="filterInTable('soDxuat',filterTable.soDxuat)" size="small" />
               </nz-input-group>
@@ -135,17 +146,6 @@
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
                   (input)="filterInTable('tenDvi',filterTable.tenDvi)" size="small" />
               </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
-                <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
-                  (ngModelChange)="filterInTable('namKhoach',filterTable.namKhoach)">
-                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                </nz-select>
-              </nz-input-group>
-              <ng-template #suffixTemplateInfo123>
-                <i nz-icon nzType="calendar"></i>
-              </ng-template>
             </th>
             <th>
               <nz-input-group>
@@ -253,9 +253,9 @@
                 [nzDisabled]="data.trangThai != '00'"></label>
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
+            <td class="text-center">{{ data.namKhoach }}</td>
             <td>{{ data.soDxuat }}</td>
             <td *ngIf="loaiVthh != '02'">{{ data.tenDvi }}</td>
-            <td class="text-center">{{ data.namKhoach }}</td>
             <td class="text-center">{{ data.ngayTao | date: 'dd/MM/yyyy' }}</td>
             <td class="text-center">{{ data.ngayPduyet | date: 'dd/MM/yyyy' }}</td>
             <td>

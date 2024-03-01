@@ -19,6 +19,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import {formatNumber} from "@angular/common";
 import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 
 @Component({
@@ -58,6 +59,19 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   listHinhThucBaoQuan: any[] = [];
   listDanhGia: any[] = [];
   formattedSlNhapKho: any;
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
