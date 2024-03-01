@@ -456,9 +456,9 @@
           </tbody>
           <tfoot>
           <tr>
-            <td colspan="2"></td>
-            <td class="text-right">{{ calcTong('trongLuongBaoBi', 'GD') | number : '1.2-2' : 'vi_VN' }}</td>
-            <td class="text-right">{{ calcTong('trongLuongCaBaoBi', 'GD') | number : '1.2-2' : 'vi_VN' }}</td>
+            <td colspan="2" class="blue-text"> TỔNG</td>
+            <td class="blue-text text-right">{{ calcTong('trongLuongBaoBi', 'GD') | number : '1.2-2' : 'vi_VN' }}</td>
+            <td class="blue-text text-right">{{ calcTong('trongLuongCaBaoBi', 'GD') | number : '1.2-2' : 'vi_VN' }}</td>
             <td></td>
           </tr>
           </tfoot>
@@ -541,8 +541,8 @@
           </tbody>
           <tfoot>
           <tr>
-            <td colspan="2"></td>
-            <td class="text-right">{{ calcTong('soBaoDem', 'TB') | number : '1.2-2' : 'vi_VN' }}</td>
+            <td colspan="2" class="blue-text">TỔNG</td>
+            <td class="text-right blue-text">{{ calcTong('soBaoDem', 'TB') | number : '1.2-2' : 'vi_VN' }}</td>
             <td></td>
           </tr>
           </tfoot>
@@ -628,9 +628,9 @@
           </tbody>
           <tfoot>
           <tr>
-            <td colspan="2"></td>
-            <td class="text-right">{{ calcTong('trongLuongBaoBi') | number : '1.2-2' : 'vi_VN' }}</td>
-            <td class="text-right">{{ calcTong('trongLuongCaBaoBi') | number : '1.2-2' : 'vi_VN' }}</td>
+            <td colspan="2" class="blue-text"> TỔNG</td>
+            <td class="text-right blue-text">{{ calcTong('trongLuongBaoBi') | number : '1.2-2' : 'vi_VN' }}</td>
+            <td class="text-right blue-text">{{ calcTong('trongLuongCaBaoBi') | number : '1.2-2' : 'vi_VN' }}</td>
             <td></td>
           </tr>
           </tfoot>
@@ -645,9 +645,7 @@
               Trọng lượng 1 bao kể cả bì (kg)
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-number nzSize="small" formControlName="trongLuongMotBao"
-                               [nzFormatter]="globals.formatter"
-                               [nzParser]="globals.parser" [nzDisabled]="isView"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" formControlName="trongLuongMotBao">
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -677,8 +675,7 @@
               Tổng trọng lượng bao bì (kg)
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-number nzSize="small" [disabled]="isView" formControlName="trongLuongBaoBi" [nzFormatter]="globals.formatter"
-                               [nzParser]="globals.parser"></nz-input-number>
+              <input class="money-input" currencyMask [options]="amount" formControlName="trongLuongBaoBi">
             </nz-form-control>
           </nz-form-item>
         </div>
