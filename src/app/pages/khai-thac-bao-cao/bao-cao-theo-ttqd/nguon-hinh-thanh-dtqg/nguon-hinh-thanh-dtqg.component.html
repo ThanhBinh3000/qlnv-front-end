@@ -18,11 +18,33 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Đơn vị
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-select formControlName="dvtt">
+                  <nz-option *ngFor="let p of dsDvtt" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại kỳ báo cáo
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-select formControlName="loaiKyBc" (ngModelChange)="changLoaiKyBc($event)">
                   <nz-option *ngFor="let p of listLoaiKyBc" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4" *ngIf="formData.value.loaiKyBc && formData.value.loaiKyBc == '02' ">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Kỳ báo cáo
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-select formControlName="quy">
+                  <nz-option *ngFor="let p of listKyBc" [nzValue]="p.giaTri" [nzLabel]="p.ma"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -38,19 +60,6 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-
-          <div nz-col [nzSpan]="4" *ngIf="formData.value.loaiKyBc && formData.value.loaiKyBc == '02' ">
-            <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Kỳ báo cáo
-              </nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-select formControlName="quy">
-                  <nz-option *ngFor="let p of listKyBc" [nzValue]="p.giaTri" [nzLabel]="p.ma"></nz-option>
-                </nz-select>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-
           <div nz-col [nzSpan]="6" *ngIf="userService.isTongCuc() && formData.value.loaiBc != '01'">
             <nz-form-item>
               <nz-form-label [nzXs]="6">Cục DTNN KV</nz-form-label>

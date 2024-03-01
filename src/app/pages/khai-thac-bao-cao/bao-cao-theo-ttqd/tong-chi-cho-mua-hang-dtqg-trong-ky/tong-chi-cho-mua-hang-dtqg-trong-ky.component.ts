@@ -40,6 +40,11 @@ export class TongChiChoMuaHangDtqgTrongKyComponent extends Base2Component implem
   maChiCuc: any;
   listLoaiKyBc: any[] = [];
   listLoaiBc: any[] = [];
+  dsDvtt: any[] = [
+    {text: 'Nghìn đồng', value: '01'},
+    {text: 'Triệu đồng', value: '02'},
+    {text: 'Tỷ đồng', value: '03'},
+  ]
   listKyBc: any[] = [];
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -61,7 +66,8 @@ export class TongChiChoMuaHangDtqgTrongKyComponent extends Base2Component implem
         tenCuc: null,
         tenChiCuc: null,
         dviNhanBaoCao: null,
-        loaiBc: [null, [Validators.required]],
+        dvtt: ['01', [Validators.required]],
+        loaiBc: ['02', [Validators.required]],
         loaiKyBc: ['02', [Validators.required]],
       }
     );
@@ -107,7 +113,7 @@ export class TongChiChoMuaHangDtqgTrongKyComponent extends Base2Component implem
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_BAO_CAO");
     if (res.msg == MESSAGE.SUCCESS) {
       console.log(res, "4444")
-      this.listLoaiBc = res.data
+      this.listLoaiBc = res.data.filter(x => x.ma != '04' && x.ma != '03')
     }
   }
 

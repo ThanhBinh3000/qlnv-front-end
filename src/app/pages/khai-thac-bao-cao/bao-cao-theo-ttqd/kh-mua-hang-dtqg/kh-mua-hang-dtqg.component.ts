@@ -39,6 +39,11 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
   rows: any[] = [];
   maCuc: any;
   maChiCuc: any;
+  dsDvtt: any[] = [
+    {text: 'Nghìn đồng', value: '01'},
+    {text: 'Triệu đồng', value: '02'},
+    {text: 'Tỷ đồng', value: '03'},
+  ]
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -58,7 +63,8 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
         bieuSo: null,
         tenCuc: null,
         tenChiCuc: null,
-        loaiBc: [null, [Validators.required]],
+        loaiBc: ['02', [Validators.required]],
+        dvtt: ['01', [Validators.required]],
         dviBaoCao: null,
         dviNhanBaoCao: null,
         loaiVthh: null,
@@ -93,7 +99,7 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_BAO_CAO");
     if (res.msg == MESSAGE.SUCCESS) {
       console.log(res, "4444")
-      this.listLoaiBc = res.data
+      this.listLoaiBc = res.data.filter(x => x.ma != '04' && x.ma != '03')
     }
   }
 

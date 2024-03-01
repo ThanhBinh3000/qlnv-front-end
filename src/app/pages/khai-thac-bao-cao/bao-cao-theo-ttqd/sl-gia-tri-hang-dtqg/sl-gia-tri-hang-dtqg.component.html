@@ -18,6 +18,17 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Đơn vị
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-select formControlName="dvtt">
+                  <nz-option *ngFor="let p of dsDvtt" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại kỳ báo cáo
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
@@ -40,7 +51,19 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="6" *ngIf="userService.isTongCuc()">
+          <div nz-col [nzSpan]="4" *ngIf="userService.isTongCuc()">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Loại báo cáo
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-select formControlName="loaiBc" (ngModelChange)="changeLoaiBc($event)">
+                  <nz-option *ngFor="let p of listLoaiBc" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col [nzSpan]="6" *ngIf="formData.value.loaiBc == '02'">
             <nz-form-item>
               <nz-form-label [nzXs]="6">Cục DTNN KV</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
@@ -51,7 +74,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6" *ngIf="!userService.isChiCuc()">
+          <div nz-col [nzSpan]="6" *ngIf="!userService.isChiCuc() || (userService.isCuc() && formData.value.loaiBc == '02')">
             <nz-form-item>
               <nz-form-label [nzXs]="6">Chi Cục DTNN</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
