@@ -189,6 +189,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       danhGiaCamQuan: ['', [Validators.required]],
       keHoachDcDtlId: [null, [Validators.required]],
       ngayHieuLuc: [, [Validators.required]],
+      chiSoChatLuongTitle: []
     });
     this.maBb = 'BBLM-' + this.userInfo.DON_VI.tenVietTat;
     this.previewName = this.isVatTu ? "phieu_kiem_nghiem_chat_luong_vt_dieu_chuyen" : "nhap_xuat_lt_phieu_kiem_nghiem_chat_luong_lt"
@@ -714,11 +715,15 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     if (!vthh) return;
     const dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(vthh);
     if (dmTieuChuan.data) {
+      const soHieuQuyChuan = dmTieuChuan.data[0]?.soHieuQuyChuan;
+      const chiSoChatLuongTitle = `Chỉ số chất lượng theo ${soHieuQuyChuan ? soHieuQuyChuan : ""}`;
+      this.formData.patchValue({ chiSoChatLuongTitle })
       this.dataTableChiTieu = Array.isArray(dmTieuChuan.data) ? dmTieuChuan.data.map(element => ({
         edit: false, chiSoCl: element.mucYeuCauXuat,
         chiSoClToiThieu: !isNaN(element.mucYeuCauXuatToiThieu?.replace(",", ".")) ? parseFloat(element.mucYeuCauXuatToiThieu.replace(",", ".")) : element.mucYeuCauXuatToiThieu,
         chiSoClToiDa: !isNaN(element.mucYeuCauXuatToiDa?.replace(",", ".")) ? parseFloat(element.mucYeuCauXuatToiDa.replace(",", ".")) : element.mucYeuCauXuatToiDa,
-        toanTu: element.toanTu, chiTieuCl: element.tenChiTieu, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.phuongPhapXd
+        toanTu: element.toanTu, chiTieuCl: element.tenChiTieu, danhGia: element.danhGia, hdrId: element.hdrId, id: element.id, ketQuaPt: element.ketQuaPt, phuongPhap: element.phuongPhapXd,
+        maChiTieu: element.maChiTieu
       })) : [];
     };
   }

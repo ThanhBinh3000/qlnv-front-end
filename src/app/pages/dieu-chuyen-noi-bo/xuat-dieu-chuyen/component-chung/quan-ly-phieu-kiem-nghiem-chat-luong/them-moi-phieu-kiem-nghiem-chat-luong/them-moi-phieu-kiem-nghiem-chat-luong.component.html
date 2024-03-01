@@ -370,7 +370,9 @@
               <tr>
                 <th width="30px">STT</th>
                 <th><span class="do">* </span>Chỉ tiêu chất lượng</th>
-                <th width="60px">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+                <!-- <th width="60px">{{formData.value.chiSoChatLuongTitle}}</th> -->
+                <th>{{formData.value.chiSoChatLuongTitle ? formData.value.chiSoChatLuongTitle: "Chỉ số chất lượng"}}
+                </th>
                 <th width="400px"><span class="do">* </span>Kết quả phân tích</th>
                 <th><span class="do">* </span>Phương pháp kiểm tra chất lượng</th>
                 <th><span class="do">* </span>Đánh giá</th>
@@ -425,13 +427,15 @@
                     (ngModelChange)="onKetQuaChange($event,i,dataTableChiTieu)" />
                 </td> -->
                 <ng-container
-                  *ngIf="formData.value.loaiVthh === '0102' && ['DANH_BONG_GAO', 'MUC_XAT_GAO'].includes(data.ma); else inputCtCL">
+                  *ngIf="formData.value.loaiVthh === '0102' && ['DANH_BONG_GAO', 'MUC_XAT_GAO'].includes(data.maChiTieu); else inputCtCL">
                   <td>
-                    <nz-select *ngIf="data.ma === 'DANH_BONG_GAO'" [(ngModel)]="data.ketQuaPt" [nzDisabled]="isView">
+                    <nz-select *ngIf="data.maChiTieu === 'DANH_BONG_GAO'" [(ngModel)]="data.ketQuaPt"
+                      [nzDisabled]="isView">
                       <nz-option *ngFor="let item of dmDanhBongGao" [nzValue]="item.giaTri"
                         [nzLabel]="item.giaTri"></nz-option>
                     </nz-select>
-                    <nz-select *ngIf="data.ma === 'MUC_XAT_GAO'" [(ngModel)]="data.ketQuaPt" [nzDisabled]="isView">
+                    <nz-select *ngIf="data.maChiTieu === 'MUC_XAT_GAO'" [(ngModel)]="data.ketQuaPt"
+                      [nzDisabled]="isView">
                       <nz-option *ngFor="let item of dmMucXatGao" [nzValue]="item.giaTri"
                         [nzLabel]="item.giaTri"></nz-option>
                     </nz-select>
@@ -444,7 +448,10 @@
                       [readOnly]="isView" />
                   </td>
                 </ng-template>
-                <td>{{data.phuongPhap}}</td>
+                <td *ngIf="data.maChiTieu !=='ATTP_GAO'; else danhGiaATTP">{{data.phuongPhap}}</td>
+                <ng-template #danhGiaATTP>
+                  <td><input nz-input [(ngModel)]="data.phuongPhap" [readOnly]="isView" /></td>
+                </ng-template>
                 <td>
                   <nz-select [(ngModel)]="data.danhGia" [disabled]="isView">
                     <nz-option *ngFor="let item of LIST_DANH_GIA" [nzValue]="item.value" [nzLabel]="item.label">

@@ -113,6 +113,25 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
       thayDoiThuKho: [],
       typeQd: []
     })
+  }
+
+
+  async ngOnInit() {
+    try {
+      this.spinner.show();
+      this.setMaQuyen();
+      await this.initData()
+      await this.timKiem();
+    } catch (e) {
+      console.log('error: ', e)
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+    finally {
+      this.spinner.hide();
+    }
+  }
+
+  setMaQuyen() {
     switch (this.loaiMaQuyen) {
       case 'DCNB_LT_KHACTK':
         this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_KHACTK_XK_LT_BKCH_XEM';
@@ -148,21 +167,6 @@ export class BangKeCanXuatDieuChuyenComponent extends Base2Component implements 
         break;
       default:
         break;
-    }
-  }
-
-
-  async ngOnInit() {
-    try {
-      this.spinner.show();
-      await this.initData()
-      await this.timKiem();
-    } catch (e) {
-      console.log('error: ', e)
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-    finally {
-      this.spinner.hide();
     }
   }
 

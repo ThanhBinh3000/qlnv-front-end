@@ -409,7 +409,7 @@
           <tr>
             <th class="text-center" nzWidth="50px">STT</th>
             <th>Chỉ tiêu chất lượng</th>
-            <th>Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+            <th>{{formData.value.chiSoChatLuongTieuDe ? formData.value.chiSoChatLuongTieuDe: "Chỉ số chất lượng"}}</th>
             <th>Kết quả phân tích</th>
             <th>Phương pháp kiểm tra chất lượng</th>
             <th>Đánh giá</th>
@@ -442,7 +442,10 @@
                     [readonly]="isView" />
                 </td>
               </ng-template>
-              <td>{{data.phuongPhap}}</td>
+              <td *ngIf="data.ma !=='ATTP_GAO'; else danhGiaATTP">{{data.phuongPhap}}</td>
+              <ng-template #danhGiaATTP>
+                <td><input nz-input [(ngModel)]="data.phuongPhap" [readOnly]="isView" /></td>
+              </ng-template>
               <td>
                 <nz-select [(ngModel)]="data.danhGia" [nzDisabled]="isView">
                   <nz-option nzValue="Đạt" nzLabel="Đạt"></nz-option>
