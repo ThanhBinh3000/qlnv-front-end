@@ -43,7 +43,12 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
   listDanhSachQuyetDinh: any[] = [];
   dsKeHoach: any[] = []
   dsHangTH = []
+  dsBaoDem = []
   previewName: string = "nhap_xuat_lt_bang_ke_can_hang_nhap_lt";
+
+  soBaoBiTong: number = 0
+  trongLuongCaBaoBiTong: number = 0
+  soBaoDemTong: number = 0
 
   AMOUNT = {
     allowZero: true,
@@ -128,6 +133,8 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       maCan: [],
       soBaoBi: [],
       trongLuongCaBaoBi: [],
+      lan: [],
+      soBaoDem: [],
       keHoachDcDtlId: [, [Validators.required]]
     });
   }
@@ -194,7 +201,11 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
     await this.spinner.show()
     if (id) {
       let data = await this.detail(id);
-      this.dsHangTH = data.dcnbBangKeCanHangDtl
+      this.dsHangTH = data.dcnbBangKeCanHangDtl.filter(item => item.type === 'CAN_GIAM_DINH')
+      this.soBaoBiTong = this.dsHangTH.reduce((previous, current) => previous + current.soBaoBi, 0);
+      this.trongLuongCaBaoBiTong = this.dsHangTH.reduce((previous, current) => previous + current.trongLuongCaBaoBi, 0);
+      this.dsBaoDem = data.dcnbBangKeCanHangDtl.filter(item => item.type === 'KHONG_CAN')
+      this.soBaoDemTong = this.dsBaoDem.reduce((previous, current) => previous + current.soBaoDem, 0);
       this.formData.patchValue({ ...data, tenLoNganKho: `${data.tenLoKho || ""} - ${data.tenNganKho}`, });
       this.fileDinhKemReq = data.fileDinhKems
       // await this.layDonViCon(data.maDiemKho)
@@ -214,10 +225,11 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       maCan: this.formData.value.maCan,
       soBaoBi: this.formData.value.soBaoBi,
       trongLuongCaBaoBi: this.formData.value.trongLuongCaBaoBi,
+      type: 'CAN_GIAM_DINH'
     })
     this.dsHangTH = cloneDeep(this.dsHangTH)
     const tongTrongLuongCabaoBi = this.dsHangTH.reduce((previous, current) => previous + current.trongLuongCaBaoBi, 0);
-
+    this.sum()
     if (this.formData.value.tongTrongLuongBaoBi) {
       const tongTrongLuongTruBi = tongTrongLuongCabaoBi - Number(this.formData.value.tongTrongLuongBaoBi)
       const tongTrongLuongTruBiText = this.convertTien(tongTrongLuongTruBi)
@@ -231,6 +243,64 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       maCan: "",
       soBaoBi: "",
       trongLuongCaBaoBi: "",
+    })
+  }
+
+  sum() {
+    this.soBaoBiTong = this.dsHangTH.reduce((previous, current) => previous + current.soBaoBi, 0);
+    this.trongLuongCaBaoBiTong = this.dsHangTH.reduce((previous, current) => previous + current.trongLuongCaBaoBi, 0);
+    if (this.soBaoDemTong) {
+      const tongSlBaoBi = this.soBaoBiTong + this.soBaoDemTong
+      this.formData.patchValue({
+        tongSlBaoBi
+      })
+    }
+    if (this.formData.value.tlSoBaoKhongCan) {
+      const tongTrongLuongCabaoBi = this.formData.value.tlSoBaoKhongCan + this.trongLuongCaBaoBiTong
+      this.formData.patchValue({
+        tongTrongLuongCabaoBi
+      })
+    }
+  }
+
+  themBaoDem() {
+    if (!this.formData.value.lan || !this.formData.value.soBaoDem) {
+      this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập đủ thông tin");
+      return
+    }
+    this.dsBaoDem.push({
+      idVirtual: uuidv4.v4(),
+      edit: false,
+      lan: this.formData.value.lan,
+      soBaoDem: this.formData.value.soBaoDem,
+      type: 'KHONG_CAN'
+    })
+    this.dsBaoDem = cloneDeep(this.dsBaoDem)
+    this.soBaoDemTong = this.dsBaoDem.reduce((previous, current) => previous + current.soBaoDem, 0);
+    if (this.soBaoBiTong) {
+      const tongSlBaoBi = this.soBaoBiTong + this.soBaoDemTong
+      this.formData.patchValue({
+        tongSlBaoBi
+      })
+    }
+
+    if (this.formData.value.tlMotBaoCaBi && this.soBaoDemTong) {
+      const tlSoBaoKhongCan = this.formData.value.tlMotBaoCaBi * this.soBaoDemTong
+      this.formData.patchValue({
+        tlSoBaoKhongCan
+      })
+
+      if (this.trongLuongCaBaoBiTong) {
+        const tongTrongLuongCabaoBi = tlSoBaoKhongCan + this.trongLuongCaBaoBiTong
+        this.formData.patchValue({
+          tongTrongLuongCabaoBi
+        })
+      }
+    }
+
+    this.formData.patchValue({
+      lan: "",
+      soBaoDem: "",
     })
   }
 
@@ -251,6 +321,24 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
     this.dsHangTH = this.dsHangTH.filter(item => item.idVirtual !== row.idVirtual)
   }
 
+  onChangeTongTrongLuongMotBaoBi(tlMotBaoCaBi) {
+    if (tlMotBaoCaBi && this.soBaoDemTong) {
+      const tlSoBaoKhongCan = tlMotBaoCaBi * this.soBaoDemTong
+      this.formData.patchValue({
+        tlSoBaoKhongCan
+      })
+
+      if (this.trongLuongCaBaoBiTong) {
+        const tongTrongLuongCabaoBi = tlSoBaoKhongCan + this.trongLuongCaBaoBiTong
+        this.formData.patchValue({
+          tongTrongLuongCabaoBi
+        })
+      }
+    }
+
+
+
+  }
 
   onChangeTongTrongLuongBaoBi(tongTrongLuongBaoBi) {
     if (this.formData.value.tongTrongLuongCabaoBi) {
@@ -452,7 +540,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
       const data = res.data
       if (data) {
         this.formData.patchValue({
-          tenLoNganKho: `${data.tenLoKho} - ${data.tenNganKho}`,
+          tenLoNganKho: `${data.tenLoKho || ''} - ${data.tenNganKho}`,
           tenLoKho: data.tenLoKho,
           maLoKho: data.maLoKho,
           tenNganKho: data.tenNganKho,
@@ -493,7 +581,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
     await this.spinner.show();
     let body = this.formData.value;
     body.fileDinhKemReq = this.fileDinhKemReq;
-    body.dcnbBangKeCanHangDtl = this.dsHangTH;
+    body.dcnbBangKeCanHangDtl = [...this.dsHangTH, ...this.dsBaoDem];
     if (this.idInput) {
       body.id = this.idInput
     }
