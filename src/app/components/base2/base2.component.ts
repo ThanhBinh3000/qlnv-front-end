@@ -21,6 +21,8 @@ import {UploadFileService} from 'src/app/services/uploaFile.service';
 import {endOfMonth} from 'date-fns';
 import printJS from "print-js";
 import {PREVIEW} from "../../constants/fileType";
+import {checkPrice} from "../../models/KeHoachBanDauGia";
+import {QthtChotGiaNhapXuatService} from "../../services/quantri-hethong/qthtChotGiaNhapXuat.service";
 
 @Component({
   selector: 'app-base2',
@@ -66,6 +68,7 @@ export class Base2Component implements OnInit {
   notification: NzNotificationService
   uploadFileService: UploadFileService
   service: BaseService;
+  checkPriceService: QthtChotGiaNhapXuatService;
   ranges = {'Hôm nay': [new Date(), new Date()], 'Tháng hiện tại': [new Date(), endOfMonth(new Date())]};
   showDlgPreview = false;
   pdfSrc: any;
@@ -81,6 +84,8 @@ export class Base2Component implements OnInit {
   selectedFile: File | null = null;
   templateName: any
   dataImport: any[] = [];
+  checkPrice: checkPrice;
+
 
   constructor(
     httpClient: HttpClient,
@@ -98,6 +103,7 @@ export class Base2Component implements OnInit {
     this.helperService = new HelperService(httpClient, this.userService, notification);
     this.userInfo = this.userService.getUserLogin();
     this.uploadFileService = new UploadFileService(httpClient);
+    this.checkPriceService = new QthtChotGiaNhapXuatService(httpClient);
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
@@ -281,8 +287,8 @@ export class Base2Component implements OnInit {
 
   // DELETE 1 item table
   delete(item: any, roles?: any, checkPrice?: any) {
-    if (checkPrice && checkPrice.boolean) {
-      this.notification.error(MESSAGE.ERROR, checkPrice.msgSuccess);
+    if (this.checkPrice && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
     if (!this.checkPermission(roles)) {
@@ -894,5 +900,22 @@ export class Base2Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, "Ký số không thành công:" + received_msg.Status + ":" + received_msg.Error);
       }
     });
+  }
+
+  async checkPriceAdjust(msgSuccess?: string) {
+    try {
+      this.checkPrice = new checkPrice();
+      this.spinner.show();
+      const res = await this.checkPriceService.checkChotGia({});
+      console.log(res, 888)
+      if (res && res.msg === MESSAGE.SUCCESS && res.data) {
+        this.checkPrice.boolean = res.data;
+        this.checkPrice.msgSuccess = `Việc ${msgSuccess} đang được tạm dừng để chốt điều chỉnh giá. Vui lòng quay lại thực hiện sau!.`;
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    } finally {
+      this.spinner.hide();
+    }
   }
 }
