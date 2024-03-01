@@ -208,7 +208,7 @@
         && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_HDBKPB_VT_HDPL_THEM') :
             userService.isAccessPermisson('XHDTQG_PTDG_HDBKPB_LT_HDPL_THEM'))">
           <button type="button" class="btn btn-main"
-                  (click)="redirectHopDong(0,false, true)">
+                  (click)="redirectHopDong(0,false, true, true)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
@@ -257,11 +257,11 @@
                   <i class="icon htvbdh_tcdt_tuchoi" title="Xem trước"></i>
                 </a>
                 <a *ngIf="data.trangThai == STATUS.DA_KY"
-                   (click)="redirectHopDong(data.id, true, true) ">
+                   (click)="redirectHopDong(data.id, true, true, true) ">
                   <i class="fa fa-eye" title="Xem"></i>
                 </a>
                 <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
-                   (click)="redirectHopDong(data.id, false, true) ">
+                   (click)="redirectHopDong(data.id, false, true, true) ">
                   <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
@@ -297,7 +297,7 @@
 </ng-container>
 <ng-template #tempHopDong>
   <app-thong-tin [idInput]="idInput" [idHopDong]="idHopDong" [loaiVthh]="loaiVthh" [isView]="isView"
-                 (showListEvent)="redirectHopDong(0, true, false)">
+                 [checkPrice]="checkPrice" (showListEvent)="redirectHopDong(0, true, false, false)">
   </app-thong-tin>
 </ng-template>
 <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModal()">

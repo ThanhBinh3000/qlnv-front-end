@@ -260,9 +260,10 @@
   </div>
 </ng-container>
 <ng-container class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin *ngIf="isAddNew" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  <app-thong-tin *ngIf="isAddNew" [loaiVthh]="loaiVthh" [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-thong-tin>
-  <app-quanly-hopdong *ngIf="isQuanLy" [idInput]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  <app-quanly-hopdong *ngIf="isQuanLy" [idInput]="idSelected" [loaiVthh]="loaiVthh" [checkPrice]="checkPrice"
+                      (showListEvent)="showList()">
   </app-quanly-hopdong>
 </ng-container>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal('QdPd')">

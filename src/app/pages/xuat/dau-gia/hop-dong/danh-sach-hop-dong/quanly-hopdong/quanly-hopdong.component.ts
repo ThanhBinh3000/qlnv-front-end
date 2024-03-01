@@ -25,6 +25,7 @@ import {PREVIEW} from "../../../../../../constants/fileType";
 export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   @Input() idInput: number;
   @Input() loaiVthh: string;
+  @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
   idQdNv: number = 0;
@@ -115,7 +116,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
         tenTrangThaiHd: data.tenTrangThaiHd,
       });
       await this.loadDsVthh();
-      this.dataTable = this.userService.isTongCuc() ? data.listHopDong :  data.listHopDong.filter(item => item.maDvi === this.userInfo.MA_DVI);
+      this.dataTable = this.userService.isTongCuc() ? data.listHopDong : data.listHopDong.filter(item => item.maDvi === this.userInfo.MA_DVI);
       if (this.dataTable && this.dataTable.length > 0) {
         await this.selectRow(this.dataTable[0]);
       }
@@ -148,7 +149,11 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     }
   }
 
-  async redirectHopDong(id: number, isView: boolean, isShowHd: boolean) {
+  async redirectHopDong(id: number, isView: boolean, isShowHd: boolean, boolean?: boolean) {
+    if (id === 0 && this.checkPrice.boolean && boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idHopDong = id;
     this.isView = isView;
     this.isEditHopDong = isShowHd;
@@ -162,6 +167,10 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   }
 
   async pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     const dataFilter = this.dataTable.find(item => item.trangThai === this.STATUS.DU_THAO);
     if (dataFilter) {
       this.notification.error(MESSAGE.ERROR, `Không thể hoàn thành thực hiện, hợp đồng số ${dataFilter.soHopDong} đang chưa ký`);
@@ -172,6 +181,10 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
 
 
   async deleteHd(data) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

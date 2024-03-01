@@ -42,6 +42,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   @Input() isView: boolean;
   @Input() isQuanLy: boolean;
   @Input() isViewOnModal: boolean;
+  @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   amount = {...AMOUNT_ONE_DECIMAL};
   maHopDongSuffix: string = '';
@@ -260,6 +261,10 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
 
   async save() {
     try {
+      if (this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
       await this.helperService.ignoreRequiredForm(this.formData);
       this.formData.controls["listMaDviTsan"].setValidators([Validators.required]);
       const soHopDong = this.formData.value.soHopDong;
@@ -276,8 +281,12 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     }
   }
 
-  async saveAndSend(status: string, msg: string, msgSuccess?: string) {
+  async saveAndBrowse(status: string, msg: string, msgSuccess?: string) {
     try {
+      if (this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
       this.setValidForm();
       const soHopDong = this.formData.value.soHopDong;
       const body = {
@@ -285,7 +294,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         soHopDong: soHopDong ? soHopDong + this.maHopDongSuffix : null,
         children: this.dataTable,
       };
-      await super.saveAndSend(body, status, msg, msgSuccess);
+      await this.saveAndSend(body, status, msg, msgSuccess);
     } catch (e) {
       console.error('Error: ', e);
     } finally {
@@ -522,6 +531,10 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   isViewPhuLuc: boolean;
 
   redirectPhuLuc(id: number, isViewPhuLuc: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idPhuLuc = id;
     this.isViewPhuLuc = isViewPhuLuc;
     this.isPhuLuc = true;
