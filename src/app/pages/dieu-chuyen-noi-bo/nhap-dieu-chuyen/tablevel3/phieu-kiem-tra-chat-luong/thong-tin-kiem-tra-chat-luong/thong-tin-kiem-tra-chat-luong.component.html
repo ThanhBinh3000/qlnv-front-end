@@ -593,7 +593,11 @@
                   <td>
                     <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaPt" />
                   </td>
-                  <td>{{data.phuongPhap}}</td>
+                  <td *ngIf="data.maChiTieu === 'ATTP_GAO'">
+                    <input type="text" nz-input class="w-400" [(ngModel)]="data.phuongPhap" />
+                  </td>
+                  <td *ngIf="data.maChiTieu !== 'ATTP_GAO'">{{data.phuongPhap}}</td>
+                  <td>
                   <td>
                     <nz-select [(ngModel)]="data.danhGia" nzAllowClear>
                       <nz-option *ngFor="let p of LIST_DANH_GIA ; let iDG = index" [nzValue]="iDG"

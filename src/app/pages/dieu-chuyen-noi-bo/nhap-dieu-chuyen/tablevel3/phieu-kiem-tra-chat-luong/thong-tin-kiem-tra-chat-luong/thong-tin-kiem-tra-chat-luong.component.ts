@@ -376,7 +376,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          tenLoNganKho: `${data.tenLoKhoNhan} ${data.tenNganKhoNhan}`,
+          tenLoNganKho: `${data.tenLoKhoNhan || ''} ${data.tenNganKhoNhan}`,
           tenLoKho: data.tenLoKhoNhan,
           maLoKho: data.maLoKhoNhan,
           tenNganKho: data.tenNganKhoNhan,
