@@ -29,6 +29,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   @Input() isView: boolean;
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
+  @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   maConVan: any;
@@ -279,6 +280,10 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
 
   async save() {
     try {
+      if (this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
       await this.helperService.ignoreRequiredForm(this.formData);
       this.formData.controls["soQdCanDc"].setValidators([Validators.required]);
       const soCongVan = this.formData.value.soCongVan;
@@ -300,8 +305,12 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     }
   }
 
-  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+  async saveAndBrowse(trangThai: string, msg: string, msgSuccess?: string) {
     try {
+      if (this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
       this.formData.controls["trichYeu"].setValidators([Validators.required]);
       if (trangThai === STATUS.BAN_HANH) {
         this.setValidForm();
@@ -317,7 +326,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         fileDinhKem: this.fileDinhKem,
         fileDinhKemDc: this.fileDinhKemDc,
       }
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
+      await this.saveAndSend(body, trangThai, msg, msgSuccess);
     } catch (error) {
       console.error("Lỗi khi lưu và gửi duyệt:", error);
     } finally {
@@ -325,6 +334,35 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     }
   }
 
+  async status(trangThai: string, msgSuccess?: string) {
+    try {
+      if (this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
+      await this.approve(this.idInput, trangThai, msgSuccess)
+    } catch (error) {
+      console.error('error: ', error);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async refuse(trangThai: string) {
+    try {
+      if (this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
+      await this.reject(this.idInput, trangThai)
+    } catch (error) {
+      console.error('error: ', error);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
+  }
 
   index = 0;
 

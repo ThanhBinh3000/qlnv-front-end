@@ -201,9 +201,10 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
   }
 
   async initForm() {
+    let maBb = 'HSKT-' + this.userInfo.DON_VI.tenVietTat;
     let id = await this.userService.getId('HO_SO_KY_THUAT_SEQ')
     this.formData.patchValue({
-      soHoSoKyThuat: `${id}/${this.formData.get('nam').value}/HSKT-CDTKVVP`,
+      soHoSoKyThuat: `${id}/${this.formData.get('nam').value}/${maBb}`,
       tenDvi: this.userInfo.TEN_DVI,
       maDvi: this.userInfo.MA_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,

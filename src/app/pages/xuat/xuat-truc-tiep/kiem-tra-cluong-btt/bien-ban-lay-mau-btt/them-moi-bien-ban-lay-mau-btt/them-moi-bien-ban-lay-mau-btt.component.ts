@@ -176,6 +176,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       ketQuaNiemPhong: true,
       loaiBienBan: 'LBGM',
       phanLoai: TRUC_TIEP.HOP_DONG,
+      donViKnghiem: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? null : this.userInfo.TEN_PHONG_BAN,
     });
   }
 
@@ -211,7 +212,17 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       if (firstCheckedItem) {
         this.selectedItems = firstCheckedItem.ma;
       }
-      await this.loadDanhSachCtieuCluong();
+      const ctieuCluong = this.dataTable.filter(item => item.type === BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG)
+      if (ctieuCluong){
+        this.danhSachCtieuCluong = ctieuCluong.map(item => ({
+          label: item.ten,
+          value: item.ma,
+          chiSoCl: item.chiSoCl,
+          phuongPhap: item.phuongPhap,
+          checked: item.checked,
+          type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
+        }));
+      }
       if (data.pthucBanTrucTiep !== THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN && !this.isView) {
         await this.onChange(data.idQdNv)
       } else if (data.pthucBanTrucTiep === THONG_TIN_BAN_TRUC_TIEP.UY_QUYEN && !this.isView) {
@@ -563,6 +574,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
           tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
+          diaDiemLayMau: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? null : data.tenDiemKho + ' - ' + this.formData.value.tenDvi,
           soLuong: data.soLuong ? data.soLuong : data.soLuongKyHd
         });
         await this.loadThuKho();
@@ -697,7 +709,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
         value: item.id,
         chiSoCl: item.mucYeuCauXuat,
         phuongPhap: item.phuongPhapXd,
-        checked: true,
+        checked: false,
         type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
       }));
     } catch (e) {

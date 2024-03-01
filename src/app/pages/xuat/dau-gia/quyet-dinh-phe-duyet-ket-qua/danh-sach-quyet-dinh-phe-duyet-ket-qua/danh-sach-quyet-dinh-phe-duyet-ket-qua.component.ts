@@ -11,6 +11,8 @@ import {
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service";
 import {MESSAGE} from "../../../../../constants/message";
 import {LOAI_HANG_DTQG} from "../../../../../constants/config";
+import {checkPrice} from "../../../../../models/KeHoachBanDauGia";
+import {QthtChotGiaNhapXuatService} from "../../../../../services/quantri-hethong/qthtChotGiaNhapXuat.service";
 
 @Component({
   selector: 'app-danh-sach-quyet-dinh-phe-duyet-ket-qua',
@@ -28,6 +30,7 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
   idThongTin: number = 0;
   isViewThongTin: boolean = false;
   listTrangThai: any = [];
+  checkPrice: checkPrice;
 
   constructor(
     httpClient: HttpClient,
@@ -36,6 +39,7 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
+    private qthtChotGiaNhapXuatService: QthtChotGiaNhapXuatService,
     private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
@@ -100,6 +104,7 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
       })
       await this.search();
       await this.loadDsVthh();
+      await this.checkChotDieuChinhGia();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -108,7 +113,27 @@ export class DanhSachQuyetDinhPheDuyetKetQuaComponent extends Base2Component imp
     }
   }
 
+  async checkChotDieuChinhGia() {
+    try {
+      this.checkPrice = new checkPrice();
+      this.spinner.show();
+      const res = await this.qthtChotGiaNhapXuatService.checkChotGia({});
+      if (res && res.msg === MESSAGE.SUCCESS && res.data) {
+        this.checkPrice.boolean = res.data;
+        this.checkPrice.msgSuccess = 'Việc xuất hàng đang được tạm dừng để chốt điều chỉnh giá. Vui lòng quay lại thực hiện sau!.';
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
   redirectDetail(id, isView: boolean) {
+    if (id === 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;

@@ -48,11 +48,13 @@
               <nz-form-label nzRequired [nzNoColon]="true">Số lượng
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-input-number [nzDisabled]="false" formControlName="soLuongTrongNam" [nzMin]="0"
-                                 [nzMax]="999999999999" [nzStep]="0.1" [nzSize]="'small'"
-                                 [nzFormatter]="globals.formatter"
-                                 [nzParser]="globals.parser" (ngModelChange)="onChangeSLTrongNam($event)">
-                </nz-input-number>
+                <input class="money-input" currencyMask [options]="amount" [min]="0"
+                       formControlName="soLuongTrongNam" (ngModelChange)="onChangeSLTrongNam($event)"/>
+<!--                <nz-input-number [nzDisabled]="false" formControlName="soLuongTrongNam" [nzMin]="0"-->
+<!--                                 [nzMax]="999999999999" [nzStep]="0.1" [nzSize]="'small'"-->
+<!--                                 [nzFormatter]="globals.formatter"-->
+<!--                                 [nzParser]="globals.parser" (ngModelChange)="onChangeSLTrongNam($event)">-->
+<!--                </nz-input-number>-->
               </nz-form-control>
             </nz-form-item>
           </div>
