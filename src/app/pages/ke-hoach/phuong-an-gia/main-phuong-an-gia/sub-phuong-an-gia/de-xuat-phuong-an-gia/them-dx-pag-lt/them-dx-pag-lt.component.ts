@@ -24,13 +24,13 @@ import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {DonviService} from "../../../../../../../services/donvi.service";
-import {AMOUNT} from "../../../../../../../Utility/utils";
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 import {CurrencyMaskInputMode} from "ngx-currency";
-import {PREVIEW} from "../../../../../../../constants/fileType";
-import printJS from "print-js";
+import {
+  QuyetDinhGiaCuaBtcService
+} from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 
 
 @Component({
@@ -115,7 +115,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     private tongHopPagService: TongHopPhuongAnGiaService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
-    private danhMucTieuChuanService: DanhMucTieuChuanService,
+    private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
     private uploadFileService: UploadFileService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService
   ) {
@@ -338,7 +338,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       if (this.listCtieuKeHoach && this.listCtieuKeHoach.length > 0 && this.isDieuChinh) {
         if (this.pagTtChungs && this.pagTtChungs.length > 0) {
           this.pagTtChungs.forEach((pagTtChung, index) => {
-            pagTtChung.soLuong = 0
+            pagTtChung.soLuong = 0;
             pagTtChung.soLuongCtieu = ''
             let ctieuChiCuc = this.listCtieuKeHoach.find(ctieu => ctieu.maDonVi == pagTtChung.maChiCuc);
             if (ctieuChiCuc) {
@@ -393,8 +393,28 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async onChangeCloaiVthh(event) {
+    let listQdBtc = [];
+    if (this.formData.value.namKeHoach && this.formData.value.loaiVthh && this.formData.value.cloaiVthh && this.formData.value.loaiGia && this.type == 'GCT') {
+      let body = {
+        namKeHoach: this.formData.value.namKeHoach,
+        loaiVthh: this.formData.value.loaiVthh,
+        cloaiVthh: this.formData.value.cloaiVthh,
+        loaiGia: this.formData.value.loaiGia == 'LG03' ? 'LG01' : 'LG02',
+        maDvi: this.userInfo.MA_DVI,
+      }
+      let res = await this.quyetDinhGiaCuaBtcService.getQdGiaLastestBtc(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        if (res.data) {
+          listQdBtc = res.data && res.data.length ? res.data : [];
+        }
+      }
+    }
     this.pagTtChungs.forEach(item => {
       item.cloaiVthh = event;
+      let itemBtc = listQdBtc.find(it => it.maChiCuc == item.maChiCuc);
+      if (itemBtc) {
+        item.soLuong = itemBtc.soLuong
+      }
     })
     let list = this.listCloaiVthh.filter(item => item.ma == event)
     this.formData.patchValue({

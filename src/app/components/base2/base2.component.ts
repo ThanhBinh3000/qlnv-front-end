@@ -280,7 +280,11 @@ export class Base2Component implements OnInit {
 
 
   // DELETE 1 item table
-  delete(item: any, roles?) {
+  delete(item: any, roles?: any, checkPrice?: any) {
+    if (checkPrice.boolean){
+      this.notification.error(MESSAGE.ERROR, checkPrice.msgSuccess);
+      return;
+    }
     if (!this.checkPermission(roles)) {
       return
     }

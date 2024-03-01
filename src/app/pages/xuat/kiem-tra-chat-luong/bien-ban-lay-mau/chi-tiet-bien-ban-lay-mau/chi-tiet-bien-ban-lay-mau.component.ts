@@ -185,6 +185,8 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
         tenChiCuc: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
         ktvBaoQuan: this.userInfo.TEN_DAY_DU,
+        dviKiemNghiem: this.userInfo.TEN_PHONG_BAN,
+        diaDiemLayMau: this.userInfo.DON_VI?.diaChi
       })
       if (this.inputData) {
         await this.bindingQdGnv(this.inputData.idQdGnv);
@@ -489,15 +491,15 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     }
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd : this.maHauTo };
     // await super.saveAndSend(body, trangThai, msg, msgSuccess);
-    await this.helperService.ignoreRequiredForm(this.formData);
+    // await this.helperService.ignoreRequiredForm(this.formData);
     const data = await this.createUpdate(body, null, true);
     if (data) {
       this.formData.patchValue({ soBbQd: data.soBbQd });
-      await this.helperService.restoreRequiredForm(this.formData);
+      // await this.helperService.restoreRequiredForm(this.formData);
       this.approve(data.id, trangThai, msg, null, msgSuccess)
     }
-    this.formData.controls['truongBpBaoQuan'].clearValidators();
-    this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
+    // this.formData.controls['truongBpBaoQuan'].clearValidators();
+    // this.formData.controls['truongBpBaoQuan'].updateValueAndValidity()
   }
 
   async bindingQdGnv(idQdGnv) {

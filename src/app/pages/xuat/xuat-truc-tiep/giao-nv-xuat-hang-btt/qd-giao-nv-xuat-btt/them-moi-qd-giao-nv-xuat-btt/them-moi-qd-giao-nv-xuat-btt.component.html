@@ -136,7 +136,7 @@
             </div>
             <div nz-col [nzSpan]="5" *ngIf="this.formData.value.phanLoai === TRUC_TIEP.CHAO_GIA">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Mã DVTS</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Mã phần hàng</nz-form-label>
                 <nz-form-control nz-col>
                   <input placeholder="" nz-input formControlName="maDviTsan" readonly/>
                 </nz-form-control>
@@ -152,7 +152,7 @@
             </div>
             <div nz-col [nzSpan]="9" *ngIf="this.formData.value.phanLoai === TRUC_TIEP.UY_QUYEN_BAN_LE">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Mã đơn vị tài sản</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> Mã phần hàng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
                     <nz-select nzMode="multiple" formControlName="listMaDviTsan"
@@ -239,7 +239,7 @@
             </div>
             <div nz-col [nzSpan]="24">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Căn cứ pháp lý</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Căn cứ QĐ phê duyệt KH BTT</nz-form-label>
                 <nz-form-control nz-col>
                   <div class="list-file" nz-col>
                     <file-list [data]="formData.value.fileCanCu" [isCanCuPL]='true' [isViewDetail]="isView">
@@ -276,7 +276,7 @@
             <th class="text-left">Nhà kho</th>
             <th class="text-left">Ngăn kho</th>
             <th class="text-left">Lô kho</th>
-            <th class="text-left">Mã DVTS</th>
+            <th class="text-left">Mã phần hàng</th>
             <th class="text-right">Số lượng xuất</th>
           </tr>
           </thead>

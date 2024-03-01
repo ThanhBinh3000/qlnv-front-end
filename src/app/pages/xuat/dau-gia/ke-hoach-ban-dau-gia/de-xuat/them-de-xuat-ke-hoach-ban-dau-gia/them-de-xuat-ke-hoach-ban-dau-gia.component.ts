@@ -499,7 +499,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     }
   }
 
-  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+  async saveAndBrowse(trangThai: string, msg: string, msgSuccess?: string) {
     try {
       this.setValidForm();
       if (this.dataTable.length === 0) {
@@ -515,7 +515,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         soDxuat: soDxuat ? soDxuat + this.maHauTo : null,
         children: this.dataTable,
       };
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
+      await this.saveAndSend(body, trangThai, msg, msgSuccess);
     } catch (error) {
       console.log('error', error);
     }

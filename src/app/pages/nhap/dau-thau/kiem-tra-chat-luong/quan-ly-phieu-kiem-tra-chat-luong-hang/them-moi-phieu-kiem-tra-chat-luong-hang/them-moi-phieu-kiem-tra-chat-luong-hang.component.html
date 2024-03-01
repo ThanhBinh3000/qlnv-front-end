@@ -9,23 +9,27 @@
       <span>In/xem trước</span>
     </button>
     <button class="btn btn-sub xanh-nhat" type="button"
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM') "
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_TK)
+      && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM') "
       (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub do" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_DUYET_LDCCUC')"
+    <button type="button" class="btn btn-sub do"
+            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_DUYET_LDCCUC')
+|| formData.value.trangThai == STATUS.CHO_DUYET_TK && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_DUYET_THUKHO')"
       (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_DUYET_LDCCUC')"
+    <button class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_DUYET_LDCCUC')
+    || formData.value.trangThai == STATUS.CHO_DUYET_TK && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_DUYET_THUKHO')"
       (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
     </button>
     <button class="btn btn-sub xanh"
-      *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC ) && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')  "
+      *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_TK ) && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')  "
       (click)="save(false)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -377,7 +381,7 @@
                   Số lượng khách hàng khai báo (kg)
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input [readonly]="isView" formControlName="slKhKb" />
+                  <input  class="money-input" currencyMask [options]="amount" [min]="0" [readonly]="isView" formControlName="slKhKb" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -387,7 +391,7 @@
                   Số lượng hàng thực tế kiểm tra (kg)
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input [readonly]="isView" formControlName="slTtKtra" />
+                  <input  class="money-input" currencyMask [options]="amount" [min]="0" [readonly]="isView" formControlName="slTtKtra" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -493,7 +497,10 @@
                   <td>
                     <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaKiemTra" />
                   </td>
-                  <td>{{data.phuongPhap}}</td>
+                  <td *ngIf="data.maChiTieu == 'ATTP_GAO'">
+                    <input type="text" nz-input class="w-400" [(ngModel)]="data.phuongPhap" />
+                  </td>
+                  <td *ngIf="data.maChiTieu != 'ATTP_GAO'">{{data.phuongPhap}}</td>
                   <td>
                     <nz-select [(ngModel)]='data.danhGia'>
                       <nz-option *ngFor='let item of listDanhGia' [nzValue]='item.ma' [nzLabel]='item.giaTri'>

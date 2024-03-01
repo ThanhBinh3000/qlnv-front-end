@@ -111,6 +111,25 @@ export class BangKeXuatVatTuDieuChuyenComponent extends Base2Component implement
             thayDoiThuKho: [],
             typeQd: []
         })
+    }
+
+
+    async ngOnInit() {
+        try {
+            this.spinner.show();
+            this.setMaQuyen();
+            await this.initData()
+            await this.timKiem();
+        } catch (e) {
+            console.log('error: ', e)
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+        finally {
+            this.spinner.hide()
+        }
+    }
+
+    setMaQuyen() {
         switch (this.loaiMaQuyen) {
             case 'DCNB_VT_KHACTK':
                 this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_KHACTK_XK_VT_BKXVT_XEM';
@@ -148,22 +167,6 @@ export class BangKeXuatVatTuDieuChuyenComponent extends Base2Component implement
                 break;
         }
     }
-
-
-    async ngOnInit() {
-        try {
-            this.spinner.show();
-            await this.initData()
-            await this.timKiem();
-        } catch (e) {
-            console.log('error: ', e)
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-        finally {
-            this.spinner.hide()
-        }
-    }
-
     async initData() {
         this.userInfo = this.userService.getUserLogin();
         this.userdetail.maDvi = this.userInfo.MA_DVI;

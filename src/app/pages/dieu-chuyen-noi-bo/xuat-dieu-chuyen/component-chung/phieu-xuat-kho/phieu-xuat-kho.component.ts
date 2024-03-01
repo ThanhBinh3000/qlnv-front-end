@@ -101,6 +101,29 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
       tenTrangThai: '',
       tenTrangThaiXh: '',
     };
+  }
+
+  async ngOnInit() {
+    await this.spinner.show();
+    try {
+      this.setMaQuyen()
+      this.formData.patchValue({
+        isVatTu: this.isVatTu,
+        loaiDc: this.loaiDc,
+        thayDoiThuKho: this.thayDoiThuKho,
+        type: this.type,
+        typeQd: this.typeQd
+        // maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
+      })
+      await this.timKiem();
+    } catch (e) {
+      console.log('e', e)
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+  setMaQuyen() {
     switch (this.loaiMaQuyen) {
       case 'DCNB_LT_KHACTK':
         this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_KHACTK_XK_LT_PXK_XEM';
@@ -168,26 +191,6 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
         break;
       default:
         break;
-    }
-  }
-
-  async ngOnInit() {
-    await this.spinner.show();
-    try {
-      this.formData.patchValue({
-        isVatTu: this.isVatTu,
-        loaiDc: this.loaiDc,
-        thayDoiThuKho: this.thayDoiThuKho,
-        type: this.type,
-        typeQd: this.typeQd
-        // maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
-      })
-      await this.timKiem();
-    } catch (e) {
-      console.log('e', e)
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
     }
   }
   async timKiem(): Promise<void> {

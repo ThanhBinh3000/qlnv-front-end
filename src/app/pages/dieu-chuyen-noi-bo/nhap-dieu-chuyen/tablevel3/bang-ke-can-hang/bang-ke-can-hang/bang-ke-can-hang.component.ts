@@ -30,34 +30,9 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
   tabSelected: number = 0;
   @Input() loaiDc: string;
 
-  // @Input()
-  // loaiVthh: string;
-  // @Input()
-  // loaiVthhCache: string;
 
-  // CHUC_NANG = CHUC_NANG;
-  // listLoaiDieuChuyen: any[] = [
-  //   { ma: "ALL", ten: "Tất cả" },
-  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  // ];
-  // listLoaiDCFilterTable: any[] = [
-  //   { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-  //   { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-  // ];
   dataTableView: any[] = [];
-  // listLoaiHangHoa: any[] = [];
-  // listHangHoaAll: any[] = [];
-  // listChungLoaiHangHoa: any[] = [];
-  // listTrangThai: any[] = [
-  //   { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-  //   { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-  //   { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-  //   { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-  //   { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-  //   { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-  //   { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
-  // ];
+  maQd: string = null;
 
   constructor(
     httpClient: HttpClient,
@@ -98,7 +73,8 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-
+    // console.log("this.userInfo", this.userInfo)
+    // this.maQd = this.userInfo.MA_QD || '';
     this.formData.patchValue({
       loaiDc: this.loaiDc,
       loaiQdinh: this.loaiDc === "CUC" ? "NHAP" : null,
@@ -188,7 +164,7 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
       this.formData.value.ngayNhapKhoDen = dayjs(this.formData.value.ngayNhapKhoDen).format('YYYY-MM-DD')
     }
     let body = this.formData.value
-    if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
+    // if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1
@@ -238,30 +214,6 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
             let children2 = chain(value2)
               .groupBy("maloNganKho")
               ?.map((value3, key3) => {
-
-                // const children3 = chain(value3).groupBy("maloNganKho")
-                //   ?.map((m, im) => {
-
-                //     const maChiCucNhan = m.find(f => f.maloNganKho == im);
-                //     // const hasMaDiemKhoNhan = vs.some(f => f.maDiemKhoNhan);
-                //     // if (!hasMaDiemKhoNhan) return {
-                //     //   ...maChiCucNhan
-                //     // }
-
-                //     // const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
-
-                //     //   const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
-                //     //   return {
-                //     //     ...maDiemKhoNhan,
-                //     //     children: n
-                //     //   }
-                //     // }).value()
-                //     return {
-                //       ...maChiCucNhan,
-                //       children: m
-                //     }
-                //   }).value()
-
                 const row3 = value3.find(s => s?.maloNganKho == key3);
                 return {
                   ...row3,

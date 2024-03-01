@@ -233,7 +233,7 @@
           <div nz-col [nzSpan]="2"
                *ngIf="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">
             <nz-form-item>
-              <nz-form-label>
+              <nz-form-label nzRequired>
                 Thuế VAT
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">

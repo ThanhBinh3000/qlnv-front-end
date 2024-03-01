@@ -114,6 +114,10 @@ export class DanhSachPhanLo {
   parent?: DanhSachPhanLo;
 }
 
+export class checkPrice  {
+  boolean: boolean = false;
+  msgSuccess: string;
+}
 
 export class DanhSachXuatBanTrucTiep {
   id: number;

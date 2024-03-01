@@ -1241,8 +1241,17 @@
                           </nz-form-control>
                         </nz-form-item>
                       </div>
-                      <div nz-col [nzSpan]="20">
-
+                      <div nz-col [nzSpan]="4">
+                        <nz-form-item>
+                          <nz-form-label>Thành tiền</nz-form-label>
+                          <nz-form-control [nzErrorTip]="error">
+                            <nz-input-number [nzSize]="'small'" formControlName="thanhTien"
+                                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                            </nz-input-number>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="16">
                       </div>
                       <div nz-col [nzSpan]="6" *ngIf="!checkLoKho">
                         <nz-form-item>
@@ -1674,6 +1683,17 @@
                           </nz-form-control>
                         </nz-form-item>
                       </div>
+                      <div nz-col [nzSpan]="4">
+                        <nz-form-item>
+                          <nz-form-label>Thành tiền</nz-form-label>
+                          <nz-form-control [nzErrorTip]="error">
+                            <nz-input-number [nzSize]="'small'" formControlName="thanhTien"
+                                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                            </nz-input-number>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col [nzSpan]="20"></div>
                       <div nz-col [nzSpan]="12">
                         <nz-form-item>
                           <nz-form-label>Nhiệm vụ</nz-form-label>

@@ -28,7 +28,7 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
 
   selectedId: number = 0;
   isView = false;
-
+  maQd: string = null;
   listLoaiDieuChuyen: any[] = [
     { ma: "ALL", ten: "Tất cả" },
     { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
@@ -77,7 +77,7 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-
+    this.maQd = 'QĐ-TCDT';
     if (this.idTHop)
       this.redirectDetail(0, false)
     if (this.qdDcId)
@@ -161,7 +161,7 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
     if (this.formData.value.ngayHieuLucDen) {
       this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLucDen).format('YYYY-MM-DD')
     }
-    if (this.formData.value.soQdinh) this.formData.value.soQdinh = `${this.formData.value.soQdinh}/DCNB`
+    if (this.formData.value.soQdinh) this.formData.value.soQdinh = `${this.formData.value.soQdinh}/${this.maQd}`
     await this.search();
   }
 
