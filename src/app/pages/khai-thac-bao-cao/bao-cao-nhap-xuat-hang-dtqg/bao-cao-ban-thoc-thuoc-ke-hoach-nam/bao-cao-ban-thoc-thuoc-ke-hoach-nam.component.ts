@@ -53,6 +53,7 @@ export class BaoCaoBanThocThuocKeHoachNamComponent  extends Base2Component imple
       await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+    console.log(this.userInfo.DON_VI,'aaaaaaaaaaaa');
     await this.spinner.hide();
   }
   downloadPdf() {
