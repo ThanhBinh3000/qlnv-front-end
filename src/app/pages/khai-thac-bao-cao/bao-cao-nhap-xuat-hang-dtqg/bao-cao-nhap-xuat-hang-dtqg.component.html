@@ -56,6 +56,10 @@
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo bán thóc thuộc kế hoạch năm (Phụ lục 01)</span>
             </li>
+            <li nz-menu-item [nzSelected]='tabSelected==18' (click)='selectTab(18)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Danh sách nhà thầu uy tín</span>
+            </li>
           </ul>
         </li>
       </ul>
@@ -100,6 +104,9 @@
         </ng-container>
         <ng-container *ngIf='tabSelected == 16'>
           <app-bao-cao-ban-thoc-thuoc-ke-hoach-nam></app-bao-cao-ban-thoc-thuoc-ke-hoach-nam>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 18'>
+          <app-bc-danh-sach-nha-thau-uy-tin></app-bc-danh-sach-nha-thau-uy-tin>
         </ng-container>
       </div>
     </div>
