@@ -113,6 +113,22 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             bbHaoDoi: '',
             trangThai: '',
         };
+    }
+
+    async ngOnInit(): Promise<void> {
+        try {
+            this.spinner.show();
+            this.setMaQuyen();
+            this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd });
+            await this.timKiem()
+        } catch (error) {
+            console.log("e", error);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+            this.spinner.hide()
+        }
+    }
+    setMaQuyen() {
         switch (this.loaiMaQuyen) {
             case 'DCNB_LT_KHACTK':
                 this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_BBLM_XEM';
@@ -164,19 +180,6 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
                 break;
             default:
                 break;
-        }
-    }
-
-    async ngOnInit(): Promise<void> {
-        try {
-            this.spinner.show();
-            this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd });
-            await this.timKiem()
-        } catch (error) {
-            console.log("e", error);
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        } finally {
-            this.spinner.hide()
         }
     }
     async timKiem() {

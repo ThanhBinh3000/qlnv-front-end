@@ -58,7 +58,6 @@ export type ChartOptionsLine = {
   styleUrls: ['./bao-cao-hien-trang-kho-tang.component.scss']
 })
 export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements OnInit {
-
   public tichLuongChart: Partial<ChartOptionsColumn>;
   public tonKhoChart: Partial<ChartOptionsLine>;
   listCuc: any[] = [];
@@ -96,7 +95,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private bcNvQuanLyKhoTangService: BcNvQuanLyKhoTangService,
-    private donViService: DonviService
+    private donViService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bcNvQuanLyKhoTangService);
     super.ngOnInit()
@@ -138,6 +137,17 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     this.search();
 
   }
+  resetConfig(type: number) { //type: 1 tích lượng, 2 tồn kho
+    if (type === 1) {
+      this.dataConfigTable.donVi.forEach(f => f.status = true);
+      this.dataConfigTable.tieuChi.forEach(f => f.status = true);
+      this.apDungTichLuongKhoConfig()
+    } else if (type === 2) {
+      this.dataConfigTableTonKho.donVi.forEach(f => f.status = true);
+      this.dataConfigTableTonKho.tieuChi.forEach(f => f.status = true);
+      this.apDungTonKhoConfig()
+    }
+  }
 
   async loadChartTichLuong() {
     let res = await this.bcNvQuanLyKhoTangService.hienTrangTichLuongKho({ maDvi: this.formData.value.maDvi });
@@ -162,7 +172,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
                 icon: '<i class ="icon htvbdh_filter"></i>',
                 title: 'Sort',
                 index: 1,
-                class: 'apexchart_sort',
+                class: 'apexchart_sort_tichluong',
                 click: (chart, options, e) => this.openModal(e, 1)
               }
             ]

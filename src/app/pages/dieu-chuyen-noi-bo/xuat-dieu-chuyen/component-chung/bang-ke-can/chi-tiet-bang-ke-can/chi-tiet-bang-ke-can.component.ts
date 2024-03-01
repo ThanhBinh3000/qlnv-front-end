@@ -30,7 +30,8 @@ import {
 import { convertTienTobangChu, convertTienTobangChuThapPhan } from 'src/app/shared/commonFunction';
 import { MA_QUYEN_BKCH, PassDataXuatBangKeCanHang } from '../bang-ke-can.component';
 import { PREVIEW } from 'src/app/constants/fileType';
-import { AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
+import { AMOUNT_NO_DECIMAL, AMOUNT_THREE_DECIMAL, AMOUNT_TWO_DECIMAL } from 'src/app/Utility/utils';
+import { pairwise, startWith } from 'rxjs/operators';
 
 
 @Component({
@@ -105,7 +106,14 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   maBb: string;
   danhSachHangHoaQD: any[] = [];
   previewName: string = "nhap_xuat_lt_bang_ke_can_hang_nhap_lt";
-  amount1 = { ...AMOUNT_TWO_DECIMAL }
+  amount = { ...AMOUNT_NO_DECIMAL }
+  amount1 = { ...AMOUNT_THREE_DECIMAL }
+  amount1Left = { ...AMOUNT_THREE_DECIMAL, align: 'left' }
+  listPhuongPhapCan: Array<{ label: string, value: string }> = [{ label: 'Cân giám định', value: 'can_giam_dinh' }, { label: 'Cân toàn bộ', value: 'can_toan_bo' }]
+  dcnbBangKeCanHangDtlKcCreate: any = {};
+  dcnbBangKeCanHangDtlKcClone: any = {}
+  tongSoBaoCan: number;
+  tongSoBaoKc: number;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -183,13 +191,44 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         tenThuKho: ['', [Validators.required]],
         dcnbBangKeCanHangDtl: [new Array(), [Validators.required, Validators.minLength(1)]],
         thoiHanDieuChuyen: [''],
-        keHoachDcDtlId: [, [Validators.required]]
+        keHoachDcDtlId: [, [Validators.required]],
+
+        phuongPhapCan: ['can_giam_dinh', [Validators.required]],
+        dcnbBangKeCanHangDtlKc: [new Array()],
+        tlMotBaoCaBi: [],
+        tlSoBaoKhongCan: [],
+        tongSlBaoBi: [],
       }
     );
     this.userInfo = this.userService.getUserLogin();
     this.maBb = `BKCH-${this.userInfo.DON_VI?.tenVietTat}`;
 
     // this.setTitle();
+    this.formData.get("tongTrongLuongTruBi").valueChanges.subscribe((value) => {
+      const tongTrongLuongTruBiText = this.convertTienTobangChu(value, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh);
+      this.formData.patchValue({ tongTrongLuongTruBiText });
+    })
+    this.formData.get('tlMotBaoCaBi')?.valueChanges.pipe(startWith(this.formData.get('tlMotBaoCaBi')?.value), pairwise()).subscribe(([prevValue, nextValue]) => {
+      if (prevValue !== nextValue) {
+        this.tinhTong()
+      }
+    })
+    this.formData.get('tongTrongLuongBaoBi')?.valueChanges.pipe(startWith(this.formData.get('tongTrongLuongBaoBi')?.value), pairwise()).subscribe(([prevValue, nextValue]) => {
+      if (prevValue !== nextValue) {
+        this.tinhTong()
+      }
+    })
+    this.formData.get('phuongPhapCan')?.valueChanges.pipe(startWith(this.formData.get('phuongPhapCan')?.value), pairwise()).subscribe(([prevValue, nextValue]) => {
+      if (prevValue !== nextValue) {
+        if (nextValue === "can_giam_dinh") {
+          this.formData.get('dcnbBangKeCanHangDtlKc').setValidators([Validators.required, Validators.minLength(1)])
+        } else {
+          this.formData.get('dcnbBangKeCanHangDtlKc').clearValidators()
+        }
+        this.clearDataCan();
+        this.formData.get('dcnbBangKeCanHangDtlKc').updateValueAndValidity();
+      }
+    })
   }
 
   async ngOnInit() {
@@ -260,7 +299,14 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
       await this.bangKeCanHangDieuChuyenService.getDetail(idInput)
         .then((res) => {
           if (res.msg === MESSAGE.SUCCESS) {
-            this.formData.patchValue({ ...res.data, soBangKe: res.data.soBangKe ? res.data.soBangKe : this.genSoBangKe(res.data.id), tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
+            const dcnbBangKeCanHangDtl = Array.isArray(res.data.dcnbBangKeCanHangDtl) ? res.data.dcnbBangKeCanHangDtl.filter(f => f.type === 'CAN_TOAN_BO' || f.type === 'CAN_GIAM_DINH') : [];
+            const dcnbBangKeCanHangDtlKc = Array.isArray(res.data.dcnbBangKeCanHangDtl) ? res.data.dcnbBangKeCanHangDtl.filter(f => f.type === 'KHONG_CAN') : []
+            this.formData.patchValue({
+              ...res.data,
+              dcnbBangKeCanHangDtl,
+              dcnbBangKeCanHangDtlKc,
+              soBangKe: res.data.soBangKe ? res.data.soBangKe : this.genSoBangKe(res.data.id), tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho
+            });
           }
         })
         .catch((e) => {
@@ -333,9 +379,12 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
       body.thayDoiThuKho = this.thayDoiThuKho;
       body.type = this.type;
       body.loaiQding = this.loaiDc === "CUC" ? "XUAT" : undefined;
+      if (body.phuongPhapCan === "can_giam_dinh") {
+        body.dcnbBangKeCanHangDtl = [...body.dcnbBangKeCanHangDtl, ...body.dcnbBangKeCanHangDtlKc.map(f => ({ ...f, trongLuongCaBaoBi: (f.soBaoDem || 0) * (body.tlMotBaoCaBi || 0) }))];
+      }
       this.helperService.markFormGroupTouched(this.formData);
       if (!this.formData.valid) return;
-      const data = await this.createUpdate(body, null, isGuiDuyet);
+      const data = await this.createUpdate({ ...body, dcnbBangKeCanHangDtlKc: undefined }, null, isGuiDuyet);
       if (data) {
         this.formData.patchValue({ id: data.id, trangThai: data.trangThai, soBangKe: data.soBangKe });
         if (isGuiDuyet) {
@@ -374,13 +423,32 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
     return tree.flatMap((item) => {
       return item.childData ? this.flattenTree(item.childData) : item;
     });
+  };
+  checkAddOrEditRow() {
+    if (Object.keys(this.dcnbBangKeCanHangDtlCreate).length >= 3 && this.dcnbBangKeCanHangDtlCreate.soBaoBi > 0 && this.dcnbBangKeCanHangDtlCreate.trongLuongCaBaoBi > 0) {
+      return true
+    }
+    if (this.formData.value.phuongPhapCan === "can_giam_dinh" && Object.keys(this.dcnbBangKeCanHangDtlKcCreate).length >= 2 && this.dcnbBangKeCanHangDtlKcCreate.soBaoDem > 0 && this.dcnbBangKeCanHangDtlKcCreate.lan) {
+      return true
+    }
+    return false
   }
   async addRow() {
-    if (Object.keys(this.dcnbBangKeCanHangDtlCreate).length !== 0) {
-      this.formData.patchValue({ dcnbBangKeCanHangDtl: [...this.formData.value.dcnbBangKeCanHangDtl, this.dcnbBangKeCanHangDtlCreate] });
+    // if (Object.keys(this.dcnbBangKeCanHangDtlCreate).length !== 0) {
+    //   this.formData.patchValue({ dcnbBangKeCanHangDtl: [...this.formData.value.dcnbBangKeCanHangDtl, this.dcnbBangKeCanHangDtlCreate] });
+    //   this.clearRow();
+    //   this.tinhTong();
+    //   this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: this.convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh) })
+    // }
+    if (this.checkAddOrEditRow()) {
+      // this.formData.value.bangKeDtl = [...this.formData.value.bangKeDtl, this.bangKeDtlCreate];
+      const dcnbBangKeCanHangDtl = cloneDeep(this.formData.value.dcnbBangKeCanHangDtl);
+      dcnbBangKeCanHangDtl.push({ ...this.dcnbBangKeCanHangDtlCreate, type: this.formData.value.phuongPhapCan === 'can_toan_bo' ? 'CAN_TOAN_BO' : 'CAN_GIAM_DINH' });
       this.clearRow();
+      this.formData.patchValue({ dcnbBangKeCanHangDtl });
       this.tinhTong();
-      this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: this.convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh) })
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin")
     }
   }
 
@@ -389,27 +457,107 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   }
 
   async editRow(i: number) {
-    this.formData.value.dcnbBangKeCanHangDtl.forEach(s => s.isEdit = false);
-    this.formData.value.dcnbBangKeCanHangDtl[i].isEdit = true;
+    // this.formData.value.dcnbBangKeCanHangDtl.forEach(s => s.isEdit = false);
+    // this.formData.value.dcnbBangKeCanHangDtl[i].isEdit = true;
+    // Object.assign(this.dcnbBangKeCanHangDtlClone, this.formData.value.dcnbBangKeCanHangDtl[i]);
+    const dcnbBangKeCanHangDtl = cloneDeep(this.formData.value.dcnbBangKeCanHangDtl);
+    dcnbBangKeCanHangDtl.forEach(s => s.isEdit = false);
+    dcnbBangKeCanHangDtl[i].isEdit = true;
     Object.assign(this.dcnbBangKeCanHangDtlClone, this.formData.value.dcnbBangKeCanHangDtl[i]);
+    this.formData.patchValue({ dcnbBangKeCanHangDtl });
   }
 
   async deleteRow(i: number) {
-    this.formData.value.dcnbBangKeCanHangDtl.splice(i, 1);
+    // this.formData.value.dcnbBangKeCanHangDtl.splice(i, 1);
+    // this.tinhTong();
+    // this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: this.convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh) })
+    const dcnbBangKeCanHangDtl = cloneDeep(this.formData.value.dcnbBangKeCanHangDtl);
+    dcnbBangKeCanHangDtl.splice(i, 1);
+    this.formData.patchValue({ dcnbBangKeCanHangDtl });
     this.tinhTong();
-    this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: this.convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh) })
   }
 
   async saveRow(i: number) {
-    this.formData.value.dcnbBangKeCanHangDtl[i].isEdit = false;
+    // this.formData.value.dcnbBangKeCanHangDtl[i].isEdit = false;
+    // this.tinhTong();
+    // this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: this.convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh) })
+    const dcnbBangKeCanHangDtl = cloneDeep(this.formData.value.dcnbBangKeCanHangDtl);
+    dcnbBangKeCanHangDtl[i].isEdit = false;
+    this.formData.patchValue({ dcnbBangKeCanHangDtl });
     this.tinhTong();
-    this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: this.convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh) })
   }
 
   async cancelRow(i: number) {
-    Object.assign(this.formData.value.dcnbBangKeCanHangDtl[i], this.dcnbBangKeCanHangDtlClone);
-    this.formData.value.dcnbBangKeCanHangDtl[i].isEdit = false;
-    this.tinhTong()
+    // Object.assign(this.formData.value.dcnbBangKeCanHangDtl[i], this.dcnbBangKeCanHangDtlClone);
+    // this.formData.value.dcnbBangKeCanHangDtl[i].isEdit = false;
+    // this.tinhTong()
+    const dcnbBangKeCanHangDtl = cloneDeep(this.formData.value.dcnbBangKeCanHangDtl);
+    Object.assign(dcnbBangKeCanHangDtl[i], this.dcnbBangKeCanHangDtlClone);
+    dcnbBangKeCanHangDtl[i].isEdit = false;
+    this.formData.patchValue({ dcnbBangKeCanHangDtl });
+  }
+  async addRowKc() {
+    // if (Object.keys(this.dcnbBangKeCanHangDtlCreate).length !== 0) {
+    //   this.formData.patchValue({ dcnbBangKeCanHangDtl: [...this.formData.value.dcnbBangKeCanHangDtl, this.dcnbBangKeCanHangDtlCreate] });
+    //   this.clearRow();
+    //   this.tinhTong();
+    //   this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: this.convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh) })
+    // }
+    if (this.checkAddOrEditRow()) {
+      // this.formData.value.bangKeDtl = [...this.formData.value.bangKeDtl, this.bangKeDtlCreate];
+      const dcnbBangKeCanHangDtlKc = cloneDeep(this.formData.value.dcnbBangKeCanHangDtlKc);
+      dcnbBangKeCanHangDtlKc.push({ ...this.dcnbBangKeCanHangDtlKcCreate, type: 'KHONG_CAN' });
+      this.clearRow();
+      this.formData.patchValue({ dcnbBangKeCanHangDtlKc });
+      this.tinhTong();
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin")
+    }
+  }
+
+  async clearRowKc() {
+    this.dcnbBangKeCanHangDtlKcCreate = {}
+  }
+
+  async editRowKc(i: number) {
+    // this.formData.value.dcnbBangKeCanHangDtl.forEach(s => s.isEdit = false);
+    // this.formData.value.dcnbBangKeCanHangDtl[i].isEdit = true;
+    // Object.assign(this.dcnbBangKeCanHangDtlClone, this.formData.value.dcnbBangKeCanHangDtl[i]);
+    const dcnbBangKeCanHangDtl = cloneDeep(this.formData.value.dcnbBangKeCanHangDtl);
+    dcnbBangKeCanHangDtl.forEach(s => s.isEdit = false);
+    dcnbBangKeCanHangDtl[i].isEdit = true;
+    Object.assign(this.dcnbBangKeCanHangDtlClone, this.formData.value.dcnbBangKeCanHangDtl[i]);
+    this.formData.patchValue({ dcnbBangKeCanHangDtl });
+  }
+
+  async deleteRowKc(i: number) {
+    // this.formData.value.dcnbBangKeCanHangDtl.splice(i, 1);
+    // this.tinhTong();
+    // this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: this.convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh) })
+    const dcnbBangKeCanHangDtlKc = cloneDeep(this.formData.value.dcnbBangKeCanHangDtlKc);
+    dcnbBangKeCanHangDtlKc.splice(i, 1);
+    this.formData.patchValue({ dcnbBangKeCanHangDtlKc });
+    this.tinhTong();
+  }
+
+  async saveRowKc(i: number) {
+    // this.formData.value.dcnbBangKeCanHangDtl[i].isEdit = false;
+    // this.tinhTong();
+    // this.formData.patchValue({ tongTrongLuongBaoBi: 0, tongTrongLuongTruBi: this.formData.value.tongTrongLuongCabaoBi, tongTrongLuongTruBiText: this.convertTienTobangChu(this.formData.value.tongTrongLuongCabaoBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh) })
+    const dcnbBangKeCanHangDtlKc = cloneDeep(this.formData.value.dcnbBangKeCanHangDtlKc);
+    dcnbBangKeCanHangDtlKc[i].isEdit = false;
+    this.formData.patchValue({ dcnbBangKeCanHangDtlKc });
+    this.tinhTong();
+  }
+
+  async cancelRowKc(i: number) {
+    // Object.assign(this.formData.value.dcnbBangKeCanHangDtl[i], this.dcnbBangKeCanHangDtlClone);
+    // this.formData.value.dcnbBangKeCanHangDtl[i].isEdit = false;
+    // this.tinhTong()
+    const dcnbBangKeCanHangDtlKc = cloneDeep(this.formData.value.dcnbBangKeCanHangDtlKc);
+    Object.assign(dcnbBangKeCanHangDtlKc[i], this.dcnbBangKeCanHangDtlKcClone);
+    dcnbBangKeCanHangDtlKc[i].isEdit = false;
+    this.formData.patchValue({ dcnbBangKeCanHangDtlKc });
   }
 
   async openDialogSoQd() {
@@ -456,14 +604,10 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
             donViNguoiGiaoHang: '',
             diaChiDonViNguoiGiaoHang: '',
             thoiGianGiaoNhan: '',
-            tongTrongLuongCabaoBi: 0,
-            tongTrongLuongBaoBi: 0,
-            tongTrongLuongTruBi: 0,
-            tongTrongLuongTruBiText: '',
-            dcnbBangKeCanHangDtl: [],
             thoiHanDieuChuyen: '',
             keHoachDcDtlId: '',
           });
+          this.clearDataCan();
           this.danhSachHangHoaQD = [];
           if (data.id) {
             this.chiTietQdDc(data.id)
@@ -576,12 +720,8 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
         tenDiemKho: dataRes.data.tenDiemKho,
         tenNganLoKho: dataRes.data.tenLoKho ? `${dataRes.data.tenLoKho} - ${dataRes.data.tenNganKho}` : dataRes.data.tenNganKho,
 
-        tongTrongLuongCabaoBi: 0,
-        tongTrongLuongBaoBi: 0,
-        tongTrongLuongTruBi: 0,
-        tongTrongLuongTruBiText: '',
-        dcnbBangKeCanHangDtl: []
       });
+      this.clearDataCan();
       this.getThoiHanDieuChuyen();
       this.chiTietDiemKho(dataRes.data.maDiemKho);
     }
@@ -613,25 +753,78 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
   }
 
   async tinhTong() {
-    let dtl = cloneDeep(this.formData.value.dcnbBangKeCanHangDtl);
-    let tongTrongLuongCabaoBi = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBaoBi, 0);
+    // let dtl = cloneDeep(this.formData.value.dcnbBangKeCanHangDtl);
+    // let tongTrongLuongCabaoBi = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBaoBi, 0);
 
+    // this.formData.patchValue({
+    //   tongTrongLuongCabaoBi,
+    //   dcnbBangKeCanHangDtl: this.formData.value.dcnbBangKeCanHangDtl
+    // });
+    if (this.formData.value.phuongPhapCan === 'can_giam_dinh') {
+      const dtl = cloneDeep(this.formData.value.dcnbBangKeCanHangDtl);
+      const dltKc = cloneDeep(this.formData.value.dcnbBangKeCanHangDtlKc);
+      const tlMotBaoCaBi = this.formData.get("tlMotBaoCaBi").value;
+      this.tongSoBaoCan = dtl.reduce((prev, cur) => prev + cur.soBaoBi, 0);
+      this.tongSoBaoKc = dltKc.reduce((prev, cur) => prev + cur.soBaoDem, 0);
+      const tongTrongLuongCaBiCan = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBaoBi, 0);
+      const tlSoBaoKhongCan = (this.tongSoBaoKc || 0) * (tlMotBaoCaBi || 0);
+      const tongTrongLuongBaoBi = this.formData.get('tongTrongLuongBaoBi').value || 0;
+      const tongTrongLuongCabaoBi = tongTrongLuongCaBiCan + tlSoBaoKhongCan;
+      const tongTrongLuongTruBi = tongTrongLuongCabaoBi - tongTrongLuongBaoBi;
+      this.formData.patchValue({
+        tlSoBaoKhongCan,
+        tongSlBaoBi: (this.tongSoBaoCan || 0) + (this.tongSoBaoKc || 0),
+        tongTrongLuongCabaoBi,
+        tongTrongLuongTruBi,
+      })
+    }
+    else {
+      const dtl = cloneDeep(this.formData.value.dcnbBangKeCanHangDtl);
+      const tongTrongLuongCabaoBi = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBaoBi, 0);
+      const tongTrongLuongBaoBi = this.formData.value.tongTrongLuongBaoBi || 0;
+      const tongTrongLuongTruBi = tongTrongLuongCabaoBi - tongTrongLuongBaoBi;
+      this.formData.patchValue({
+        tongTrongLuongCabaoBi,
+        // bangKeDtl: this.formData.value.bangKeDtl,
+        tongTrongLuongTruBi,
+      });
+    }
+  }
+  // async trongLuongTruBi() {
+  //   let data = cloneDeep(this.formData.value);
+  //   if (!!!data.tongTrongLuongBaoBi) {
+  //     data.tongTrongLuongBaoBi = 0;
+  //   }
+  //   let tongTrongLuongTruBi = data.tongTrongLuongCabaoBi - data.tongTrongLuongBaoBi;
+  //   this.formData.patchValue({
+  //     tongTrongLuongTruBi,
+  //     tongTrongLuongTruBiText: this.convertTienTobangChu(tongTrongLuongTruBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh),
+  //     tongTrongLuongBaoBi: data.tongTrongLuongBaoBi,
+  //   });
+  // }
+  async trongLuongTruBi() {
+    const tongTrongLuongCabaoBi = this.formData.value.tongTrongLuongCabaoBi || 0;
+    const tongTrongLuongBaoBi = this.formData.value.tongTrongLuongBaoBi || 0;
+    let tongTrongLuongTruBi = tongTrongLuongCabaoBi - tongTrongLuongBaoBi;
     this.formData.patchValue({
-      tongTrongLuongCabaoBi,
-      dcnbBangKeCanHangDtl: this.formData.value.dcnbBangKeCanHangDtl
+      tongTrongLuongTruBi: tongTrongLuongTruBi,
     });
   }
-  async trongLuongTruBi() {
-    let data = cloneDeep(this.formData.value);
-    if (!!!data.tongTrongLuongBaoBi) {
-      data.tongTrongLuongBaoBi = 0;
-    }
-    let tongTrongLuongTruBi = data.tongTrongLuongCabaoBi - data.tongTrongLuongBaoBi;
-    this.formData.patchValue({
-      tongTrongLuongTruBi,
-      tongTrongLuongTruBiText: this.convertTienTobangChu(tongTrongLuongTruBi, this.formData.value.donViTinh === "kg" ? "kilôgam" : this.formData.value.donViTinh),
-      tongTrongLuongBaoBi: data.tongTrongLuongBaoBi,
-    });
+  clearDataCan() {
+    this.tongSl = null;
+    this.tongSoBaoCan = null;
+    this.tongSoBaoKc = null;
+    this.tongTien = null;
+    this.formData.get("dcnbBangKeCanHangDtl").setValue([]);
+    this.formData.get("dcnbBangKeCanHangDtlKc").setValue([]);
+    this.formData.get('tongTrongLuongCabaoBi').setValue(null);
+    this.formData.get('tongTrongLuongBaoBi').setValue(null);
+    this.formData.get('tongTrongLuongTruBi').setValue(null);
+    this.formData.get('tongTrongLuongTruBiText').setValue(null);
+
+    this.formData.get('tlMotBaoCaBi').setValue(null);
+    this.formData.get('tlSoBaoKhongCan').setValue(null);
+    this.formData.get('tongSlBaoBi').setValue(null);
   }
 
   convertTienTobangChu(tien: number, donVi?: string) {

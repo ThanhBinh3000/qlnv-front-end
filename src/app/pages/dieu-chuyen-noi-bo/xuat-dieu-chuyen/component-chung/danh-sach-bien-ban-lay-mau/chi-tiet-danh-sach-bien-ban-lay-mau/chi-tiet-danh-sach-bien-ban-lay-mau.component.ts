@@ -217,7 +217,9 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         ktvBaoQuan: this.userInfo.TEN_DAY_DU,
         ...this.passData,
         tenNganLoKho: this.passData.tenLoKho ? `${this.passData.tenLoKho} - ${this.passData.tenNganKho}` : this.passData.tenNganKho,
-        qdccId: this.passData.qddccId
+        qdccId: this.passData.qddccId,
+        dviKiemNghiem: this.userInfo.TEN_PHONG_BAN,
+        diaDiemLayMau: this.userInfo.DON_VI?.diaChi
       });
       // if (this.passData.qddccId) {
       //   this.getChiTietQD(this.passData.qddccId)

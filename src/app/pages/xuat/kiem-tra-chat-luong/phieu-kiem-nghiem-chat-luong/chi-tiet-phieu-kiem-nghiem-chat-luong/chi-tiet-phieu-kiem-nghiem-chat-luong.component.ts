@@ -136,7 +136,8 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       hinhThucBaoQuan: [new Array()],
       tenNganLoKho: [],
       ketLuanCuoi: [],
-      slHangBaoQuan: []
+      slHangBaoQuan: [],
+      chiSoChatLuongTieuDe: []
     });
   }
 
@@ -214,6 +215,17 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     const res = await this.danhMucDungChungService.danhMucChungGetAll(ma);
     if (res.msg === MESSAGE.SUCCESS) {
       this.dmMucXatGao = Array.isArray(res.data) ? res.data : []
+    }
+  }
+  async getSoHieuQuyChuan(vthh: string) {
+    if (!vthh) return;
+    const res = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(vthh)
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        const soHieuQuyChuan = res.data[0]?.soHieuQuyChuan;
+        const chiSoChatLuongTieuDe = `Chỉ số chất lượng theo ${soHieuQuyChuan ? soHieuQuyChuan : ""}`;
+        this.formData.patchValue({ chiSoChatLuongTieuDe })
+      }
     }
   }
   async save() {
@@ -586,7 +598,7 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
             // donViTinh: data.donViTinh
           });
           if (data.cloaiVthh || data.loaiVthh) {
-            await Promise.all([this.loadDanhSachHinhThucBaoQuan(data.cloaiVthh || data.loaiVthh), this.tenThuKho(data.maDiaDiem), this.kiemTraTonKho(data.maDiaDiem)])
+            await Promise.all([this.getSoHieuQuyChuan(data.cloaiVthh || data.loaiVthh), this.loadDanhSachHinhThucBaoQuan(data.cloaiVthh || data.loaiVthh), this.tenThuKho(data.maDiaDiem), this.kiemTraTonKho(data.maDiaDiem)])
           }
           this.buildTableView();
 
