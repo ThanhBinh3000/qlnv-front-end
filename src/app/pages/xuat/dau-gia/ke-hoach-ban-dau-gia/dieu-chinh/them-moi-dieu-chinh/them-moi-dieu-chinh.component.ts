@@ -277,90 +277,48 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     this.danhSachDieuChinh = data
   }
 
-
-  async save() {
+  async saveAndApproveAndReject(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
       if (this.checkPrice.boolean) {
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
         return;
       }
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["soQdCanDc"].setValidators([Validators.required]);
-      const soCongVan = this.formData.value.soCongVan;
-      const soQdDc = this.formData.value.soQdDc;
       const body = {
         ...this.formData.value,
-        soCongVan: soCongVan ? soCongVan + this.maConVan : null,
-        soQdDc: soQdDc ? soQdDc + this.maHauTo : null,
+        soCongVan: this.formData.value.soCongVan ? this.formData.value.soCongVan + this.maConVan : null,
+        soQdDc: this.formData.value.soQdDc ? this.formData.value.soQdDc + this.maHauTo : null,
         children: this.dataTable,
         canCuPhapLy: this.canCuPhapLy,
         fileDinhKem: this.fileDinhKem,
         fileDinhKemDc: this.fileDinhKemDc,
       };
-      await this.createUpdate(body);
-    } catch (e) {
-      console.error('Error: ', e);
+      switch (action) {
+        case "createUpdate":
+          this.formData.controls["soQdCanDc"].setValidators([Validators.required]);
+          await this.createUpdate(body);
+          break;
+        case "saveAndSend":
+          this.formData.controls["trichYeu"].setValidators([Validators.required]);
+          if (trangThai === STATUS.BAN_HANH) {
+            this.setValidForm();
+          }
+          await this.saveAndSend(body, trangThai, msg, msgSuccess);
+          break;
+        case "approve":
+          await this.approve(this.idInput, trangThai, msg);
+          break;
+        case "reject":
+          await this.reject(this.idInput, trangThai);
+          break;
+        default:
+          console.error("Invalid action: ", action);
+          break;
+      }
+    } catch (error) {
+      console.error('Error: ', error);
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
-    }
-  }
-
-  async saveAndBrowse(trangThai: string, msg: string, msgSuccess?: string) {
-    try {
-      if (this.checkPrice.boolean) {
-        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
-        return;
-      }
-      this.formData.controls["trichYeu"].setValidators([Validators.required]);
-      if (trangThai === STATUS.BAN_HANH) {
-        this.setValidForm();
-      }
-      const soCongVan = this.formData.value.soCongVan;
-      const soQdDc = this.formData.value.soQdDc;
-      const body = {
-        ...this.formData.value,
-        soCongVan: soCongVan ? soCongVan + this.maConVan : null,
-        soQdDc: soQdDc ? soQdDc + this.maHauTo : null,
-        children: this.dataTable,
-        canCuPhapLy: this.canCuPhapLy,
-        fileDinhKem: this.fileDinhKem,
-        fileDinhKemDc: this.fileDinhKemDc,
-      }
-      await this.saveAndSend(body, trangThai, msg, msgSuccess);
-    } catch (error) {
-      console.error("Lỗi khi lưu và gửi duyệt:", error);
-    } finally {
-      await this.helperService.restoreRequiredForm(this.formData);
-    }
-  }
-
-  async status(trangThai: string, msgSuccess?: string) {
-    try {
-      if (this.checkPrice.boolean) {
-        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
-        return;
-      }
-      await this.approve(this.idInput, trangThai, msgSuccess)
-    } catch (error) {
-      console.error('error: ', error);
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
-    }
-  }
-
-  async refuse(trangThai: string) {
-    try {
-      if (this.checkPrice.boolean) {
-        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
-        return;
-      }
-      await this.reject(this.idInput, trangThai)
-    } catch (error) {
-      console.error('error: ', error);
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
     }
   }
 

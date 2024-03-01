@@ -11,6 +11,8 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {checkPrice} from "../../../../../models/KeHoachBanDauGia";
+import {QthtChotGiaNhapXuatService} from "../../../../../services/quantri-hethong/qthtChotGiaNhapXuat.service";
 
 @Component({
   selector: 'app-table-giao-xh',
@@ -32,6 +34,8 @@ export class TableGiaoXh extends Base2Component implements OnInit {
   isViewHaoDoi: boolean = false
   listTrangThai: any = [];
   listTrangThaiXh: any = [];
+  checkPrice: checkPrice;
+
 
   constructor(
     httpClient: HttpClient,
@@ -40,6 +44,7 @@ export class TableGiaoXh extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
+    private qthtChotGiaNhapXuatService: QthtChotGiaNhapXuatService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
@@ -116,6 +121,7 @@ export class TableGiaoXh extends Base2Component implements OnInit {
         await this.loadDsVthh();
       }
       await this.search();
+      await this.checkChotDieuChinhGia();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -124,7 +130,27 @@ export class TableGiaoXh extends Base2Component implements OnInit {
     }
   }
 
+  async checkChotDieuChinhGia() {
+    try {
+      this.checkPrice = new checkPrice();
+      this.spinner.show();
+      const res = await this.qthtChotGiaNhapXuatService.checkChotGia({});
+      if (res && res.msg === MESSAGE.SUCCESS && res.data) {
+        this.checkPrice.boolean = res.data;
+        this.checkPrice.msgSuccess = 'Việc xuất hàng đang được tạm dừng để chốt điều chỉnh giá. Vui lòng quay lại thực hiện sau!.';
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
   redirectDetail(id, isView: boolean) {
+    if (id === 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;
