@@ -208,7 +208,7 @@
             </a>
             <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU
                 && (userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XOA')) && userService.isTongCuc()"
-               (click)="delete(data, null, this.checkPrice)">
+               (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

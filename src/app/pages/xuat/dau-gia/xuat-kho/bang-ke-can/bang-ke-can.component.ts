@@ -6,16 +6,11 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {DonviService} from "src/app/services/donvi.service";
-import {
-  DeXuatPhuongAnCuuTroService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
 import {MESSAGE} from "src/app/constants/message";
 import {BangKeCanService} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BangKeCan.service';
 import _ from 'lodash';
 import * as uuid from "uuid";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {QthtChotGiaNhapXuatService} from "../../../../../services/quantri-hethong/qthtChotGiaNhapXuat.service";
-import {checkPrice} from "../../../../../models/KeHoachBanDauGia";
 
 @Component({
   selector: 'app-bdg-bang-ke-can',
@@ -34,7 +29,6 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   isViewKiemnghiem: boolean = false;
   idXuatKho: number = 0;
   isViewXuatKho: boolean = false;
-  checkPrice: checkPrice;
 
 
   constructor(
@@ -44,7 +38,6 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private donviService: DonviService,
-    private qthtChotGiaNhapXuatService: QthtChotGiaNhapXuatService,
     private bangKeCanService: BangKeCanService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangKeCanService);
@@ -81,7 +74,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     try {
       await this.spinner.show();
       await this.search();
-      await this.checkChotDieuChinhGia();
+      await this.checkPriceAdjust('xuất hàng');
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -155,21 +148,6 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     }
   }
 
-  async checkChotDieuChinhGia() {
-    try {
-      this.checkPrice = new checkPrice();
-      this.spinner.show();
-      const res = await this.qthtChotGiaNhapXuatService.checkChotGia({});
-      if (res && res.msg === MESSAGE.SUCCESS && res.data) {
-        this.checkPrice.boolean = res.data;
-        this.checkPrice.msgSuccess = 'Việc xuất hàng đang được tạm dừng để chốt điều chỉnh giá. Vui lòng quay lại thực hiện sau!.';
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-    } finally {
-      this.spinner.hide();
-    }
-  }
   redirectDetail(id, isView: boolean) {
     if (id === 0 && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);

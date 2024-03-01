@@ -11,7 +11,6 @@ import {
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {QthtChotGiaNhapXuatService} from "../../../../../services/quantri-hethong/qthtChotGiaNhapXuat.service";
-import {checkPrice} from "../../../../../models/KeHoachBanDauGia";
 
 @Component({
   selector: 'app-dieu-chinh',
@@ -25,7 +24,6 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
   listTrangThai: any = [];
-  checkPrice: checkPrice;
 
   constructor(
     httpClient: HttpClient,
@@ -33,7 +31,6 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private qthtChotGiaNhapXuatService: QthtChotGiaNhapXuatService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBdgService);
@@ -98,28 +95,12 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
         type: 'QDDC',
       })
       await this.search();
-      await this.checkChotDieuChinhGia();
+      await this.checkPriceAdjust('xuất hàng');
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
-    }
-  }
-
-  async checkChotDieuChinhGia() {
-    try {
-      this.checkPrice = new checkPrice();
-      this.spinner.show();
-      const res = await this.qthtChotGiaNhapXuatService.checkChotGia({});
-      if (res && res.msg === MESSAGE.SUCCESS && res.data) {
-        this.checkPrice.boolean = res.data;
-        this.checkPrice.msgSuccess = 'Việc xuất hàng đang được tạm dừng để chốt điều chỉnh giá. Vui lòng quay lại thực hiện sau!.';
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-    } finally {
-      this.spinner.hide();
     }
   }
 
