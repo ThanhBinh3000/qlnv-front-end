@@ -179,7 +179,6 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     }
   }
 
-
   async deleteHd(data) {
     if (this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);

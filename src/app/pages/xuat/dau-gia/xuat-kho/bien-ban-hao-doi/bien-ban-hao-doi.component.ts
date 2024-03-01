@@ -14,6 +14,8 @@ import {
 import {
   BienBanHaoDoiService
 } from "src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BienBanHaoDoi.service";
+import {checkPrice} from "../../../../../models/KeHoachBanDauGia";
+import {QthtChotGiaNhapXuatService} from "../../../../../services/quantri-hethong/qthtChotGiaNhapXuat.service";
 
 @Component({
   selector: 'app-bdg-bien-ban-hao-doi',
@@ -35,6 +37,7 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
   isViewBangKe: boolean = false;
   idXuatKho: number = 0;
   isViewXuatKho: boolean = false;
+  checkPrice: checkPrice;
 
   constructor(
     httpClient: HttpClient,
@@ -42,6 +45,7 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private qthtChotGiaNhapXuatService: QthtChotGiaNhapXuatService,
     private phieuXuatKhoService: PhieuXuatKhoService,
     private bienBanHaoDoiService: BienBanHaoDoiService,
   ) {
@@ -77,6 +81,7 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     try {
       await this.spinner.show();
       await this.search();
+      await this.checkChotDieuChinhGia();
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -156,7 +161,27 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     }
   }
 
+  async checkChotDieuChinhGia() {
+    try {
+      this.checkPrice = new checkPrice();
+      this.spinner.show();
+      const res = await this.qthtChotGiaNhapXuatService.checkChotGia({});
+      if (res && res.msg === MESSAGE.SUCCESS && res.data) {
+        this.checkPrice.boolean = res.data;
+        this.checkPrice.msgSuccess = 'Việc xuất hàng đang được tạm dừng để chốt điều chỉnh giá. Vui lòng quay lại thực hiện sau!.';
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
   redirectDetail(id, isView: boolean) {
+    if (id === 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;

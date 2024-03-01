@@ -211,7 +211,7 @@
             <a *ngIf="isActionAllowed('PHEDUYET', data)" (click)="redirectDetail(data.id, true)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
-            <a *ngIf="isActionAllowed('XOA', data)" (click)="delete(data)">
+            <a *ngIf="isActionAllowed('XOA', data)" (click)="delete(data, null, this.checkPrice)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
@@ -241,7 +241,7 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-create-giao-xh [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-                      (showListEvent)="showList()">
+                      [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-create-giao-xh>
 </div>
 <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewHopDong" (nzOnCancel)="closeModal('hopDong')">
