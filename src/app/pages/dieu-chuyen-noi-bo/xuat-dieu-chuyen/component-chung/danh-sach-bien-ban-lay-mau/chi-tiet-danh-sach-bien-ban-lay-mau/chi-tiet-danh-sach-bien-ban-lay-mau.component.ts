@@ -229,7 +229,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         this.getChiTietTieuChiCanKiemTra(this.passData.cloaiVthh || this.passData.loaiVthh)
       }
     }
-
   }
 
   quayLai() {
