@@ -28,17 +28,16 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   @Input() loaiVthh: string;
 
   searchFilter = {
+    namNhap: '',
     soQd: '',
     soBienBan: '',
     ngayNhapDayKho: '',
-    ngayKetThucNhap: '',
-    maDiemKho: '',
-    maNhaKho: '',
-    maKhoNganLo: '',
-    kyThuatVien: '',
   };
 
-
+  tuNgayNhapDayKho: Date | null = null;
+  denNgayNhapDayKho: Date | null = null;
+  tuNgayTgianNkho: Date | null = null;
+  denNgayTgianNkho: Date | null = null;
   STATUS = STATUS
 
   listDiemKho: any[] = [];
@@ -147,7 +146,13 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
         "limit": this.pageSize,
         "page": this.page - 1
       },
-      loaiVthh: this.loaiVthh
+      loaiVthh: this.loaiVthh,
+      soQd: this.searchFilter.soQd,
+      namNhap: this.searchFilter.namNhap,
+      tuNgayNhapDayKho: this.tuNgayNhapDayKho != null ? dayjs(this.tuNgayNhapDayKho).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayNhapDayKho: this.denNgayNhapDayKho != null ? dayjs(this.denNgayNhapDayKho).format('YYYY-MM-DD') + " 24:59:59" : null,
+      tuNgayTgianNkho: this.tuNgayTgianNkho != null ? dayjs(this.tuNgayTgianNkho).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayTgianNkho: this.denNgayTgianNkho != null ? dayjs(this.denNgayTgianNkho).format('YYYY-MM-DD') + " 24:59:59" : null,
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -193,15 +198,14 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
+      namNhap: '',
       soQd: '',
       soBienBan: '',
       ngayNhapDayKho: '',
-      ngayKetThucNhap: '',
-      maDiemKho: '',
-      maNhaKho: '',
-      maKhoNganLo: '',
-      kyThuatVien: '',
     };
+    this.tuNgayNhapDayKho = null;
+    this.denNgayNhapDayKho = null;
+    this.search();
   }
 
   xoaItem(item: any) {
@@ -334,20 +338,19 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "maDvi": this.userInfo.MA_DVI,
-          "maVatTuCha": this.isTatCa ? null : this.maVthh,
-          "ngayKetThucNhapDen": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 1 ? dayjs(this.searchFilter.ngayKetThucNhap[1]).format('YYYY-MM-DD') : null,
-          "ngayKetThucNhapTu": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 0 ? dayjs(this.searchFilter.ngayKetThucNhap[0]).format('YYYY-MM-DD') : null,
-          "ngayNhapDayKhoDen": this.searchFilter.ngayNhapDayKho && this.searchFilter.ngayNhapDayKho.length > 1 ? dayjs(this.searchFilter.ngayNhapDayKho[1]).format('YYYY-MM-DD') : null,
-          "ngayNhapDayKhoTu": this.searchFilter.ngayNhapDayKho && this.searchFilter.ngayNhapDayKho.length > 0 ? dayjs(this.searchFilter.ngayNhapDayKho[0]).format('YYYY-MM-DD') : null,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": null,
-          "soBienBan": this.searchFilter.soBienBan,
-          "soQdNhap": this.searchFilter.soQd,
-          "str": null,
-          "trangThai": null
-        }
+          trangThai: STATUS.BAN_HANH,
+          paggingReq: {
+            "limit": this.pageSize,
+            "page": this.page - 1
+          },
+          loaiVthh: this.loaiVthh,
+          soQd: this.searchFilter.soQd,
+          namNhap: this.searchFilter.namNhap,
+          tuNgayNhapDayKho: this.tuNgayNhapDayKho != null ? dayjs(this.tuNgayNhapDayKho).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayNhapDayKho: this.denNgayNhapDayKho != null ? dayjs(this.denNgayNhapDayKho).format('YYYY-MM-DD') + " 24:59:59" : null,
+          tuNgayTgianNkho: this.tuNgayTgianNkho != null ? dayjs(this.tuNgayTgianNkho).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayTgianNkho: this.denNgayTgianNkho != null ? dayjs(this.denNgayTgianNkho).format('YYYY-MM-DD') + " 24:59:59" : null,
+        };
         this.quanLyPhieuNhapDayKhoService.export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-phieu-nhap-day-kho.xlsx'),
@@ -531,4 +534,31 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     }
     return false;
   }
+
+  disabledTuNgayNhapDayKho = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayNhapDayKho) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayNhapDayKho.getTime();
+  };
+
+  disabledDenNgayNhapDayKho = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayNhapDayKho) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayNhapDayKho.getTime();
+  };
+  disabledTuNgayTgianNkho = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayTgianNkho) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayTgianNkho.getTime();
+  };
+
+  disabledDenNgayTgianNkho = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayTgianNkho) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayTgianNkho.getTime();
+  };
 }
