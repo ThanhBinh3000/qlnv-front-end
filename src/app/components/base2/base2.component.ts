@@ -286,7 +286,7 @@ export class Base2Component implements OnInit {
 
 
   // DELETE 1 item table
-  delete(item: any, roles?: any, checkPrice?: any) {
+  delete(item: any, roles?: any) {
     if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
@@ -907,10 +907,9 @@ export class Base2Component implements OnInit {
       this.checkPrice = new checkPrice();
       this.spinner.show();
       const res = await this.checkPriceService.checkChotGia({});
-      console.log(res, 888)
       if (res && res.msg === MESSAGE.SUCCESS && res.data) {
         this.checkPrice.boolean = res.data;
-        this.checkPrice.msgSuccess = `Việc ${msgSuccess} đang được tạm dừng để chốt điều chỉnh giá. Vui lòng quay lại thực hiện sau!.`;
+        this.checkPrice.msgSuccess = `Việc ${msgSuccess} đang được tạm dừng để chốt điều chỉnh giá. Vui lòng quay lại thực hiện sau !`;
       }
     } catch (error) {
       console.error('An error occurred:', error);

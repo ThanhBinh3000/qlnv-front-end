@@ -35,7 +35,6 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   isViewBangKe: boolean = false;
   idXuatKho: number = 0;
   isViewXuatKho: boolean = false;
-  checkPrice: checkPrice;
 
   constructor(
     httpClient: HttpClient,
@@ -44,7 +43,6 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private phieuXuatKhoService: PhieuXuatKhoService,
-    private qthtChotGiaNhapXuatService: QthtChotGiaNhapXuatService,
     private bienBanTinhKhoService: BienBanTinhKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanTinhKhoService);
@@ -84,7 +82,7 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
     try {
       await this.spinner.show();
       await this.search();
-      await this.checkChotDieuChinhGia();
+      await this.checkPriceAdjust('xuất hàng');
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -159,22 +157,6 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
       this.expandSetString.add(idVirtual);
     } else {
       this.expandSetString.delete(idVirtual);
-    }
-  }
-
-  async checkChotDieuChinhGia() {
-    try {
-      this.checkPrice = new checkPrice();
-      this.spinner.show();
-      const res = await this.qthtChotGiaNhapXuatService.checkChotGia({});
-      if (res && res.msg === MESSAGE.SUCCESS && res.data) {
-        this.checkPrice.boolean = res.data;
-        this.checkPrice.msgSuccess = 'Việc xuất hàng đang được tạm dừng để chốt điều chỉnh giá. Vui lòng quay lại thực hiện sau!.';
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-    } finally {
-      this.spinner.hide();
     }
   }
 

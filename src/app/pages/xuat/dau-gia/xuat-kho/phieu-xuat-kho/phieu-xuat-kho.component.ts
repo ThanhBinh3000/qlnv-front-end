@@ -10,8 +10,6 @@ import * as uuid from "uuid";
 import {PhieuXuatKhoService} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
 import _ from 'lodash';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {checkPrice} from "../../../../../models/KeHoachBanDauGia";
-import {QthtChotGiaNhapXuatService} from "../../../../../services/quantri-hethong/qthtChotGiaNhapXuat.service";
 
 @Component({
   selector: 'app-bdg-phieu-xuat-kho',
@@ -30,7 +28,6 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   isViewKiemnghiem: boolean = false;
   idBangKe: number = 0;
   isViewBangKe: boolean = false;
-  checkPrice: checkPrice;
 
   constructor(
     httpClient: HttpClient,
@@ -39,7 +36,6 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private phieuXuatKhoService: PhieuXuatKhoService,
-    private qthtChotGiaNhapXuatService: QthtChotGiaNhapXuatService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
     this.formData = this.fb.group({
@@ -71,7 +67,7 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     try {
       await this.spinner.show();
       await this.search();
-      await this.checkChotDieuChinhGia();
+      await this.checkPriceAdjust('xuất hàng');
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -142,22 +138,6 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
       this.expandSetString.add(idVirtual);
     } else {
       this.expandSetString.delete(idVirtual);
-    }
-  }
-
-  async checkChotDieuChinhGia() {
-    try {
-      this.checkPrice = new checkPrice();
-      this.spinner.show();
-      const res = await this.qthtChotGiaNhapXuatService.checkChotGia({});
-      if (res && res.msg === MESSAGE.SUCCESS && res.data) {
-        this.checkPrice.boolean = true;
-        this.checkPrice.msgSuccess = 'Việc xuất hàng đang được tạm dừng để chốt điều chỉnh giá. Vui lòng quay lại thực hiện sau!.';
-      }
-    } catch (error) {
-      console.error('An error occurred:', error);
-    } finally {
-      this.spinner.hide();
     }
   }
 
