@@ -10,6 +10,7 @@ import { DonviService } from "../../../services/donvi.service";
 import { MangLuoiKhoService } from "../../../services/qlnv-kho/mangLuoiKho.service";
 import { QuanLyHangTrongKhoService } from "../../../services/quanLyHangTrongKho.service";
 import { MESSAGE } from "../../../constants/message";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-dialog-them-moi-dm-nhom-hang',
@@ -23,6 +24,19 @@ export class DialogThemMoiDmNhomHangComponent extends Base2Component implements 
   data: any
   listMatHang: any[] = [];
   nhomCcdc: any[] = [];
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

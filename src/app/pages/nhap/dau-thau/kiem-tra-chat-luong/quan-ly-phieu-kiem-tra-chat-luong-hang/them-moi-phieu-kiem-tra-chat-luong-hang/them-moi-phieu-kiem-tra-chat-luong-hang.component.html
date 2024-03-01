@@ -381,7 +381,7 @@
                   Số lượng khách hàng khai báo (kg)
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input [readonly]="isView" formControlName="slKhKb" />
+                  <input  class="money-input" currencyMask [options]="amount" [min]="0" [readonly]="isView" formControlName="slKhKb" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -391,7 +391,7 @@
                   Số lượng hàng thực tế kiểm tra (kg)
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input [readonly]="isView" formControlName="slTtKtra" />
+                  <input  class="money-input" currencyMask [options]="amount" [min]="0" [readonly]="isView" formControlName="slTtKtra" />
                 </nz-form-control>
               </nz-form-item>
             </div>
