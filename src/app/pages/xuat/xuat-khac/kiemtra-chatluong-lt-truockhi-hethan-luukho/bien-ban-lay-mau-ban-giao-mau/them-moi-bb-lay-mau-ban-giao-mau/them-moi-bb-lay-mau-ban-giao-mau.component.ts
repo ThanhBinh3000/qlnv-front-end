@@ -18,7 +18,6 @@ import {Validators} from '@angular/forms';
 import {
   TongHopDanhSachHangDTQGService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuatlt/TongHopDanhSachHangDTQG.service";
-import {saveAs} from 'file-saver';
 import {LOAI_HH_XUAT_KHAC} from "../../../../../../constants/config";
 import {
   BienBanLayMauLuongThucHangDTQGService
@@ -166,7 +165,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
             this.listFileDinhKem = data.fileDinhKems;
             this.canCu = data.canCu;
             this.fileNiemPhong = data.fileDinhKemNiemPhong;
-            this.dataTable=this.formData.value.bbLayMauDtl ;
+            this.dataTable = this.formData.value.bbLayMauDtl;
             this.dataTable.forEach((item, index) => {
               this.dataEdit[index] = {
                 edit: false,
@@ -175,9 +174,9 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
             });
             //Xử lý pp lấy mẫu và chỉ tiêu kiểm tra chất lượng
             if (data.ppLayMau) {
-              const ppLayMauOptions = data.ppLayMau.split(',').map(option => {
-                const [label, checked] = option.split('-');
-                return { label, value: null, checked: checked === 'true' };
+              const ppLayMauOptions = data.ppLayMau.split(';').map(option => {
+                const [label, checked] = option.split('=>');
+                return {label, value: null, checked: checked === 'true'};
               });
 
               this.formData.patchValue({
@@ -186,8 +185,10 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
             }
 
             if (data.chiTieuKiemTra) {
-              let chiTieuOptions = data.chiTieuKiemTra.indexOf(",") > 0 ? data.chiTieuKiemTra.split(",") : [data.chiTieuKiemTra];
-              chiTieuOptions = chiTieuOptions.map((str, index) => ({label: str, value: index + 1, checked: true}));
+              const chiTieuOptions = data.chiTieuKiemTra.split(";").map(option => {
+                const [label, checked] = option.split('=>');
+                return {label, value: null, checked: checked === 'true'};
+              });
               this.formData.patchValue({
                 chiTieuKiemTraList: chiTieuOptions,
               });
@@ -264,7 +265,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       ngayTongHop: data.ngayTongHop,
     });
     if (data.tongHopDtl) {
-      this.listDiaDiemNhap = data.tongHopDtl.filter(i=>i.maDiaDiem.substring(0,8) === this.userInfo.MA_DVI);
+      this.listDiaDiemNhap = data.tongHopDtl.filter(i => i.maDiaDiem.substring(0, 8) === this.userInfo.MA_DVI);
     }
     await this.listBienBan(data.maDanhSach)
     await this.spinner.hide();
@@ -358,15 +359,15 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     // xử lý pp lấy mẫu và tiêu chuẩn cần lấy mẫu kiểm tra
     if (body.ppLayMauList && body.ppLayMauList.length > 0) {
       body.ppLayMau = body.ppLayMauList.map(function (item) {
-        return item['label'] + '-' + item.checked;
-      }).join(",");
+        return item['label'] + '=>' + item.checked;
+      }).join(";");
     }
     if (body.chiTieuKiemTraList && body.chiTieuKiemTraList.length > 0) {
       body.chiTieuKiemTra = body.chiTieuKiemTraList.map(function (item) {
-        return item['label'];
-      }).join(",");
+        return item['label'] + '=>' + item.checked;
+      }).join(";");
     }
-    body.bbLayMauDtl  = this.dataTable;
+    body.bbLayMauDtl = this.dataTable;
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {

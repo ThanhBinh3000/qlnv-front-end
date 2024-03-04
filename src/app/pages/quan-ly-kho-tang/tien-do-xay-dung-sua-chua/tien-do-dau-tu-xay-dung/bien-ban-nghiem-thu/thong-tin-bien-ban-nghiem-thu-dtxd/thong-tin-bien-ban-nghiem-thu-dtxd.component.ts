@@ -36,15 +36,18 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
   rowItemDvSuDung: KtDtxdBbNghiemThuDtl = new KtDtxdBbNghiemThuDtl();
   rowItemDvGiamSat: KtDtxdBbNghiemThuDtl = new KtDtxdBbNghiemThuDtl();
   rowItemDvThiCong: KtDtxdBbNghiemThuDtl = new KtDtxdBbNghiemThuDtl();
+  rowItemDvQuanLy: KtDtxdBbNghiemThuDtl = new KtDtxdBbNghiemThuDtl();
   dataEditChuDauTu: { [key: string]: { edit: boolean; data: KtDtxdBbNghiemThuDtl } } = {};
   dataEditDvSuDung: { [key: string]: { edit: boolean; data: KtDtxdBbNghiemThuDtl } } = {};
   dataEditDvGiamSat: { [key: string]: { edit: boolean; data: KtDtxdBbNghiemThuDtl } } = {};
   dataEditDvThiCong: { [key: string]: { edit: boolean; data: KtDtxdBbNghiemThuDtl } } = {};
+  dataEditDvQuanLy: { [key: string]: { edit: boolean; data: KtDtxdBbNghiemThuDtl } } = {};
   listHopDong: any[] = [];
   talbeChuDauTu: any[] = [];
   tableDvSuDung: any[] = [];
   talbeDvGiamSat: any[] = [];
   talbeDvThiCong: any[] = [];
+  talbeDvQuanLy: any[] = [];
   maBb: string
 
 
@@ -73,6 +76,7 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
       dvGiamSat: [null],
       dvSuDung: [null],
       dvThiCong: [null],
+      dvQuanLy: [null],
       ngayKhoiCong: [null],
       ngayHoanThanh: [null],
       thoiGianBatDau: [null , Validators.required],
@@ -146,11 +150,13 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
             this.tableDvSuDung = dataList.filter(item => item.loai == '01');
             this.talbeDvGiamSat = dataList.filter(item => item.loai == '02');
             this.talbeDvThiCong = dataList.filter(item => item.loai == '03');
+            this.talbeDvQuanLy = dataList.filter(item => item.loai == '04');
           }
           this.updateEditCacheBgBn('chuDauTu')
           this.updateEditCacheBgBn('dvSuDung')
           this.updateEditCacheBgBn('dvGiamSat')
           this.updateEditCacheBgBn('dvThiCong')
+          this.updateEditCacheBgBn('dvQuanLy')
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -176,7 +182,7 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
     body.fileDinhKems = this.fileDinhKem
     body.idDuAn = this.itemDuAn.id
     body.idQdPdKhlcnt = this.itemQdPdKhLcnt.id
-    body.listKtTdxdBienbanNghiemthuDtl = [...this.talbeChuDauTu, this.talbeDvThiCong, this.tableDvSuDung, this.talbeDvGiamSat].flat();
+    body.listKtTdxdBienbanNghiemthuDtl = [...this.talbeChuDauTu, this.talbeDvThiCong, this.tableDvSuDung, this.talbeDvGiamSat, this.talbeDvQuanLy].flat();
     if (isKy) {
       this.modal.confirm({
         nzClosable: false,
@@ -239,6 +245,12 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
       this.talbeDvThiCong = [...this.talbeDvThiCong, this.rowItemDvThiCong];
       this.rowItemDvThiCong = new KtDtxdBbNghiemThuDtl();
       this.updateEditCacheBgBn(type);
+    } else if (type == 'dvQuanLy') {
+      this.rowItemDvQuanLy.loai = '04'
+      this.rowItemDvQuanLy.id = null
+      this.talbeDvQuanLy = [...this.talbeDvQuanLy, this.rowItemDvQuanLy];
+      this.rowItemDvQuanLy = new KtDtxdBbNghiemThuDtl();
+      this.updateEditCacheBgBn(type);
     }
   }
 
@@ -279,6 +291,15 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
           };
         });
       }
+    } else if (type == 'dvQuanLy') {
+      if (this.talbeDvQuanLy) {
+        this.talbeDvThiCong.forEach((item, index) => {
+          this.dataEditDvQuanLy[index] = {
+            edit: false,
+            data: {...item},
+          };
+        });
+      }
     }
   }
 
@@ -291,6 +312,8 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
       this.rowItemDvGiamSat = new KtDtxdBbNghiemThuDtl();
     } else if (type == 'dvThiCong') {
       this.rowItemDvThiCong = new KtDtxdBbNghiemThuDtl();
+    } else if (type == 'dvQuanLy') {
+      this.rowItemDvQuanLy = new KtDtxdBbNghiemThuDtl();
     }
   }
 
@@ -303,6 +326,8 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
       this.dataEditDvGiamSat[stt].edit = true;
     } else if (type == 'dvThiCong') {
       this.dataEditDvThiCong[stt].edit = true;
+    } else if (type == 'dvQuanLy') {
+      this.dataEditDvQuanLy[stt].edit = true;
     }
   }
 
@@ -327,6 +352,11 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
         data: {...this.talbeDvThiCong[stt]},
         edit: false
       };
+    } else if (type == 'dvQuanLy') {
+      this.dataEditDvQuanLy[stt] = {
+        data: {...this.talbeDvQuanLy[stt]},
+        edit: false
+      };
     }
   }
 
@@ -346,6 +376,10 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
     }   if (type == 'dvThiCong') {
       this.dataEditDvThiCong[idx].edit = false;
       Object.assign(this.talbeDvThiCong[idx], this.dataEditDvThiCong[idx].data);
+      this.updateEditCacheBgBn(type);
+    }  if (type == 'dvQuanLy') {
+      this.dataEditDvQuanLy[idx].edit = false;
+      Object.assign(this.talbeDvQuanLy[idx], this.dataEditDvQuanLy[idx].data);
       this.updateEditCacheBgBn(type);
     }
 
@@ -373,6 +407,9 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
             this.updateEditCacheBgBn(type);
           } else if (type == 'dvThiCong') {
             this.talbeDvThiCong.splice(index, 1);
+            this.updateEditCacheBgBn(type);
+          } else if (type == 'dvQuanLy') {
+            this.talbeDvQuanLy.splice(index, 1);
             this.updateEditCacheBgBn(type);
           }
         } catch (e) {

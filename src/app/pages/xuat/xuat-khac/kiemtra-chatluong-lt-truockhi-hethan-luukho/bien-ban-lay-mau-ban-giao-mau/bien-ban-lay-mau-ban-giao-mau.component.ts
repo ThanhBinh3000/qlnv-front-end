@@ -198,7 +198,7 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
             id: item.idBienBan
           };
           this.bienBanLayMauLuongThucHangDTQGService.delete(body).then(async () => {
-            await this.search();
+            await this.timKiem();
             this.spinner.hide();
           });
         } catch (e) {
