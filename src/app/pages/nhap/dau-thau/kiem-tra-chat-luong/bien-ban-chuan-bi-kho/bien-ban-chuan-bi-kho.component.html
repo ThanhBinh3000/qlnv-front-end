@@ -150,7 +150,7 @@
 </ng-container>
 
 <ng-container class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin-bien-ban-chuan-bi-kho [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
+  <app-thong-tin-bien-ban-chuan-bi-kho [checkPrice]="checkPrice" [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
     [loaiVthh]="loaiVthh" [idQdGiaoNvNh]="idQdGiaoNvNh" [maNganLoKho]="maNganLoKho">
   </app-thong-tin-bien-ban-chuan-bi-kho>
 </ng-container>

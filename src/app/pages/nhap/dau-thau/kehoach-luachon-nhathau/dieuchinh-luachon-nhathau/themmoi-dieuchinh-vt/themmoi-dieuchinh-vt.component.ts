@@ -36,6 +36,7 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
   @Input() isViewDetail: boolean;
   @Input() loaiVthh: string;
   @Input() id: number;
+  @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   danhsachDx: any[] = [];
   danhsachDxCache: any[] = [];
@@ -336,6 +337,10 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
   }
 
   async save(isGuiDuyet?) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     await this.spinner.show();
     let childBody = this.thongtinDieuchinhComponent.formData.value;
     this.formData.patchValue({
@@ -524,6 +529,10 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
   }
 
   async tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: "TỪ CHỐI PHÊ DUYỆT",
       nzContent: DialogTuChoiComponent,

@@ -35,6 +35,7 @@ import {PREVIEW} from "../../../../../constants/fileType";
 export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() loaiVthh: string;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isViewDetail: boolean;
@@ -372,6 +373,10 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
   }
 
   async save(isGuiDuyet?: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.spinner.show();
     this.setValidator(isGuiDuyet);
     this.helperService.markFormGroupTouched(this.formData);
@@ -546,6 +551,10 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     switch (this.formData.get('trangThai').value) {
       case STATUS.CHO_DUYET_TP: {
@@ -864,6 +873,10 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
   }
 
   async saveDdiemNhap(statusSave) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let daPhanBo = true
     this.dataTable.forEach(item => {
       if(item.children.length == 0){

@@ -245,12 +245,12 @@
 </ng-container>
 
 <div *ngIf="isDetail" class="chi-tiet">
-  <app-themmoi-dieuchinh [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail"
+  <app-themmoi-dieuchinh [checkPrice]="checkPrice" [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail"
                          [loaiVthh]="loaiVthh">
   </app-themmoi-dieuchinh>
 </div>
 <div *ngIf="isDetailVt" class="chi-tiet">
-  <app-themmoi-dieuchinh-vt [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail"
+  <app-themmoi-dieuchinh-vt [checkPrice]="checkPrice" [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail"
                          [loaiVthh]="loaiVthh">
   </app-themmoi-dieuchinh-vt>
 </div>
