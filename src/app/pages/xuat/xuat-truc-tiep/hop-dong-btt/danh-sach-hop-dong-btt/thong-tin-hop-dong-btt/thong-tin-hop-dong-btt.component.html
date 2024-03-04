@@ -455,7 +455,7 @@
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Số điện thoại</nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Số điện thoại</nz-form-label>
                   <nz-form-control nz-col
                                    [nzErrorTip]="formData.get('sdtBenMua').hasError('invalidPhoneNumber') ? 'Số điện thoại không hợp lệ' : ''">
                     <input nz-input formControlName="sdtBenMua" [readonly]="isView"/>

@@ -268,7 +268,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
             id: this.idInput,
             trangThai: STATUS.DA_HOAN_THANH,
           };
-          const res = await this.qdPdKetQuaBttService.approve(body);
+          const res = this.check ? await this.qdPdKetQuaBttService.approve(body) : await this.quyetDinhPdKhBanTrucTiepService.approve(body);
           if (res.msg === MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DUYET_SUCCESS);
             this.goBack();

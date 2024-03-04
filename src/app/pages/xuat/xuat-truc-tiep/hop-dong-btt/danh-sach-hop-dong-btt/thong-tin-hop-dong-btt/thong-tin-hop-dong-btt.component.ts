@@ -484,10 +484,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
   async setListDviTsanCuc(inputTable) {
-    console.log(inputTable, 777)
     this.listDviTsan = [];
     inputTable.forEach((element) => {
-      console.log(element.children, 888)
       const dataGroup = _.chain(element.children).groupBy('maDviTsan').map((value, key) => ({
         maDviTsan: key,
         children: value,
@@ -555,7 +553,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
 
   async selectMaDviTsanCuc() {
     this.dataTable = [];
-    console.log(this.listDviTsanFilter, 999)
     const currentSelectList = cloneDeep(this.listDviTsanFilter);
     if (this.formData.value.listMaDviTsan && this.formData.value.listMaDviTsan.length > 0) {
       const selectedItems = currentSelectList.filter(item => this.formData.value.listMaDviTsan.includes(item.maDviTsan));
@@ -875,7 +872,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   setValidForm() {
     const fieldsToValidate = [
       "namHd",
-      "soQdPd",
       "tenBenMua",
       "listMaDviTsan",
       "soHopDong",
@@ -897,8 +893,11 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       "moTaiBenMua",
       "moTaHangHoa",
     ];
-    if (this.userService.isCuc()) {
+    if (this.userService.isCuc() && this.formData.value.phanLoai === 'QĐKQ') {
       fieldsToValidate.push("soQdKq");
+    }
+    if (this.formData.value.phanLoai === 'QĐKH') {
+      fieldsToValidate.push("soQd");
     }
     fieldsToValidate.forEach(field => {
       this.formData.controls[field].setValidators([Validators.required]);
