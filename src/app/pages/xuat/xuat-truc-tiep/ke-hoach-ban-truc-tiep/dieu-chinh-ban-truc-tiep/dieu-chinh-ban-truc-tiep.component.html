@@ -216,7 +216,7 @@
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
   <app-chi-tiet-dieu-chinh-ban-truc-tiep [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-                                         (showListEvent)="showList()">
+                                         [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-chi-tiet-dieu-chinh-ban-truc-tiep>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal()">

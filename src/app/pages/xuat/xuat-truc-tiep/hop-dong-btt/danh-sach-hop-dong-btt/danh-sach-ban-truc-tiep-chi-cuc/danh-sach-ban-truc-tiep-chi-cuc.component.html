@@ -239,9 +239,9 @@
   </div>
 </ng-container>
 <ng-container class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin-hop-dong-btt *ngIf="isAddNew" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  <app-thong-tin-hop-dong-btt *ngIf="isAddNew" [checkPrice]="checkPrice" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-thong-tin-hop-dong-btt>
-  <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [idInput]="idSelected" [loaiVthh]="loaiVthh"
+  <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [checkPrice]="checkPrice" [idInput]="idSelected" [loaiVthh]="loaiVthh"
                             (showListEvent)="showList()">
   </app-quan-ly-hop-dong-btt>
 </ng-container>

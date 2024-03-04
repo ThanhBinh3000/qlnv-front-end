@@ -128,7 +128,7 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   }
 
   redirectDetail(id: number, boolean?: boolean) {
-    if (id === 0 && this.checkPrice.boolean) {
+    if (id === 0 && this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }

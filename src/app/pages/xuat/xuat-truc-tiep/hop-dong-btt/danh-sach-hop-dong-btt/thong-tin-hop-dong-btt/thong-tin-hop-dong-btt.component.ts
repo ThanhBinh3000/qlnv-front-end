@@ -49,6 +49,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   @Input() isQuanLy: boolean;
   @Input() isViewOnModal: boolean;
   @Input() phanLoai: string;
+  @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   amount = {...AMOUNT_ONE_DECIMAL};
@@ -166,7 +167,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         soQdDc: [''],
         soQd: [''],
         phanLoai: [''],
-        idKh:[],
+        idKh: [],
       }
     );
   }
@@ -267,40 +268,35 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     return dayjs(dateString).isValid();
   }
 
-  async save() {
+  async saveAndBrowse(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
+      if (this.checkPrice && this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["listMaDviTsan"].setValidators([Validators.required]);
-      const {soHopDong, tgianGiaoNhan} = this.formData.value;
       const body = {
         ...this.formData.value,
-        soHopDong: soHopDong ? soHopDong + this.maHopDongSuffix : null,
-        tgianGiaoNhanTu: tgianGiaoNhan ? dayjs(tgianGiaoNhan[0]).format('YYYY-MM-DD') : null,
-        tgianGiaoNhanDen: tgianGiaoNhan ? dayjs(tgianGiaoNhan[1]).format('YYYY-MM-DD') : null,
+        soHopDong: this.formData.value.soHopDong ? this.formData.value.soHopDong + this.maHopDongSuffix : null,
+        tgianGiaoNhanTu: this.formData.value.tgianGiaoNhan ? dayjs(this.formData.value.tgianGiaoNhan[0]).format('YYYY-MM-DD') : null,
+        tgianGiaoNhanDen: this.formData.value.tgianGiaoNhan ? dayjs(this.formData.value.tgianGiaoNhan[1]).format('YYYY-MM-DD') : null,
         [this.userService.isCuc() ? 'children' : 'xhHopDongBttDviList']: this.dataTable,
       };
-      await this.createUpdate(body);
-    } catch (e) {
-      console.error('Error: ', e);
-    } finally {
-      await this.helperService.restoreRequiredForm(this.formData);
-    }
-  }
-
-  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    try {
-      this.setValidForm();
-      const {soHopDong, tgianGiaoNhan} = this.formData.value;
-      const body = {
-        ...this.formData.value,
-        soHopDong: soHopDong ? soHopDong + this.maHopDongSuffix : null,
-        tgianGiaoNhanTu: tgianGiaoNhan ? dayjs(tgianGiaoNhan[0]).format('YYYY-MM-DD') : null,
-        tgianGiaoNhanDen: tgianGiaoNhan ? dayjs(tgianGiaoNhan[1]).format('YYYY-MM-DD') : null,
-        [this.userService.isCuc() ? 'children' : 'xhHopDongBttDviList']: this.dataTable,
-      };
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
-    } catch (e) {
-      console.error('Error: ', e);
+      switch (action) {
+        case "createUpdate":
+          this.formData.controls["listMaDviTsan"].setValidators([Validators.required]);
+          await this.createUpdate(body);
+          break;
+        case "saveAndSend":
+          this.setValidForm();
+          await this.saveAndSend(body, trangThai, msg, msgSuccess);
+          break;
+        default:
+          console.error("Invalid action: ", action);
+          break;
+      }
+    } catch (error) {
+      console.error('Error: ', error);
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
     }
@@ -851,6 +847,10 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   isViewPhuLuc: boolean;
 
   redirectPhuLuc(id, isViewPhuLuc: boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idPhuLuc = id;
     this.isViewPhuLuc = isViewPhuLuc;
     this.isPhuLuc = true;

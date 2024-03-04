@@ -148,7 +148,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
 
   async saveAndBrowse(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
-      if (this.checkPrice.boolean) {
+      if (this.checkPrice && this.checkPrice.boolean) {
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
         return;
       }

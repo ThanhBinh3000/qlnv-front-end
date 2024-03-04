@@ -13,8 +13,6 @@ import {
   BienBanTinhKhoService
 } from './../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BienBanTinhKho.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {checkPrice} from "../../../../../models/KeHoachBanDauGia";
-import {QthtChotGiaNhapXuatService} from "../../../../../services/quantri-hethong/qthtChotGiaNhapXuat.service";
 
 @Component({
   selector: 'app-bdg-bien-ban-tinh-kho',
@@ -161,7 +159,7 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   }
 
   redirectDetail(id, isView: boolean) {
-    if (id === 0 && this.checkPrice.boolean) {
+    if (id === 0 && this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }

@@ -32,6 +32,7 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
   @Input() isView: boolean;
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
+  @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   maConVan: any;
@@ -344,49 +345,46 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
     this.danhSachDieuChinh = data
   }
 
-  async save() {
+  async saveAndApproveAndReject(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
+      if (this.checkPrice && this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["soQdCanDc"].setValidators([Validators.required]);
-      const soCongVan = this.formData.value.soCongVan;
-      const soQdDc = this.formData.value.soQdDc;
       const body = {
         ...this.formData.value,
-        soCongVan: soCongVan ? soCongVan + this.maConVan : null,
-        soQdDc: soQdDc ? soQdDc + this.maHauTo : null,
-        children: this.dataTable,
-        canCuPhapLy: this.canCuPhapLy,
-        fileDinhKem: this.fileDinhKem,
-        fileDinhKemDc: this.fileDinhKemDc,
-      };
-      await this.createUpdate(body);
-    } catch (e) {
-      console.error('Error: ', e);
-    } finally {
-      await this.helperService.restoreRequiredForm(this.formData);
-    }
-  }
-
-  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    try {
-      this.formData.controls["trichYeu"].setValidators([Validators.required]);
-      if (trangThai === STATUS.BAN_HANH) {
-        this.setValidForm();
-      }
-      const soCongVan = this.formData.value.soCongVan;
-      const soQdDc = this.formData.value.soQdDc;
-      const body = {
-        ...this.formData.value,
-        soCongVan: soCongVan ? soCongVan + this.maConVan : null,
-        soQdDc: soQdDc ? soQdDc + this.maHauTo : null,
+        soCongVan: this.formData.value.soCongVan ? this.formData.value.soCongVan + this.maConVan : null,
+        soQdDc: this.formData.value.soQdDc ? this.formData.value.soQdDc + this.maHauTo : null,
         children: this.dataTable,
         canCuPhapLy: this.canCuPhapLy,
         fileDinhKem: this.fileDinhKem,
         fileDinhKemDc: this.fileDinhKemDc,
       }
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
+      switch (action) {
+        case "createUpdate":
+          this.formData.controls["soQdCanDc"].setValidators([Validators.required]);
+          await this.createUpdate(body);
+          break;
+        case "saveAndSend":
+          this.formData.controls["trichYeu"].setValidators([Validators.required]);
+          if (trangThai === STATUS.BAN_HANH) {
+            this.setValidForm();
+          }
+          await this.saveAndSend(body, trangThai, msg, msgSuccess);
+          break;
+        case "approve":
+          await this.approve(this.idInput, trangThai, msg);
+          break;
+        case "reject":
+          await this.reject(this.idInput, trangThai);
+          break;
+        default:
+          console.error("Invalid action: ", action);
+          break;
+      }
     } catch (error) {
-      console.error("Lỗi khi lưu và gửi duyệt:", error);
+      console.error('Error: ', error);
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
     }

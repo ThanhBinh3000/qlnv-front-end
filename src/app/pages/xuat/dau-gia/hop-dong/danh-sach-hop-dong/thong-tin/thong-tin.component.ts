@@ -28,7 +28,6 @@ import {STATUS} from 'src/app/constants/status';
 import {DonviService} from "../../../../../../services/donvi.service";
 import _ from 'lodash';
 import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
-import {ca} from "date-fns/locale";
 
 @Component({
   selector: 'app-thong-tin',
@@ -262,7 +261,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
 
   async saveAndBrowse(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
-      if (this.checkPrice.boolean) {
+      if (this.checkPrice && this.checkPrice.boolean) {
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
         return;
       }
@@ -521,7 +520,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   isViewPhuLuc: boolean;
 
   redirectPhuLuc(id: number, isViewPhuLuc: boolean) {
-    if (this.checkPrice.boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }

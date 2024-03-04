@@ -208,7 +208,7 @@
 </div>
 <div *ngIf="isDetail">
   <app-them-phieu-ktra-cluong-btt [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-                                  (showListEvent)="showList()">
+                                  [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-them-phieu-ktra-cluong-btt>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModal('QdNv')">

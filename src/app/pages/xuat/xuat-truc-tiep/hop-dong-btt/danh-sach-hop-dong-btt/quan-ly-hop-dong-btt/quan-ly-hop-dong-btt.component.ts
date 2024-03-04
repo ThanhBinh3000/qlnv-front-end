@@ -30,6 +30,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   @Input() idInput: number;
   @Input() loaiVthh: string;
   @Input() check: boolean;
+  @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
   TRUC_TIEP = THONG_TIN_BAN_TRUC_TIEP
@@ -223,7 +224,11 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     }
   }
 
-  async redirectHopDong(id: number, isView: boolean, isShowHd: boolean) {
+  async redirectHopDong(id: number, isView: boolean, isShowHd: boolean, boolean?: boolean) {
+    if (id === 0 && this.checkPrice && this.checkPrice.boolean && boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idHopDong = id;
     this.isView = isView;
     this.isEditHopDong = isShowHd;
@@ -237,6 +242,10 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   }
 
   async pheDuyet() {
+    if (this.checkPrice && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.userService.isChiCuc() ? await this.guiDuyetChiCuc() : await this.guiDuyetCuc()
   }
 
@@ -326,6 +335,10 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   }
 
   async deleteHd(data) {
+    if (this.checkPrice && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     await this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

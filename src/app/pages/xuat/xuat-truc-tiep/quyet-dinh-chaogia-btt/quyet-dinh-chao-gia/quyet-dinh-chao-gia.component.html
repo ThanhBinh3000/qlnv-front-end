@@ -47,7 +47,8 @@
       </button>
       <button
         *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_EXP'): userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_EXP')"
-        type="button" class="btn btn-sub" (click)="exportData('danh-sach-quyet-dinh-phe-duyet-ket-qua-chao-gia-hang-DTQG.xlsx')">
+        type="button" class="btn btn-sub"
+        (click)="exportData('danh-sach-quyet-dinh-phe-duyet-ket-qua-chao-gia-hang-DTQG.xlsx')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
@@ -198,7 +199,7 @@
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
   <app-chi-tiet-quyet-dinh-chao-gia [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-                                    (showListEvent)="showList()">
+                                    [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-chi-tiet-quyet-dinh-chao-gia>
 </div>
 <!--xem -->
