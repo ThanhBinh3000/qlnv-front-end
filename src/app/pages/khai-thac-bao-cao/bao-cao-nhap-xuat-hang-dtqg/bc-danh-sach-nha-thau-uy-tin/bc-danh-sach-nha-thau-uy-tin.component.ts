@@ -82,16 +82,22 @@ export class BcDanhSachNhaThauUyTinComponent extends Base2Component implements O
   }
 
   async preView() {
+    if(this.formData.get('denNam').value != null && this.formData.get('denNam').value > dayjs().get('year') + 3){
+      this.formData.patchValue({
+        denNam : null
+      })
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       return;
     }
     try {
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "pdf";
-      await this.bcNhapXuatMuaBanHangDTQGService.tienDoBdgThocTheoNamNhapKho(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.bcDanhSachNhaThauUyTin(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -103,6 +109,14 @@ export class BcDanhSachNhaThauUyTinComponent extends Base2Component implements O
     }
   }
 
+  changeTuNam(){
+    if(this.formData.get('tuNam').value != null ){
+      this.formData.patchValue({
+        denNam : this.formData.get('tuNam').value + 4
+      })
+    }
+    console.log(this.formData.get('denNam').value);
+  }
   async clearFilter() {
     this.formData.reset();
     this.formData.patchValue({

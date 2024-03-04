@@ -15,7 +15,7 @@
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Từ năm
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select formControlName="tuNam">
+                <nz-select formControlName="tuNam" (ngModelChange)='changeTuNam()'>
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -26,7 +26,7 @@
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Đến năm
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select formControlName="denNam">
+                <nz-select formControlName="denNam" nzDisabled='true'>
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
