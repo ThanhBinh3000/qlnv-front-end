@@ -17,17 +17,18 @@
             <label class="search__label"> Số phiếu KNCL </label>
             <input nz-input formControlName="soPhieuKiemNghiem"/>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="6">
             <label class="search__label"> Ngày kiểm nghiệm </label>
             <div nz-row>
-              <div nz-col nzSpan="12" class="cus-start-date">
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartngayKnghiemTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayKiemNghiemMauTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
+              <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartngayKnghiemDen" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayKiemNghiemMauDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                formControlName="ngayKiemNghiemMauDen" nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
               </div>
             </div>
           </div>

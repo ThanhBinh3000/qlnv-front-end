@@ -300,7 +300,7 @@
             <th class="text-left">
               <span style='color: red;'>*</span> Chỉ tiêu chất lượng
             </th>
-            <th class="text-left">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+            <th class="text-left">Chỉ số chất lượng theo {{formData.value.soHieuQuyChuan}}</th>
             <th class="text-left">
               <span style='color: red;'>*</span> Kết quả phân tích
             </th>
@@ -317,7 +317,12 @@
             <tr *ngIf="!data.edit">
               <td class="text-center">{{ i + 1 }}</td>
               <td class="text-left">{{ data.tenChiTieu }}</td>
-              <td class="text-left">{{ data.mucYeuCauXuat }}</td>
+              <td class="text-left" *ngIf="data.maChiTieu == 'ATTP_GAO'">
+                <input nz-input [disabled]="isView" [(ngModel)]="data.mucYeuCauXuat">
+              </td>
+              <td class="text-left" *ngIf="data.maChiTieu != 'ATTP_GAO'">
+                {{ data.mucYeuCauXuat }}
+              </td>
               <td class="text-left">
                 <input nz-input [disabled]="isView" [(ngModel)]="data.ketQua"
                        (ngModelChange)="onChangeKetQua($event, i)"/>
