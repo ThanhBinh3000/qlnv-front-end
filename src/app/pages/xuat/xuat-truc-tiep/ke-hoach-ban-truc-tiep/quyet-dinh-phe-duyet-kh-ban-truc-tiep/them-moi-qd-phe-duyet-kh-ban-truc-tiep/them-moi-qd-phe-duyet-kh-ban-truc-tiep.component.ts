@@ -156,7 +156,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
 
   async saveAndBrowse(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
-      if (this.checkPrice.boolean) {
+      if (this.checkPrice && this.checkPrice.boolean) {
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
         return;
       }

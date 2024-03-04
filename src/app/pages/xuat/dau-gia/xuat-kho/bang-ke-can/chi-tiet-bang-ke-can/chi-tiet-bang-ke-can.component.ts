@@ -603,7 +603,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
 
   async saveAndApproveAndReject(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
-      if (this.checkPrice.boolean) {
+      if (this.checkPrice && this.checkPrice.boolean) {
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
         return;
       }

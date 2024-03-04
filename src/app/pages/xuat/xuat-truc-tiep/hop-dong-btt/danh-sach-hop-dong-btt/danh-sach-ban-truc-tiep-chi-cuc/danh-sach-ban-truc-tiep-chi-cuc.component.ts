@@ -102,6 +102,7 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
         pthucBanTrucTiep: ['02'],
       })
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -141,6 +142,10 @@ export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implement
   }
 
   redirectDetail(id: number, boolean?: boolean) {
+    if (id === 0 && this.checkPrice && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.isQuanLy = boolean;

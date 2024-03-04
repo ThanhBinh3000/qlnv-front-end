@@ -32,6 +32,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
   @Input() isView: boolean;
   @Input() idInput: number;
   @Input() isViewOnModal: boolean;
+  @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   templateNameVt = "Quyết định kết quả chào giá vật tư";
@@ -132,36 +133,39 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
     }
   }
 
-  async save() {
+  async saveAndApproveAndReject(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
+      if (this.checkPrice && this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["soQdPd"].setValidators([Validators.required]);
-      const soQdKq = this.formData.value.soQdKq;
       const body = {
         ...this.formData.value,
-        soQdKq: soQdKq ? `${soQdKq}${this.maHauTo}` : null,
+        soQdKq: this.formData.value.soQdKq ? this.formData.value.soQdKq + this.maHauTo : null,
         children: this.dataTable,
       };
-      await this.createUpdate(body);
-    } catch (e) {
-      console.error('Error: ', e);
-    } finally {
-      await this.helperService.restoreRequiredForm(this.formData);
-    }
-  }
-
-  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    try {
-      this.setValidForm();
-      const soQdKq = this.formData.value.soQdKq;
-      const body = {
-        ...this.formData.value,
-        soQdKq: soQdKq ? `${soQdKq}${this.maHauTo}` : null,
-        children: this.dataTable,
-      };
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
-    } catch (e) {
-      console.error('Error: ', e);
+      switch (action) {
+        case "createUpdate":
+          this.formData.controls["soQdPd"].setValidators([Validators.required]);
+          await this.createUpdate(body);
+          break;
+        case "saveAndSend":
+          this.setValidForm();
+          await this.saveAndSend(body, trangThai, msg, msgSuccess);
+          break;
+        case "approve":
+          await this.approve(this.idInput, trangThai, msg);
+          break;
+        case "reject":
+          await this.reject(this.idInput, trangThai);
+          break;
+        default:
+          console.error("Invalid action: ", action);
+          break;
+      }
+    } catch (error) {
+      console.error('Error: ', error);
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
     }

@@ -37,6 +37,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
   @Input() isView: boolean;
   @Input() idInput: number;
   @Input() isViewOnModal: boolean;
+  @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   templateNameVt = "Phiếu kiểm nghiệm chất lượng";
@@ -411,14 +412,31 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     try {
       await this.spinner.show();
       const res = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(this.formData.value.cloaiVthh);
-      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        return;
+      if (res.msg === MESSAGE.SUCCESS || res.data) {
+        this.dataTable = res.data || [];
+        this.dataTable = this.dataTable.map(element => ({
+          ...element,
+          edit: false
+        }));
+        if (this.dataTable && !this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+          const chiTieuMap = res.data.reduce((acc, item) => {
+            acc[item.maChiTieu] = item.mucYeuCauXuat;
+            return acc;
+          }, {});
+          let ketQuaValues = [];
+          if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.THOC)) {
+            ketQuaValues = ['MAU_SAC_THOC', 'MUI_THOC', 'TRANG_THAI_THOC', 'SINH_VAT_HAI_THOC'];
+          } else if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.GAO)) {
+            ketQuaValues = ['MAU_SAC_GAO', 'MUI_VI_GAO', 'TAP_CHAT_GAO', 'DANH_BONG_GAO', 'SINH_VAT_HAI_GAO'];
+          } else {
+            ketQuaValues = ['MAU_SAC_MUOI'];
+          }
+          ketQuaValues = ketQuaValues.map(key => chiTieuMap[key] ? `- ${chiTieuMap[key]}. \n` : '')
+            .filter(value => value !== '');
+          this.formData.get('ketQua').setValue(ketQuaValues.join(''));
+        }
+        this.formData.get('soHieuQuyChuan').setValue(this.dataTable[0].soHieuQuyChuan)
       }
-      this.dataTable = res.data || [];
-      this.dataTable.forEach(element => {
-        element.edit = false;
-        element.danhGia = 'Đạt';
-      });
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -428,16 +446,42 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
   }
 
   async onChangeKetQua(event, index) {
-    if (event.length === 0 || index < 0) {
+    if (!event) {
+      this.dataTable[index].danhGia = "";
       return;
     }
-    const ketQua = parseFloat(event.replace(",", "."));
-    if (!isNaN(ketQua) && this.dataTable[index].mucYeuCauXuat.length > 0 && this.dataTable[index].mucYeuCauXuat.length < 10) {
-      const data = this.dataTable[index];
-      const match = data.mucYeuCauXuat.match(/≤\s*([\d.,-]+)/);
-      const chiTieu = match ? parseFloat(match[1].replace(",", ".")) : 0;
-      if (!isNaN(chiTieu) && !isNaN(ketQua)) {
-        data.danhGia = ketQua <= chiTieu && ketQua > 0 ? "Đạt" : "Không đạt";
+    const parseNumber = (value) => {
+      if (typeof value === "string" || value instanceof String) {
+        return parseFloat(value.replace(",", "."));
+      }
+      return value;
+    };
+    const setDanhGia = (index, value) => {
+      this.dataTable[index].danhGia = value;
+    };
+    const KetQua = parseNumber(event);
+    if ((KetQua === 0 || KetQua >= 0) && index !== null) {
+      const toanTu = parseFloat(this.dataTable[index].toanTu);
+      const XuatToiDa = parseNumber(this.dataTable[index].mucYeuCauXuatToiDa);
+      const xuatToiThieu = parseNumber(this.dataTable[index].mucYeuCauXuatToiThieu);
+      if ([1, 4].includes(toanTu) && (xuatToiThieu === 0 || xuatToiThieu > 0)) {
+        if ((toanTu === 1 && xuatToiThieu < KetQua && (!XuatToiDa || KetQua <= XuatToiDa)) || (toanTu === 4 && xuatToiThieu <= KetQua && (!XuatToiDa || KetQua <= XuatToiDa))) {
+          setDanhGia(index, "Đạt");
+        } else {
+          setDanhGia(index, "Không đạt");
+        }
+      } else if ([2, 5].includes(toanTu) && XuatToiDa > 0) {
+        if ((toanTu === 2 && KetQua < XuatToiDa && (!xuatToiThieu || KetQua >= xuatToiThieu)) || (toanTu === 5 && KetQua <= XuatToiDa && (!xuatToiThieu || KetQua >= xuatToiThieu))) {
+          setDanhGia(index, "Đạt");
+        } else {
+          setDanhGia(index, "Không đạt");
+        }
+      } else if ([3, 6].includes(toanTu) && (XuatToiDa === 0 || XuatToiDa > 0) && (xuatToiThieu === 0 || xuatToiThieu > 0)) {
+        if ((toanTu === 3 && xuatToiThieu == KetQua && KetQua == XuatToiDa) || (toanTu === 6 && xuatToiThieu <= KetQua && KetQua <= XuatToiDa)) {
+          setDanhGia(index, "Đạt");
+        } else {
+          setDanhGia(index, "Không đạt");
+        }
       }
     }
   }
@@ -460,34 +504,38 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     this.loadDanhSachKnghiemCluong = data;
   }
 
-
-  async save() {
+  async saveAndApproveAndReject(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
+      if (this.checkPrice && this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.setValidator();
       const body = {
         ...this.formData.value,
         children: this.dataTable,
       };
-      await this.createUpdate(body);
-    } catch (e) {
-      console.error('Error: ', e);
-    } finally {
-      await this.helperService.restoreRequiredForm(this.formData);
-    }
-  }
-
-  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    try {
-      await this.helperService.ignoreRequiredForm(this.formData);
-      this.setValidForm();
-      const body = {
-        ...this.formData.value,
-        children: this.dataTable,
-      };
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
-    } catch (e) {
-      console.error('Error: ', e);
+      switch (action) {
+        case "createUpdate":
+          this.setValidator();
+          await this.createUpdate(body);
+          break;
+        case "saveAndSend":
+          this.setValidForm();
+          await this.saveAndSend(body, trangThai, msg, msgSuccess);
+          break;
+        case "approve":
+          await this.approve(this.idInput, trangThai, msg);
+          break;
+        case "reject":
+          await this.reject(this.idInput, trangThai);
+          break;
+        default:
+          console.error("Invalid action: ", action);
+          break;
+      }
+    }catch (error) {
+      console.error('Error: ', error);
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
     }

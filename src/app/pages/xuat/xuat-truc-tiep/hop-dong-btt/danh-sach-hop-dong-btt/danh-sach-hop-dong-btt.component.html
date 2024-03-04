@@ -257,10 +257,11 @@
   </div>
 </ng-container>
 <ng-container class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin-hop-dong-btt *ngIf="isAddNew" [phanLoai]="phanLoai" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  <app-thong-tin-hop-dong-btt *ngIf="isAddNew" [phanLoai]="phanLoai" [loaiVthh]="loaiVthh" (showListEvent)="showList()"
+                              [checkPrice]="checkPrice">
   </app-thong-tin-hop-dong-btt>
   <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [idInput]="idSelected" [loaiVthh]="loaiVthh" [check]="check"
-                            (showListEvent)="showList()">
+                            [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-quan-ly-hop-dong-btt>
 </ng-container>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal('pheDuyet')">

@@ -150,7 +150,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   }
 
   async redirectHopDong(id: number, isView: boolean, isShowHd: boolean, boolean?: boolean) {
-    if (id === 0 && this.checkPrice.boolean && boolean) {
+    if (id === 0 && this.checkPrice && this.checkPrice.boolean && boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
@@ -167,7 +167,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   }
 
   async pheDuyet() {
-    if (this.checkPrice.boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
@@ -180,7 +180,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   }
 
   async deleteHd(data) {
-    if (this.checkPrice.boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }

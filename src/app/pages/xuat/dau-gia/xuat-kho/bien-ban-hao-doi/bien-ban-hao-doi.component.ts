@@ -158,7 +158,7 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
   }
 
   redirectDetail(id, isView: boolean) {
-    if (id === 0 && this.checkPrice.boolean) {
+    if (id === 0 && this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
