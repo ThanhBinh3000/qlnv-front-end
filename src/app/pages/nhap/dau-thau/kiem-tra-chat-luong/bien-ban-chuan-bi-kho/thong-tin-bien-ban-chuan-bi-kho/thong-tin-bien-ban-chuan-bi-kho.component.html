@@ -11,13 +11,16 @@
     <button class="btn btn-sub btn-sm waves-effect waves-light xanh-nhat"
       *ngIf="!isDisableField() && !isView
        && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM')
-      && ( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TK || formData.value.trangThai == STATUS.TU_CHOI_LDCC )"
+      && ( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TK
+      || formData.value.trangThai == STATUS.TU_CHOI_KT
+      || formData.value.trangThai == STATUS.TU_CHOI_LDCC )"
       (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
     <button type="button" class="btn btn-sub do"
             *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TK && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_THUKHO'))
+            || (formData.value.trangThai ==STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_KT'))
       || (formData.value.trangThai ==STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_LDCCUC'))"
       (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi "></i>
@@ -25,6 +28,7 @@
     </button>
     <button class="btn btn-sub btn-sm waves-effect waves-light xanh-nhat"
       *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TK && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_THUKHO'))
+      || (formData.value.trangThai ==STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_KT'))
       || (formData.value.trangThai ==STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_LDCCUC'))"
       (click)=" pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -33,7 +37,8 @@
     <button
       *ngIf="!isDisableField() && !isView
       && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM')
-      && ( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TK || formData.value.trangThai == STATUS.TU_CHOI_LDCC ) "
+      && ( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TK
+       || formData.value.trangThai == STATUS.TU_CHOI_KT|| formData.value.trangThai == STATUS.TU_CHOI_LDCC ) "
       (click)="save(false)" class="btn btn-main btn-sm waves-effect waves-light">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -249,10 +254,9 @@
             <nz-form-label [nzNoColon]="true">
               Loại hình kho
             </nz-form-label>
-            <nz-select formControlName="loaiHinhKho" [disabled]="isDisableField() || isView">
-              <nz-option *ngFor="let thuKho of listLoaiKho" [nzValue]="thuKho.maLhKho" [nzLabel]="thuKho.tenLhKho">
-              </nz-option>
-            </nz-select>
+            <nz-form-control [nzErrorTip]="error">
+              <input nz-input formControlName="loaiHinhKho" readonly />
+            </nz-form-control>
           </nz-form-item>
         </div>
 

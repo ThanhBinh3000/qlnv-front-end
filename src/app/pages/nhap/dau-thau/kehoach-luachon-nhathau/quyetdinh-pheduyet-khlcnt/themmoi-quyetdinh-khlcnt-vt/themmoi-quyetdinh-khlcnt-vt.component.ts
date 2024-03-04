@@ -48,6 +48,7 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
   @Input() idInput: number = 0;
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isView: boolean;
@@ -231,6 +232,10 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
   }
 
   async save(isGuiDuyet?) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     await this.spinner.show();
     if (!this.isDetailPermission()) {
       return;
@@ -392,7 +397,12 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
       this.fileDinhKems = data.fileDinhKems;
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
-        soQd: data.soQd?.split("/")[0]
+        soQd: data.soQd?.split("/")[0],
+        soQuyetDinhDieuBDG: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT ?? null,
+        ngayQuyetDinhDieuBDG: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT ?? null,
+        chotDcGia: !!data.qthtChotGiaInfoRes?.qthtChotDieuChinhGia?.length,
+        quyetDinhDcGia: !!data.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia?.length,
+        quyetDinhDc: !!(data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT && data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT),
       });
       this.dataLoadDetail = data.dsGthau;
       await this.onChangeIdTrHdr(data.idTrHdr, true)

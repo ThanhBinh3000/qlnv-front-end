@@ -71,6 +71,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
     @Input() idGoiThau: number;
     @Input() dataBinding: any;
     @Input() idKqLcnt: number;
+  @Input() checkPrice: any;
     @Output()
     showListEvent = new EventEmitter<any>();
     maVthh: string;
@@ -255,7 +256,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
         }
         if (!this.loaiVthh.startsWith('02')) {
           this.formData.patchValue({
-            donViTinh: 'tấn',
+            donViTinh: 'Kg',
           })
         }
         await Promise.all([
@@ -331,7 +332,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
           });
           if (!this.loaiVthh.startsWith('02')) {
             this.formData.patchValue({
-              donViTinh: 'tấn',
+              donViTinh: 'Kg',
             })
           }
           this.idGoiThau = detail.idGoiThau;
@@ -377,6 +378,10 @@ export class ThongTinComponent implements OnInit, OnChanges {
     }
 
     async save(isKy?) {
+      if (this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
         this.spinner.show();
         this.setValidator(isKy);
         this.helperService.markFormGroupTouched(this.formData);
@@ -391,7 +396,6 @@ export class ThongTinComponent implements OnInit, OnChanges {
         body.listFileDinhKem = this.listFileDinhKem;
         body.listCcPhapLy = this.listCcPhapLy;
         body.detail = this.dataTable;
-        console.log(this.dataTable)
         let res = null;
         if (this.formData.get('id').value) {
             res = await this.hopDongService.update(body);
@@ -642,6 +646,10 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 if (res.msg == MESSAGE.SUCCESS) {
                   let nhaThauTrung = res.data.dsNhaThauDthau.find(item => item.id == data.idNhaThau);
                   for (let i = 0; i < data.children.length; i++) {
+                    data.children[i].soLuong = data.children[i].soLuong * 1000
+                    for (let k = 0; k < data.children[i].children.length; k++) {
+                      data.children[i].children[k].soLuong = data.children[i].children[k].soLuong * 1000
+                    }
                     let body = {
                       maDvi: data.children[i].maDvi,
                       type: this.listType
@@ -671,7 +679,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
                     diaChiNhaThau: nhaThauTrung?.diaChi,
                     mstNhaThau: nhaThauTrung?.mst,
                     sdtNhaThau: nhaThauTrung?.sdt,
-                    soLuong: data.soLuong,
+                    soLuong: data.soLuong * 1000,
                     donGia: data.donGiaNhaThau
                   })
                 }
@@ -861,7 +869,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
             this.dataTable.forEach(item => {
                 sum += item.soLuong;
             })
-            return sum;
+            return sum * 1000;
         }
     }
 
@@ -871,7 +879,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
             this.dataTable.forEach(item => {
                 sum += item.soLuong * item.donGiaNhaThau;
             })
-            return sum;
+            return sum * 1000;
         }
     }
 
