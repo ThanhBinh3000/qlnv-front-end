@@ -35,6 +35,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   @Input() isViewDetail: boolean;
   @Input() loaiVthh: string;
   @Input() id: number;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
   danhsachDx: any[] = [];
@@ -424,6 +425,10 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   }
 
   async tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: "TỪ CHỐI PHÊ DUYỆT",
       nzContent: DialogTuChoiComponent,
@@ -519,6 +524,10 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   }
 
   async save(isGuiDuyet?) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     await this.spinner.show();
     this.setValidator(isGuiDuyet);
     await this.helperService.markFormGroupTouched(this.formData);

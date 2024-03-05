@@ -6,9 +6,6 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {DonviService} from "src/app/services/donvi.service";
-import {
-  DeXuatPhuongAnCuuTroService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
 import {MESSAGE} from "src/app/constants/message";
 import {BangKeCanService} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BangKeCan.service';
 import _ from 'lodash';
@@ -33,6 +30,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   idXuatKho: number = 0;
   isViewXuatKho: boolean = false;
 
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -40,7 +38,6 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private donviService: DonviService,
-    private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
     private bangKeCanService: BangKeCanService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangKeCanService);
@@ -77,6 +74,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     try {
       await this.spinner.show();
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -151,6 +149,10 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   }
 
   redirectDetail(id, isView: boolean) {
+    if (id === 0 && this.checkPrice && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;

@@ -488,7 +488,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       case STATUS.TU_CHOI_LDCC:
       case STATUS.TU_CHOI_TK:
       case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_LDCC;
+        trangThai = STATUS.CHO_DUYET_TK;
         mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }

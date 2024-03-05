@@ -22,25 +22,29 @@ import {
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { STATUS } from 'src/app/constants/status';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
 @Component({
   selector: 'app-danh-sach-quyetdinh-ketqua-lcnt',
   templateUrl: './danh-sach-quyetdinh-ketqua-lcnt.component.html',
   styleUrls: ['./danh-sach-quyetdinh-ketqua-lcnt.component.scss']
 })
-export class DanhSachQuyetdinhKetquaLcntComponent implements OnInit {
+export class DanhSachQuyetdinhKetquaLcntComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string
 
   constructor(
-    private router: Router,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private modal: NzModalService,
     public userService: UserService,
     private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService,
-    private danhMucService: DanhMucService
+    private danhMucService: DanhMucService,
+    httpClient: HttpClient,
+    spinner: NgxSpinnerService,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    modal: NzModalService,
   ) {
-
+  super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetKetQuaLCNTService);
   }
   listNam: any[] = [];
   yearNow: number = 0;
@@ -114,6 +118,7 @@ export class DanhSachQuyetdinhKetquaLcntComponent implements OnInit {
       };
       await this.loadDsVthh();
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     }
     catch (e) {
@@ -195,6 +200,10 @@ export class DanhSachQuyetdinhKetquaLcntComponent implements OnInit {
 
 
   redirectToChiTiet(id: number, roles: any, isView: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.isViewDetail = isView;
     this.selectedId = id;
     this.isDetail = true;
@@ -221,6 +230,10 @@ export class DanhSachQuyetdinhKetquaLcntComponent implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

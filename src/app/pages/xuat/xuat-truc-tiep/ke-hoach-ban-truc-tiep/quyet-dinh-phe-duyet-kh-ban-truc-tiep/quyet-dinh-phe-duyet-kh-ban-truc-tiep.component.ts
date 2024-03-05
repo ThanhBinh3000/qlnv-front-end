@@ -87,6 +87,7 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         type: 'QDKH'
       })
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -96,6 +97,10 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   redirectDetail(id, isView: boolean) {
+    if (id === 0 && this.checkPrice && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;

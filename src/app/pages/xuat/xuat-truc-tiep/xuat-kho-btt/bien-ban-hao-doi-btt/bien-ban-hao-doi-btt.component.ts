@@ -79,6 +79,7 @@ export class BienBanHaoDoiBttComponent extends Base2Component implements OnInit 
     try {
       await this.spinner.show();
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -159,6 +160,10 @@ export class BienBanHaoDoiBttComponent extends Base2Component implements OnInit 
   }
 
   redirectDetail(id, isView: boolean) {
+    if (id === 0 && this.checkPrice && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;

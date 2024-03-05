@@ -151,74 +151,40 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
     }
   }
 
-  async save() {
+  async saveAndApproveAndReject(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
-      if (this.checkPrice.boolean) {
+      if (this.checkPrice && this.checkPrice.boolean) {
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
         return;
       }
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["maThongBao"].setValidators([Validators.required]);
-      const soQdKq = this.formData.value.soQdKq;
       const body = {
         ...this.formData.value,
-        soQdKq: soQdKq ? soQdKq + this.maHauTo : null
+        soQdKq: this.formData.value.soQdKq ? this.formData.value.soQdKq + this.maHauTo : null
       };
-      await this.createUpdate(body);
-    } catch (e) {
-      console.error('Error: ', e);
+      switch (action) {
+        case "createUpdate":
+          this.formData.controls["maThongBao"].setValidators([Validators.required]);
+          await this.createUpdate(body);
+          break;
+        case "saveAndSend":
+          this.setValidForm();
+          await this.saveAndSend(body, trangThai, msg, msgSuccess);
+          break;
+        case "approve":
+          await this.approve(this.idInput, trangThai, msg);
+          break;
+        case "reject":
+          await this.reject(this.idInput, trangThai);
+          break;
+        default:
+          console.error("Invalid action: ", action);
+          break;
+      }
+    } catch (error) {
+      console.error('Error: ', error);
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
-    }
-  }
-
-  async saveAndBrowse(trangThai: string, msg: string, msgSuccess?: string) {
-    try {
-      if (this.checkPrice.boolean) {
-        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
-        return;
-      }
-      this.setValidForm();
-      const soQdKq = this.formData.value.soQdKq;
-      const body = {
-        ...this.formData.value,
-        soQdKq: soQdKq ? soQdKq + this.maHauTo : null
-      };
-      await this.saveAndSend(body, trangThai, msg, msgSuccess);
-    } catch (e) {
-      console.error('Error: ', e);
-    } finally {
-      await this.helperService.restoreRequiredForm(this.formData);
-    }
-  }
-
-  async status(trangThai: string, msgSuccess?: string) {
-    try {
-      if (this.checkPrice.boolean) {
-        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
-        return;
-      }
-      await this.approve(this.idInput, trangThai, msgSuccess)
-    } catch (error) {
-      console.error('error: ', error);
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
-    }
-  }
-
-  async refuse(trangThai: string) {
-    try {
-      if (this.checkPrice.boolean) {
-        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
-        return;
-      }
-      await this.reject(this.idInput, trangThai)
-    } catch (error) {
-      console.error('error: ', error);
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
     }
   }
 

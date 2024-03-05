@@ -200,7 +200,7 @@
             <a *ngIf="isActionAllowed('PHEDUYET', data)" (click)="redirectDetail(data.id, true)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
-            <a *ngIf="isActionAllowed('XOA', data)" (click)="delete(data, null, this.checkPrice)">
+            <a *ngIf="isActionAllowed('XOA', data)" (click)="delete(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>

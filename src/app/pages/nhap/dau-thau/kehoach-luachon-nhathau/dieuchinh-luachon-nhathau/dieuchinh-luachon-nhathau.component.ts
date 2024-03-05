@@ -70,6 +70,7 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
         loaiVthh: this.loaiVthh
       })
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -79,6 +80,10 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     if (this.loaiVthh.startsWith("02")) {
       this.isDetailVt = true;

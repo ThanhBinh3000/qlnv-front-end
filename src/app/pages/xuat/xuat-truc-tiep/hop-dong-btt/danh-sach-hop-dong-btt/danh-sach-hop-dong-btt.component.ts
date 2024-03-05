@@ -106,6 +106,7 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     try {
       await this.spinner.show();
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -163,6 +164,10 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   }
 
   redirectDetail(id: number, boolean?: boolean, check?: boolean) {
+    if (id === 0 && this.checkPrice && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.check = check;

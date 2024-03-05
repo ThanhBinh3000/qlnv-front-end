@@ -241,7 +241,7 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-create-giao-xh [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-                      (showListEvent)="showList()">
+                      [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-create-giao-xh>
 </div>
 <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewHopDong" (nzOnCancel)="closeModal('hopDong')">

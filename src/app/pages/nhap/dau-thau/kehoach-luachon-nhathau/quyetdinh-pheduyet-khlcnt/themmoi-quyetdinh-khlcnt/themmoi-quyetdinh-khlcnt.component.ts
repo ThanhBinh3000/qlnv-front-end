@@ -53,6 +53,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   @Input() idInput: number = 0;
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isView: boolean;
@@ -380,6 +381,10 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     await this.spinner.show();
     if (!this.isDetailPermission()) {
       return;
@@ -562,8 +567,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         soQd: data.soQd?.split("/")[0],
         soQuyetDinhDieuBDG: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT ?? null,
         ngayQuyetDinhDieuBDG: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT ?? null,
-        chotDcGia: !!data.qthtChotGiaInfoRes?.qthtChotDieuChinhGia.length,
-        quyetDinhDcGia: !!data.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length,
+        chotDcGia: !!data.qthtChotGiaInfoRes?.qthtChotDieuChinhGia?.length,
+        quyetDinhDcGia: !!data.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia?.length,
         quyetDinhDc: !!(data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT && data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT),
       });
       if (!this.userService.isTongCuc()) {

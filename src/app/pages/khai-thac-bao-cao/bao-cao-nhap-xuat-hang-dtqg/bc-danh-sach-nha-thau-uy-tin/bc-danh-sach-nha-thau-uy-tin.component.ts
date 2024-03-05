@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Base2Component } from '../../../../components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../../../../services/storage.service';
@@ -8,24 +8,24 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { BcNhapXuatMuaBanHangDTQGService } from '../../../../services/bao-cao/BcNhapXuatMuaBanHangDTQG.service';
 import { UserService } from '../../../../services/user.service';
 import { DonviService } from '../../../../services/donvi.service';
-import {saveAs} from "file-saver";
 import { DanhMucService } from '../../../../services/danhmuc.service';
 import { Globals } from '../../../../shared/globals';
 import * as dayjs from 'dayjs';
+import {saveAs} from "file-saver";
 import { Validators } from '@angular/forms';
 import { MESSAGE } from '../../../../constants/message';
 
 @Component({
-  selector: 'app-bao-cao-ban-thoc-thuoc-ke-hoach-nam',
-  templateUrl: './bao-cao-ban-thoc-thuoc-ke-hoach-nam.component.html',
-  styleUrls: ['./bao-cao-ban-thoc-thuoc-ke-hoach-nam.component.scss']
+  selector: 'app-bc-danh-sach-nha-thau-uy-tin',
+  templateUrl: './bc-danh-sach-nha-thau-uy-tin.component.html',
+  styleUrls: ['./bc-danh-sach-nha-thau-uy-tin.component.scss']
 })
-export class BaoCaoBanThocThuocKeHoachNamComponent  extends Base2Component implements OnInit {
+export class BcDanhSachNhaThauUyTinComponent extends Base2Component implements OnInit {
   pdfSrc: any;
   excelSrc: any;
   pdfBlob: any;
   excelBlob: any;
-  nameFile = "bao-cao-tien-do-nhap-gao-theo-goi-thau";
+  nameFile = "bao-cao-danh-sach-nha-thau-uy-tin";
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -34,13 +34,12 @@ export class BaoCaoBanThocThuocKeHoachNamComponent  extends Base2Component imple
               modal: NzModalService,
               private bcNhapXuatMuaBanHangDTQGService: BcNhapXuatMuaBanHangDTQGService,
               public userService: UserService,
-              private donViService: DonviService,
-              private danhMucSv: DanhMucService,
               public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, bcNhapXuatMuaBanHangDTQGService);
     this.formData = this.fb.group(
       {
-        namKh: [dayjs().get("year"), [Validators.required]],
+        tuNam: [dayjs().get("year") - 4, [Validators.required]],
+        denNam: [dayjs().get("year"), [Validators.required]],
       }
     );
   }
@@ -53,7 +52,6 @@ export class BaoCaoBanThocThuocKeHoachNamComponent  extends Base2Component imple
       await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    console.log(this.userInfo.DON_VI,'aaaaaaaaaaaa');
     await this.spinner.hide();
   }
   downloadPdf() {
@@ -65,8 +63,7 @@ export class BaoCaoBanThocThuocKeHoachNamComponent  extends Base2Component imple
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      body.fileName = this.nameFile;
-      await this.bcNhapXuatMuaBanHangDTQGService.bcBanThocThuocKeHoachNam(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.bcDanhSachNhaThauUyTin(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, this.nameFile + ".xlsx");
@@ -85,21 +82,22 @@ export class BaoCaoBanThocThuocKeHoachNamComponent  extends Base2Component imple
   }
 
   async preView() {
-    // this.formData.controls["maCuc"].clearValidators();
-    // if (this.formData.value.loaiBc == '02') {
-    //   this.formData.controls["maCuc"].setValidators(Validators.required);
-    // }
+    if(this.formData.get('denNam').value != null && this.formData.get('denNam').value > dayjs().get('year') + 3){
+      this.formData.patchValue({
+        denNam : null
+      })
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       return;
     }
     try {
       this.spinner.show();
       let body = this.formData.value;
-      // body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       body.typeFile = "pdf";
-      await this.bcNhapXuatMuaBanHangDTQGService.bcBanThocThuocKeHoachNam(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.bcDanhSachNhaThauUyTin(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -111,11 +109,20 @@ export class BaoCaoBanThocThuocKeHoachNamComponent  extends Base2Component imple
     }
   }
 
+  changeTuNam(){
+    if(this.formData.get('tuNam').value != null ){
+      this.formData.patchValue({
+        denNam : this.formData.get('tuNam').value + 4
+      })
+    }
+    console.log(this.formData.get('denNam').value);
+  }
   async clearFilter() {
     this.formData.reset();
     this.formData.patchValue({
       nam: dayjs().get('year')
     })
   }
+
 
 }

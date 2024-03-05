@@ -13,42 +13,42 @@
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && isView
                && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BBTK_DUYET_LDCCUC') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_DUYET_LDCCUC'))"
               type="button" class="btn btn-sub do"
-              (click)="reject(idInput,STATUS.TU_CHOI_LDCC)">
+              (click)="saveAndApproveAndReject('reject',STATUS.TU_CHOI_LDCC)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span> Từ chối </span>
       </button>
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && isView
                && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BBTK_DUYET_LDCCUC') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_DUYET_LDCCUC'))"
               type="button" class="btn btn-sub xanh-nhat"
-              (click)="approve(idInput,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt biên bản này này')">
+              (click)="saveAndApproveAndReject('approve',STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt biên bản này này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span> Duyệt </span>
       </button>
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_KT) && isView
                && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BBTK_DUYET_KT') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_DUYET_KT'))"
               type="button" class="btn btn-sub do"
-              (click)="reject(idInput,STATUS.TU_CHOI_KT)">
+              (click)="saveAndApproveAndReject('reject',STATUS.TU_CHOI_KT)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span> Từ chối </span>
       </button>
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_KT) && isView
                && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BBTK_DUYET_KT') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_DUYET_KT'))"
               type="button" class="btn btn-sub xanh-nhat"
-              (click)="approve(idInput,STATUS.CHO_DUYET_LDCC,'Bạn có muốn duyệt biên bản này này')">
+              (click)="saveAndApproveAndReject('approve',STATUS.CHO_DUYET_LDCC,'Bạn có muốn duyệt biên bản này này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span> Duyệt </span>
       </button>
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ) && isView
                && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BBTK_DUYET_KTVBQ') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_DUYET_KTVBQ'))"
               type="button" class="btn btn-sub do"
-              (click)="reject(idInput,STATUS.TU_CHOI_KTVBQ)">
+              (click)="saveAndApproveAndReject('reject',STATUS.TU_CHOI_KTVBQ)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span> Từ chối </span>
       </button>
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ) && isView
                && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BBTK_DUYET_KTVBQ') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_DUYET_KTVBQ'))"
               type="button" class="btn btn-sub xanh-nhat"
-              (click)="approve(idInput,STATUS.CHO_DUYET_KT,'Bạn có muốn duyệt biên bản này này')">
+              (click)="saveAndApproveAndReject('approve',STATUS.CHO_DUYET_KT,'Bạn có muốn duyệt biên bản này này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span> Duyệt </span>
       </button>
@@ -56,7 +56,7 @@
        formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && !isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BBTK_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_THEM'))"
               type="button" class="btn btn-sub xanh-nhat"
-              (click)="saveAndSend(STATUS.CHO_DUYET_KTVBQ, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
+              (click)="saveAndApproveAndReject('saveAndSend', STATUS.CHO_DUYET_KTVBQ, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
@@ -64,7 +64,7 @@
        formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC)  && !isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_XK_VT_BBTK_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_THEM'))"
               type="button" class="btn btn-main"
-              (click)="save()">
+              (click)="saveAndApproveAndReject('createUpdate')">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>

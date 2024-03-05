@@ -259,44 +259,33 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     this.objHopDongHdr = data;
   }
 
-  async save() {
+  async saveAndBrowse(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
-      if (this.checkPrice.boolean) {
+      if (this.checkPrice && this.checkPrice.boolean) {
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
         return;
       }
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["listMaDviTsan"].setValidators([Validators.required]);
-      const soHopDong = this.formData.value.soHopDong;
       const body = {
         ...this.formData.value,
-        soHopDong: soHopDong ? soHopDong + this.maHopDongSuffix : null,
+        soHopDong: this.formData.value.soHopDong ? this.formData.value.soHopDong + this.maHopDongSuffix : null,
         children: this.dataTable,
       };
-      await this.createUpdate(body);
-    } catch (e) {
-      console.error('Error: ', e);
-    } finally {
-      await this.helperService.restoreRequiredForm(this.formData);
-    }
-  }
-
-  async saveAndBrowse(status: string, msg: string, msgSuccess?: string) {
-    try {
-      if (this.checkPrice.boolean) {
-        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
-        return;
+      switch (action) {
+        case "createUpdate":
+          this.formData.controls["listMaDviTsan"].setValidators([Validators.required]);
+          await this.createUpdate(body);
+          break;
+        case "saveAndSend":
+          this.setValidForm();
+          await this.saveAndSend(body, trangThai, msg, msgSuccess);
+          break;
+        default:
+          console.error("Invalid action: ", action);
+          break;
       }
-      this.setValidForm();
-      const soHopDong = this.formData.value.soHopDong;
-      const body = {
-        ...this.formData.value,
-        soHopDong: soHopDong ? soHopDong + this.maHopDongSuffix : null,
-        children: this.dataTable,
-      };
-      await this.saveAndSend(body, status, msg, msgSuccess);
-    } catch (e) {
-      console.error('Error: ', e);
+    } catch (error) {
+      console.error('Error: ', error);
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
     }
@@ -531,7 +520,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   isViewPhuLuc: boolean;
 
   redirectPhuLuc(id: number, isViewPhuLuc: boolean) {
-    if (this.checkPrice.boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }

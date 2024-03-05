@@ -394,7 +394,7 @@ export class ThemMoiTongChiMuaHangComponent extends Base2Component implements On
 
   async handleSelectFile(event: any){
     await this.onFileSelected(event);
-    if(this.dataImport.length > 0){
+    if(this.dataImport != null && this.dataImport.length > 0){
       this.dataNguonNsnn = this.dataImport.filter(obj => obj.loaiNguon === 1);
       this.dataNguonNgoaiNsnn = this.dataImport.filter(obj => obj.loaiNguon === 2);
     }

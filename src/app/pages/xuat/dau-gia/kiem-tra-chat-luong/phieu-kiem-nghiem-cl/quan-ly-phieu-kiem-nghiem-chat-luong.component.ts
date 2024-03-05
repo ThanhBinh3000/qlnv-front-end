@@ -30,7 +30,6 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
   isViewLayMau: boolean = false;
   idTinhKho: number = 0;
   isViewTinhKho: boolean = false;
-
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -72,6 +71,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
     try {
       await this.spinner.show();
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -128,6 +128,10 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
   }
 
   redirectDetail(id, isView: boolean) {
+    if (id === 0 && this.checkPrice && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;
