@@ -6,10 +6,10 @@
       </div>
       <div class="icon_change">
         <a class="left icon-wrapper" (click)="changeLoaiHienTrang(0)" title="Hiện trạng tích lượng kho Tổng cục DTNN">
-          <i class="icon htvbdh_stats-bars" [ngClass]="loaiHienTrang ===0? 'active': ''"></i>
+          <i class="icon htvbdh_bao-cao-thong-ke" [ngClass]="loaiHienTrang ===0? 'active': ''"></i>
         </a>
         <a class="right icon-wrapper" (click)="changeLoaiHienTrang(1)" title="Hiện trạng kho Tổng cục DTNN">
-          <i class="icon htvbdh_tcdt_ngan-kho-2" [ngClass]="loaiHienTrang ===1? 'active': ''"></i>
+          <i class="icon htvbdh_card" [ngClass]="loaiHienTrang ===1? 'active': ''"></i>
         </a>
       </div>
     </div>
@@ -19,6 +19,17 @@
           <app-template-error #error [control]="control"></app-template-error>
         </ng-template>
         <div nz-row [nzGutter]="24">
+          <div nz-col [nzSpan]="6">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh" nzRequired>Loại hàng hóa
+              </nz-form-label>
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <nz-select formControlName="loaiVthh" nzAllowClear>
+                  <nz-option *ngFor="let p of listHangHoa" [nzValue]="p.loaiVthh" [nzLabel]="p.tenVthh"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
           <div nz-col [nzSpan]="6" *ngIf="!userService.isChiCuc()">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true" class="label-color-kh">Cục
@@ -59,59 +70,22 @@
     </div>
   </div>
 </div>
-<!-- Hiện trạng tích lượng kho -->
+<!-- Hiện trạng kho tàng (biểu đồ) -->
 <ng-container *ngIf="loaiHienTrang === 0">
   <div class="luong-thuc__danh-sach kiem-soat-truy-cap mt-2 p-2">
     <div class="contentBor chi-tieu__body">
       <div class="contentDetail">
         <div class="main-content">
-          <!--<nz-card class="flex-card p-lr16">
-            <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
-              <div class="search__body" nz-row [nzGutter]="[18, 12]">
-                <div nz-col nzSpan="4">
-                  <label class="search__label">Tên người dùng</label>
-                  <nz-input-group>
-                    <input nz-input formControlName="userName"/>
-                  </nz-input-group>
-                </div>
-                <div nz-col nzSpan="6">
-                  <label class="search__label">Từ ngày </label>
-                  <nz-range-picker nzFormat="yyyy-MM-dd" formControlName="ngayHd"></nz-range-picker>
-                </div>
-                <div nz-col nzSpan="4">
-                  <label class="search__label"> Phân hệ </label>
-                  <nz-select formControlName="system">
-                    <nz-option *ngFor="let p of listSystem" [nzValue]="p.code" [nzLabel]="p.ten"></nz-option>
-                  </nz-select>
-                </div>
-              </div>
-            </form>
-            <div class="cangiua group-button-search">
-              <button nz-button class="search__button&#45;&#45;clear" (click)="clearSearch()">
-                <i class="icon  htvbdh_nhap-lai1"></i>
-                Xóa điều kiện
-              </button>
-              <button nz-button class="search__button&#45;&#45;search" (click)="filter()">
-                <i nz-icon nzType="search"></i>
-                Tìm kiếm
-              </button>
-            </div>
-          </nz-card>
-          <div class="group-button">
-            <h3></h3>
-            <div class="buttons">
-              <button type="button"
-                      class="btn btn-sub" (click)="exportData()">
-                <i class="icon htvbdh_chuyen-xu-ly"></i>
-                <span>Xuất file</span>
-              </button>
-            </div>
-          </div>-->
           <nz-card class="mt16 flex-card p-lr16 mg-t-10">
             <div class="header header-green-background mg-t-10">
               <div class="header-text">
                 <div class="title-chi-tieu">
-                  <span class="text-uppercase font-weight-bold">Hiện trạng tích lượng kho</span>
+                  <span class="text-uppercase font-weight-bold">{{tieuDeHienTrang}}</span>
+                </div>
+              </div>
+              <div class="right-content">
+                <div>
+                  <span>Đơn vị: {{this.donViTinh}}</span>
                 </div>
               </div>
             </div>
@@ -127,127 +101,95 @@
               </div>
             </div>
           </nz-card>
-          <nz-card class="mt16 flex-card p-lr16 mg-t-10">
-            <div class="header header-green-background mg-t-10">
-              <div class="header-text">
-                <div class="title-chi-tieu">
-                  <span class="text-uppercase font-weight-bold">Hiện trạng tồn kho</span>
-                </div>
-              </div>
-            </div>
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="24">
-                <ng-container *ngIf="tonKhoChart">
-                  <apx-chart [series]="tonKhoChart.series" [chart]="tonKhoChart.chart" [xaxis]="tonKhoChart.xaxis"
-                    [stroke]="tonKhoChart.stroke" [tooltip]="tonKhoChart.tooltip" [dataLabels]="tonKhoChart.dataLabels"
-                    [legend]="tonKhoChart.legend" [markers]="tonKhoChart.markers" [grid]="tonKhoChart.grid"
-                    [yaxis]="tonKhoChart.yaxis" [title]="tonKhoChart.title"></apx-chart>
-                </ng-container>
-              </div>
-            </div>
-          </nz-card>
         </div>
       </div>
     </div>
   </div>
 </ng-container>
 <!-- Hiện trạng kho tổng cục -->
-<ng-container *ngIf="loaiHienTrang === 1">
-  <div class="bc-content">
-    <h3 class="text-uppercase title-content">Hiện trạng kho tổng cục DTNN</h3>
-    <div style="background: #ECECEC;padding:8px;">
-      <div nz-row [nzGutter]="8">
-        <div nz-col [nzSpan]="12">
-          <nz-card [nzTitle]="tlvt">
-            <ng-template #tlvt>
-              <h4 class="bc-htk_title bold">Tích lượng vật tư (tấn)</h4>
-            </ng-template>
-            <div nz-row [nzGutter]="8">
-              <div nz-col [nzSpan]="8">
-                <nz-card [nzTitle]="ttlvt">
-                  <ng-template #ttlvt>
-                    <h4 class="bc-htk_title bd-left" title="Tổng tích lượng">Tổng tích lượng</h4>
-                  </ng-template>
-                  <p class="card_content">{{tongTichLuongVt|number:globals.numberFormat:globals.locale}}</p>
-                </nz-card>
+<ng-container *ngIf="loaiHienTrang === 1 && isShowDataTonKho">
+  <div class="luong-thuc__danh-sach kiem-soat-truy-cap mt-2 p-2">
+    <div class="contentBor chi-tieu__body">
+      <div class="contentDetail">
+        <div class="main-content">
+          <nz-card class="mt16 flex-card p-lr16 mg-t-10">
+            <div class="header header-green-background mg-t-10">
+              <div class="header-text">
+                <div class="title-chi-tieu">
+                  <span class="text-uppercase font-weight-bold">{{tieuDeHienTrang}}</span>
+                </div>
               </div>
-              <div nz-col [nzSpan]="8">
-                <nz-card [nzTitle]="ttlvtdsd">
-                  <ng-template #ttlvtdsd>
-                    <h4 class="bc-htk_title bd-left" title="Tổng tích lượng đã sử dụng">Tổng tích lượng đã sử dụng</h4>
-                  </ng-template>
-                  <p class="card_content">{{tongTichLuongVtDsd|number:globals.numberFormat:globals.locale}}</p>
-                </nz-card>
-              </div>
-              <div nz-col [nzSpan]="8">
-                <nz-card [nzTitle]="ttlvtcsd">
-                  <ng-template #ttlvtcsd>
-                    <h4 class="bc-htk_title bd-left" title="Tổng tích lượng chưa sử dụng">Tổng tích lượng chưa sử dụng
-                    </h4>
-                  </ng-template>
-                  <p class="card_content">{{tongTichLuongVtCsd|number:globals.numberFormat:globals.locale}}</p>
-                </nz-card>
-              </div>
-            </div>
-          </nz-card>
-        </div>
-        <div nz-col [nzSpan]="12">
-          <nz-card [nzTitle]="tllt">
-            <ng-template #tllt>
-              <h4 class="bc-htk_title bold">Tích lượng lương thực (tấn)</h4>
-            </ng-template>
-            <div nz-row [nzGutter]="8">
-              <div nz-col [nzSpan]="8">
-                <nz-card [nzTitle]="ttllt">
-                  <ng-template #ttllt>
-                    <h4 class="bc-htk_title bd-left" title="Tổng tích lượng">Tổng tích lượng</h4>
-                  </ng-template>
-                  <p class="card_content">{{tongTichLuongLt|number:globals.numberFormat:globals.locale}}</p>
-                </nz-card>
-              </div>
-              <div nz-col [nzSpan]="8">
-                <nz-card [nzTitle]="ttlltdsd">
-                  <ng-template #ttlltdsd>
-                    <h4 class="bc-htk_title bd-left" title="Tổng tích lượng đã sử dụng">Tổng tích lượng đã sử dụng</h4>
-                  </ng-template>
-                  <p class="card_content">{{tongTichLuongLtDsd|number:globals.numberFormat:globals.locale}}</p>
-                </nz-card>
-              </div>
-              <div nz-col [nzSpan]="8">
-                <nz-card [nzTitle]="ttlltcsd">
-                  <ng-template #ttlltcsd>
-                    <h4 class="bc-htk_title bd-left" title="Tổng tích luongwh chưa sử dụng">Tổng tích lượng chưa sử dụng
-                    </h4>
-                  </ng-template>
-                  <p class="card_content">{{tongTichLuongLtCsd|number:globals.numberFormat:globals.locale}}</p>
-                </nz-card>
+              <div class="right-content">
+                <div class="export-dashbroad">
+                  <span class="mr-3">Đơn vị: {{this.donViTinh}}</span>
+                  <a class="right icon-wrapper" (click)="downloadExcel()" title="Xuất file excel">
+                    <i class="icon htvbdh_download2"></i>
+                  </a>
+<!--                  <span nz-button-->
+<!--                          nz-popover-->
+<!--                          nzPopoverTitle=""-->
+<!--                          [nzPopoverContent]="downloadTemplate"-->
+<!--                          nzPopoverPlacement="bottom">-->
+<!--                    <i class="icon htvbdh_download2" title="Tải file"></i>-->
+<!--                  </span>-->
+<!--                  <ng-template #downloadTemplate>-->
+<!--                    <div>-->
+<!--                      <button nz-button (click)="downloadWord(previewName)" class="modal__button&#45;&#45;save">-->
+<!--                        <i class="icon htvbdh_file-word"></i>-->
+<!--                        Xuất .docx-->
+<!--                      </button>-->
+<!--                      <button nz-button (click)="downloadPdf(previewName)" class="modal__button&#45;&#45;save mr-1">-->
+<!--                        <i class="icon htvbdh_file-pdf"></i>-->
+<!--                        Xuất .pdf-->
+<!--                      </button>-->
+<!--                </div>-->
+<!--                  </ng-template>-->
+                </div>
               </div>
             </div>
-          </nz-card>
-        </div>
-        <div nz-col [nzSpan]="24" style="margin-top: 8px;">
-          <nz-card [nzTitle]="tk">
-            <ng-template #tk>
-              <h4 class="bc-htk_title bold">Tồn kho</h4>
-            </ng-template>
-            <div nz-row [nzGutter]="8">
-              <div nz-col [nzXl]="6" [nzSpan]="8" *ngFor="let data of tonKho">
-                <nz-card [nzTitle]="cttk">
-                  <ng-template #cttk>
-                    <h4 class="bc-htk_title bd-left"
-                      [title]="(data.tenCloaiVthh || data.tenLoaiVthh) + ' '+ '('+ data.dvt +')'">{{data.tenCloaiVthh ||
-                      data.tenLoaiVthh}} ({{data.dvt}})</h4>
-                  </ng-template>
-                  <p class="card_content">{{data.tonKho|number:globals.numberFormat:globals.locale}}</p>
-                </nz-card>
-              </div>
-            </div>
+            <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+              <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataTable" [nzFrontPagination]="false"
+                        [nzShowPagination]="false" nzBordered>
+                <thead>
+                <tr>
+                  <th *ngIf="!this.isChiCucSelected">{{titleTable}}</th>
+                  <th>Kế hoạch</th>
+                  <th>Tồn kho đầu năm</th>
+                  <th>Nhập hàng trong năm</th>
+                  <th>Xuất hàng trong năm</th>
+                  <th>Tồn kho cuối kỳ</th>
+                  <th>Còn lại</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of basicTable.data">
+                  <td *ngIf="!this.isChiCucSelected">{{item.tenDvi}}</td>
+                  <td class="text-right">{{item.keHoach | number:globals.numberFormat:globals.locale}}</td>
+                  <td class="text-right">{{item.tonDau | number:globals.numberFormat:globals.locale}}</td>
+                  <td class="text-right">{{item.nhap | number:globals.numberFormat:globals.locale}}</td>
+                  <td class="text-right">{{item.xuat | number:globals.numberFormat:globals.locale}}</td>
+                  <td class="text-right">{{item.tonCuoi | number:globals.numberFormat:globals.locale}}</td>
+                  <td class="text-right">{{item.conLai | number:globals.numberFormat:globals.locale}}</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr *ngIf="!this.isChiCucSelected">
+                  <td class="bold text-blue">Tổng</td>
+                  <td class="bold text-blue text-right">{{tongKeHoach|number:globals.numberFormat:globals.locale}}</td>
+                  <td class="bold text-blue text-right">{{tongTonDau|number:globals.numberFormat:globals.locale}}</td>
+                  <td class="bold text-blue text-right">{{tongNhap|number:globals.numberFormat:globals.locale}}</td>
+                  <td class="bold text-blue text-right">{{tongXuat|number:globals.numberFormat:globals.locale}}</td>
+                  <td class="bold text-blue text-right">{{tongTonCuoi|number:globals.numberFormat:globals.locale}}</td>
+                  <td class="bold text-blue text-right">{{tongConLai|number:globals.numberFormat:globals.locale}}</td>
+                </tr>
+                </tfoot>
+              </nz-table>
+            </nz-card>
           </nz-card>
         </div>
       </div>
     </div>
   </div>
-
 </ng-container>
 <!--modal sua noi dung-->
 <nz-modal [nzWidth]="'600px'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" [(nzVisible)]="showFilterTichLuong"
@@ -257,12 +199,12 @@
       [nzShowPagination]="false">
       <tbody>
         <tr>
-          <td (nzExpandChange)="showTieuChi= !showTieuChi" [nzExpand]="showTieuChi" nzShowExpand="true">Tiêu chí</td>
+          <td (nzExpandChange)="showTieuChi= !showTieuChi" [nzExpand]="showTieuChi" nzShowExpand="true" class="bold">Tiêu chí</td>
           <td></td>
         </tr>
         <ng-container *ngIf="showTieuChi">
           <tr *ngFor="let data of dataConfigTable.tieuChi">
-            <td>{{data.tenTieuChi}}</td>
+            <td [ngClass]="data.maTieuChi === 'all'? 'bold': ''">{{data.tenTieuChi}}</td>
             <td width="45px" class="text-center">
               <label nz-checkbox [(ngModel)]="data.status"
                 (ngModelChange)="handleChangeStatus($event, 'tieuChi', data.maTieuChi)"></label>
@@ -270,12 +212,12 @@
           </tr>
         </ng-container>
         <tr>
-          <td (nzExpandChange)="showTieuChi= !showTieuChi" [nzExpand]="showTieuChi" nzShowExpand="true">Tiêu chí</td>
+          <td (nzExpandChange)="showTieuChi= !showTieuChi" [nzExpand]="showTieuChi" nzShowExpand="true" class="bold">Tiêu chí</td>
           <td></td>
         </tr>
         <ng-container *ngIf="showDonVi">
           <tr *ngFor="let data of dataConfigTable.donVi; let i=index">
-            <td>{{data.tenTieuChi}}</td>
+            <td [ngClass]="data.maTieuChi === 'all'? 'bold': ''">{{data.tenTieuChi}}</td>
             <td width="45px" class="text-center">
               <label nz-checkbox [(ngModel)]="data.status"
                 (ngModelChange)="handleChangeStatus($event, 'donVi', data.maTieuChi)"></label>
@@ -286,57 +228,11 @@
     </nz-table>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="resetConfig(1)" class="search__button--clear">
+    <button nz-button (click)="resetConfig()" class="search__button--clear">
       <i class="icon htvbdh_nhap-lai1"></i>
       Xóa điều kiện
     </button>
     <button nz-button (click)='apDungTichLuongKhoConfig()' class='modal__button--save'>
-      <i class='icon htvbdh_luu'></i>
-      Áp dụng
-    </button>
-  </div>
-</nz-modal>
-<nz-modal [nzWidth]="'600px'" [nzBodyStyle]="{ 'overflow-y': 'auto' }" [(nzVisible)]="showFilterTonKho"
-  (nzOnCancel)="handleCancelTonKho()" nzTitle="Tùy chọn">
-  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <nz-table #configTable class="nowrap table-chi-tiet" nzBordered [nzFrontPagination]="false"
-      [nzShowPagination]="false">
-      <tbody>
-        <tr>
-          <td (nzExpandChange)="showTieuChi= !showTieuChi" [nzExpand]="showTieuChi" nzShowExpand="true">Tiêu chí</td>
-          <td></td>
-        </tr>
-        <ng-container *ngIf="showTieuChi">
-          <tr *ngFor="let data of dataConfigTableTonKho.tieuChi">
-            <td>{{data.tenTieuChi}}</td>
-            <td width="45px" class="text-center">
-              <label nz-checkbox [(ngModel)]="data.status"
-                (ngModelChange)="handleChangeStatusTonKho($event, 'tieuChi', data.maTieuChi)"></label>
-            </td>
-          </tr>
-        </ng-container>
-        <tr>
-          <td (nzExpandChange)="showTieuChi= !showTieuChi" [nzExpand]="showTieuChi" nzShowExpand="true">Tiêu chí</td>
-          <td></td>
-        </tr>
-        <ng-container *ngIf="showDonVi">
-          <tr *ngFor="let data of dataConfigTableTonKho.donVi; let i=index">
-            <td>{{data.tenTieuChi}}</td>
-            <td width="45px" class="text-center">
-              <label nz-checkbox [(ngModel)]="data.status"
-                (ngModelChange)="handleChangeStatusTonKho($event, 'donVi', data.maTieuChi)"></label>
-            </td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </nz-table>
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="resetConfig(2)" class="search__button--clear">
-      <i class="icon htvbdh_nhap-lai1"></i>
-      Xóa điều kiện
-    </button>
-    <button nz-button (click)='apDungTonKhoConfig()' class='modal__button--save'>
       <i class='icon htvbdh_luu'></i>
       Áp dụng
     </button>

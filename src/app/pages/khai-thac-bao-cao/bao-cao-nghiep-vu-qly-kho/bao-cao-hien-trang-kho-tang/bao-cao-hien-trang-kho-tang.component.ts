@@ -24,6 +24,10 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import { BcNvQuanLyKhoTangService } from "src/app/services/bao-cao/BcNvQuanLyKhoTang.service";
 import { MESSAGE } from "src/app/constants/message";
 import { Base2Component } from "src/app/components/base2/base2.component";
+import {Validators} from "@angular/forms";
+import {DanhMucService} from "../../../../services/danhmuc.service";
+import {pairwise, startWith} from "rxjs/operators";
+import dayjs from "dayjs";
 
 
 export type ChartOptionsColumn = {
@@ -51,7 +55,12 @@ export type ChartOptionsLine = {
   legend: ApexLegend;
   title: ApexTitleSubtitle;
 };
-
+interface LoaiHangHoaType{
+  tenVthh: string,
+  loaiVthh: string,
+  loaiHang: string,
+  donViTinh: string
+}
 @Component({
   selector: 'app-bao-cao-hien-trang-kho-tang',
   templateUrl: './bao-cao-hien-trang-kho-tang.component.html',
@@ -63,31 +72,29 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
   listCuc: any[] = [];
   listChiCuc: any[] = [];
   loaiHienTrang: number = 0;
-  tongTichLuongVt: number;
-  tongTichLuongVtDsd: number;
-  tongTichLuongVtCsd: number;
-  tongTichLuongLt: number;
-  tongTichLuongLtDsd: number;
-  tongTichLuongLtCsd: number;
   tonKho: Array<{ cloaiVthh: "string", dvt: "string", loaiVthh: "string", tenCloaiVthh: "string", tenLoaiVthh: "string", tonKho: 0 }> = []
   showFilterTichLuong: boolean = false;
   showFilterTonKho: boolean = false;
   dataConfigTable: {
     tieuChi: Array<{ tenTieuChi: string, maTieuChi: string, status: boolean }>, donVi: Array<{ tenTieuChi: string, maTieuChi: string, status: boolean }>
-  } = {
-      tieuChi: [
-        { tenTieuChi: 'Tất cả', maTieuChi: 'all', status: true },
-        { tenTieuChi: 'Tổng tích lượng lương thực đã sử dụng (tấn kho)', maTieuChi: 'tongTichLuongLuongThucDaSuDung', status: true },
-        { tenTieuChi: 'Tổng tích lượng lương thực khả dụng (tấn kho)', maTieuChi: 'tongTichLuongLuongThucKhaDung', status: true },
-        { tenTieuChi: 'Tổng tích lượng vật tư đã sử dụng (tấn kho)', maTieuChi: 'tongTichLuongVatTuDaSuDung', status: true },
-        { tenTieuChi: 'Tổng tích lượng vật tư khả dụng (tấn kho)', maTieuChi: 'tongTichLuongVatTuKhaDung', status: true },
-      ], donVi: []
-    };
-  dataConfigTableTonKho: { tieuChi: Array<{ tenTieuChi: string, maTieuChi: string, status: boolean }>, donVi: Array<{ tenTieuChi: string, maTieuChi: string, status: boolean }> } = { tieuChi: [], donVi: [] }
+  } = {tieuChi: [], donVi: []};
   showTieuChi: boolean = true;
   showDonVi: boolean = true;
   dataTichLuongKho: any[] = [];
   dataTonKho: any[] = [];
+  listHangHoa: Array<LoaiHangHoaType>=[];
+  tieuDeHienTrang: string='';
+  titleTable: string = 'Cục DTNNKV';
+  isShowDataTonKho: boolean =false;
+  isChiCucSelected: boolean= false;
+  donViTinh: string="";
+  tongKeHoach: number=0;
+  tongTonDau: number=0;
+  tongNhap: number=0;
+  tongXuat: number=0;
+  tongTonCuoi: number=0;
+  tongConLai: number=0;
+  previewName: string ='';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -96,6 +103,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     modal: NzModalService,
     private bcNvQuanLyKhoTangService: BcNvQuanLyKhoTangService,
     private donViService: DonviService,
+    private  danhMucSerVice: DanhMucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bcNvQuanLyKhoTangService);
     super.ngOnInit()
@@ -103,59 +111,67 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
       maDvi: [''],
       maCuc: [''],
       maChiCuc: [''],
+      loaiVthh: ['', [Validators.required]]
     });
-    // this.tichLuongChart = {}
-    // this.tonKhoChart = {}
-    /*    this.search();
-        this.filterTable = {};*/
+    this.formData.get('loaiVthh')?.valueChanges.pipe(startWith(this.formData.get('loaiVthh')?.value), pairwise()).subscribe(([prevValue, nextValue]) => {
+      if (prevValue !== nextValue) {
+        const findIndex= this.listHangHoa.findIndex(f=>f.loaiVthh === nextValue);
+        if(findIndex>=0){
+          this.donViTinh = this.listHangHoa[findIndex].donViTinh;
+        }else{
+          this.donViTinh='';
+        }
+      }
+    })
   }
 
   async ngOnInit() {
     await this.spinner.show();
+    document.addEventListener('click', this.handleClickFilter)
     if (this.userService.isChiCuc()) {
       this.formData.controls["maCuc"].clearValidators();
     }
     try {
       await Promise.all([
-        this.loadChartTichLuong(),
-        this.loadChartTonKho(),
-        this.ketXuatBaoCao(),
+        this.getLoaiVthh(),
         this.loadDonVi(this.userInfo.MA_DVI)
 
       ]);
     } catch (e) {
       console.log('error: ', e)
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
   }
-
+  ngOnDestroy() {
+    document.removeEventListener('click', this.handleClickFilter);
+  }
+  async getLoaiVthh(){
+    const res= await this.danhMucSerVice.getAllVthhByCap(2);
+    if(res.msg === MESSAGE.SUCCESS){
+      this.listHangHoa= res.data.map(f=>({tenVthh: f.ten, loaiVthh: f.ma, loaiHang: f.loaiHang, donViTinh: f.maDviTinh}))
+    }
+  }
   clearSearch() {
     this.formData.reset();
     this.search();
 
   }
-  resetConfig(type: number) { //type: 1 tích lượng, 2 tồn kho
-    if (type === 1) {
-      this.dataConfigTable.donVi.forEach(f => f.status = true);
-      this.dataConfigTable.tieuChi.forEach(f => f.status = true);
-      this.apDungTichLuongKhoConfig()
-    } else if (type === 2) {
-      this.dataConfigTableTonKho.donVi.forEach(f => f.status = true);
-      this.dataConfigTableTonKho.tieuChi.forEach(f => f.status = true);
-      this.apDungTonKhoConfig()
-    }
+  resetConfig(){
+    this.dataConfigTable.donVi.forEach(f => f.status = true);
+    this.dataConfigTable.tieuChi.forEach(f => f.status = true);
+    this.apDungTichLuongKhoConfig()
   }
 
-  async loadChartTichLuong() {
-    let res = await this.bcNvQuanLyKhoTangService.hienTrangTichLuongKho({ maDvi: this.formData.value.maDvi });
+  async loadChartTichLuong(body) {
+    const res = await this.bcNvQuanLyKhoTangService.hienTrangKhoTangChart(body);
     if (res.msg == MESSAGE.SUCCESS) {
       // let responseData = res.data;
-      this.dataTichLuongKho = cloneDeep(res.data);
-      this.setTichLuongKho(this.dataTichLuongKho)
-      console.log(this.tichLuongChart)
+      this.dataTichLuongKho = cloneDeep(res.data.series).map(f=>({data: f.data, name: f.name, label: res.data.categories,group: f.group}));
+      this.dataConfigTable.tieuChi= [{tenTieuChi: "Tất cả", maTieuChi: "all", status: true}].concat(Array.isArray(res.data.series)? cloneDeep(res.data.series).map(f=>({tenTieuChi: f.name, maTieuChi: f.name, status: true})): []);
+      this.setTichLuongKho(this.dataTichLuongKho);
+      return res;
     }
   }
   setTichLuongKho(responseData: any[] = []) {
@@ -164,7 +180,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
       chart: {
         type: "bar",
         height: 650,
-        stacked: true,
+        // stacked: true,
         toolbar: {
           tools: {
             customIcons: [
@@ -177,16 +193,19 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
               }
             ]
           }
-        }
+        },
       },
       stroke: {
         width: 1,
         colors: ["#fff"],
       },
+      // dataLabels: {
+      //   formatter: (val) => {
+      //     return Number(val).toLocaleString("vi-VN") + " " + this.donViTinh;
+      //   },
+      // },
       dataLabels: {
-        formatter: (val) => {
-          return Number(val).toLocaleString("vi-VN") + " tấn kho";
-        },
+        enabled: false
       },
       plotOptions: {
         bar: {
@@ -194,7 +213,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
         },
       },
       xaxis: {
-        categories: responseData[0]?.label
+        categories: Array.isArray(responseData[0]?.label)? responseData[0].label: []
       },
       fill: {
         opacity: 1,
@@ -208,7 +227,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
       yaxis: {
         labels: {
           formatter: (val) => {
-            return Number(val).toLocaleString("vi-VN") + "";
+            return Number(val).toLocaleString("vi-VN") + " " + this.donViTinh;
           },
         },
       },
@@ -217,137 +236,95 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
         horizontalAlign: "left",
       },
     };
-  }
-  async loadChartTonKho() {
-    let res = await this.bcNvQuanLyKhoTangService.hienTrangTonKho({ maDvi: this.formData.value.maDvi });
-    if (res.msg == MESSAGE.SUCCESS) {
-      let responseData = Array.isArray(res.data) ? res.data : [];
-      this.dataTonKho = cloneDeep(responseData);
-      this.dataConfigTableTonKho.tieuChi = [{ tenTieuChi: 'Tất cả', maTieuChi: 'all', status: true }].concat(responseData.map(f => ({ tenTieuChi: f.name, maTieuChi: '', status: true })));
-      this.setTonKho(this.dataTonKho);
-      console.log(this.tonKhoChart)
+  };
+  async loadHienTrangKhoTang(body){
+    const res = await this.bcNvQuanLyKhoTangService.hienTrangKhoTang(body);
+    if(res.msg === MESSAGE.SUCCESS){
+      this.dataTable=Array.isArray(res.data)? res.data: [];
+      const {tongKeHoach, tongTonDau, tongNhap, tongXuat, tongTonCuoi, tongConLai}=this.dataTable.reduce((obj, cur)=>{
+        obj.tongKeHoach+=cur.keHoach;
+        obj.tongTonDau+=cur.tonDau;
+        obj.tongNhap+=cur.nhap;
+        obj.tongXuat+=cur.xuat;
+        obj.tongTonCuoi+=cur.tonCuoi;
+        obj.tongConLai+=cur.conLai;
+        return obj;
+      }, {tongKeHoach: 0, tongTonDau: 0, tongNhap: 0, tongXuat: 0, tongTonCuoi: 0, tongConLai: 0});
+      this.tongKeHoach=tongKeHoach;
+      this.tongTonDau=tongTonDau;
+      this.tongNhap=tongNhap;
+      this.tongXuat=tongXuat;
+      this.tongTonCuoi=tongTonCuoi;
+      this.tongConLai=tongConLai;
+      return res;
     }
-  }
-  setTonKho(responseData: any[] = []) {
-    this.tonKhoChart = {
-      series: responseData,
-      chart: {
-        height: 550,
-        type: "line",
-        toolbar: {
-          tools: {
-            customIcons: [
-              {
-                icon: '<i class ="icon htvbdh_filter"></i>',
-                title: 'Sort',
-                index: 4,
-                class: 'apexchart_sort_tonKho',
-                click: (chart, options, e) => this.openModal(e, 2)
-              }
-            ]
-          }
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        width: 5,
-        curve: "smooth",
-        //dashArray: [0, 8, 5]
-      },
-
-      legend: {
-        tooltipHoverFormatter: function (val, opts) {
-          return (
-            val +
-            " - <strong>" +
-            Number(opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex]).toLocaleString("vi-VN") +
-            "</strong>"
-          );
-        },
-        position: 'right',
-      },
-      markers: {
-        size: 7,
-        hover: {
-          sizeOffset: 6
-        }
-      },
-      xaxis: {
-        labels: {
-          trim: false,
-          offsetX: 10
-        },
-        categories: responseData[0]?.label
-      },
-      yaxis: {
-        labels: {
-          formatter: (val) => {
-            return Number(val).toLocaleString("vi-VN") + "";
-          },
-        },
-      },
-      tooltip: {
-        y: [
-          /*{
-            title: {
-              formatter: function(val) {
-                return val;
-              }
-            }
-          },
-          {
-            title: {
-              formatter: function(val) {
-                return val + " per session";
-              }
-            }
-          },
-          {
-            title: {
-              formatter: function(val) {
-                return val;
-              }
-            }
-          }*/
-        ]
-      },
-      grid: {
-        borderColor: "#f1f1f1"
-      }
-    };
   }
 
   changeLoaiHienTrang(loaiHienTrang: number) {
     this.loaiHienTrang = loaiHienTrang;
+    this.setTichLuongKho([]);
+    this.dataTable = [];
+    this.donViTinh='';
+    this.tieuDeHienTrang='';
+    this.tongKeHoach=0;
+    this.tongTonDau=0;
+    this.tongNhap=0;
+    this.tongXuat=0;
+    this.tongTonCuoi=0;
+    this.tongConLai=0;
   }
 
   async ketXuatBaoCao() {
     try {
-      this.spinner.show();
-      this.helperService.markFormGroupTouched(this.formData);
+      await this.spinner.show();
+      await this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
         return;
       }
       let body = this.formData.value;
-      const data = await this.bcNvQuanLyKhoTangService.hienTrangKhoTang(body);
-      this.tongTichLuongVt = data.tongTichLuongVt;
-      this.tongTichLuongVtDsd = data.tongTichLuongVtDsd;
-      this.tongTichLuongVtCsd = data.tongTichLuongVtCsd;
-      this.tongTichLuongLt = data.tongTichLuongLt;
-      this.tongTichLuongLtDsd = data.tongTichLuongLtDsd;
-      this.tongTichLuongLtCsd = data.tongTichLuongLtCsd;
-      this.tonKho = Array.isArray(data.tonKho) ? data.tonKho.reduce((arr, cur) => {
-        const vthh = cur.cloaiVthh ? `${cur.cloaiVthh}-${cur.loaiVthh}` : cur.loaiVthh;
-        const findIndex = arr.findIndex(f => f.vthh === vthh);
-        if (findIndex >= 0) {
-          arr[findIndex].tonKho += cur.tonKho
-        } else {
-          arr.push({ ...cur, vthh })
+      body.maDvi= body.maChiCuc || body.maCuc;
+      body.nam =dayjs().get('year');
+      let res;
+      if(this.loaiHienTrang === 0){
+        res = await  this.loadChartTichLuong(body);
+      }else{
+        res = await  this.loadHienTrangKhoTang(body)
+      }
+
+      if(res.msg === MESSAGE.SUCCESS){
+          this.isShowDataTonKho=true;
+          this.isChiCucSelected=false;
+          const {loaiVthh, maCuc, maChiCuc}=this.formData.value;
+          let tenVthh=''
+          let tenDvi='';
+          if (loaiVthh) {
+            const findIndex= this.listHangHoa.findIndex(f=>f.loaiVthh === loaiVthh);
+            tenVthh=this.listHangHoa[findIndex].tenVthh
+          }
+          if(!maCuc){
+            tenDvi='TCDTNN'
+          }
+          if (maCuc) {
+            const findIndex= this.listCuc.findIndex(f=>f.maDvi === maCuc);
+            tenDvi=this.listCuc[findIndex].tenDvi
+          }
+          if (maChiCuc) {
+            const findIndex= this.listChiCuc.findIndex(f=>f.maDvi === maChiCuc);
+            tenDvi=this.listChiCuc[findIndex].tenDvi;
+            this.isChiCucSelected=true
+          }
+          if(tenVthh){
+            this.tieuDeHienTrang=`Hiện trạng kho ${tenDvi} ( Loại hàng hóa: ${tenVthh})`
+          }
+        if(this.formData.value.maChiCuc){
+          this.titleTable='';
+        }else if(this.formData.value.maCuc){
+          this.titleTable= 'Chi cục DTNNKV';
+        }else{
+          this.titleTable='Cục DTNNKV';
         }
-        return arr
-      }, []) : [];
+
+      }
 
     } catch (error) {
       console.log("error", error)
@@ -387,7 +364,6 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
       console.log("e", error);
     } finally {
       this.dataConfigTable.donVi = [{ tenTieuChi: 'Tất cả', maTieuChi: 'all', status: true }].concat(this.listCuc.map(f => ({ tenTieuChi: f.tenDvi, maTieuChi: f.maDvi, status: true })));
-      this.dataConfigTableTonKho.donVi = [{ tenTieuChi: 'Tất cả', maTieuChi: 'all', status: true }].concat(this.listCuc.map(f => ({ tenTieuChi: f.tenDvi, maTieuChi: f.maDvi, status: true })));
     }
   }
 
@@ -412,52 +388,39 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
   }
 
   async changeCuc(val: string) {
-    try {
-      this.formData.patchValue({
-        maDvi: val
-      });
-      await this.spinner.show();
-      await Promise.all([
-        this.loadChartTichLuong(),
-        this.loadChartTonKho(),
-      ]);
-    } catch (e) {
-      console.log('error: ', e)
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      await this.spinner.hide();
-    }
     this.getDsDviCon(val);
   }
 
   async changeChiCuc(val: string) {
-    try {
-      this.formData.patchValue({
-        maDvi: val
-      });
-      if (this.formData.value.maChiCuc) {
-        await this.spinner.show();
-        await Promise.all([
-          this.loadChartTichLuong(),
-          this.loadChartTonKho(),
-        ]);
-      }
-    } catch (e) {
-      console.log('error: ', e)
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      await this.spinner.hide();
-    }
   }
 
   clearFilter() {
     // this.formData.reset();
     this.formData.patchValue({
+      maDvi: "",
+      maCuc: "",
       maChiCuc: "",
-    })
+      loaiVthh: ""
+    }, {onlySelf: true, emitEvent: false})
     if (this.userService.isTongCuc) {
-      this.formData.controls["maCuc"].setValue("", { emitEvent: false });
+      // this.formData.controls["maCuc"].setValue("", { emitEvent: false });
       this.listChiCuc = []
+    };
+    this.setTichLuongKho([]);
+    this.dataTable=[];
+    this.donViTinh='';
+    this.tieuDeHienTrang='';
+    this.tongKeHoach=0;
+    this.tongTonDau=0;
+    this.tongNhap=0;
+    this.tongXuat=0;
+    this.tongTonCuoi=0;
+    this.tongConLai=0;
+  }
+  handleClickFilter(e: MouseEvent){
+    if((e.target as HTMLElement).closest(".apexchart_sort_tonKho")){
+      e.preventDefault();
+      e.stopPropagation();
     }
   }
 
@@ -487,25 +450,6 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
       } else {
         this.dataConfigTable[key][allIndex].status = false;
       }
-      console.log("this.dataConfigTable", this.dataConfigTable)
-    };
-  }
-  handleChangeStatusTonKho(status: boolean, key: 'tieuChi' | 'donVi', subKey: string) {
-    if (subKey === "all") {
-      this.dataConfigTableTonKho[key].forEach(element => {
-        element.status = status;
-      });
-    } else {
-      const allIndex = this.dataConfigTableTonKho[key].findIndex(f => f.maTieuChi === 'all');
-      if (status) {
-        const checkFalseIndex = this.dataConfigTableTonKho[key].findIndex(f => f.maTieuChi !== 'all' && !f.status);
-        if (checkFalseIndex < 0) {
-          this.dataConfigTableTonKho[key][allIndex].status = true;
-        }
-      } else {
-        this.dataConfigTableTonKho[key][allIndex].status = false;
-      }
-      console.log("this.dataConfigTableTonKho", this.dataConfigTableTonKho)
     };
   }
   apDungTichLuongKhoConfig() {
@@ -557,57 +501,6 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     this.setTichLuongKho(dataTichLuongKhoFilter)
     this.handleCancelTichLuong();
   };
-  handleCancelTonKho() {
-    this.showFilterTonKho = false;
-
-  };
-  apDungTonKhoConfig() {
-    let dataTonKhoFilter = [];
-    const allTieuChiIndex = this.dataConfigTableTonKho.tieuChi.findIndex(f => f.maTieuChi === 'all');
-    const allDonViIndex = this.dataConfigTableTonKho.donVi.findIndex(f => f.maTieuChi === 'all');
-    if (this.dataConfigTableTonKho.tieuChi[allTieuChiIndex]?.status) {
-      if (this.dataConfigTableTonKho.donVi[allDonViIndex]?.status) {
-        dataTonKhoFilter = cloneDeep(this.dataTonKho)
-      } else {
-        this.dataTonKho.forEach((item: { data: number[], label: string[], group: string, name: string }, index: number) => {
-          let listLabel = [];
-          let listLabelIndex = []
-          let data = [];
-          cloneDeep(item.label).forEach((f, i1) => {
-            if (this.dataConfigTableTonKho.donVi.findIndex(m => m.tenTieuChi === f && m.status) >= 0) {
-              listLabel.push(f);
-              listLabelIndex.push(i1)
-            }
-          });
-          listLabelIndex.forEach(i => {
-            data.push(item.data[i])
-          })
-          dataTonKhoFilter.push({ data, label: listLabel, group: item.group, name: item.name })
-        })
-      }
-    }
-    else {
-      if (this.dataConfigTableTonKho.donVi[allDonViIndex]?.status) {
-        dataTonKhoFilter = cloneDeep(this.dataTonKho.filter(f => this.dataConfigTableTonKho.tieuChi.findIndex(m => m.tenTieuChi === f.name && m.status) >= 0))
-      } else {
-        this.dataTonKho.filter(f => this.dataConfigTableTonKho.tieuChi.findIndex(m => m.tenTieuChi === f.name && m.status) >= 0).forEach((item: { data: number[], label: string[], group: string, name: string }, index: number) => {
-          let listLabel = [];
-          let listLabelIndex = []
-          let data = [];
-          cloneDeep(item.label).forEach((f, i1) => {
-            if (this.dataConfigTableTonKho.donVi.findIndex(m => m.tenTieuChi === f && m.status) >= 0) {
-              listLabel.push(f);
-              listLabelIndex.push(i1)
-            }
-          });
-          listLabelIndex.forEach(i => {
-            data.push(item.data[i])
-          })
-          dataTonKhoFilter.push({ data, label: listLabel, group: item.group, name: item.name })
-        })
-      }
-    }
-    this.setTonKho(dataTonKhoFilter)
-    this.handleCancelTonKho();
+  downloadExcel() {
   }
 }
