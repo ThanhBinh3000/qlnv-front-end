@@ -36,6 +36,7 @@ export class ThemMoiNhapXuatTonKhoHangDtqgComponent extends Base2Component imple
   thoiGianSx: Date | null = null;
   listDataDetail: any[] = [];
   listCloaiVthh: any[] = [];
+  whitelistWebService: any = {};
   now: any;
   listQuy: any[] = [
     { text: "Quý I", value: 1 },
@@ -115,6 +116,7 @@ export class ThemMoiNhapXuatTonKhoHangDtqgComponent extends Base2Component imple
       this.getUserInfor(),
       // this.loadDsVthh(),
       this.loadDsDonVi(),
+      this.loadDsKyBc(),
       this.layTatCaDonViByLevel()
     ]);
     if (this.idInput > 0) {
@@ -282,15 +284,20 @@ export class ThemMoiNhapXuatTonKhoHangDtqgComponent extends Base2Component imple
       res = await this.bcBnTt145Service.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      this.idInput = res.data.id
-      if (isBanHanh) {
-        this.pheDuyetBcBn(body);
-      } else {
-        if (this.formData.get('id').value) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      if(await this.checkWhiteList()){
+        if (isBanHanh) {
+          this.idInput = res.data.id;
+          this.pheDuyetBcBn(body);
         } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          if (this.formData.get('id').value) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          } else {
+            this.idInput = res.data.id
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          }
         }
+      }else{
+        this.notification.error(MESSAGE.ERROR, MESSAGE.WEB_SERVICE_ERR);
       }
       await this.spinner.hide()
       // this.quayLai();
@@ -364,5 +371,22 @@ export class ThemMoiNhapXuatTonKhoHangDtqgComponent extends Base2Component imple
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  async loadDsKyBc() {
+    let res = await this.danhMucService.danhMucChungGetAll("WEB_SERVICE");
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res, "3333")
+      this.whitelistWebService = res.data;
+    }
+  }
+
+  async checkWhiteList(){
+    if(this.whitelistWebService.find(x => x.ma == "BCBN_145_06")){
+      return true;
+    }else{
+      return false;
+    }
+
   }
 }
