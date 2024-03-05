@@ -3135,6 +3135,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       await this.quyetDinhDieuChinhCTKHService.xuatBaoCaoNhapVt({
         id: this.id,
         namKeHoach: this.formData.value.namKeHoach,
+        soQuyetDinh : this.thongTinChiTieuKeHoachNam.soQuyetDinh,
+        ngayKy : this.formData.value.ngayKy,
       }).then(async (response) => {
         if (response && response.status == 200) {
           const contentDisposition = response.headers.get('content-disposition');
