@@ -33,7 +33,11 @@ export class BcNvQuanLyKhoTangService extends BaseService {
         return this._httpClient.post<OldResponseData>(url, body).toPromise();
     }
     hienTrangKhoTang(body) {
-        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/hien-trang-kho-tang`;
-        return this._httpClient.post<any>(url, body).toPromise();
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/hien-trang-kho/tra-cuu-hien-trang`;
+        return this._httpClient.post<OldResponseData>(url, body).toPromise();
+    }
+    hienTrangKhoTangChart(body){
+      const url=`${environment.SERVICE_API}${this.GATEWAY}/${this.table}/hien-trang-kho/hien-trang`;
+      return this._httpClient.post<OldResponseData>(url, body).toPromise();
     }
 }
