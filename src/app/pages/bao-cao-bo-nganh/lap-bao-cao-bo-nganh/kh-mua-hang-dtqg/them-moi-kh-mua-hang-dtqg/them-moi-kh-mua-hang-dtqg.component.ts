@@ -17,6 +17,7 @@ import {
   DialogThemMoiKhMuaHangDtqgComponent
 } from "../dialog-them-moi-kh-mua-hang-dtqg/dialog-them-moi-kh-mua-hang-dtqg.component";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
 
 @Component({
   selector: 'app-them-moi-kh-mua-hang-dtqg',
@@ -33,6 +34,7 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
     { text: "Quý III", value: 3 },
     { text: "Quý IV", value: 4 }
   ];
+  whitelistWebService: any = {};
   listLoaiBc: any[] = [
     {
       text: "Báo cáo năm",
@@ -69,7 +71,8 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
               spinner: NgxSpinnerService,
               modal: NzModalService,
               private bcBnTt108Service: BcBnTt130Service,
-              private donViService: DonviService
+              private donViService: DonviService,
+              private danhMucService: DanhMucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bcBnTt108Service);
     this.formData = this.fb.group(
@@ -102,7 +105,8 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
       await this.loadChiTiet(this.idInput)
     } else {
       await Promise.all([
-        this.loadDsDonVi()
+        this.loadDsDonVi(),
+        this.loadDsKyBc(),
       ]);
       this.formData.patchValue({
         tenDonViNhan: this.dsDonVi[0].tenDvi,
@@ -204,15 +208,19 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
     }
     if (res.msg == MESSAGE.SUCCESS) {
       this.idInput = res.data.id;
-      if (isBanHanh) {
-        this.pheDuyetBcBn(body);
-      } else {
-        if (this.formData.get("id").value) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      if(await this.checkWhiteList()){
+        if (isBanHanh) {
+          this.pheDuyetBcBn(body);
         } else {
-          this.formData.get("id").setValue(res.data.id);
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          if (this.formData.get("id").value) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          } else {
+            this.formData.get("id").setValue(res.data.id);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          }
         }
+      }else{
+        this.notification.error(MESSAGE.ERROR, MESSAGE.WEB_SERVICE_ERR);
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -457,5 +465,22 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  async loadDsKyBc() {
+    let res = await this.danhMucService.danhMucChungGetAll("WEB_SERVICE");
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res, "3333")
+      this.whitelistWebService = res.data;
+    }
+  }
+
+  async checkWhiteList(){
+    if(this.whitelistWebService.find(x => x.ma == "BCBN_130_03")){
+      return true;
+    }else{
+      return false;
+    }
+
   }
 }
