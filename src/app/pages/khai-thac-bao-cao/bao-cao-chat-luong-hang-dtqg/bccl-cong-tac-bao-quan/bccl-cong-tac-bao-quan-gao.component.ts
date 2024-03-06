@@ -307,6 +307,9 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
           body.vaiTro = 'CBTHUKHO';
         }
       }
+      if (body.loaiVthh == '04') {
+        body.loaiVthh == '0401'
+      }
       body.nam = (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') ? (this.formData.value.kyBc + " NĂM " + this.formData.value.namNhap) : ("NĂM " + this.formData.value.namNhap);
       await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
         this.pdfBlob = s;
@@ -391,6 +394,9 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
           body.denNgay = body.tgBaoCaoDen ? dayjs(body.tgBaoCaoDen).format('DD/MM/YYYY') : null;
           body.vaiTro = 'CBTHUKHO';
         }
+      }
+      if (body.loaiVthh == '04') {
+        body.loaiVthh == '0401'
       }
       body.nam = (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') ? (this.formData.value.kyBc + " NĂM " + this.formData.value.namNhap) : ("NĂM " + this.formData.value.namNhap);
       await this.bcCLuongHangDTQGService.baoCaoCongTacBqHangDtqg(body).then(async s => {
