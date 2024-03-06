@@ -57,7 +57,7 @@ export type ChartOptionsLine = {
   title: ApexTitleSubtitle;
 };
 interface LoaiHangHoaType{
-  tenVthh: string,
+  tenLoaiVthh: string,
   loaiVthh: string,
   loaiHang: string,
   donViTinh: string
@@ -84,7 +84,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
   dataTichLuongKho: any[] = [];
   dataTonKho: any[] = [];
   listHangHoa: Array<LoaiHangHoaType>=[];
-  tenVthh: string='';
+  tenLoaiVthh: string='';
   tieuDeHienTrang: string='';
   titleTable: string = 'Cục DTNNKV';
   isShowDataTonKho: boolean =false;
@@ -152,7 +152,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
   async getLoaiVthh(){
     const res= await this.danhMucSerVice.getAllVthhByCap(2);
     if(res.msg === MESSAGE.SUCCESS){
-      this.listHangHoa= res.data.map(f=>({tenVthh: f.ten, loaiVthh: f.ma, loaiHang: f.loaiHang, donViTinh: f.maDviTinh}))
+      this.listHangHoa= res.data.map(f=>({tenLoaiVthh: f.ten, loaiVthh: f.ma, loaiHang: f.loaiHang, donViTinh: f.maDviTinh}))
     }
   }
   clearSearch() {
@@ -296,11 +296,11 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
           this.isShowDataTonKho=true;
           this.isChiCucSelected=false;
           const {loaiVthh, maCuc, maChiCuc}=this.formData.value;
-          this.tenVthh=''
+          this.tenLoaiVthh=''
           let tenDvi='';
           if (loaiVthh) {
             const findIndex= this.listHangHoa.findIndex(f=>f.loaiVthh === loaiVthh);
-            this.tenVthh=this.listHangHoa[findIndex].tenVthh
+            this.tenLoaiVthh=this.listHangHoa[findIndex].tenLoaiVthh
           }
           if(!maCuc){
             tenDvi='TCDTNN'
@@ -314,8 +314,8 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
             tenDvi=this.listChiCuc[findIndex].tenDvi;
             this.isChiCucSelected=true
           }
-          if(this.tenVthh){
-            this.tieuDeHienTrang=`Hiện trạng kho ${tenDvi} ( Loại hàng hóa: ${this.tenVthh})`
+          if(this.tenLoaiVthh){
+            this.tieuDeHienTrang=`Hiện trạng kho ${tenDvi} ( Loại hàng hóa: ${this.tenLoaiVthh})`
           }
         if(this.formData.value.maChiCuc){
           this.titleTable='';
@@ -410,7 +410,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     this.setTichLuongKho([]);
     this.dataTable=[];
     this.donViTinh='';
-    this.tenVthh='';
+    this.tenLoaiVthh='';
     this.tieuDeHienTrang='';
     this.tongKeHoach=0;
     this.tongTonDau=0;
@@ -511,7 +511,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
         nam: dayjs().get('year'),
         maDvi: this.formData.value.maChiCuc || this.formData.value.maCuc,
         loaiVthh: this.formData.value.loaiVthh,
-        tenVthh: this.tenVthh
+        tenLoaiVthh: this.tenLoaiVthh
       }
       if(!body.loaiVthh) return this.notification.error(MESSAGE.ERROR, "Chưa có loại vật tư hàng hóa nào được chọn.");
       this.bcNvQuanLyKhoTangService
