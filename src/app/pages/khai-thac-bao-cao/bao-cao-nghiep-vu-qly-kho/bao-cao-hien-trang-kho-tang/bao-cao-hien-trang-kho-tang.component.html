@@ -122,7 +122,7 @@
               <div class="right-content">
                 <div class="export-dashbroad">
                   <span class="mr-3">Đơn vị: {{this.donViTinh}}</span>
-                  <a class="right icon-wrapper" (click)="downloadExcel()" title="Xuất file excel">
+                  <a class="right icon-wrapper" (click)="downloadExcel($event)" title="Xuất file excel">
                     <i class="icon htvbdh_download2"></i>
                   </a>
 <!--                  <span nz-button-->
@@ -158,7 +158,7 @@
                   <th>Nhập hàng trong năm</th>
                   <th>Xuất hàng trong năm</th>
                   <th>Tồn kho cuối kỳ</th>
-                  <th>Còn lại</th>
+                  <th>Còn lại cần thực hiện</th>
                 </tr>
                 </thead>
                 <tbody>

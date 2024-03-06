@@ -324,7 +324,7 @@
                     <td class="text-center">{{i + 1}}</td>
                     <td>{{item.maCan}}</td>
                     <td class="text-right">{{item.soBaoBi|number: '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right">{{item.trongLuongCaBaoBi|number: '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{item.trongLuongCaBaoBi|number: '1.0-3' : 'vi_VN'}}</td>
                     <td *ngIf="!isView && !isViewOnModal" class="text-center">
                       <a (click)="editRow(i)">
                         <i class="fa fa-pencil" title="Sửa"></i>
@@ -358,9 +358,9 @@
               <tfoot>
               <tr>
                 <td></td>
-                <td class="bold text-blue text-uppercase">Tổng</td>
-                <td class="bold text-blue">{{tongSoBaoCan|number: '1.0-1' : 'vi_VN'}}</td>
-                <td class="bold text-blue">{{tongTrongLuongBaoCan|number: '1.0-1' : 'vi_VN'}}</td>
+                <td class="bold text-blue text-uppercase text-right">Tổng</td>
+                <td class="bold text-blue text-right">{{tongSoBaoCan|number: '1.0-1' : 'vi_VN'}}</td>
+                <td class="bold text-blue text-right">{{tongTrongLuongBaoCan|number: '1.0-3' : 'vi_VN'}}</td>
                 <td *ngIf="!isView && !isViewOnModal"></td>
               </tr>
               </tfoot>
@@ -435,8 +435,8 @@
               <tfoot>
               <tr>
                 <td></td>
-                <td class="bold text-blue text-uppercase">Tổng</td>
-                <td class="bold text-blue">{{tongSoBaoKc|number: '1.0-1' : 'vi_VN'}}</td>
+                <td class="bold text-blue text-uppercase text-right">Tổng</td>
+                <td class="bold text-blue text-right">{{tongSoBaoKc|number: '1.0-1' : 'vi_VN'}}</td>
                 <td *ngIf="!isView && !isViewOnModal"></td>
               </tr>
               </tfoot>
@@ -487,7 +487,7 @@
                   <nz-form-label class="label-color-kh"> Tổng trọng lượng kể cả bao bì (kg)
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error" nz-col style="margin-top: 5px;">
-                    <span>{{formData.value.tongTrongLuongCabaoBi|number: '1.0-1' : 'vi_VN'}}</span>
+                    <span>{{formData.value.tongTrongLuongCabaoBi|number: '1.0-3' : 'vi_VN'}}</span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -496,7 +496,7 @@
                   <nz-form-label class="label-color-kh"> Tổng trọng lượng hàng đã trừ bì (kg)
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error" style="margin-top: 5px;">
-                    <span>{{formData.value.tongTrongLuongTruBi|number: '1.0-1' : 'vi_VN'}}</span>
+                    <span>{{formData.value.tongTrongLuongTruBi|number: '1.0-3' : 'vi_VN'}}</span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -562,7 +562,7 @@
                 <td>{{i + 1}}</td>
                 <td>{{item.maCan}}</td>
                 <td>{{item.soBaoBi|number: '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.trongLuongCaBaoBi|number: '1.0-1' : 'vi_VN'}}</td>
+                <td>{{item.trongLuongCaBaoBi|number: '1.0-3' : 'vi_VN'}}</td>
                 <td *ngIf="!isView || !isViewOnModal">
                   <a (click)="editRow(i)">
                     <i class="fa fa-pencil" title="Sửa"></i>
@@ -601,9 +601,9 @@
           <tfoot>
           <tr>
             <td></td>
-            <td class="bold text-blue text-uppercase">Tổng</td>
-            <td class="bold text-blue">{{tongSoBaoCan|number: '1.0-1' : 'vi_VN'}}</td>
-            <td class="bold text-blue">{{tongTrongLuongBaoCan|number: '1.0-1' : 'vi_VN'}}</td>
+            <td class="bold text-blue text-uppercase text-right">Tổng</td>
+            <td class="bold text-blue text-right">{{tongSoBaoCan|number: '1.0-1' : 'vi_VN'}}</td>
+            <td class="bold text-blue text-right">{{tongTrongLuongBaoCan|number: '1.0-3' : 'vi_VN'}}</td>
             <td *ngIf="!isView || !isViewOnModal"></td>
           </tr>
           </tfoot>
@@ -631,7 +631,7 @@
             <nz-form-label class="label-color-kh"> Tổng trọng lượng kể cả bao bì (kg)
             </nz-form-label>
             <nz-form-control style="margin-top: 5px;">
-              <span>{{formData.value.tongTrongLuongCabaoBi|number: '1.0-1' : 'vi_VN'}}</span>
+              <span>{{formData.value.tongTrongLuongCabaoBi|number: '1.0-3' : 'vi_VN'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -640,7 +640,7 @@
             <nz-form-label class="label-color-kh"> Tổng trọng lượng hàng đã trừ bì (viết bằng số)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error" style="margin-top: 5px;">
-              <span>{{formData.value.tongTrongLuongTruBi|number: '1.0-1' : 'vi_VN'}}</span>
+              <span>{{formData.value.tongTrongLuongTruBi|number: '1.0-3' : 'vi_VN'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -731,9 +731,9 @@
         <tfoot>
           <tr>
             <td></td>
-            <td class="bold text-blue text-uppercase">Tổng</td>
-            <td class="bold text-blue">{{tongSoBaoCan|number: '1.0-1' : 'vi_VN'}}</td>
-            <td class="bold text-blue">{{tongTrongLuongBaoCan|number: '1.0-1' : 'vi_VN'}}</td>
+            <td class="bold text-blue text-uppercase text-right">Tổng</td>
+            <td class="bold text-blue text-right">{{tongSoBaoCan|number: '1.0-1' : 'vi_VN'}}</td>
+            <td class="bold text-blue text-right">{{tongTrongLuongBaoCan|number: '1.0-3' : 'vi_VN'}}</td>
             <td></td>
           </tr>
         </tfoot>
