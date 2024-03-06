@@ -75,6 +75,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
       this.loadDsLoaiBc();
       this.loadDsKyBc();
       this.changLoaiKyBc('01');
+      await this.initForm();
     } catch (e) {
       console.log("error: ", e);
       await this.spinner.hide();
@@ -83,11 +84,25 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
     await this.spinner.hide();
   }
 
+  async initForm() {
+    if (this.userService.isCuc()) {
+      this.formData.patchValue({
+        maCuc : this.userInfo.MA_DVI
+      })
+    }
+    if (this.userService.isChiCuc()) {
+      this.formData.patchValue({
+        maCuc : this.userInfo.MA_DVI.substring(0, 6),
+        maChiCuc : this.userInfo.MA_DVI,
+      })
+    }
+  }
+
   async loadDsDonVi() {
     let res = await this.donViService.layTatCaDonViByLevel(2);
     if (res && res.data) {
       this.dsDonVi = res.data
-      this.dsDonVi = this.dsDonVi.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
+      this.dsDonVi = this.dsDonVi.filter(item => item.type != "PB")
     }
   }
 
@@ -125,7 +140,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
   async loadDsLoaiBc() {
     let res = await this.danhMucSv.danhMucChungGetAll("LOAI_BAO_CAO");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiBc = res.data;
+      this.listLoaiBc = res.data.filter(x => x.ma == '02' || x.ma == '01');
     }
   }
 
