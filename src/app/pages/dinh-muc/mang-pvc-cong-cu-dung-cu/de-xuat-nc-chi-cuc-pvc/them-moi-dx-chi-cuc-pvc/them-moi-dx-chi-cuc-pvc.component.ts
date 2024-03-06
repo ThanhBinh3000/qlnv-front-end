@@ -55,6 +55,8 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
       soQdGiaoCt: [null, Validators.required],
       trichYeu: [null],
       ghiChu: [null],
+      diaDiem: [null],
+      sdt: [null],
       trangThai: ['00'],
       trangThaiTh: [],
       tenTrangThai: ['Dự thảo'],
@@ -75,6 +77,9 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
         this.detail(this.id);
       } else {
         this.changeNamKh(this.formData.value.namKeHoach);
+        this.formData.patchValue({
+          diaDiem : this.userInfo.DON_VI.diaChi ?? null
+        })
       }
       this.spinner.hide();
     } catch (e) {

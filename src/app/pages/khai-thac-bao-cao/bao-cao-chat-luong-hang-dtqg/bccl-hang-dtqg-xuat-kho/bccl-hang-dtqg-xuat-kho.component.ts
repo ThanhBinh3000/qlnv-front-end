@@ -237,7 +237,7 @@ export class BcclHangDtqgXuatKhoComponent extends Base2Component implements OnIn
   async loadDsLoaiBc() {
     let res = await this.danhMucSv.danhMucChungGetAll("LOAI_BAO_CAO");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiBc = res.data;
+      this.listLoaiBc = res.data.filter(x => x.ma == '02' || x.ma == '01');
     }
   }
 

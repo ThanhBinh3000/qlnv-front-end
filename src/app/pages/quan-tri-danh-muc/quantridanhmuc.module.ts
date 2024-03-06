@@ -23,28 +23,30 @@ import { ThemmoiThukhoComponent } from './danh-muc-thu-kho/themmoi-thukho/themmo
 import {DanhMucDinhMucHaoHutComponent} from "./danh-muc-dinh-muc-hao-hut/danh-muc-dinh-muc-hao-hut.component";
 import { DanhMucCtieuChatLuongComponent } from './danh-muc-ctieu-chat-luong/danh-muc-ctieu-chat-luong.component';
 import { ThemMoiDanhMucCtieuChatLuongComponent } from './danh-muc-ctieu-chat-luong/them-moi-danh-muc-ctieu-chat-luong/them-moi-danh-muc-ctieu-chat-luong.component';
+import {ThemMoiDmHaoHutComponent} from "./danh-muc-dinh-muc-hao-hut/them-moi-dm-hao-hut/them-moi-dm-hao-hut.component";
 
 
 @NgModule({
-  declarations: [
-    QuanTriDanhMucComponent,
-    DanhMucDungChungComponent,
-    ThemDanhMucDungChungComponent,
-    DanhMucDonViComponent,
-    NewDonViComponent,
-    DanhMucDinhMucPhiComponent,
-    DanhMucHangHoaComponent,
-    NewHangHoaComponent,
-    DanhMucCongCuDungCuComponent,
-    DanhMucTaiSanComponent,
-    DanhMucThuKhoComponent,
-    DanhMucDviLqComponent,
-    ThemMoiDmDviLqComponent,
-    ThemmoiThukhoComponent,
-    DanhMucDinhMucHaoHutComponent,
-    DanhMucCtieuChatLuongComponent,
-    ThemMoiDanhMucCtieuChatLuongComponent
-  ],
+    declarations: [
+        QuanTriDanhMucComponent,
+        DanhMucDungChungComponent,
+        ThemDanhMucDungChungComponent,
+        DanhMucDonViComponent,
+        NewDonViComponent,
+        DanhMucDinhMucPhiComponent,
+        DanhMucHangHoaComponent,
+        NewHangHoaComponent,
+        DanhMucCongCuDungCuComponent,
+        DanhMucTaiSanComponent,
+        DanhMucThuKhoComponent,
+        DanhMucDviLqComponent,
+        ThemMoiDmDviLqComponent,
+        ThemmoiThukhoComponent,
+        DanhMucDinhMucHaoHutComponent,
+        DanhMucCtieuChatLuongComponent,
+        ThemMoiDanhMucCtieuChatLuongComponent,
+        ThemMoiDmHaoHutComponent
+    ],
   imports: [CommonModule, QuanTriDanhMucRoutingModule, ComponentsModule, MainModule, NzTreeViewModule],
 
 })
