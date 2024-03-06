@@ -110,7 +110,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
     try {
       this.spinner.show();
       this.formData.value.namNhap = this.formData.value.namNhap && this.formData.value.namNhap.length > 0 ? this.formData.value.namNhap.toString() : ""
-      this.formData.value.namXuat = this.formData.value.namXuat && this.formData.value.namXuat.length > 0 ? this.formData.value.namNhap.toString() : ""
+      this.formData.value.namXuat = this.formData.value.namXuat && this.formData.value.namXuat.length > 0 ? this.formData.value.namXuat.toString() : ""
       let body = this.formData.value;
       body.maDvi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       body.nam  = 2023;
@@ -160,7 +160,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
     try {
       this.spinner.show();
       this.formData.value.namNhap = this.formData.value.namNhap && this.formData.value.namNhap.length > 0 ? this.formData.value.namNhap.toString() : ""
-      this.formData.value.namXuat = this.formData.value.namXuat && this.formData.value.namXuat.length > 0 ? this.formData.value.namNhap.toString() : ""
+      this.formData.value.namXuat = this.formData.value.namXuat && this.formData.value.namXuat.length > 0 ? this.formData.value.namXuat.toString() : ""
       let body = this.formData.value;
       body.maDonVi = !body.maChiCuc ? (!body.maCuc ? null : body.maCuc) : body.maChiCuc
       body.nam  = 2023;
@@ -216,7 +216,7 @@ export class BaoCaoHaoHutHangDtqgComponent extends Base2Component implements OnI
   async loadDsLoaiBc() {
     let res = await this.danhMucSv.danhMucChungGetAll("LOAI_BAO_CAO");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiBc = res.data;
+      this.listLoaiBc = res.data.filter(x => x.ma == '02' || x.ma == '01');
     }
   }
 
