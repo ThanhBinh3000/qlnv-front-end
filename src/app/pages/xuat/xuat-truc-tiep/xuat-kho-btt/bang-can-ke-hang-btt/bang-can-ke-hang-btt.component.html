@@ -3,63 +3,66 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="20">
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? 2 : 3">
             <label class="search__label"> Năm kế hoạch </label>
             <nz-select formControlName="namKh">
               <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? 5 : 7">
             <label class="search__label">
               {{loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? 'Số QĐ giao NV XH' : 'Số QĐ giao NV xuất hàng'}}
             </label>
             <input nz-input formControlName="soQdNv"/>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? 5 : 7">
             <label class="search__label">
               {{loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? 'Số bảng kê xuất vật tư' : 'Số bảng kê cân hàng'}}
             </label>
             <input nz-input formControlName="soBangKeHang"/>
           </div>
-          <div nz-col [nzSpan]="4" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
+          <div nz-col [nzSpan]="7" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
             <label class="search__label"> Ngày tạo bảng kê</label>
             <div nz-row>
-              <div nz-col nzSpan="12" class="cus-start-date">
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartNgayTaoBangKeTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayLapBangKeTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
+              <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartNgayTaoBangKeDen" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayLapBangKeDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                formControlName="ngayLapBangKeDen" nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
               </div>
             </div>
           </div>
-          <div nz-col [nzSpan]="4" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
+          <div nz-col [nzSpan]="6" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
             <label class="search__label"> Thơi hạn xuất kho trước ngày</label>
             <div nz-row>
-              <div nz-col nzSpan="12" class="cus-start-date">
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartThoiHanGiaoNhanTu" nzFormat="dd/MM/yyyy"
                                 formControlName="tgianGiaoNhanTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
+              <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartThoiHanGiaoNhanDen" nzFormat="dd/MM/yyyy"
-                                formControlName="tgianGiaoNhanDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                formControlName="tgianGiaoNhanDen" nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
               </div>
             </div>
           </div>
-          <div nz-col [nzSpan]="4" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
+          <div nz-col [nzSpan]="6" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
             <label class="search__label"> Ngày xuất kho</label>
             <div nz-row>
-              <div nz-col nzSpan="12" class="cus-start-date">
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartNgayXuatKhoTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayXuatKhoTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
+              <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartNgayXuatKhoDen" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayXuatKhoDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                formControlName="ngayXuatKhoDen" nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
               </div>
             </div>
           </div>
