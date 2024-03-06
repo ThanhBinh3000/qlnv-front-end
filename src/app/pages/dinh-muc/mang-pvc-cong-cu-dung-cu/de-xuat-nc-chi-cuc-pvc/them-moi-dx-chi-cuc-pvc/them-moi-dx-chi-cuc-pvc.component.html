@@ -66,7 +66,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="5">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label [nzNoColon]="true" class="label-color-kh">Số quyết
@@ -76,7 +76,23 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="9">
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label  [nzNoColon]="true" class="label-color-kh">Địa điểm</nz-form-label>
+              <input nz-input formControlName="diaDiem" [readonly]="isView" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label  [nzNoColon]="true" class="label-color-kh">Số điện thoại liên hệ</nz-form-label>
+              <input nz-input formControlName="sdt" [readonly]="isView" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Trích yếu</nz-form-label>
@@ -91,6 +107,14 @@
               <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký"
                 formControlName="ngayKy">
               </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Trích yếu</nz-form-label>
+              <input nz-input formControlName="trichYeu" [readonly]="isView" />
             </nz-form-control>
           </nz-form-item>
         </div>
