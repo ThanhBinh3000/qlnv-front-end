@@ -39,6 +39,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     },
     { text: "Báo cáo quý", value: 2, thoiHanGuiBc: "Ngày 20 của tháng đầu quý sau" }
   ];
+  whitelistWebService: any = {};
   dsDonVi: any[] = [];
   dataNguonNsnn: any[] = [];
   dataNguonNgoaiNsnn: any[] = [];
@@ -108,6 +109,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     } else {
       await Promise.all([
         this.loadDsDonVi(),
+        this.loadDsKyBc(),
         this.nguonVonGetAll()
       ]);
       this.formData.patchValue({
@@ -339,15 +341,19 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     }
     if (res.msg == MESSAGE.SUCCESS) {
       this.idInput = res.data.id;
-      if (isBanHanh) {
-        this.pheDuyetBcBn(body);
-      } else {
-        if (this.formData.get("id").value) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      if(await this.checkWhiteList()){
+        if (isBanHanh) {
+          this.pheDuyetBcBn(body);
         } else {
-          this.formData.get("id").setValue(res.data.id);
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          if (this.formData.get("id").value) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          } else {
+            this.formData.get("id").setValue(res.data.id);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          }
         }
+      }else{
+        this.notification.error(MESSAGE.ERROR, MESSAGE.WEB_SERVICE_ERR);
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -444,5 +450,22 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  async loadDsKyBc() {
+    let res = await this.danhMucService.danhMucChungGetAll("WEB_SERVICE");
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res, "3333")
+      this.whitelistWebService = res.data;
+    }
+  }
+
+  async checkWhiteList(){
+    if(this.whitelistWebService.find(x => x.ma == "BCBN_130_01")){
+      return true;
+    }else{
+      return false;
+    }
+
   }
 }

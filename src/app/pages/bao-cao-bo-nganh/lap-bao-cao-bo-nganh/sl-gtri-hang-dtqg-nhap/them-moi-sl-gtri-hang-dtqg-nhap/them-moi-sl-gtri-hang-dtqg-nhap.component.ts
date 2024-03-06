@@ -18,6 +18,7 @@ import {
 import { cloneDeep } from 'lodash';
 import {CurrencyMaskInputMode} from "ngx-currency";
 import {TEN_HANG_DTQG} from "../../../../../constants/config";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
 
 @Component({
   selector: 'app-them-moi-sl-gtri-hang-dtqg-nhap',
@@ -34,6 +35,7 @@ export class ThemMoiSlGtriHangDtqgNhapComponent extends Base2Component implement
     { text: "Quý III", value: 3 },
     { text: "Quý IV", value: 4 }
   ];
+  whitelistWebService: any = {};
   listLoaiBc: any[] = [
     {
       text: "Báo cáo năm",
@@ -70,7 +72,8 @@ export class ThemMoiSlGtriHangDtqgNhapComponent extends Base2Component implement
               spinner: NgxSpinnerService,
               modal: NzModalService,
               private bcBnTt108Service: BcBnTt130Service,
-              private donViService: DonviService
+              private donViService: DonviService,
+              private danhMucService: DanhMucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bcBnTt108Service);
     this.formData = this.fb.group(
@@ -104,6 +107,7 @@ export class ThemMoiSlGtriHangDtqgNhapComponent extends Base2Component implement
       await this.loadChiTiet(this.idInput)
     } else {
       await Promise.all([
+        this.loadDsKyBc(),
         this.loadDsDonVi()
       ]);
       this.formData.patchValue({
@@ -188,15 +192,19 @@ export class ThemMoiSlGtriHangDtqgNhapComponent extends Base2Component implement
     }
     if (res.msg == MESSAGE.SUCCESS) {
       this.idInput = res.data.id;
-      if (isBanHanh) {
-        this.pheDuyetBcBn(body);
-      } else {
-        if (this.formData.get("id").value) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      if(await this.checkWhiteList()){
+        if (isBanHanh) {
+          this.pheDuyetBcBn(body);
         } else {
-          this.formData.get("id").setValue(res.data.id);
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          if (this.formData.get("id").value) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          } else {
+            this.formData.get("id").setValue(res.data.id);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          }
         }
+      }else{
+        this.notification.error(MESSAGE.ERROR, MESSAGE.WEB_SERVICE_ERR);
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -453,5 +461,22 @@ export class ThemMoiSlGtriHangDtqgNhapComponent extends Base2Component implement
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  async loadDsKyBc() {
+    let res = await this.danhMucService.danhMucChungGetAll("WEB_SERVICE");
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res, "3333")
+      this.whitelistWebService = res.data;
+    }
+  }
+
+  async checkWhiteList(){
+    if(this.whitelistWebService.find(x => x.ma == "BCBN_130_05")){
+      return true;
+    }else{
+      return false;
+    }
+
   }
 }

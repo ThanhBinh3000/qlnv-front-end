@@ -17,6 +17,7 @@ import {
 import { cloneDeep } from 'lodash';
 import { Base2Component } from "../../../../../components/base2/base2.component";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
 
 @Component({
   selector: 'app-them-moi-sl-gtri-hang-dtqg-xc-khac',
@@ -47,6 +48,7 @@ export class ThemMoiSlGtriHangDtqgXcKhacComponent extends Base2Component impleme
   itemRowMatHangEdit: any[] = [];
   itemRowDonViEdit: any[] = [];
   itemRowNhomMhEdit: any[] = [];
+  whitelistWebService: any = {};
   itemRowMatHang: any[] = [];
   amount = {
     allowZero: true,
@@ -69,7 +71,8 @@ export class ThemMoiSlGtriHangDtqgXcKhacComponent extends Base2Component impleme
               spinner: NgxSpinnerService,
               modal: NzModalService,
               private bcBnTt108Service: BcBnTt130Service,
-              private donViService: DonviService
+              private donViService: DonviService,
+              private danhMucService: DanhMucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bcBnTt108Service);
     this.formData = this.fb.group(
@@ -103,6 +106,7 @@ export class ThemMoiSlGtriHangDtqgXcKhacComponent extends Base2Component impleme
       await this.loadChiTiet(this.idInput)
     } else {
       await Promise.all([
+        this.loadDsKyBc(),
         this.loadDsDonVi()
       ]);
       this.formData.patchValue({
@@ -181,15 +185,19 @@ export class ThemMoiSlGtriHangDtqgXcKhacComponent extends Base2Component impleme
     }
     if (res.msg == MESSAGE.SUCCESS) {
       this.idInput = res.data.id;
-      if (isBanHanh) {
-        this.pheDuyetBcBn(body);
-      } else {
-        if (this.formData.get("id").value) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      if(await this.checkWhiteList()){
+        if (isBanHanh) {
+          this.pheDuyetBcBn(body);
         } else {
-          this.formData.get("id").setValue(res.data.id);
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          if (this.formData.get("id").value) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          } else {
+            this.formData.get("id").setValue(res.data.id);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          }
         }
+      }else{
+        this.notification.error(MESSAGE.ERROR, MESSAGE.WEB_SERVICE_ERR);
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -458,5 +466,22 @@ export class ThemMoiSlGtriHangDtqgXcKhacComponent extends Base2Component impleme
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  async loadDsKyBc() {
+    let res = await this.danhMucService.danhMucChungGetAll("WEB_SERVICE");
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res, "3333")
+      this.whitelistWebService = res.data;
+    }
+  }
+
+  async checkWhiteList(){
+    if(this.whitelistWebService.find(x => x.ma == "BCBN_130_08")){
+      return true;
+    }else{
+      return false;
+    }
+
   }
 }

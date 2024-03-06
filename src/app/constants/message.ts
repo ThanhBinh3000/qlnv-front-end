@@ -9,6 +9,7 @@ export const MESSAGE = {
   NOTIFICATION: 'Thông báo',
   SUCCESS: 'Thành công',
   ADD_SUCCESS: 'Bạn đã lưu thành công!',
+  WEB_SERVICE_ERR: 'Quản trị viên ngừng tiếp nhận báo cáo này',
   UPDATE_SUCCESS: 'Cập nhật thành công',
   DELETE_SUCCESS: 'Xóa thành công',
   DELETE_CONFIRM: 'Bạn có chắc chắn muốn xóa',
