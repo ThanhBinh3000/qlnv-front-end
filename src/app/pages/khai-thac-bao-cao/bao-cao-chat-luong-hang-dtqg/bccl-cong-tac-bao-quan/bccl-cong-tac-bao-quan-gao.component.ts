@@ -198,9 +198,12 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
 
   changeLoaiBc(event: any) {
     if (event && event == '01') {
+      this.formData.controls["maCuc"].clearValidators();
       this.formData.patchValue({
-        maCuc : null, maChiCuc : null
+        maCuc : null,
+        maChiCuc : null
       })
+      this.helperService.markFormGroupTouched(this.formData);
     }
   }
 
