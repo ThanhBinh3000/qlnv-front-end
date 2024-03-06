@@ -784,6 +784,8 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
       const tongTrongLuongCabaoBi = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBaoBi, 0);
       const tongTrongLuongBaoBi = this.formData.value.tongTrongLuongBaoBi || 0;
       const tongTrongLuongTruBi = tongTrongLuongCabaoBi - tongTrongLuongBaoBi;
+      this.tongTrongLuongBaoCan= tongTrongLuongCabaoBi;
+      this.tongSoBaoCan= dtl.reduce((sum, cur)=>sum+=cur.soBaoBi, 0);
       this.formData.patchValue({
         tongTrongLuongCabaoBi,
         // bangKeDtl: this.formData.value.bangKeDtl,
@@ -831,7 +833,7 @@ export class ChiTietBangKeCanDieuChuyenComponent extends Base2Component implemen
 
   convertTienTobangChu(tien: number, donVi?: string) {
     if (tien > 0) {
-      let rs = convertTienTobangChuThapPhan(Number(tien.toFixed(1)));
+      let rs = convertTienTobangChuThapPhan(Number(tien.toFixed(3)));
       return rs.charAt(0).toUpperCase() + rs.slice(1) + (donVi ? " " + donVi : "");
     }
   }

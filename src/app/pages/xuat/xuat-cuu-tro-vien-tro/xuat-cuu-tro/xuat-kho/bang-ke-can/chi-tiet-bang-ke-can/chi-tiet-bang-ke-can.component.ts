@@ -854,6 +854,8 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         const tongTrongLuongCaBi = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBi, 0);
         const tongTrongLuongBaoBi = this.formData.value.tongTrongLuongBaoBi || 0;
         const tongTrongLuongHang = tongTrongLuongCaBi - tongTrongLuongBaoBi;
+        this.tongTrongLuongBaoCan=tongTrongLuongCaBi;
+        this.tongSoBaoCan = dtl.reduce((sum, cur)=>sum +=cur.soBaoBi, 0);
         this.formData.patchValue({
           tongTrongLuong: tongTrongLuongCaBi,
           // bangKeDtl: this.formData.value.bangKeDtl,
@@ -873,7 +875,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
 
   convertTienTobangChu(tien: number, donVi?: string) {
     if (tien > 0) {
-      let rs = convertTienTobangChuThapPhan(Number(tien.toFixed(1)));
+      let rs = convertTienTobangChuThapPhan(Number(tien.toFixed(3)));
       return rs.charAt(0).toUpperCase() + rs.slice(1) + (donVi ? " " + donVi : "");
     }
   }

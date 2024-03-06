@@ -28,6 +28,7 @@ import {Validators} from "@angular/forms";
 import {DanhMucService} from "../../../../services/danhmuc.service";
 import {pairwise, startWith} from "rxjs/operators";
 import dayjs from "dayjs";
+import {saveAs} from 'file-saver';
 
 
 export type ChartOptionsColumn = {
@@ -83,6 +84,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
   dataTichLuongKho: any[] = [];
   dataTonKho: any[] = [];
   listHangHoa: Array<LoaiHangHoaType>=[];
+  tenVthh: string='';
   tieuDeHienTrang: string='';
   titleTable: string = 'Cục DTNNKV';
   isShowDataTonKho: boolean =false;
@@ -264,7 +266,6 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     this.loaiHienTrang = loaiHienTrang;
     this.setTichLuongKho([]);
     this.dataTable = [];
-    this.donViTinh='';
     this.tieuDeHienTrang='';
     this.tongKeHoach=0;
     this.tongTonDau=0;
@@ -295,11 +296,11 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
           this.isShowDataTonKho=true;
           this.isChiCucSelected=false;
           const {loaiVthh, maCuc, maChiCuc}=this.formData.value;
-          let tenVthh=''
+          this.tenVthh=''
           let tenDvi='';
           if (loaiVthh) {
             const findIndex= this.listHangHoa.findIndex(f=>f.loaiVthh === loaiVthh);
-            tenVthh=this.listHangHoa[findIndex].tenVthh
+            this.tenVthh=this.listHangHoa[findIndex].tenVthh
           }
           if(!maCuc){
             tenDvi='TCDTNN'
@@ -313,8 +314,8 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
             tenDvi=this.listChiCuc[findIndex].tenDvi;
             this.isChiCucSelected=true
           }
-          if(tenVthh){
-            this.tieuDeHienTrang=`Hiện trạng kho ${tenDvi} ( Loại hàng hóa: ${tenVthh})`
+          if(this.tenVthh){
+            this.tieuDeHienTrang=`Hiện trạng kho ${tenDvi} ( Loại hàng hóa: ${this.tenVthh})`
           }
         if(this.formData.value.maChiCuc){
           this.titleTable='';
@@ -409,6 +410,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     this.setTichLuongKho([]);
     this.dataTable=[];
     this.donViTinh='';
+    this.tenVthh='';
     this.tieuDeHienTrang='';
     this.tongKeHoach=0;
     this.tongTonDau=0;
@@ -501,6 +503,27 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     this.setTichLuongKho(dataTichLuongKhoFilter)
     this.handleCancelTichLuong();
   };
-  downloadExcel() {
+  downloadExcel(event) {
+    try {
+      event.stopPropagation();
+      this.spinner.show();
+      let body = {
+        nam: dayjs().get('year'),
+        maDvi: this.formData.value.maChiCuc || this.formData.value.maCuc,
+        loaiVthh: this.formData.value.loaiVthh,
+        tenVthh: this.tenVthh
+      }
+      if(!body.loaiVthh) return this.notification.error(MESSAGE.ERROR, "Chưa có loại vật tư hàng hóa nào được chọn.");
+      this.bcNvQuanLyKhoTangService
+        .ketXuat(body)
+        .subscribe((blob) =>
+          saveAs(blob, 'bao-cao-hien-trang-kho-tang.xlsx'),
+        );
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
   }
 }
