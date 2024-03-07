@@ -79,14 +79,14 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     this.formData = this.fb.group(
       {
         id: [null],
-        namBc: [dayjs().get("year"), [Validators.required]],
+        namBc: [dayjs().get("year")],
         kyBc: [null],
         loaiBc: [null],
         thoiHanGuiBc: [null],
         thongTuSo: ["130/2018/TT-BTC"],
         bieuSo: ["001.H/BCDTQG-BN"],
         tenDonViGui: [null],
-        maDonViGui: [null],
+        maDonViGui: [null, [Validators.required]],
         tenDonViNhan: [null],
         maDonViNhan: [null],
         ngayTao: [dayjs().format("YYYY-MM-DD")],
@@ -144,7 +144,9 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
   }
 
   changeLoaiBc(event) {
-    this.formData.get("thoiHanGuiBc").setValue(this.listLoaiBc.find(item => item.value == event).thoiHanGuiBc);
+    if (event != null) {
+      this.formData.get("thoiHanGuiBc").setValue(this.listLoaiBc.find(item => item.value == event).thoiHanGuiBc);
+    }
   }
 
   initData() {
@@ -320,6 +322,10 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
   }
 
   async save(isBanHanh?: boolean) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      return;
+    }
     this.dataNguonNsnn.forEach(i => {
       i.loaiNguon = 1
     })
@@ -391,6 +397,11 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
       this.dataNguonNsnn = this.dataImport.filter(obj => obj.loaiNguon === 1);
       this.dataNguonNgoaiNsnn = this.dataImport.filter(obj => obj.loaiNguon === 2);
     }
+    this.dataNguonNsnn.forEach(item => {
+      item.tongTrongKy = this.nvl(item.muaTangTrongKy) + this.nvl(item.muaBuTrongKy) + this.nvl(item.muaBsungTrongKy) + this.nvl(item.khacTrongKy);
+      item.tongLuyKe = this.nvl(item.muaTangLuyKe) + this.nvl(item.muaBuLuyKe) + this.nvl(item.muaBsungLuyKe) + this.nvl(item.khacLuyKe);
+    })
+    this.tongRowNguon();
   }
   calTongChi() {
     let sum = 0
