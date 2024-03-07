@@ -476,6 +476,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
         return;
       }
+      if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+        return;
+      }
       await this.helperService.ignoreRequiredForm(this.formData);
       const body = {
         ...this.formData.value,

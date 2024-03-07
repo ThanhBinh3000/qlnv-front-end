@@ -21,8 +21,6 @@ import {
 import {
   BienBanHaoDoiBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/bien-ban-hao-doi-btt.service';
-import {PREVIEW} from "../../../../../../constants/fileType";
-import printJS from "print-js";
 import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 
 @Component({
@@ -507,6 +505,10 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
     try {
       if (this.checkPrice && this.checkPrice.boolean) {
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
+      if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
         return;
       }
       await this.helperService.ignoreRequiredForm(this.formData);

@@ -76,7 +76,6 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
     private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
     private bangCanKeHangBttService: BangCanKeHangBttService,
     private hopDongBttService: HopDongBttService,
-    private bangKeBttService: BangKeBttService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangCanKeHangBttService);
     this.formData = this.fb.group({
@@ -715,6 +714,10 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
     try {
       if (this.checkPrice && this.checkPrice.boolean) {
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
+      if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
         return;
       }
       await this.helperService.ignoreRequiredForm(this.formData);

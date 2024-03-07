@@ -132,6 +132,10 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
+    if (this.checkPrice && this.checkPrice.booleanNhapXuat){
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.isQuanLy = boolean;

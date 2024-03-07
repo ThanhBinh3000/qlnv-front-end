@@ -15,4 +15,9 @@ export class QthtChotGiaNhapXuatService extends BaseService {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/check-khoa-chot-dieu-chinh-gia`
     return this.httpClient.post<any>(url, body).toPromise();
   }
+
+  checkChotNhapXuat(body: any) {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/check-khoa-chot-dieu-nhap-xuat`
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
 }
