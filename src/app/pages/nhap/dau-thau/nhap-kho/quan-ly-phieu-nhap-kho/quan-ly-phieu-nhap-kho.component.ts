@@ -22,13 +22,16 @@ import {
   QuyetDinhGiaoNhapHangService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
 import { STATUS } from "../../../../../constants/status";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {Base2Component} from "../../../../../components/base2/base2.component";
 
 @Component({
   selector: 'quan-ly-phieu-nhap-kho',
   templateUrl: './quan-ly-phieu-nhap-kho.component.html',
   styleUrls: ['./quan-ly-phieu-nhap-kho.component.scss'],
 })
-export class QuanLyPhieuNhapKhoComponent implements OnInit {
+export class QuanLyPhieuNhapKhoComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   searchFilter = {
@@ -86,16 +89,16 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     return endValue.getTime() <= this.tuNgayNk.getTime();
   };
   constructor(
-    private spinner: NgxSpinnerService,
-    private donViService: DonviService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
-    private notification: NzNotificationService,
-    private router: Router,
-    public userService: UserService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
-    private modal: NzModalService,
-    public globals: Globals,
-  ) { }
+  ) {
+    super(httpClient, storageService, notification, spinner, modal, quanLyPhieuNhapKhoService);
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -110,6 +113,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
       await Promise.all([
         this.search(),
       ]);
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -119,6 +123,10 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
@@ -171,6 +179,10 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

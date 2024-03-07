@@ -265,7 +265,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   }
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number, maNganLoKho?: string) {
-    if (this.checkPrice.boolean) {
+    if (id == 0 && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }

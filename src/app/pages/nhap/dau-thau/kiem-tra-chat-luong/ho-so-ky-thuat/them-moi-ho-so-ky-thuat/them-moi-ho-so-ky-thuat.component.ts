@@ -31,6 +31,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
   @Input() id: number;
   @Input() isView: boolean;
   @Input() loaiVthh: string;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
   isViewChild: boolean;
@@ -257,6 +258,10 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
   };
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -295,6 +300,10 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
   }
 
   async save(isGuiDuyet?) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
@@ -328,6 +337,10 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
   }
 
   async pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

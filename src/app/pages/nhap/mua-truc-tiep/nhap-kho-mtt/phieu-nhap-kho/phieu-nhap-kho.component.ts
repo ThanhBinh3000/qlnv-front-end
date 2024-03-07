@@ -16,6 +16,9 @@ import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../constants/status";
 import { PhieuNhapKhoMuaTrucTiepService } from 'src/app/services/phieu-nhap-kho-mua-truc-tiep.service';
 import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
 
 
 @Component({
@@ -23,7 +26,7 @@ import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-
   templateUrl: './phieu-nhap-kho.component.html',
   styleUrls: ['./phieu-nhap-kho.component.scss'],
 })
-export class PhieuNhapKhoComponent implements OnInit {
+export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   searchFilter = {
@@ -62,16 +65,17 @@ export class PhieuNhapKhoComponent implements OnInit {
   denNgayNkho: Date | null = null;
 
   constructor(
-    private spinner: NgxSpinnerService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private donViService: DonviService,
     private phieuNhapKhoMuaTrucTiepService: PhieuNhapKhoMuaTrucTiepService,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
-    private notification: NzNotificationService,
-    private router: Router,
-    public userService: UserService,
-    private modal: NzModalService,
-    public globals: Globals,
-  ) { }
+  ) {
+    super(httpClient, storageService, notification, spinner, modal, phieuNhapKhoMuaTrucTiepService);
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -86,6 +90,7 @@ export class PhieuNhapKhoComponent implements OnInit {
       await Promise.all([
         this.search(),
       ]);
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -95,6 +100,10 @@ export class PhieuNhapKhoComponent implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
@@ -147,6 +156,10 @@ export class PhieuNhapKhoComponent implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

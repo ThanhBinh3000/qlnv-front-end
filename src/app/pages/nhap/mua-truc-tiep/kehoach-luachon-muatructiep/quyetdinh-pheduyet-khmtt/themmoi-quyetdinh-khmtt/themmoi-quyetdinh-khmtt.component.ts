@@ -36,6 +36,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   @Input() isViewOnModal: boolean;
   @Input() isView: boolean = false;
   @Input() disableField: boolean = false;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -171,6 +172,10 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   }
 
   async save(isGuiDuyet?) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     await this.spinner.show();
     this.setValidator(isGuiDuyet)
     let body = this.formData.value;

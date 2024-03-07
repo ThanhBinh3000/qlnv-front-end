@@ -80,6 +80,10 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {
+    if ((id == null || id == 0) && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     if (this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;

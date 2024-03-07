@@ -28,7 +28,7 @@ import {
   templateUrl: './hopdong-phuluc-hopdong.component.html',
   styleUrls: ['./hopdong-phuluc-hopdong.component.scss']
 })
-export class HopdongPhulucHopdongComponent implements OnInit {
+export class HopdongPhulucHopdongComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -68,17 +68,16 @@ export class HopdongPhulucHopdongComponent implements OnInit {
   tuNgayKy: Date | null = null;
   denNgayKy: Date | null = null;
   constructor(
-    private fb: FormBuilder,
-    private httpClient: HttpClient,
-    private storageService: StorageService,
-    private notification: NzNotificationService,
-    public userService: UserService,
-    private spinner: NgxSpinnerService,
-    private modal: NzModalService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
     private thongTinPhuLucHopDongService: MttHopDongPhuLucHdService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, thongTinPhuLucHopDongService);
     this.formData = this.fb.group({
       namKh: null,
       soHd: null,
@@ -109,6 +108,7 @@ export class HopdongPhulucHopdongComponent implements OnInit {
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
       await this.timKiem();
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
@@ -135,6 +135,10 @@ export class HopdongPhulucHopdongComponent implements OnInit {
   }
 
   goDetail(id: number, roles?: any, isQuanLy?: boolean) {
+    if ((id == null || id == 0) && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.isQuanLy = isQuanLy;

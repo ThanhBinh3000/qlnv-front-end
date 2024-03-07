@@ -39,6 +39,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   @Input() loaiVthh: string;
   @Input() isTatCa: boolean;
   @Input() idQdGiaoNvNh: number;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -389,6 +390,10 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   }
 
   async save(isGuiDuyet?: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
       this.spinner.show();
       try {
         this.helperService.markFormGroupTouched(this.formData);
@@ -463,6 +468,10 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   }
 
   pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
@@ -526,6 +535,10 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = this.globals.prop.NHAP_TU_CHOI_KTV_BAO_QUAN;
     switch (this.formData.get('trangThai').value) {
       case STATUS.CHO_DUYET_KTVBQ: {

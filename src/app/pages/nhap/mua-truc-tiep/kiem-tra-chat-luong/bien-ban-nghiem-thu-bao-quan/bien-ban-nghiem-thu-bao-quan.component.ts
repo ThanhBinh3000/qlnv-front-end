@@ -16,13 +16,16 @@ import { Globals } from 'src/app/shared/globals';
 import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
 import { STATUS } from 'src/app/constants/status';
 import { MttBienBanNghiemThuBaoQuan } from './../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttBienBanNghiemThuBaoQuan.service';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
 
 @Component({
   selector: 'app-bien-ban-nghiem-thu-bao-quan',
   templateUrl: './bien-ban-nghiem-thu-bao-quan.component.html',
   styleUrls: ['./bien-ban-nghiem-thu-bao-quan.component.scss']
 })
-export class BienBanNghiemThuBaoQuanComponent implements OnInit {
+export class BienBanNghiemThuBaoQuanComponent extends Base2Component implements OnInit {
   @Input() typeVthh: string;
   inputDonVi: string = '';
   options: any[] = [];
@@ -71,18 +74,18 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
   STATUS = STATUS
   idQdGiaoNvNh: number
   constructor(
-    private spinner: NgxSpinnerService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private donViService: DonviService,
     private bienBanNghiemThuBaoQuan: MttBienBanNghiemThuBaoQuan,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
-    private router: Router,
-    public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    public globals: Globals,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
-
-  ) { }
+  ) {
+    super(httpClient, storageService, notification, spinner, modal, bienBanNghiemThuBaoQuan);
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -111,6 +114,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       await Promise.all([this.search()]);
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -301,6 +305,10 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -409,6 +417,10 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
 
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;

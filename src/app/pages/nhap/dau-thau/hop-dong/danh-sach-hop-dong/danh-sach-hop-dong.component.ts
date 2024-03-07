@@ -278,6 +278,10 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   }
 
   themMoi(isView: boolean, data: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = data.id;
     this.isDetail = true;
     this.isAddNew = true;
@@ -286,7 +290,7 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, data: any) {
-    if (this.checkPrice.boolean) {
+    if (data == null && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }

@@ -39,6 +39,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   @Input() isView: boolean;
   @Input() typeVthh: string;
   @Input() idQdGiaoNvNh: number;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -554,6 +555,10 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   }
 
   pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDCC:
@@ -613,6 +618,10 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     switch (this.formData.value.trangThai) {
       case STATUS.CHO_DUYET_TK: {
@@ -686,6 +695,10 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   }
 
   async save(isGuiDuyet: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
       try {
         this.spinner.show();
         this.helperService.markFormGroupTouched(this.formData);

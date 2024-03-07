@@ -39,6 +39,7 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
   @Input() isView: boolean;
   @Input() loaiVthh: string;
   @Input() idQdGiaoNvNh: number;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -335,6 +336,10 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
   }
 
   async save(isGuiDuyet?: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.setValidator(isGuiDuyet);
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
