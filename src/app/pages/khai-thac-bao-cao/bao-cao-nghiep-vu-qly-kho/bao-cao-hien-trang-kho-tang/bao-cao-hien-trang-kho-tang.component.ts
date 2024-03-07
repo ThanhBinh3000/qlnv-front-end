@@ -225,7 +225,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
           strokeWidth: 2,
         },
       },
-      colors: ["#2196f3", "#b0b0b0", "#ff4d4f", "#ffaa29"],
+      colors: ["#50ff45", "#2196f3", "#b0b0b0", "#ff4d4f", "#ffaa29"],
       yaxis: {
         labels: {
           formatter: (val) => {
