@@ -19,7 +19,6 @@ import {PREVIEW} from "../../../../../../constants/fileType";
 import {
   QuyetDinhPdKhBanTrucTiepService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service";
-import {da} from "date-fns/locale";
 
 @Component({
   selector: 'app-quan-ly-hop-dong-btt',
@@ -229,6 +228,10 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
+    if (id === 0 && this.checkPrice && this.checkPrice.booleanNhapXuat && boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+      return;
+    }
     this.idHopDong = id;
     this.isView = isView;
     this.isEditHopDong = isShowHd;
@@ -245,7 +248,11 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
+    } if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+      return;
     }
+
     this.userService.isChiCuc() ? await this.guiDuyetChiCuc() : await this.guiDuyetCuc()
   }
 
@@ -337,6 +344,10 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   async deleteHd(data) {
     if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
+    if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
       return;
     }
     await this.modal.confirm({

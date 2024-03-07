@@ -139,6 +139,10 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
         return;
       }
+      if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+        return;
+      }
       await this.helperService.ignoreRequiredForm(this.formData);
       const body = {
         ...this.formData.value,

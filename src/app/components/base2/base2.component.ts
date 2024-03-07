@@ -291,6 +291,10 @@ export class Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
+    if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+      return;
+    }
     if (!this.checkPermission(roles)) {
       return
     }
@@ -902,14 +906,21 @@ export class Base2Component implements OnInit {
     });
   }
 
-  async checkPriceAdjust(msgSuccess?: string) {
+  async checkPriceAdjust(msg?: string) {
     try {
       this.checkPrice = new checkPrice();
       this.spinner.show();
-      const res = await this.checkPriceService.checkChotGia({});
-      if (res && res.msg === MESSAGE.SUCCESS && res.data) {
-        this.checkPrice.boolean = res.data;
-        this.checkPrice.msgSuccess = `Việc ${msgSuccess} đang được tạm dừng để chốt điều chỉnh giá. Vui lòng quay lại thực hiện sau !`;
+      const [resGia, resNhapXuat] = await Promise.all([
+        this.checkPriceService.checkChotGia({}),
+        this.checkPriceService.checkChotNhapXuat({})
+      ]);
+      if (resGia && resGia.msg === MESSAGE.SUCCESS) {
+        this.checkPrice.boolean = resGia.data;
+        this.checkPrice.msgSuccess = `Việc ${msg} đang được tạm dừng để chốt điều chỉnh giá. Vui lòng quay lại thực hiện sau!.`;
+      }
+      if (resNhapXuat && resNhapXuat.msg === MESSAGE.SUCCESS) {
+        this.checkPrice.booleanNhapXuat = resNhapXuat.data;
+        this.checkPrice.msgNhapXuat = `Việc ${msg} đang được tạm dừng cho đến khi nào việc chốt được gỡ bỏ hoặc hết hiệu lực. Vui lòng quay lại thực hiện sau!.`;
       }
     } catch (error) {
       console.error('An error occurred:', error);
