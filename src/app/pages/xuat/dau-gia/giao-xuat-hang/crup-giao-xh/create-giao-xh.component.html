@@ -281,6 +281,7 @@
             <th class="text-left"> Số biên bản tịnh kho</th>
             <th class="text-left"> Ngày lập BB tịnh kho</th>
             <th class="text-left"> Trạng thái XH</th>
+            <th class="text-center" *ngIf="!isView"> Hành động</th>
           </tr>
           </thead>
           <tbody>
@@ -293,6 +294,11 @@
               <td></td>
               <td></td>
               <td class="text-left">{{ data.tenTrangThai}}</td>
+              <td class="text-center" *ngIf="!isView">
+                <a (click)="deleteChiCuc(idx)">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
             </tr>
             <ng-container *ngIf="expandSet.has(idx)">
               <tr *ngFor="let children of data.children, let i = index">
@@ -309,6 +315,7 @@
                 <td class="text-left">{{ children.soBbTinhKho}}</td>
                 <td class="text-left">{{ children.ngayLapBbTinhKho| date: 'dd/MM/yyyy'}}</td>
                 <td></td>
+                <td *ngIf="!isView"></td>
               </tr>
             </ng-container>
           </ng-container>
