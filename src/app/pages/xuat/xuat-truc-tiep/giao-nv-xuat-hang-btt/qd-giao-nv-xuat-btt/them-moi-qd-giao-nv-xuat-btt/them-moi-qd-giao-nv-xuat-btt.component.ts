@@ -129,7 +129,6 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
     });
-    await this.loadQdNvXuatHang();
   }
 
   async loadQdNvXuatHang() {
@@ -149,7 +148,6 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     }
     this.loadQdNvXh = data;
   }
-
 
   async getDetail(id: number) {
     if (id <= 0) {
@@ -179,10 +177,15 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       loaiVthh: this.loaiVthh,
     };
     try {
+      await this.loadQdNvXuatHang();
       const res = await this.hopDongBttService.search(body);
       if (res.msg === MESSAGE.SUCCESS) {
-        const set = new Set(this.loadQdNvXh.map(item => item.soHopDong));
-        this.dsHdongBanTrucTiep = res.data.content.filter(item => !set.has(item.soHopDong));
+        res.data.content.forEach(item => {
+          item.children = item.children.filter(a =>
+            !this.loadQdNvXh.some(s => s.children.some(s1 => s1.maDvi === a.maDvi && item.id === s.idHopDong))
+          );
+        });
+        this.dsHdongBanTrucTiep = res.data.content.filter(item => item.maDvi === this.userInfo.MA_DVI && item.children.length > 0);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH HỢP ĐỒNG BÁN TRỰC TIẾP',
@@ -192,7 +195,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          dataTable: this.dsHdongBanTrucTiep.filter(item => item.idQdNv === null && item.soQdNv === null),
+          dataTable: this.dsHdongBanTrucTiep,
           dataHeader: ['Số hợp đồng', 'Tên hợp đồng', 'Loại hàng hóa'],
           dataColumn: ['soHopDong', 'tenHopDong', 'tenLoaiVthh']
         },
@@ -264,20 +267,48 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
         pthucBanTrucTiep: THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA,
         phanLoai: BAN_TRUC_TIEP.CHAO_GIA,
       });
-      this.dataTable = data.children
-      this.dataTable.forEach(item => {
-        item.soLuong = item.soLuongKyHopDong;
-        item.children.forEach(child => {
-          child.soLuong = child.soLuongKyHd;
-          child.donGia = child.donGiaKyHd;
+      this.loadQdNvXh = this.loadQdNvXh.filter(item => item.idHopDong === data.id);
+      const maDviSet = new Set(this.loadQdNvXh.flatMap(item => item.children.map(child => child.maDvi)));
+      data.children = data.children.filter(child => !maDviSet.has(child.maDvi));
+      this.dataTable = data.children;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable = this.dataTable.map(item => {
+          return {
+            ...item,
+            soLuong: item.soLuongKyHopDong,
+            children: item.children.map(child => ({
+              ...child,
+              soLuong: child.soLuongKyHd,
+              donGia: child.donGiaKyHd
+            }))
+          };
         });
-      })
+      }
     } catch (error) {
       console.error('error: ', error);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  deleteChiCuc(index) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable.splice(index, 1)
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 
   async openDialogThongTin() {
@@ -294,6 +325,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       lastest: 1,
     };
     try {
+      await this.loadQdNvXuatHang();
       const res = await this.chaoGiaMuaLeUyQuyenService.search(body);
       if (res.msg === MESSAGE.SUCCESS) {
         this.dsThongTinChaoGia = res.data.content.map(item => ({

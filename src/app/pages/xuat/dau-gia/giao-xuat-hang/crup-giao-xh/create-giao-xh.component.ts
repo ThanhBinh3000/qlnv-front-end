@@ -136,8 +136,12 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       await this.loadDanhDachNhiemVu();
       const res = await this.hopDongXuatHangService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
-        const soHopDongSet = new Set(this.loadDanhSachQdGiaoNv.map(item => item.soHopDong));
-        this.dataHopDong = res.data.content.filter(item => !soHopDongSet.has(item.soHopDong));
+        res.data.content.forEach(item => {
+          item.children = item.children.filter(a =>
+            !this.loadDanhSachQdGiaoNv.some(s => s.children.some(s1 => s1.maDvi === a.maDvi && item.id === s.idHopDong))
+          );
+        });
+        this.dataHopDong = res.data.content.filter(item => item.maDvi === this.userInfo.MA_DVI && item.children.length > 0);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH HỢP ĐỒNG BÁN ĐẤU GIÁ',
@@ -147,7 +151,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          dataTable: this.dataHopDong.filter(item => item.maDvi === this.userInfo.MA_DVI),
+          dataTable: this.dataHopDong,
           dataHeader: ['Số hợp đồng', 'Tên hợp đồng', 'Loại hàng hóa'],
           dataColumn: ['soHopDong', 'tenHopDong', 'tenLoaiVthh']
         },
@@ -193,6 +197,9 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
         donViTinh: data.donViTinh,
         tgianGiaoHang: data.tgianGiaoHang,
       });
+      this.loadDanhSachQdGiaoNv = this.loadDanhSachQdGiaoNv.filter(item => item.idHopDong === data.id);
+      const maDviSet = new Set(this.loadDanhSachQdGiaoNv.flatMap(item => item.children.map(child => child.maDvi)));
+      data.children = data.children.filter(child => !maDviSet.has(child.maDvi));
       this.dataTable = data.children;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.map(item => {
@@ -207,6 +214,25 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  deleteChiCuc(index) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable.splice(index, 1)
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 
   async loadDanhDachNhiemVu() {
