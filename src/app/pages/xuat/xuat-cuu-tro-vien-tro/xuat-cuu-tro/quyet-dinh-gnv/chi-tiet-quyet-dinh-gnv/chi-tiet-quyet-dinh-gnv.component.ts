@@ -211,8 +211,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
         // this.loadDsDonVi(),
         this.loadDsDiaDanh(),
         this.loadDsVthh(),
+        this.loadDetail()
       ]);
-      await this.loadDetail();
+      // await this.loadDetail();
     } catch (e) {
       console.log('error: ', e)
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -450,7 +451,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   }
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    if (!this.checkHoanTatPhanBo()) return;
+    // if (!this.checkHoanTatPhanBo()) return;
     if (trangThai === STATUS.DA_DUYET_LDC) {
       this.formData.get("soQdPd").setValidators([Validators.required]);
     } else {
@@ -1110,7 +1111,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     this.formDataDtl.patchValue({
       ...data, mId: isEdit ? data.mId : uuidv4(), slThocDeXayXat: 0, slGaoThuHoiSauXayXat: 0, tyLeThuHoiSauXayXat: 0,
       tenCuc: level === 1 ? data.tenDvi : data.tenCuc,
-      //Ở cấp cục giao Gạo nên loai Vthh là gạo, cấp chi cục loại Vthh hàng hóa là Thóc 
+      //Ở cấp cục giao Gạo nên loai Vthh là gạo, cấp chi cục loại Vthh hàng hóa là Thóc
       loaiVthh: level === 2 ? LOAI_HANG_DTQG.THOC : data.loaiVthh,
       maDvi: null,
       tenChiCuc: level === 1 ? '' : data.tenChiCuc,
