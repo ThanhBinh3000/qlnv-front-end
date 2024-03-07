@@ -62,7 +62,8 @@ export class QuyetdinhPheduyetKqcgComponent extends Base2Component implements On
         loaiVthh: this.loaiVthh
       })
       await this.search();
-      await this.initData()
+      await this.initData();
+      await this.checkPriceAdjust('xuất hàng');
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
@@ -84,4 +85,15 @@ export class QuyetdinhPheduyetKqcgComponent extends Base2Component implements On
     await this.loadDsTong();
   }
 
+  goDetail(id: number, roles?: any) {
+    if ((id == null || id == 0) && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.idSelected = id;
+    this.isDetail = true;
+  }
 }

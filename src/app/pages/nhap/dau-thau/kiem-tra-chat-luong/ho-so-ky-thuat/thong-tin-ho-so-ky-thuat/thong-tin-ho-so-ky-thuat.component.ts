@@ -44,6 +44,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
   @Input() isView: boolean;
   @Input() loaiVthh: string;
   @Input() previewName: string;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -299,6 +300,10 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
   }
 
   async save(isGuiDuyet: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.spinner.show();
     try {
       this.helperService.markFormGroupTouched(this.formData);

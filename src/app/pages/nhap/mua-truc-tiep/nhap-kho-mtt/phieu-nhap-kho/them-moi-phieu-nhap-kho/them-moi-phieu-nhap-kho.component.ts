@@ -33,6 +33,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
   @Input() loaiVthh: string;
   @Input() isTatCa: boolean;
   @Input() idQdGiaoNvNh: number;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -312,6 +313,10 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
   }
 
   pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
@@ -363,6 +368,10 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -406,6 +415,10 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
   }
 
   async save(isGuiDuyet: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     await this.spinner.show();
     try {
       this.setValidator();

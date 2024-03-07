@@ -601,10 +601,11 @@
                   />
         </td>
         <td>
-          <input class='money-input' currencyMask [options]='amount'
-                 [(ngModel)]='item.slDeNghiCapVon'
-                 [max]='item.slTheoQdTtcp'
-                 (ngModelChange)='changeThanhTienEdit(idx)' />
+          <nz-input-group>
+            <nz-input-number [nzMin]='1' [nzMax]='item.slTheoQdTtcp' [nzSize]="'small'" [(ngModel)]='item.slDeNghiCapVon'
+                             (ngModelChange)='changeThanhTienEdit(idx)'>
+            </nz-input-number>
+          </nz-input-group>
         </td>
         <td><input type='text' nz-input [(ngModel)]='item.donViTinh' /></td>
         <td>

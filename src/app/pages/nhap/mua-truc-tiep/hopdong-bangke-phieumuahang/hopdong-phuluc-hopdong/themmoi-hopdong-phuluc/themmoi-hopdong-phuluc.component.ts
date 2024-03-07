@@ -34,7 +34,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
   @Input() idKqMtt: number;
   @Input() isQuanLy: boolean;
   @Input() idQdKh: number;
-
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
   cacChiCucHopDong: ChiTietCacChiCucHopDong;
@@ -273,6 +273,10 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
   }
 
   async save(isOther: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if(!this.userService.isChiCuc() && isOther && this.validateSlKyHd()){
       this.notification.error(MESSAGE.ERROR, 'Số lượng ký hợp đồng phải bằng số lượng nhập trực tiếp');

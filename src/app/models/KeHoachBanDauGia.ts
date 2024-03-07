@@ -116,7 +116,9 @@ export class DanhSachPhanLo {
 
 export class checkPrice  {
   boolean: boolean = false;
+  booleanNhapXuat: boolean = false;
   msgSuccess: string;
+  msgNhapXuat: string;
 }
 
 export class DanhSachXuatBanTrucTiep {

@@ -10,7 +10,6 @@ import {
   QuyetDinhPdKhBdgService
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {QthtChotGiaNhapXuatService} from "../../../../../services/quantri-hethong/qthtChotGiaNhapXuat.service";
 
 @Component({
   selector: 'app-dieu-chinh',
@@ -107,6 +106,10 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
   redirectDetail(id, isView: boolean) {
     if (id === 0 && this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
+    if (id === 0 && this.checkPrice && this.checkPrice.booleanNhapXuat){
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
       return;
     }
     this.idSelected = id;

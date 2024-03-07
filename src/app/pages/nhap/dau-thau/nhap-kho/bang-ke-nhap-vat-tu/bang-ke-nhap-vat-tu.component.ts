@@ -179,6 +179,10 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -295,6 +299,10 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     this.idQdGiaoNvNh = idQdGiaoNvNh;
     this.isDetail = true;

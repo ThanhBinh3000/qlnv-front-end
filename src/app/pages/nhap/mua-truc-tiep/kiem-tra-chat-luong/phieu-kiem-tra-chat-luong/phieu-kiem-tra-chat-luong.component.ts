@@ -15,15 +15,17 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../constants/status";
 import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
-import { N } from '@angular/cdk/keycodes';
 import { MttPhieuKiemTraChatLuongService } from './../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttPhieuKiemTraChatLuongService.service';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
 
 @Component({
   selector: 'app-phieu-kiem-tra-chat-luong',
   templateUrl: './phieu-kiem-tra-chat-luong.component.html',
   styleUrls: ['./phieu-kiem-tra-chat-luong.component.scss']
 })
-export class PhieuKiemTraChatLuongComponent implements OnInit {
+export class PhieuKiemTraChatLuongComponent extends Base2Component implements OnInit {
   @Input() typeVthh: string;
   @Input()
   listVthh: any[] = [];
@@ -79,16 +81,17 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
   listNam: any[] = [];
 
   constructor(
-    private spinner: NgxSpinnerService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private donViService: DonviService,
     private phieuKtraCluongService: MttPhieuKiemTraChatLuongService,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
-    private notification: NzNotificationService,
-    private router: Router,
-    private modal: NzModalService,
-    public userService: UserService,
-    public globals: Globals,
-  ) { }
+  ) {
+    super(httpClient, storageService, notification, spinner, modal, phieuKtraCluongService);
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -108,6 +111,7 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
         });
       }
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -245,6 +249,10 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -278,6 +286,10 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;

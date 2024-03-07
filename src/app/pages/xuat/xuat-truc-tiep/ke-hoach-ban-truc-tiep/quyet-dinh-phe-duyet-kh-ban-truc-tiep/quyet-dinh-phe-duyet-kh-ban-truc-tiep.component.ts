@@ -101,6 +101,10 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
+    if (id === 0 && this.checkPrice && this.checkPrice.booleanNhapXuat) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;

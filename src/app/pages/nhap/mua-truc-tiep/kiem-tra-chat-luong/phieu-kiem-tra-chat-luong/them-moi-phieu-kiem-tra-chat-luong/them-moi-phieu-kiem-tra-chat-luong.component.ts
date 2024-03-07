@@ -34,6 +34,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   @Input() isTatCa: boolean;
   @Input() typeVthh: string;
   @Input() idQdGiaoNvNh: number;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -358,6 +359,10 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   }
 
   async save(isGuiDuyet: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     if (this.validateSave()) {
       await this.spinner.show();
 
@@ -427,6 +432,10 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   }
 
   pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
@@ -478,6 +487,10 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,

@@ -33,6 +33,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
   @Input() id: number;
   @Input() loaiVthh: string;
   @Input() isView: boolean;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -217,6 +218,10 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
   }
 
   pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     let msg = ''
     switch (this.formData.get('trangThai').value) {
@@ -269,6 +274,10 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -312,6 +321,10 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
   }
 
   async save(isGuiDuyet: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.spinner.show();
     try {
       this.helperService.markFormGroupTouched(this.formData);

@@ -199,7 +199,7 @@
   </div>
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
-  <app-themmoi-quyetdinh-khmtt [idInput]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  <app-themmoi-quyetdinh-khmtt [checkPrice]="checkPrice" [idInput]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-themmoi-quyetdinh-khmtt>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openDxMtt" (nzOnCancel)="closeDxMttModal()">

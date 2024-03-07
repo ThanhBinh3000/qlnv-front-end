@@ -44,6 +44,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   @Input() typeVthh: string;
   @Input() idQdGiaoNvNh: number;
   @Input() maNganLoKho: string;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -499,6 +500,10 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   }
 
   pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
@@ -550,6 +555,10 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -608,6 +617,10 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   }
 
   async save(isGuiDuyet: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
       this.spinner.show();
       try {
         this.helperService.markFormGroupTouched(this.formData);

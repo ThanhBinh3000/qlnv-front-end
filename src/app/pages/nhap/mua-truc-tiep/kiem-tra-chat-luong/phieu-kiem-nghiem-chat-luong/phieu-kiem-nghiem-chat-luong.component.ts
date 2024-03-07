@@ -52,6 +52,7 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
         loaiVthh: this.loaiVthh
       })
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
     }
     catch (e) {
       console.log('error: ', e)
@@ -135,6 +136,10 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   }
 
   async xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -168,6 +173,10 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   }
 
   goDetail(id: number, isView?: any) {
+    if (id == null && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;

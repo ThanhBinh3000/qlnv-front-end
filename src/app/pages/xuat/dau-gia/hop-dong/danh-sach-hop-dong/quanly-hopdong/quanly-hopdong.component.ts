@@ -154,6 +154,10 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
+    if (id == 0 && this.checkPrice && this.checkPrice.booleanNhapXuat && boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+      return;
+    }
     this.idHopDong = id;
     this.isView = isView;
     this.isEditHopDong = isShowHd;
@@ -171,6 +175,10 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
+    if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+      return;
+    }
     const dataFilter = this.dataTable.find(item => item.trangThai === this.STATUS.DU_THAO);
     if (dataFilter) {
       this.notification.error(MESSAGE.ERROR, `Không thể hoàn thành thực hiện, hợp đồng số ${dataFilter.soHopDong} đang chưa ký`);
@@ -182,6 +190,10 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   async deleteHd(data) {
     if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
+    if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
       return;
     }
     this.modal.confirm({
