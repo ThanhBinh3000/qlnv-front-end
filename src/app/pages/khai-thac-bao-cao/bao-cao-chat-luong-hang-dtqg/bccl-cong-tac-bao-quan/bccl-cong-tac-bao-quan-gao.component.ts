@@ -219,7 +219,7 @@ export class BcclCongTacBaoQuanGaoComponent extends Base2Component implements On
     if (this.formData.value.loaiBc == '02' && this.userService.isTongCuc()) {
       this.formData.controls["maCuc"].setValidators([Validators.required]);
     }
-    if (this.formData.value.loaiKyBc == '01' && this.formData.value.loaiKyBc == '02') {
+    if (this.formData.value.loaiKyBc == '01' || this.formData.value.loaiKyBc == '02') {
       this.formData.controls["kyBc"].setValidators([Validators.required]);
     }
     if (this.formData.value.loaiKyBc == '04') {
