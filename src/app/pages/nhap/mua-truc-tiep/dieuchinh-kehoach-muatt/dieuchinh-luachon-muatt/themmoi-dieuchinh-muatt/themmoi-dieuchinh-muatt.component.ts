@@ -38,6 +38,7 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
   @Input() idInput: number;
   @Input()
   loaiVthhInput: string;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
   soLuongDiaDiemList: any;
@@ -189,6 +190,10 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -498,6 +503,10 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
 
 
   async save(isGuiDuyet?) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.clearValidatorLuuDuThao()
     await this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -597,6 +606,10 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
   }
 
   async guiDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     let mesg = ''
 

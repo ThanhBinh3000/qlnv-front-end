@@ -18,13 +18,16 @@ import { Globals } from 'src/app/shared/globals';
 import { STATUS } from 'src/app/constants/status';
 import { QuyetDinhGiaoNhiemVuXuatHangService } from 'src/app/services/quyetDinhGiaoNhiemVuXuatHang.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
 
 @Component({
   selector: 'quan-ly-phieu-nhap-day-kho',
   templateUrl: './quan-ly-phieu-nhap-day-kho.component.html',
   styleUrls: ['./quan-ly-phieu-nhap-day-kho.component.scss'],
 })
-export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
+export class QuanLyPhieuNhapDayKhoComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   searchFilter = {
@@ -79,16 +82,17 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   dataTableAll: any[] = [];
 
   constructor(
-    private spinner: NgxSpinnerService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
-    private notification: NzNotificationService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private router: Router,
-    private modal: NzModalService,
-    public userService: UserService,
-    public globals: Globals,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
-  ) { }
+  ) {
+    super(httpClient, storageService, notification, spinner, modal, quanLyPhieuNhapDayKhoService);
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -97,6 +101,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
       await Promise.all([
         this.search(),
       ]);
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     }
     catch (e) {
@@ -209,6 +214,10 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -325,6 +334,10 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;

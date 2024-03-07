@@ -48,7 +48,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   @Input() id: number;
   @Input() typeVthh: string;
   @Input() isView: boolean;
-
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
   userInfo: UserLogin;
@@ -216,6 +216,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   async save(isGuiDuyet?: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     await this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -255,6 +259,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
@@ -312,6 +320,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     switch (this.formData.get('trangThai').value) {
       case STATUS.CHO_DUYET_TP: {

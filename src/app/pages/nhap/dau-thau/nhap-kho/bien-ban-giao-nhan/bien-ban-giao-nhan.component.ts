@@ -94,6 +94,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
       await Promise.all([
         this.search(),
       ]);
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     }
     catch (e) {
@@ -191,6 +192,10 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -307,6 +312,10 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;

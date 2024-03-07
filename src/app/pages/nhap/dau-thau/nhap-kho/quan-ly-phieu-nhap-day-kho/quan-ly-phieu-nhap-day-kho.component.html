@@ -200,7 +200,7 @@
   </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-  <them-moi-phieu-nhap-day-kho [id]="selectedId" (showListEvent)="showList()" [isView]="isViewDetail"
+  <them-moi-phieu-nhap-day-kho  [checkPrice]="checkPrice" [id]="selectedId" (showListEvent)="showList()" [isView]="isViewDetail"
     [loaiVthh]="loaiVthh" [isTatCa]="isTatCa" [idQdGiaoNvNh]="idQdGiaoNvNh">
   </them-moi-phieu-nhap-day-kho>
 </ng-container>

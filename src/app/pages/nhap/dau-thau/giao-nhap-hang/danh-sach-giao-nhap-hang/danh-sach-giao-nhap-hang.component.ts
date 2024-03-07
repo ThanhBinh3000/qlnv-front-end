@@ -170,7 +170,7 @@ export class DanhSachGiaoNhapHangComponent extends Base2Component implements OnI
   }
 
   redirectToThongTin(id: number, isView?: boolean) {
-    if (this.checkPrice.boolean) {
+    if (id == 0 && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }

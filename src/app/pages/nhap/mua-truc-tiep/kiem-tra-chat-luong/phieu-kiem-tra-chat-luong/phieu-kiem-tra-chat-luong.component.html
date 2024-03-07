@@ -195,7 +195,7 @@
 </ng-container>
 <ng-template #templateThemmoi>
     <ng-container class="chi-tiet" *ngIf="isDetail">
-        <app-them-moi-phieu-kiem-tra-chat-luong [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
+        <app-them-moi-phieu-kiem-tra-chat-luong [checkPrice]="checkPrice" [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
             [typeVthh]="typeVthh" [isTatCa]="isTatCa" [idQdGiaoNvNh]="idQdGiaoNvNh">
         </app-them-moi-phieu-kiem-tra-chat-luong>
     </ng-container>

@@ -104,6 +104,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
         this.qdTCDT = this.userInfo.MA_QD;
       }
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -218,6 +219,10 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -251,6 +256,10 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;

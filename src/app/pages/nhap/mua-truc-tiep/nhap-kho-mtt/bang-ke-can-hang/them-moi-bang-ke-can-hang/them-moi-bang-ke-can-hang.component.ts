@@ -33,6 +33,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
   @Input() isView: boolean;
   @Input() typeVthh: string;
   @Input() idQdGiaoNvNh: number;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Output()
@@ -420,6 +421,10 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
   }
 
   pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
@@ -471,6 +476,10 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -529,6 +538,10 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
   }
 
   async save(isGuiDuyet: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     // if (this.validateSave()) {
     this.spinner.show();
     try {

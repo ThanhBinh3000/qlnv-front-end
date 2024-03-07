@@ -111,7 +111,10 @@ export class BangkeThumualeComponent extends Base2Component implements OnInit {
   }
 
   themMoiBangKeMuaLe($event, data?: any, index?: number) {
-    console.log(data, 5555);
+    if ((data == null || data?.id == null) && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     const modalGT = this.modal.create({
       nzTitle: 'THÊM BẢNG KÊ',
       nzContent: DialogThemMoiBangKeThuMuaLeComponent,

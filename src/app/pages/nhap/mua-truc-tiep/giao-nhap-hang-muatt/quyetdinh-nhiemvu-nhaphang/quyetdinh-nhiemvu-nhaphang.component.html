@@ -207,7 +207,7 @@
     </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-    <app-themmoi-nhiemvu-nhaphang [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail"
+    <app-themmoi-nhiemvu-nhaphang [checkPrice]="checkPrice" [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail"
         [typeVthh]="typeVthh">
     </app-themmoi-nhiemvu-nhaphang>
 </ng-container>

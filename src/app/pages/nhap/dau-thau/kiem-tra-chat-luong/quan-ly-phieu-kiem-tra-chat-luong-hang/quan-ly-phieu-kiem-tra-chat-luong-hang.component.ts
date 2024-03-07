@@ -19,13 +19,16 @@ import {
   QuyetDinhGiaoNhapHangService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
 import { QuanLyNghiemThuKeLotService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
 
 @Component({
   selector: 'quan-ly-phieu-kiem-tra-chat-luong-hang',
   templateUrl: './quan-ly-phieu-kiem-tra-chat-luong-hang.component.html',
   styleUrls: ['./quan-ly-phieu-kiem-tra-chat-luong-hang.component.scss'],
 })
-export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
+export class QuanLyPhieuKiemTraChatLuongHangComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
@@ -83,17 +86,17 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   titleStatus: "";
 
   constructor(
-    private spinner: NgxSpinnerService,
-    private donViService: DonviService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
-    private notification: NzNotificationService,
-    private router: Router,
-    private modal: NzModalService,
-    public userService: UserService,
-    public globals: Globals,
-  ) { }
+  ) {
+    super(httpClient, storageService, notification, spinner, modal, quanLyPhieuKiemTraChatLuongHangService);
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -109,6 +112,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
         this.qdTCDT = this.userInfo.MA_QD;
       }
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -238,6 +242,10 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -271,6 +279,10 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number, maNganLoKho?: string ) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;

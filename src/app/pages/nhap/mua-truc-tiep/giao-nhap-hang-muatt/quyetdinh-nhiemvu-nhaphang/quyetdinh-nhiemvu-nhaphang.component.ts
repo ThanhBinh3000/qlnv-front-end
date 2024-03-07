@@ -14,13 +14,16 @@ import dayjs from 'dayjs';
 import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { STATUS } from 'src/app/constants/status';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
 
 @Component({
   selector: 'app-quyetdinh-nhiemvu-nhaphang',
   templateUrl: './quyetdinh-nhiemvu-nhaphang.component.html',
   styleUrls: ['./quyetdinh-nhiemvu-nhaphang.component.scss']
 })
-export class QuyetdinhNhiemvuNhaphangComponent implements OnInit {
+export class QuyetdinhNhiemvuNhaphangComponent extends Base2Component implements OnInit {
   @Input()
   typeVthh: string;
   @Input()
@@ -83,15 +86,15 @@ export class QuyetdinhNhiemvuNhaphangComponent implements OnInit {
   isViewDetail: boolean;
   STATUS = STATUS;
   constructor(
-    private router: Router,
-    private spinner: NgxSpinnerService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
-    public userService: UserService,
-    public globals: Globals,
     private danhMucService: DanhMucService
   ) {
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvNhapHangService);
   }
 
   async ngOnInit() {
@@ -109,6 +112,7 @@ export class QuyetdinhNhiemvuNhaphangComponent implements OnInit {
       this.searchFilter.loaiVthh = this.typeVthh;
       this.getCloaiVthh();
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);

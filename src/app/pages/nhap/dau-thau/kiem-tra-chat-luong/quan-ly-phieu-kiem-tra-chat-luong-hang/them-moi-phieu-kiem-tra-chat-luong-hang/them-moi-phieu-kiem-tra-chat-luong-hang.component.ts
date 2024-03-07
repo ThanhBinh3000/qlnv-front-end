@@ -34,6 +34,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   @Input() loaiVthh: string;
   @Input() idQdGiaoNvNh: number;
   @Input() maNganLoKho: string;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -429,6 +430,10 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   }
 
   async save(isGuiDuyet: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     if (this.validateSave()) {
       await this.spinner.show();
       this.setValidator(isGuiDuyet);
@@ -478,6 +483,10 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   }
 
   pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     if (this.formData.value.soBbNtbq == null) {
       this.notification.error(MESSAGE.ERROR, "Bạn cần tạo biên bản nghiệm thu bảo quản lần đầu trước.")
       return;
@@ -539,6 +548,10 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     switch (this.formData.get('trangThai').value) {
       case STATUS.CHO_DUYET_LDCC: {
