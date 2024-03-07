@@ -76,13 +76,13 @@ export class ThemMoiTongChiMuaHangComponent extends Base2Component implements On
     this.formData = this.fb.group(
       {
         id: [null],
-        namBc: [dayjs().get("year"), [Validators.required]],
+        namBc: [dayjs().get("year")],
         kyBc: [null],
         loaiBc: [null],
         thoiHanGuiBc: [null],
         thongTuSo: ["130/2018/TT-BTC"],
         bieuSo: ["002.H/BCDTQG-BN"],
-        tenDonViGui: [null],
+        tenDonViGui: [null, [Validators.required]],
         maDonViGui: [null],
         tenDonViNhan: [null],
         maDonViNhan: [null],
@@ -335,6 +335,10 @@ export class ThemMoiTongChiMuaHangComponent extends Base2Component implements On
   }
 
   async save(isBanHanh?: boolean) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      return;
+    }
     this.dataNguonNsnn.forEach(i => {
       i.loaiNguon = 1
     })
@@ -410,14 +414,14 @@ export class ThemMoiTongChiMuaHangComponent extends Base2Component implements On
     let sum = 0
     if (this.dataNguonNsnn) {
       this.dataNguonNsnn.forEach(item => {
-        if (item.dmLevel == 2) {
+        if (item.dmLevel == 1) {
           sum += this.nvl(item.tongTrongKy);
         }
       })
     }
     if (this.dataNguonNgoaiNsnn) {
       this.dataNguonNgoaiNsnn.forEach(item => {
-        if (item.dmLevel == 2) {
+        if (item.dmLevel == 1) {
           sum += this.nvl(item.tongTrongKy);
         }
       })
@@ -462,7 +466,6 @@ export class ThemMoiTongChiMuaHangComponent extends Base2Component implements On
   async loadDsKyBc() {
     let res = await this.danhMucService.danhMucChungGetAll("WEB_SERVICE");
     if (res.msg == MESSAGE.SUCCESS) {
-      console.log(res, "3333")
       this.whitelistWebService = res.data;
     }
   }

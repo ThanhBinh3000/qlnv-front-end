@@ -278,6 +278,8 @@
             <th class="text-left">Lô kho</th>
             <th class="text-left">Mã phần hàng</th>
             <th class="text-right">Số lượng xuất</th>
+            <th class="text-center" *ngIf="!isView && this.formData.value.phanLoai === TRUC_TIEP.CHAO_GIA"> Hành động
+            </th>
           </tr>
           </thead>
           <tbody>
@@ -292,6 +294,11 @@
               <td></td>
               <td></td>
               <td class="text-right bold">{{ data.soLuong|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-center" *ngIf="!isView && this.formData.value.phanLoai === TRUC_TIEP.CHAO_GIA">
+                <a (click)="deleteChiCuc(i)">
+                  <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+                </a>
+              </td>
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
               <tr *ngFor="let children of data.children">
@@ -303,6 +310,7 @@
                 <td class="text-left">{{ children.tenLoKho }}</td>
                 <td class="text-left">{{ children.maDviTsan }}</td>
                 <td class="text-right">{{ children.soLuong|number:globals.numberFormat:globals.locale }}</td>
+                <td *ngIf="!isView && this.formData.value.phanLoai === TRUC_TIEP.CHAO_GIA"></td>
               </tr>
             </ng-container>
           </ng-container>

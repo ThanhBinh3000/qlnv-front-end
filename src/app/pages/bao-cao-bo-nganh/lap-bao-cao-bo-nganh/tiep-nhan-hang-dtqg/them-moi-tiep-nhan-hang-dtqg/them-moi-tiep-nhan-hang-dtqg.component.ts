@@ -39,7 +39,7 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
     {
       text: "Báo cáo năm",
       value: 1,
-      thoiHanGuiBc: "Sau 05 ngày kết thúc thời gian chỉnh lý quyết toán ngân sách nhà nước"
+      thoiHanGuiBc: "Sau 25 ngày kết thúc năm."
     },
     { text: "Báo cáo quý", value: 2, thoiHanGuiBc: "Ngày 20 của tháng đầu quý sau" }
   ];
@@ -78,14 +78,14 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
     this.formData = this.fb.group(
       {
         id: [null],
-        namBc: [dayjs().get("year"), [Validators.required]],
+        namBc: [dayjs().get("year")],
         kyBc: [null],
         loaiBc: [null],
         thoiHanGuiBc: [null],
         thongTuSo: ["130/2018/TT-BTC"],
         bieuSo: ["010.H/BCDTQG-BN"],
         tenDonViGui: [null],
-        maDonViGui: [null],
+        maDonViGui: [null, [Validators.required]],
         tenDonViNhan: [null],
         maDonViNhan: [null],
         ngayTao: [dayjs().format("YYYY-MM-DD")],
@@ -159,7 +159,9 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
   }
 
   changeLoaiBc(event) {
-    this.formData.get("thoiHanGuiBc").setValue(this.listLoaiBc.find(item => item.value == event).thoiHanGuiBc);
+    if (event != null) {
+      this.formData.get("thoiHanGuiBc").setValue(this.listLoaiBc.find(item => item.value == event).thoiHanGuiBc);
+    }
   }
 
   quayLai() {
@@ -167,6 +169,10 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
   }
 
   async save(isBanHanh?: boolean) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      return;
+    }
     for (let i = 0; i < this.listDataGroup.length; i++) {
       this.listDataGroup[i].thuTuHienThi = (i+1)
     }

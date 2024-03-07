@@ -297,7 +297,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
         soBbNhapDayKho: data.bienBanNhapDayKho?.soBienBanNhapDayKho,
         tenNganLoKho: data.tenLoKho ? data.tenLoKho + " - " + data.tenNganKho : data.tenNganKho,
       })
-      this.formattedSlThucNhap = this.formData.get('slThucNhap') ? formatNumber(this.formData.get('slThucNhap').value * 1000, 'vi_VN', '1.0-99') : '0';
+      this.formattedSlThucNhap = this.formData.get('slThucNhap') ? formatNumber(this.formData.get('slThucNhap').value * 1000, 'vi_VN', '1.2-2') : '0';
     }
   }
 
