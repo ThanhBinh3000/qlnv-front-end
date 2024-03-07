@@ -78,14 +78,14 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
     this.formData = this.fb.group(
       {
         id: [null],
-        namBc: [dayjs().get("year"), [Validators.required]],
+        namBc: [dayjs().get("year")],
         kyBc: [null],
         loaiBc: [null],
         thoiHanGuiBc: [null],
         thongTuSo: ["130/2018/TT-BTC"],
         bieuSo: ["004.H/BCDTQG-BN"],
         tenDonViGui: [null],
-        maDonViGui: [null],
+        maDonViGui: [null, [Validators.required]],
         tenDonViNhan: [null],
         maDonViNhan: [null],
         ngayTao: [dayjs().format("YYYY-MM-DD")],
@@ -171,6 +171,10 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
   }
 
   async save(isBanHanh?: boolean) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      return;
+    }
     for (let i = 0; i < this.listDataGroup.length; i++) {
       this.listDataGroup[i].thuTuHienThi = (i+1)
     }

@@ -62,11 +62,13 @@
         </div>
         <div nz-col *ngIf="userService.isTongCuc()" [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Đơn vị gửi báo cáo
+            <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Đơn vị gửi báo cáo
             </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
             <nz-select formControlName="maDonViGui" (ngModelChange)="handleChoose($event)" [nzDisabled]="isView">
               <nz-option *ngFor="let p of listDsDvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
             </nz-select>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
@@ -219,15 +221,15 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-right">{{ data.gtriTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
+            <td class="text-right">{{ data.gtriTrongKy | number : '1.2-2' : 'vi_VN'  }}</td>
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-right">{{ data.gtriLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
+            <td class="text-right">{{ data.gtriLuyKe | number : '1.2-2' : 'vi_VN'  }}</td>
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-right">{{ data.gtriTong | number : '1.0-99' : 'vi_VN'  }}</td>
+            <td class="text-right">{{ data.gtriTong | number : '1.2-2' : 'vi_VN'  }}</td>
             <td nzRight *ngIf="!isView">
               <a (click)="editRowDvi(i)">
                 <i class=" fa fa-pencil"></i>
@@ -251,15 +253,15 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-right">{{ data.gtriTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
+            <td class="text-right">{{ data.gtriTrongKy | number : '1.2-2' : 'vi_VN'  }}</td>
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-right">{{ data.gtriLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
+            <td class="text-right">{{ data.gtriLuyKe | number : '1.2-2' : 'vi_VN'  }}</td>
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-right">{{ data.gtriTong | number : '1.0-99' : 'vi_VN'  }}</td>
+            <td class="text-right">{{ data.gtriTong | number : '1.2-2' : 'vi_VN'  }}</td>
             <td nzRight>
               <a (click)="saveEditRowDvi(i)">
                 <i class="icon htvbdh_tcdt_save"></i>
@@ -282,16 +284,16 @@
               <td>{{ nhomMatHang.diaDiem }}</td>
               <td>{{ nhomMatHang.tgianSx }}</td>
               <td>{{ nhomMatHang.thanLuuKho }}</td>
-              <td class="text-right">{{ nhomMatHang.slTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
-              <td class="text-right">{{ nhomMatHang.gtriTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
+              <td class="text-right">{{ nhomMatHang.slTrongKy | number : '1.2-2' : 'vi_VN'  }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriTrongKy | number : '1.2-2' : 'vi_VN'  }}</td>
               <td>{{ nhomMatHang.quocGiaTrongKy}}</td>
               <td>{{ nhomMatHang.diaDiemTrongKy}}</td>
-              <td class="text-right">{{ nhomMatHang.slLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
-              <td class="text-right">{{ nhomMatHang.gtriLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
+              <td class="text-right">{{ nhomMatHang.slLuyKe | number : '1.2-2' : 'vi_VN'  }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriLuyKe | number : '1.2-2' : 'vi_VN'  }}</td>
               <td>{{ nhomMatHang.quocGiaLuyKe}}</td>
               <td>{{ nhomMatHang.diaDiemLuyKe}}</td>
-              <td class="text-right">{{ nhomMatHang.slTong | number : '1.0-99' : 'vi_VN'  }}</td>
-              <td class="text-right">{{ nhomMatHang.gtriTong | number : '1.0-99' : 'vi_VN'  }}</td>
+              <td class="text-right">{{ nhomMatHang.slTong | number : '1.2-2' : 'vi_VN'  }}</td>
+              <td class="text-right">{{ nhomMatHang.gtriTong | number : '1.2-2' : 'vi_VN'  }}</td>
               <td nzRight *ngIf="!isView">
                 <a *ngIf="!isView" (click)="editRowNhomMh(i, y)">
                   <i class=" fa fa-pencil"></i>
@@ -375,16 +377,16 @@
                 <td>{{ matHang.diaDiem }}</td>
                 <td>{{ matHang.tgianSx }}</td>
                 <td>{{ matHang.thanLuuKho }}</td>
-                <td>{{ matHang.slTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
-                <td>{{ matHang.gtriTrongKy | number : '1.0-99' : 'vi_VN'  }}</td>
+                <td class="text-right">{{ matHang.slTrongKy | number : '1.2-2' : 'vi_VN'  }}</td>
+                <td class="text-right">{{ matHang.gtriTrongKy | number : '1.2-2' : 'vi_VN'  }}</td>
                 <td>{{ matHang.quocGiaTrongKy  }}</td>
                 <td>{{ matHang.diaDiemTrongKy }}</td>
-                <td>{{ matHang.slLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
-                <td>{{ matHang.gtriLuyKe | number : '1.0-99' : 'vi_VN'  }}</td>
+                <td class="text-right">{{ matHang.slLuyKe | number : '1.2-2' : 'vi_VN'  }}</td>
+                <td class="text-right">{{ matHang.gtriLuyKe | number : '1.2-2' : 'vi_VN'  }}</td>
                 <td>{{ matHang.quocGiaLuyKe   }}</td>
                 <td>{{ matHang.diaDiemLuyKe  }}</td>
-                <td>{{ matHang.slTong | number : '1.0-99' : 'vi_VN'  }}</td>
-                <td>{{ matHang.gtriTong | number : '1.0-99' : 'vi_VN'  }}</td>
+                <td class="text-right">{{ matHang.slTong | number : '1.2-2' : 'vi_VN'  }}</td>
+                <td class="text-right">{{ matHang.gtriTong | number : '1.2-2' : 'vi_VN'  }}</td>
                 <td nzRight *ngIf="!isView">
                   <a *ngIf="!isView" (click)="editRowMatHang(i, y, z)">
                     <i class=" fa fa-pencil"></i>
@@ -531,15 +533,15 @@
         <td class="text-center">X</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
-        <td class="text-right">{{calTongTrongKy() | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTongTrongKy() | number : '1.2-2' : 'vi_VN'}}</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
-        <td class="text-right">{{calTongLuyKe() | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTongLuyKe() | number : '1.2-2' : 'vi_VN'}}</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
-        <td class="text-right">{{calTong() | number : '1.0-99' : 'vi_VN'}}</td>
+        <td class="text-right">{{calTong() | number : '1.2-2' : 'vi_VN'}}</td>
         <td nzRight class="text-center" *ngIf="!isView"></td>
       </tr>
       </tbody>
