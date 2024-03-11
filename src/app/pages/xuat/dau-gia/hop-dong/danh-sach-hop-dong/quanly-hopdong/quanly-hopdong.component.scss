@@ -38,3 +38,12 @@
 .bg-selected td {
   background-color: #d8dcfe;
 }
+
+::ng-deep .ant-modal-body {
+  overflow: scroll;
+}
+
+::ng-deep .ant-select-selection-placeholder {
+  color: #999;
+  opacity: 70%;
+}

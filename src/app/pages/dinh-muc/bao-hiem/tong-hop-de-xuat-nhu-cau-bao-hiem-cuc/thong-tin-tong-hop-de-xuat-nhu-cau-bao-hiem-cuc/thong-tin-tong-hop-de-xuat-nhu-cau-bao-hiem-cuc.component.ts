@@ -99,7 +99,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     let body = this.formDataTongHop.value;
     if (!body.listSoCv || body.listSoCv.length == 0) {
       let arr = this.listDxCuc.map(item => item.soCv);
-      body.listSoCv = arr && arr.length > 0 ?  arr.toString() : [];
+      body.listSoCv = arr && arr.length > 0 ?  arr.toString() : "";
     } else {
       body.listSoCv = body.listSoCv.toString();
     }
@@ -313,7 +313,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
 
   sumSlHang(row: string, table : any[]) : number {
     let result = 0;
-    let arr = table.filter(it => it.nhomCha);
+    let arr = table.filter(it => !it.nhomCha);
     const sum = arr.reduce((prev, cur) => {
       prev += cur[row];
       return prev;
