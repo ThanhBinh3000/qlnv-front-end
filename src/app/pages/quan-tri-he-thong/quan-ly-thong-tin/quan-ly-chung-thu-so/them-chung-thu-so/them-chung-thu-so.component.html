@@ -44,6 +44,26 @@
           </nz-form-item>
         </div>
 
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Tài khoản</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group [nzSuffix]="suffixIcon">
+                <input nz-input formControlName="userName" [nzAutocomplete]="auto" [readOnly]="isView"
+                  (ngModelChange)="search($event)" />
+              </nz-input-group>
+            </nz-form-control>
+            <ng-template #suffixIcon>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+            <nz-autocomplete #auto>
+              <nz-auto-option *ngFor="let option of userList" [nzValue]="option.username"
+                (click)="selectUserLDap(option)">{{ option.username }}
+              </nz-auto-option>
+            </nz-autocomplete>
+          </nz-form-item>
+        </div>
+
         <div nz-col [nzSpan]="24" class="mt10">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
