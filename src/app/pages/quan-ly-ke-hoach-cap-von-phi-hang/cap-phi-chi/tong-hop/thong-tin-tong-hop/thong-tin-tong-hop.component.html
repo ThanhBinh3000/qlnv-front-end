@@ -157,7 +157,7 @@
                 [ngClass]="{'bg-selected': data.selected}"
                 (click)="selectRow(data, 'rowDisplay')">
               <td class='text-center'>{{i + 1}}</td>
-              <td>{{ data.tenBoNganh }}</td>
+              <td>{{ data.tenBoNganh }} 11</td>
               <td>{{ data.tenDvCungCap }}</td>
               <td>{{ data.soTaiKhoan }}</td>
               <td>{{ data.nganHang }}</td>
@@ -171,7 +171,7 @@
               <th></th>
               <th></th>
               <th class='text-right'> Tổng</th>
-              <th class='bg-gray  text-money text-specical-money'>{{tongBang1(cts) | number : '1.0-1' : 'vi-VN'}}
+              <th class='bg-gray  text-money text-specical-money text-right'>{{tongBang1(cts) | number : '1.0-1' : 'vi-VN'}}
               </th>
             </tr>
             </tbody>
@@ -205,12 +205,12 @@
             <tr>
               <th></th>
               <th class='text-right'> Tổng</th>
-              <th class='bg-gray  text-money text-specical-money'>
-                {{tongChiPhiBang2(rowDisplay) | number : '1.0-1' : 'vi-VN'}}</th>
-              <th class='bg-gray  text-money text-specical-money'>
-                {{tongKinhPhiBang2(rowDisplay) | number : '1.0-1' : 'vi-VN'}}</th>
-              <th class='bg-gray  text-money text-specical-money'>
-                {{tongCapThemBang2(rowDisplay) | number : '1.0-1' : 'vi-VN'}}
+              <th class='bg-gray  text-money text-specical-money text-right'>
+                {{tongChiPhiBang2(itemSelectedInfo) | number : '1.0-1' : 'vi-VN'}}</th>
+              <th class='bg-gray  text-money text-specical-money text-right'>
+                {{tongKinhPhiBang2(itemSelectedInfo) | number : '1.0-1' : 'vi-VN'}}</th>
+              <th class='bg-gray  text-money text-specical-money text-right'>
+                {{tongCapThemBang2(itemSelectedInfo) | number : '1.0-1' : 'vi-VN'}}
               </th>
             </tr>
             </tbody>
@@ -295,7 +295,7 @@
               <th></th>
               <th></th>
               <th class='text-right'> Tổng</th>
-              <th class='bg-gray  text-money text-specical-money'>{{tongBang1(ct1s) | number : '1.0-1' : 'vi-VN'}}</th>
+              <th class='bg-gray  text-money text-specical-money text-right'>{{tongBang1(ct1s) | number : '1.0-1' : 'vi-VN'}}</th>
               <th></th>
             </tr>
             </tbody>
@@ -442,11 +442,11 @@
             <tr>
               <th></th>
               <th class='text-right'> Tổng</th>
-              <th class='bg-gray  text-money text-specical-money'>
+              <th class='bg-gray  text-money text-specical-money text-right'>
                 {{tongChiPhiBang2(rowEdit) | number : '1.0-1' : 'vi-VN'}}</th>
-              <th class='bg-gray  text-money text-specical-money'>
+              <th class='bg-gray  text-money text-specical-money text-right'>
                 {{tongKinhPhiBang2(rowEdit) | number : '1.0-1' : 'vi-VN'}}</th>
-              <th class='bg-gray  text-money text-specical-money'>
+              <th class='bg-gray  text-money text-specical-money text-right'>
                 {{tongCapThemBang2(rowEdit) | number : '1.0-1' : 'vi-VN'}}
               </th>
               <th></th>
