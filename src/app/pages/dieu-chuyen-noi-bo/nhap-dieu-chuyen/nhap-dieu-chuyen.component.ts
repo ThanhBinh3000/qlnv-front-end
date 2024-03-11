@@ -43,12 +43,12 @@ export class NhapDieuChuyenComponent extends Base2Component implements OnInit {
     };
   }
 
-  tabSelected: number = 0;
+  tabSelected: string = 'NBCHICUC';
 
   ngOnInit(): void {
   }
 
-  selectTab(tab: number) {
+  selectTab(tab: string) {
     this.tabSelected = tab;
   }
 

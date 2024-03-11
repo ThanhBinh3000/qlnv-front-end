@@ -167,7 +167,13 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     return this.userService.isChiCuc()
   }
 
+  isIN() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BKNVT_IN') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BKNVT_IN') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BKNVT_IN'))
+  }
 
+  isThem() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BKNVT_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BKNVT_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BKNVT_THEM'))
+  }
 
   async loadChiTiet(id: number) {
     await this.spinner.show()
@@ -477,8 +483,16 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
 
   }
 
+  isDuyetTP() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BKNVT_DUYET_TP') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BKNVT_DUYET_TP') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BKNVT_DUYET_TP'))
+  }
+
+  isDuyetLD() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BKNVT_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BKNVT_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BKNVT_DUYET_LDCCUC'))
+  }
+
   isTuChoi() {
-    return this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+    return (this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT && this.isDuyetTP()) || (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && this.isDuyetLD())
   }
 
   async tuChoi() {
@@ -492,7 +506,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
   }
 
   isPheDuyet() {
-    return this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+    return (this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT && this.isDuyetTP()) || (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && this.isDuyetLD())
   }
 
   async pheDuyet() {

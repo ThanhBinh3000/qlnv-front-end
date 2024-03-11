@@ -798,6 +798,25 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     await this.spinner.hide();
   }
 
+  isIn() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_BBNTBQLD_IN') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_BBNTBQLD_IN') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_BBNTBQLD_IN'))
+  }
+
+  isThem() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_BBNTBQLD_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_BBNTBQLD_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_BBNTBQLD_THEM'))
+  }
+
+  isDuyetTK() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_BBNTBQLD_DUYET_THUKHO') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_BBNTBQLD_DUYET_THUKHO') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_BBNTBQLD_DUYET_THUKHO'))
+  }
+
+  isDuyetKT() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_BBNTBQLD_DUYET_KETOAN') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_BBNTBQLD_DUYET_KETOAN') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_BBNTBQLD_DUYET_KETOAN'))
+  }
+
+  isDuyetLD() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_BBNTBQLD_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_BBNTBQLD_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_BBNTBQLD_DUYET_LDCCUC'))
+  }
 
 
   isGuiDuyet() {
@@ -827,7 +846,7 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   }
 
   isPheDuyet() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_TK || this.formData.value.trangThai == STATUS.CHO_DUYET_KT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+    return (this.formData.value.trangThai == STATUS.CHO_DUYET_TK && this.isDuyetTK()) || (this.formData.value.trangThai == STATUS.CHO_DUYET_KT && this.isDuyetKT()) || (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && this.isDuyetLD())
   }
 
   async pheDuyet() {

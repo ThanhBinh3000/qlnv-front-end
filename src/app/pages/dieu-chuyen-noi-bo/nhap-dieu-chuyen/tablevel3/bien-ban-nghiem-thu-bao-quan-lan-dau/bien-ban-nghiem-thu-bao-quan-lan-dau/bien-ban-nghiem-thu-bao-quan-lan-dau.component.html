@@ -1,4 +1,4 @@
-<div *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC')">
+<div *ngIf="userService.isAccessPermisson('DCNB_NHAP')">
   <div *ngIf="isShowDS() && !isDetail" class="luong-thuc__danh-sach">
     <div class="bg-trang">
       <nz-card class="mt16 flex-card p-lr16">
@@ -76,16 +76,15 @@
       <div class="group-button">
         <h3 class="text-uppercase">Danh sách biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</h3>
         <div class="buttons">
-          <!-- <button type="button" class="btn btn-do" (click)="deleteMulti()"
-            *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_XOA') && isTongCuc()">
+          <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="isXoa()">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
-          </button> -->
-          <button type="button" class="btn btn-sub" (click)="exportDataTC()">
+          </button>
+          <button type="button" class="btn btn-sub" (click)="exportDataTC()" *ngIf="isExport()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Xuất file</span>
           </button>
-          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)" *ngIf="isChiCuc()">
+          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)" *ngIf="isThem()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
@@ -249,7 +248,7 @@
                               <a *ngIf="isEdit(row5)" (click)="redirectDetail(row5.id, false)">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
-                              <a *ngIf="row5.trangThai == STATUS.DU_THAO" (click)="xoa(row5)">
+                              <a *ngIf="row5.trangThai == STATUS.DU_THAO && isXoa()" (click)="xoa(row5)">
                                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                               </a>
                             </td>
