@@ -60,6 +60,10 @@
               <span nz-icon nzType='fund'></span>
               <span>Danh sách nhà thầu uy tín</span>
             </li>
+            <li nz-menu-item [nzSelected]='tabSelected==19' (click)='selectTab(19)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo tổng hợp kết quả đấu thầu mua gạo</span>
+            </li>
           </ul>
         </li>
       </ul>
@@ -107,6 +111,9 @@
         </ng-container>
         <ng-container *ngIf='tabSelected == 18'>
           <app-bc-danh-sach-nha-thau-uy-tin></app-bc-danh-sach-nha-thau-uy-tin>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 19'>
+          <app-bc-th-ket-qua-dau-thau-gao-theo-nam></app-bc-th-ket-qua-dau-thau-gao-theo-nam>
         </ng-container>
       </div>
     </div>
