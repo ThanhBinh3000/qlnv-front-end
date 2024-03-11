@@ -247,9 +247,9 @@
                                     [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-them-moi-qd-giao-nv-xuat-btt>
 </div>
-
-<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewHopDong" (nzOnCancel)="closeModal('hopDong')">
-  <ng-container *nzModalContent class="modal__content">
+<!--Xem hợp đồng-->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewHopDong" (nzOnCancel)="closeModal('hopDong')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-thong-tin-hop-dong-btt [idHopDong]="idHopDong" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
     </app-thong-tin-hop-dong-btt>
   </ng-container>

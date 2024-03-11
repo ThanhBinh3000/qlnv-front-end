@@ -201,6 +201,7 @@
                                      (showListEvent)="showList()">
   </app-them-moi-bien-ban-lay-mau-btt>
 </div>
+<!--Xem quyết định giao nhiệm vụ-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModal('QdNv')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-qd-giao-nv-xuat-btt [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
