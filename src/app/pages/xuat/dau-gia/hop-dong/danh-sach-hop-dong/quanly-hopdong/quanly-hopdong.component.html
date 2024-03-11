@@ -300,10 +300,11 @@
                  [checkPrice]="checkPrice" (showListEvent)="redirectHopDong(0, true, false, false)">
   </app-thong-tin>
 </ng-template>
-<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModal()">
-  <ng-container *nzModalContent class="modal__content">
-    <!--        <app-create-giao-xh [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true">-->
-    <!--        </app-create-giao-xh>-->
+<!--Xem quyết định giao nhiệm vụ -->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-create-giao-xh [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-create-giao-xh>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal()" class="modal__button--cancel">
