@@ -552,6 +552,7 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
+<!--Xem phiếu xuất kho-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewXuatKho" (nzOnCancel)="closeModal('xuatKho')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-phieu-xuat-kho-btt [idInput]="idXuatKho" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
@@ -565,32 +566,7 @@
     </button>
   </div>
 </nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewBangKe" (nzOnCancel)="closeModal('bangKe')">
-  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-bang-ke-can-hang-btt [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
-                                       [isView]="true">
-    </app-them-moi-bang-ke-can-hang-btt>
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="closeModal('bangKe')" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewXuatKho" (nzOnCancel)="closeModal('xuatKho')">
-  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-phieu-xuat-kho-btt [idInput]="idXuatKho" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
-                                     [isView]="true">
-    </app-them-moi-phieu-xuat-kho-btt>
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="closeModal('xuatKho')" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
+<!--Xem bảng kê cân hàng-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewBangKe" (nzOnCancel)="closeModal('bangKe')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-bang-ke-can-hang-btt [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isViewOnModal]="true"

@@ -202,7 +202,7 @@
                                     [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-chi-tiet-quyet-dinh-chao-gia>
 </div>
-<!--xem -->
+<!--xem quyết định kế hoạch -->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModal('QdKh')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
@@ -216,6 +216,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem điều chỉnh quyết định-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdDc" (nzOnCancel)="closeModal('QdDc')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-dieu-chinh-ban-truc-tiep [idInput]="idQdPdDc" [loaiVthh]="loaiVthh" [isViewOnModal]="true"

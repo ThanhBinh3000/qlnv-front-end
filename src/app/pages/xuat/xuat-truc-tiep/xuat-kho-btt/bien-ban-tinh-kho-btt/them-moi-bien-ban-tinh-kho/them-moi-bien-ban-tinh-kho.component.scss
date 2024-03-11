@@ -1,11 +1,8 @@
-.text-green {
-    color: Blue;
-    font-weight: 500;
-    font-size: 12px;
+::ng-deep .ant-modal-body {
+  overflow: scroll;
 }
 
-.text-grey {
-    color: rgb(175, 175, 175);
-    font-weight: 500;
-    font-size: 12px;
+::ng-deep .ant-select-selection-placeholder {
+  color: #999;
+  opacity: 70%;
 }

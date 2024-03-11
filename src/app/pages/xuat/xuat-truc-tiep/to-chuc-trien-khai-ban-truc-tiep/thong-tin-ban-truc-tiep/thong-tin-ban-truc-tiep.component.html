@@ -240,7 +240,7 @@
                                         (showListEvent)="showList()">
   </app-them-moi-thong-tin-ban-truc-tiep>
 </div>
-<!--xem -->
+<!--Xem quyết định kế hoạch-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModal('QdKh')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
@@ -254,6 +254,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem quyết định điều chỉnh kế hoạch-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdDc" (nzOnCancel)="closeModal('QdDc')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-dieu-chinh-ban-truc-tiep [idInput]="idQdPdDc" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
@@ -267,6 +268,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem đề xuất-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewDxKh" (nzOnCancel)="closeModal('DxKh')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-de-xuat-kh-ban-truc-tiep [idInput]="idDxKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
@@ -280,6 +282,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem quyết định kế quả chào gía-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKq" (nzOnCancel)="closeModal('QdKq')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-quyet-dinh-chao-gia [idInput]="idQdPdKq" [loaiVthh]="loaiVthh" [isViewOnModal]="true"

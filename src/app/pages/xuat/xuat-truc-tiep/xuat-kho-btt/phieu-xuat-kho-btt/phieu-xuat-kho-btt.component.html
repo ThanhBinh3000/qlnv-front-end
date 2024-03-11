@@ -52,7 +52,8 @@
       <div class="buttons">
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_XK_VT_PXK_EXP') : userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_PXK_EXP')"
-          type="button" class="btn btn-sub" (click)="exportData('danh-sach-phieu-xuat-kho-ban-truc-tiep-hang-DTQG.xlsx')">
+          type="button" class="btn btn-sub"
+          (click)="exportData('danh-sach-phieu-xuat-kho-ban-truc-tiep-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>
@@ -225,10 +226,11 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-them-moi-phieu-xuat-kho-btt [idInput]="idSelected" [idQdGnv]="idQdNv" [idKiemnghiem]="idKiemnghiem"
-                                   [loaiVthh]="loaiVthh" [isView]="isView"  [checkPrice]="checkPrice"
+                                   [loaiVthh]="loaiVthh" [isView]="isView" [checkPrice]="checkPrice"
                                    (showListEvent)="showList()">
   </app-them-moi-phieu-xuat-kho-btt>
 </div>
+<!--Xem quyết định giao nhiệm vụ-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModal('QdNv')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-qd-giao-nv-xuat-btt [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
@@ -241,6 +243,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem phiếu kiểm nghiệm chất lượng-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewKiemnghiem"
           (nzOnCancel)="closeModal('kiemNghiem')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
@@ -255,6 +258,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem bảng kê cân hàng-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewBangKe"
           (nzOnCancel)="closeModal('bangKe')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
