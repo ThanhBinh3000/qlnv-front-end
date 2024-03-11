@@ -82,7 +82,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     this.spinner.show();
     try {
       this.maCv = '/' + this.userInfo.DON_VI.tenVietTat + '-TCKT'
-      await this.loadDsDxCc();
+      await this.loadDsDxCc(this.formDataTongHop.value.namKeHoach);
       if (this.id > 0) {
         await this.detail(this.id);
       }
@@ -103,7 +103,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     let body = this.formDataTongHop.value;
     if (!body.listSoCv || body.listSoCv.length == 0) {
       let arr = this.listDxChiCuc.map(item => item.soCv);
-      body.listSoCv = arr && arr.length > 0 ?  arr.toString() : [];
+      body.listSoCv = arr && arr.length > 0 ?  arr.toString() : "";
     } else {
       body.listSoCv = body.listSoCv.toString();
     }
@@ -138,14 +138,16 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     }
   }
 
-  async loadDsDxCc() {
+  async loadDsDxCc(namKh) {
     this.spinner.show();
     try {
       let body = {
         "capDvi": "3",
+        "maDvi": this.userInfo.MA_DVI,
+        "namKeHoach": namKh,
         "paggingReq": {
           "limit": 10,
-          "page": 0
+          "page": 0,
         }
       }
       let res = await this.deXuatBaoHiemSv.search(body);
@@ -579,6 +581,15 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
       console.log(e);
     } finally {
       this.spinner.hide();
+    }
+  }
+
+  async changeNamKh(event) {
+    if (event) {
+      this.formDataTongHop.patchValue({
+        listSoCv : []
+      })
+      await this.loadDsDxCc(event);
     }
   }
 }
