@@ -24,11 +24,11 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import { BcNvQuanLyKhoTangService } from "src/app/services/bao-cao/BcNvQuanLyKhoTang.service";
 import { MESSAGE } from "src/app/constants/message";
 import { Base2Component } from "src/app/components/base2/base2.component";
-import {Validators} from "@angular/forms";
-import {DanhMucService} from "../../../../services/danhmuc.service";
-import {pairwise, startWith} from "rxjs/operators";
+import { Validators } from "@angular/forms";
+import { DanhMucService } from "../../../../services/danhmuc.service";
+import { pairwise, startWith } from "rxjs/operators";
 import dayjs from "dayjs";
-import {saveAs} from 'file-saver';
+import { saveAs } from 'file-saver';
 
 
 export type ChartOptionsColumn = {
@@ -56,7 +56,7 @@ export type ChartOptionsLine = {
   legend: ApexLegend;
   title: ApexTitleSubtitle;
 };
-interface LoaiHangHoaType{
+interface LoaiHangHoaType {
   tenLoaiVthh: string,
   loaiVthh: string,
   loaiHang: string,
@@ -78,25 +78,25 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
   showFilterTonKho: boolean = false;
   dataConfigTable: {
     tieuChi: Array<{ tenTieuChi: string, maTieuChi: string, status: boolean }>, donVi: Array<{ tenTieuChi: string, maTieuChi: string, status: boolean }>
-  } = {tieuChi: [], donVi: []};
+  } = { tieuChi: [], donVi: [] };
   showTieuChi: boolean = true;
   showDonVi: boolean = true;
   dataTichLuongKho: any[] = [];
   dataTonKho: any[] = [];
-  listHangHoa: Array<LoaiHangHoaType>=[];
-  tenLoaiVthh: string='';
-  tieuDeHienTrang: string='';
+  listHangHoa: Array<LoaiHangHoaType> = [];
+  tenLoaiVthh: string = '';
+  tieuDeHienTrang: string = '';
   titleTable: string = 'Cục DTNNKV';
-  isShowDataTonKho: boolean =false;
-  isChiCucSelected: boolean= false;
-  donViTinh: string="";
-  tongKeHoach: number=0;
-  tongTonDau: number=0;
-  tongNhap: number=0;
-  tongXuat: number=0;
-  tongTonCuoi: number=0;
-  tongConLai: number=0;
-  previewName: string ='';
+  isShowDataTonKho: boolean = false;
+  isChiCucSelected: boolean = false;
+  donViTinh: string = "";
+  tongKeHoach: number = 0;
+  tongTonDau: number = 0;
+  tongNhap: number = 0;
+  tongXuat: number = 0;
+  tongTonCuoi: number = 0;
+  tongConLai: number = 0;
+  previewName: string = '';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -105,7 +105,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     modal: NzModalService,
     private bcNvQuanLyKhoTangService: BcNvQuanLyKhoTangService,
     private donViService: DonviService,
-    private  danhMucSerVice: DanhMucService
+    private danhMucSerVice: DanhMucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bcNvQuanLyKhoTangService);
     super.ngOnInit()
@@ -117,11 +117,11 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     });
     this.formData.get('loaiVthh')?.valueChanges.pipe(startWith(this.formData.get('loaiVthh')?.value), pairwise()).subscribe(([prevValue, nextValue]) => {
       if (prevValue !== nextValue) {
-        const findIndex= this.listHangHoa.findIndex(f=>f.loaiVthh === nextValue);
-        if(findIndex>=0){
+        const findIndex = this.listHangHoa.findIndex(f => f.loaiVthh === nextValue);
+        if (findIndex >= 0) {
           this.donViTinh = this.listHangHoa[findIndex].donViTinh;
-        }else{
-          this.donViTinh='';
+        } else {
+          this.donViTinh = '';
         }
       }
     })
@@ -149,10 +149,10 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
   ngOnDestroy() {
     document.removeEventListener('click', this.handleClickFilter);
   }
-  async getLoaiVthh(){
-    const res= await this.danhMucSerVice.getAllVthhByCap(2);
-    if(res.msg === MESSAGE.SUCCESS){
-      this.listHangHoa= res.data.map(f=>({tenLoaiVthh: f.ten, loaiVthh: f.ma, loaiHang: f.loaiHang, donViTinh: f.maDviTinh}))
+  async getLoaiVthh() {
+    const res = await this.danhMucSerVice.getAllVthhByCap(2);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.listHangHoa = res.data.map(f => ({ tenLoaiVthh: f.ten, loaiVthh: f.ma, loaiHang: f.loaiHang, donViTinh: f.maDviTinh }))
     }
   }
   clearSearch() {
@@ -160,7 +160,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     this.search();
 
   }
-  resetConfig(){
+  resetConfig() {
     this.dataConfigTable.donVi.forEach(f => f.status = true);
     this.dataConfigTable.tieuChi.forEach(f => f.status = true);
     this.apDungTichLuongKhoConfig()
@@ -170,8 +170,8 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     const res = await this.bcNvQuanLyKhoTangService.hienTrangKhoTangChart(body);
     if (res.msg == MESSAGE.SUCCESS) {
       // let responseData = res.data;
-      this.dataTichLuongKho = cloneDeep(res.data.series).map(f=>({data: f.data, name: f.name, label: res.data.categories,group: f.group}));
-      this.dataConfigTable.tieuChi= [{tenTieuChi: "Tất cả", maTieuChi: "all", status: true}].concat(Array.isArray(res.data.series)? cloneDeep(res.data.series).map(f=>({tenTieuChi: f.name, maTieuChi: f.name, status: true})): []);
+      this.dataTichLuongKho = cloneDeep(res.data.series).map(f => ({ data: f.data, name: f.name, label: res.data.categories, group: f.group }));
+      this.dataConfigTable.tieuChi = [{ tenTieuChi: "Tất cả", maTieuChi: "all", status: true }].concat(Array.isArray(res.data.series) ? cloneDeep(res.data.series).map(f => ({ tenTieuChi: f.name, maTieuChi: f.name, status: true })) : []);
       this.setTichLuongKho(this.dataTichLuongKho);
       return res;
     }
@@ -215,7 +215,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
         },
       },
       xaxis: {
-        categories: Array.isArray(responseData[0]?.label)? responseData[0].label: []
+        categories: Array.isArray(responseData[0]?.label) ? responseData[0].label : []
       },
       fill: {
         opacity: 1,
@@ -239,25 +239,25 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
       },
     };
   };
-  async loadHienTrangKhoTang(body){
+  async loadHienTrangKhoTang(body) {
     const res = await this.bcNvQuanLyKhoTangService.hienTrangKhoTang(body);
-    if(res.msg === MESSAGE.SUCCESS){
-      this.dataTable=Array.isArray(res.data)? res.data: [];
-      const {tongKeHoach, tongTonDau, tongNhap, tongXuat, tongTonCuoi, tongConLai}=this.dataTable.reduce((obj, cur)=>{
-        obj.tongKeHoach+=cur.keHoach;
-        obj.tongTonDau+=cur.tonDau;
-        obj.tongNhap+=cur.nhap;
-        obj.tongXuat+=cur.xuat;
-        obj.tongTonCuoi+=cur.tonCuoi;
-        obj.tongConLai+=cur.conLai;
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.dataTable = Array.isArray(res.data) ? res.data : [];
+      const { tongKeHoach, tongTonDau, tongNhap, tongXuat, tongTonCuoi, tongConLai } = this.dataTable.reduce((obj, cur) => {
+        obj.tongKeHoach += cur.keHoach;
+        obj.tongTonDau += cur.tonDau;
+        obj.tongNhap += cur.nhap;
+        obj.tongXuat += cur.xuat;
+        obj.tongTonCuoi += cur.tonCuoi;
+        obj.tongConLai += cur.conLai;
         return obj;
-      }, {tongKeHoach: 0, tongTonDau: 0, tongNhap: 0, tongXuat: 0, tongTonCuoi: 0, tongConLai: 0});
-      this.tongKeHoach=tongKeHoach;
-      this.tongTonDau=tongTonDau;
-      this.tongNhap=tongNhap;
-      this.tongXuat=tongXuat;
-      this.tongTonCuoi=tongTonCuoi;
-      this.tongConLai=tongConLai;
+      }, { tongKeHoach: 0, tongTonDau: 0, tongNhap: 0, tongXuat: 0, tongTonCuoi: 0, tongConLai: 0 });
+      this.tongKeHoach = tongKeHoach;
+      this.tongTonDau = tongTonDau;
+      this.tongNhap = tongNhap;
+      this.tongXuat = tongXuat;
+      this.tongTonCuoi = tongTonCuoi;
+      this.tongConLai = tongConLai;
       return res;
     }
   }
@@ -266,13 +266,13 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     this.loaiHienTrang = loaiHienTrang;
     this.setTichLuongKho([]);
     this.dataTable = [];
-    this.tieuDeHienTrang='';
-    this.tongKeHoach=0;
-    this.tongTonDau=0;
-    this.tongNhap=0;
-    this.tongXuat=0;
-    this.tongTonCuoi=0;
-    this.tongConLai=0;
+    this.tieuDeHienTrang = '';
+    this.tongKeHoach = 0;
+    this.tongTonDau = 0;
+    this.tongNhap = 0;
+    this.tongXuat = 0;
+    this.tongTonCuoi = 0;
+    this.tongConLai = 0;
   }
 
   async ketXuatBaoCao() {
@@ -283,46 +283,46 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
         return;
       }
       let body = this.formData.value;
-      body.maDvi= body.maChiCuc || body.maCuc;
-      body.nam =dayjs().get('year');
+      body.maDvi = body.maChiCuc || body.maCuc;
+      body.nam = dayjs().get('year');
       let res;
-      if(this.loaiHienTrang === 0){
-        res = await  this.loadChartTichLuong(body);
-      }else{
-        res = await  this.loadHienTrangKhoTang(body)
+      if (this.loaiHienTrang === 0) {
+        res = await this.loadChartTichLuong(body);
+      } else {
+        res = await this.loadHienTrangKhoTang(body)
       }
 
-      if(res.msg === MESSAGE.SUCCESS){
-          this.isShowDataTonKho=true;
-          this.isChiCucSelected=false;
-          const {loaiVthh, maCuc, maChiCuc}=this.formData.value;
-          this.tenLoaiVthh=''
-          let tenDvi='';
-          if (loaiVthh) {
-            const findIndex= this.listHangHoa.findIndex(f=>f.loaiVthh === loaiVthh);
-            this.tenLoaiVthh=this.listHangHoa[findIndex].tenLoaiVthh
-          }
-          if(!maCuc){
-            tenDvi='TCDTNN'
-          }
-          if (maCuc) {
-            const findIndex= this.listCuc.findIndex(f=>f.maDvi === maCuc);
-            tenDvi=this.listCuc[findIndex].tenDvi
-          }
-          if (maChiCuc) {
-            const findIndex= this.listChiCuc.findIndex(f=>f.maDvi === maChiCuc);
-            tenDvi=this.listChiCuc[findIndex].tenDvi;
-            this.isChiCucSelected=true
-          }
-          if(this.tenLoaiVthh){
-            this.tieuDeHienTrang=`Hiện trạng kho ${tenDvi} ( Loại hàng hóa: ${this.tenLoaiVthh})`
-          }
-        if(this.formData.value.maChiCuc){
-          this.titleTable='';
-        }else if(this.formData.value.maCuc){
-          this.titleTable= 'Chi cục DTNNKV';
-        }else{
-          this.titleTable='Cục DTNNKV';
+      if (res.msg === MESSAGE.SUCCESS) {
+        this.isShowDataTonKho = true;
+        this.isChiCucSelected = false;
+        const { loaiVthh, maCuc, maChiCuc } = this.formData.value;
+        this.tenLoaiVthh = ''
+        let tenDvi = '';
+        if (loaiVthh) {
+          const findIndex = this.listHangHoa.findIndex(f => f.loaiVthh === loaiVthh);
+          this.tenLoaiVthh = this.listHangHoa[findIndex].tenLoaiVthh
+        }
+        if (!maCuc) {
+          tenDvi = 'TCDTNN'
+        }
+        if (maCuc) {
+          const findIndex = this.listCuc.findIndex(f => f.maDvi === maCuc);
+          tenDvi = this.listCuc[findIndex].tenDvi
+        }
+        if (maChiCuc) {
+          const findIndex = this.listChiCuc.findIndex(f => f.maDvi === maChiCuc);
+          tenDvi = this.listChiCuc[findIndex].tenDvi;
+          this.isChiCucSelected = true
+        }
+        if (this.tenLoaiVthh) {
+          this.tieuDeHienTrang = `Hiện trạng kho ${tenDvi} ( Loại hàng hóa: ${this.tenLoaiVthh})`
+        }
+        if (this.formData.value.maChiCuc) {
+          this.titleTable = '';
+        } else if (this.formData.value.maCuc) {
+          this.titleTable = 'Chi cục DTNNKV';
+        } else {
+          this.titleTable = 'Cục DTNNKV';
         }
 
       }
@@ -389,6 +389,11 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
   }
 
   async changeCuc(val: string) {
+    if (!val) {
+      this.formData.patchValue({ maChiCuc: "" })
+      this.listChiCuc = [];
+      return;
+    }
     this.getDsDviCon(val);
   }
 
@@ -402,25 +407,25 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
       maCuc: "",
       maChiCuc: "",
       loaiVthh: ""
-    }, {onlySelf: true, emitEvent: false})
+    }, { onlySelf: true, emitEvent: false })
     if (this.userService.isTongCuc) {
       // this.formData.controls["maCuc"].setValue("", { emitEvent: false });
       this.listChiCuc = []
     };
     this.setTichLuongKho([]);
-    this.dataTable=[];
-    this.donViTinh='';
-    this.tenLoaiVthh='';
-    this.tieuDeHienTrang='';
-    this.tongKeHoach=0;
-    this.tongTonDau=0;
-    this.tongNhap=0;
-    this.tongXuat=0;
-    this.tongTonCuoi=0;
-    this.tongConLai=0;
+    this.dataTable = [];
+    this.donViTinh = '';
+    this.tenLoaiVthh = '';
+    this.tieuDeHienTrang = '';
+    this.tongKeHoach = 0;
+    this.tongTonDau = 0;
+    this.tongNhap = 0;
+    this.tongXuat = 0;
+    this.tongTonCuoi = 0;
+    this.tongConLai = 0;
   }
-  handleClickFilter(e: MouseEvent){
-    if((e.target as HTMLElement).closest(".apexchart_sort_tonKho")){
+  handleClickFilter(e: MouseEvent) {
+    if ((e.target as HTMLElement).closest(".apexchart_sort_tonKho")) {
       e.preventDefault();
       e.stopPropagation();
     }
@@ -513,7 +518,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
         loaiVthh: this.formData.value.loaiVthh,
         tenLoaiVthh: this.tenLoaiVthh
       }
-      if(!body.loaiVthh) return this.notification.error(MESSAGE.ERROR, "Chưa có loại vật tư hàng hóa nào được chọn.");
+      if (!body.loaiVthh) return this.notification.error(MESSAGE.ERROR, "Chưa có loại vật tư hàng hóa nào được chọn.");
       this.bcNvQuanLyKhoTangService
         .ketXuat(body)
         .subscribe((blob) =>
