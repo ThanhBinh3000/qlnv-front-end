@@ -11,6 +11,7 @@ import {
   ThongtinDaugiaComponent
 } from './main-tochuc-trienkhai/thong-tin-dau-gia/chi-tiet-thong-tin-dau-gia/thongtin-daugia/thongtin-daugia.component';
 import {KeHoachBanDauGiaModule} from '../ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module';
+import {QuyetDinhPheDuyetKetQuaModule} from "../quyet-dinh-phe-duyet-ket-qua/quyet-dinh-phe-duyet-ket-qua.module";
 
 @NgModule({
   declarations: [
@@ -28,7 +29,7 @@ import {KeHoachBanDauGiaModule} from '../ke-hoach-ban-dau-gia/ke-hoach-ban-dau-g
     ComponentsModule,
     MainModule,
     KeHoachBanDauGiaModule,
-
+    QuyetDinhPheDuyetKetQuaModule
   ]
 })
 export class ToChucTrienKhaiModule {

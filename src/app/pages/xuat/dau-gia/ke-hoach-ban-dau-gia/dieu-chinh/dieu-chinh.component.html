@@ -233,6 +233,7 @@
                            [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-them-moi-dieu-chinh>
 </div>
+<!--Xem quyết định kế hoạch-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">

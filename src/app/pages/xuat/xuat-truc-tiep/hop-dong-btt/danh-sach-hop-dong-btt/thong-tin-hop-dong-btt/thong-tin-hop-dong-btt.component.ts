@@ -585,6 +585,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         soLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongKyHd, 0),
         donGia: this.dataTable[0].donGiaKyHd,
         thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0),
+        giaTri: this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0),
       });
     } else {
       this.dataTable.forEach((item) => {
@@ -608,6 +609,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       this.formData.patchValue({
         soLuong: this.dataTable.reduce((prev, cur) => prev + cur.soLuongKyHopDong, 0),
         thanhTien: this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0),
+        giaTri: this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0),
       });
     }
     await this.loadDiaDiemKho();
