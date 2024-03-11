@@ -49,7 +49,7 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
       tichLuongSdVt: ['', Validators.required],
       theTichSdVt: ['', Validators.required],
       theTichSdLt: ['', Validators.required],
-      namNhap: ['', Validators.required],
+      namNhap: [''],
       ngayNhapDay: [''],
       ngayXuatDoc: [''],
       loaiVthh: ['', Validators.required],
