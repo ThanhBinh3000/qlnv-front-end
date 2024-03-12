@@ -60,6 +60,7 @@ export class DanhMucDonViComponent implements OnInit {
       maDviCha: [""],
       tenDvi: ["", Validators.required],
       maDvi: [""],
+      maDinhDanh: [""],
       tenVietTat: [""],
       diaChi: [""],
       capDvi: [""],
