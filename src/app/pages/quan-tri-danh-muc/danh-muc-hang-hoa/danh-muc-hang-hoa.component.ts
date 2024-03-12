@@ -1,29 +1,26 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {NzFormatEmitEvent, NzTreeComponent} from 'ng-zorro-antd/tree';
 import {DonviService} from 'src/app/services/donvi.service';
-import {ResponseData, OldResponseData} from 'src/app/interfaces/response';
+import {OldResponseData} from 'src/app/interfaces/response';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {MESSAGE} from 'src/app/constants/message';
 import {HelperService} from 'src/app/services/helper.service';
-import {NzTreeSelectComponent} from 'ng-zorro-antd/tree-select';
-import {LOAI_DON_VI, TrangThaiHoatDong} from 'src/app/constants/status';
+import {TrangThaiHoatDong} from 'src/app/constants/status';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {NewHangHoaComponent} from "./new-hang-hoa/new-hang-hoa.component";
 import {DanhMucService} from "../../../services/danhmuc.service";
 import {UserService} from "../../../services/user.service";
 import {DanhMucTieuChuanService} from "../../../services/quantri-danhmuc/danhMucTieuChuan.service";
-import {TYPE_PAG} from "../../../constants/config";
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
+
 @Component({
   selector: 'app-danh-muc-hang-hoa',
   templateUrl: './danh-muc-hang-hoa.component.html',
   styleUrls: ['./danh-muc-hang-hoa.component.scss']
 })
 export class DanhMucHangHoaComponent implements OnInit {
-  @ViewChild('nzTreeSelectComponent', {static: false}) nzTreeSelectComponent!: NzTreeSelectComponent;
   searchValue = '';
   searchFilter = {
     soQD: '',

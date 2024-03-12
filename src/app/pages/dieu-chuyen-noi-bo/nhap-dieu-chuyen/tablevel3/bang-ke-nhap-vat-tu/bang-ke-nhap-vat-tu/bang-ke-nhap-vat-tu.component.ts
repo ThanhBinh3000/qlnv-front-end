@@ -122,9 +122,27 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
   };
 
   isShowDS() {
-    if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
-      return true
-    else return false
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BKNVT_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BKNVT_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BKNVT_XEM'))
+  }
+
+  isXoa() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BKNVT_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BKNVT_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BKNVT_XOA'))
+  }
+
+  isExport() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BKNVT_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BKNVT_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BKNVT_EXP'))
+  }
+
+  isThem() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BKNVT_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BKNVT_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BKNVT_THEM'))
+  }
+
+  isDuyetTP() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BKNVT_DUYET_TP') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BKNVT_DUYET_TP') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BKNVT_DUYET_TP'))
+  }
+
+  isDuyetLD() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BKNVT_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BKNVT_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BKNVT_DUYET_LDCCUC'))
   }
 
   isCuc() {

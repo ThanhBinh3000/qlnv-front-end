@@ -831,8 +831,24 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     this.approve(this.idInput, trangThai, mesg);
   }
 
+  isIN() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_VT_BBCBK_IN') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_VT_BBCBK_IN') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_VT_BBCBK_IN'))
+  }
+
+  isThem() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_VT_BBCBK_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_VT_BBCBK_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_VT_BBCBK_THEM'))
+  }
+
+  isDuyetTK() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_VT_BBCBK_DUYET_THUKHO') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_VT_BBCBK_DUYET_THUKHO') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_VT_BBCBK_DUYET_THUKHO'))
+  }
+
+  isDuyetLD() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_VT_BBCBK_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_VT_BBCBK_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_VT_BBCBK_DUYET_LDCCUC'))
+  }
+
   isTuChoi() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_TK || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+    return (this.formData.value.trangThai == STATUS.CHO_DUYET_TK && this.isDuyetTK()) || (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && this.isDuyetLD())
   }
 
   async tuChoi() {
@@ -846,7 +862,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   }
 
   isPheDuyet() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_TK || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+    return (this.formData.value.trangThai == STATUS.CHO_DUYET_TK && this.isDuyetTK()) || (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && this.isDuyetLD())
   }
 
   async pheDuyet() {

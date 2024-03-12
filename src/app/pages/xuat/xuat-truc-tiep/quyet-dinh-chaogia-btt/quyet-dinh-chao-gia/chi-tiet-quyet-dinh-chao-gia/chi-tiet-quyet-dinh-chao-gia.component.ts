@@ -156,6 +156,9 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
           break;
         case "saveAndSend":
           this.setValidForm();
+          if (!this.validateSoLuong()) {
+            return;
+          }
           await this.saveAndSend(body, trangThai, msg, msgSuccess);
           break;
         case "approve":
@@ -173,6 +176,34 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
     }
+  }
+
+  validateSoLuong() {
+    for (let decision of this.dataTable) {
+      for (let item of decision.children) {
+        let tongLuongDaChon = 0;
+        let giaCaoNhat = 0;
+        let toChucLuaChon = null;
+        for (let child of item.children) {
+          if (child.luaChon) {
+            tongLuongDaChon += child.soLuong;
+            if (child.donGia > giaCaoNhat) {
+              giaCaoNhat = child.donGia;
+              toChucLuaChon = child.tochucCanhan;
+            }
+          }
+        }
+        if (tongLuongDaChon > item.soLuongDeXuat) {
+          this.notification.error(MESSAGE.ERROR, `Tổng lượng đã chọn cho mục ${item.tenDiemKho} với mã phần hàng là ${item.maDviTsan} vượt quá lượng đề xuất.`);
+          return false;
+        }
+        if (toChucLuaChon === null) {
+          this.notification.error(MESSAGE.ERROR, `Không có tổ chức hoặc cá nhân nào được chọn cho mục ${item.tenDiemKho} với mã phần hàng là ${item.maDviTsan}.`);
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   async openThongtinChaoGia() {

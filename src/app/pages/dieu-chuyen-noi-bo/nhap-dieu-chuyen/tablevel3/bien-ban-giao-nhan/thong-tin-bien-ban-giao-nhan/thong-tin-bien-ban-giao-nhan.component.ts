@@ -604,7 +604,17 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
     await this.spinner.hide();
   }
 
+  isIN() {
+    return this.isCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBGN_IN') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBGN_IN') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBGN_IN'))
+  }
 
+  isThem() {
+    return this.isCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBGN_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBGN_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBGN_THEM'))
+  }
+
+  isDuyet() {
+    return this.isCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBGN_DUYET') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBGN_DUYET') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBGN_DUYET'))
+  }
 
   isGuiDuyet() {
     return this.isView && this.formData.value.trangThai !== STATUS.DU_THAO
@@ -617,7 +627,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
   }
 
   isTuChoi() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDC && this.isDuyet()
   }
 
   async tuChoi() {
@@ -629,7 +639,7 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
   }
 
   isPheDuyet() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDC && this.isDuyet()
   }
 
   async pheDuyet() {

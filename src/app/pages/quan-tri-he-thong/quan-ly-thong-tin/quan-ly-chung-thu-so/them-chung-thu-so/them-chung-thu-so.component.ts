@@ -14,6 +14,7 @@ import { Base2Component } from "src/app/components/base2/base2.component";
 import dayjs from "dayjs";
 import moment from "moment";
 import { DanhMucService } from "src/app/services/danhmuc.service";
+import { QlNguoiSuDungService } from "src/app/services/quantri-nguoidung/qlNguoiSuDung.service";
 
 @Component({
   selector: 'app-them-chung-thu-so',
@@ -27,6 +28,7 @@ export class ThemChungThuSoComponent extends Base2Component implements OnInit {
   isView = false
   data?: any
   dsCT: any[] = [];
+  userList: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -39,13 +41,15 @@ export class ThemChungThuSoComponent extends Base2Component implements OnInit {
     private donViService: DonviService,
     private mangLuoiKhoService: MangLuoiKhoService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
-
+    private qlNsdService: QlNguoiSuDungService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLyHangTrongKhoService);
     this.formData = this.fb.group({
       certificateNumber: [, [Validators.required]],
       startDate: [, [Validators.required]],
       endDate: [, [Validators.required]],
+      userId: [, [Validators.required]],
+      userName: [, [Validators.required]],
       description: [],
       loaiChungThu: [, [Validators.required]],
       note: [],
@@ -65,6 +69,36 @@ export class ThemChungThuSoComponent extends Base2Component implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsCT = res.data
     }
+  }
+
+  async search(username) {
+    this.spinner.show();
+    let body: any = {
+      userType: 'ALL',
+      username
+    };
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1,
+    }
+    let res = await this.qlNsdService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+
+      this.userList = data.content.map(user => {
+        return {
+          userId: user.id,
+          username: user.username
+        }
+      });
+    }
+    this.spinner.hide();
+  }
+
+  selectUserLDap(data) {
+    this.formData.patchValue({
+      userId: data.userId
+    })
   }
 
   handleOk(item: any) {
