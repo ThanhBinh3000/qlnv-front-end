@@ -26,7 +26,9 @@ export class DanhMucDungChungComponent implements OnInit {
 
   formData: FormGroup;
 
-  danhMucList: any[];
+  listTenDm: any[];
+  listLoai: any[];
+  listMa: any[];
 
   setOfCheckedId = new Set<number>();
 
@@ -412,6 +414,17 @@ export class DanhMucDungChungComponent implements OnInit {
       });
     } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+  changeGtri(event: any, column: string) {
+    let arr  = this.dataTableAll.filter(option =>
+      option[column].toLowerCase().includes(event.toLowerCase())
+    );
+    if (arr && arr.length > 0) {
+      this.listTenDm = arr.map(item => item.giaTri);
+      this.listMa = arr.map(item => item.ma);
+      this.listLoai = arr.map(item => item.loai);
     }
   }
 }

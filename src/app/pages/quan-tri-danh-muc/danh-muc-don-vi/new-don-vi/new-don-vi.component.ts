@@ -51,6 +51,7 @@ export class NewDonViComponent implements OnInit {
       maDviCha: [''],
       tenDvi: ['', Validators.required],
       maDvi: ['', Validators.required],
+      maDinhDanh: ['', Validators.required],
       diaChi: [''],
       tenVietTat: [''],
       sdt: [''],

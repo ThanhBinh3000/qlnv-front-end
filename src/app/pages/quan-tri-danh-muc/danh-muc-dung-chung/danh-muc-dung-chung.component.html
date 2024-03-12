@@ -37,20 +37,33 @@
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.loai"
-               (blur)="search()" (keydown.enter)="search()" />
+               (blur)="search()" (keydown.enter)="search()" [nzAutocomplete]="auto" (ngModelChange)="changeGtri($event, 'loai')"
+              />
             </nz-input-group>
+            <nz-autocomplete #auto>
+              <nz-auto-option *ngFor="let option of listLoai" [nzValue]="option">{{ option }}
+              </nz-auto-option>
+            </nz-autocomplete>
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.ma"
-                     (blur)="search()" (keydown.enter)="search()" />
+                     (blur)="search()" (keydown.enter)="search()" [nzAutocomplete]="auto1" (ngModelChange)="changeGtri($event, 'ma')" />
             </nz-input-group>
+            <nz-autocomplete #auto1>
+              <nz-auto-option *ngFor="let option of listMa" [nzValue]="option">{{ option }}
+              </nz-auto-option>
+            </nz-autocomplete>
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.giaTri"
-                     (blur)="search()" (keydown.enter)="search()" />
+                     (blur)="search()" (keydown.enter)="search()" [nzAutocomplete]="auto2" (ngModelChange)="changeGtri($event, 'giaTri')" />
             </nz-input-group>
+            <nz-autocomplete nz #auto2>
+              <nz-auto-option *ngFor="let option of listTenDm" [nzValue]="option">{{ option }}
+              </nz-auto-option>
+            </nz-autocomplete>
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
