@@ -25,7 +25,7 @@ export class BaoCaoKetQuaHoTroGaoComponent extends Base2Component implements OnI
   excelSrc: any;
   pdfBlob: any;
   excelBlob: any;
-  nameFile = "bao-cao-tien-do-bdg-thoc-gao-theo-nam";
+  nameFile = "ket-qua-ho-tro-gao-hoc-sinh";
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -64,7 +64,7 @@ export class BaoCaoKetQuaHoTroGaoComponent extends Base2Component implements OnI
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      await this.bcNhapXuatMuaBanHangDTQGService.baoCaoTienDoBdgThocGaoTheoNam(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.ketQuaHoTroGaoHocSinh(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, this.nameFile + ".xlsx");
@@ -92,7 +92,7 @@ export class BaoCaoKetQuaHoTroGaoComponent extends Base2Component implements OnI
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "pdf";
-      await this.bcNhapXuatMuaBanHangDTQGService.baoCaoTienDoBdgThocGaoTheoNam(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.ketQuaHoTroGaoHocSinh(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
