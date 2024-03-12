@@ -1,18 +1,19 @@
 <div *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC')">
   <nz-affix *ngIf="!isChiCuc()" [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
     <ul nz-menu nzMode="horizontal">
-      <li nz-menu-item nzSelected (click)="selectTab(0)">
+      <li nz-menu-item nzSelected (click)="selectTab('TC')"
+        *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC')">
         Quyết định điều chuyển của Tổng cục
       </li>
-      <li nz-menu-item (click)="selectTab(1)">
+      <li nz-menu-item (click)="selectTab('CUC')" *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_CUC')">
         Quyết định điều chuyển của Cục
       </li>
     </ul>
   </nz-affix>
 
-  <app-quyet-dinh-dieu-chuyen-tc *ngIf="tabSelected == 0" [idTHop]="idTongHop" [qdDcId]="qdDcId"
+  <app-quyet-dinh-dieu-chuyen-tc *ngIf="tabSelected == 'TC'" [idTHop]="idTongHop" [qdDcId]="qdDcId"
     [isViewOnModal]="isViewOnModal"></app-quyet-dinh-dieu-chuyen-tc>
-  <app-quyet-dinh-dieu-chuyen-cuc *ngIf="tabSelected == 1"
+  <app-quyet-dinh-dieu-chuyen-cuc *ngIf="tabSelected == 'CUC'"
     [isViewOnModal]="isViewOnModal"></app-quyet-dinh-dieu-chuyen-cuc>
 
 

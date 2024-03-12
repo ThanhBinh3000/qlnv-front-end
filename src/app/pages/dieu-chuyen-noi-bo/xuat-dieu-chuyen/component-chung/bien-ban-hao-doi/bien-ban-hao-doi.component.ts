@@ -107,6 +107,33 @@ export class BienBanHaoDoiDieuChuyenComponent extends Base2Component implements 
       ngayXuatKho: '',
       tenTrangThai: '',
     };
+  }
+
+
+  userInfo: UserLogin;
+  userdetail: any = {};
+  selectedId: number = 0;
+  isView = false;
+  children: any = [];
+  expandSetString = new Set<string>();
+
+
+  async ngOnInit(): Promise<void> {
+    try {
+      this.spinner.show();
+      this.setMaQuyen();
+      this.initData()
+      await this.timKiem();
+    }
+    catch (e) {
+      console.log('error: ', e)
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+    finally {
+      this.spinner.hide();
+    }
+  }
+  setMaQuyen() {
     switch (this.loaiMaQuyen) {
       case 'DCNB_LT_KHACTK':
         this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_KHACTK_XK_LT_BBHD_XEM';
@@ -150,30 +177,6 @@ export class BienBanHaoDoiDieuChuyenComponent extends Base2Component implements 
         break;
       default:
         break;
-    }
-  }
-
-
-  userInfo: UserLogin;
-  userdetail: any = {};
-  selectedId: number = 0;
-  isView = false;
-  children: any = [];
-  expandSetString = new Set<string>();
-
-
-  async ngOnInit(): Promise<void> {
-    try {
-      this.spinner.show()
-      this.initData()
-      await this.timKiem();
-    }
-    catch (e) {
-      console.log('error: ', e)
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-    finally {
-      this.spinner.hide();
     }
   }
 

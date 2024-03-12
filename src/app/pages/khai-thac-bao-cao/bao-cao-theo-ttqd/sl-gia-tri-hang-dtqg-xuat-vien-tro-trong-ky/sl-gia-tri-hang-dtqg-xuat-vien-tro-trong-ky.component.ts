@@ -43,7 +43,12 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
     {text: 'Báo cáo Quý', value: 1},
     {text: 'Báo cáo Năm', value: 2}
   ]
-
+  dsDvtt: any[] = [
+    {text: 'Đồng', value: '01'},
+    {text: 'Nghìn đồng', value: '02'},
+    {text: 'Triệu đồng', value: '03'},
+    {text: 'Tỷ đồng', value: '04'},
+  ]
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -66,6 +71,7 @@ export class SlGiaTriHangDtqgXuatVienTroTrongKyComponent extends Base2Component 
         tenChiCuc: null,
         dviNhanBaoCao: null,
         loaiBc: null,
+        dvtt: ['01', [Validators.required]],
         loaiKyBc: ['02', [Validators.required]],
         loaiVthh: null,
         chungLoaiVthh: null,

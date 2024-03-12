@@ -117,9 +117,31 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
   };
 
   isShowDS() {
-    if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
-      return true
-    else return false
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_BBNTBQLD_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_BBNTBQLD_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_BBNTBQLD_XEM'))
+  }
+
+  isXoa() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_BBNTBQLD_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_BBNTBQLD_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_BBNTBQLD_XOA'))
+  }
+
+  isExport() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_BBNTBQLD_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_BBNTBQLD_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_BBNTBQLD_EXP'))
+  }
+
+  isThem() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_BBNTBQLD_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_BBNTBQLD_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_BBNTBQLD_THEM'))
+  }
+
+  isDuyetTK() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_BBNTBQLD_DUYET_THUKHO') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_BBNTBQLD_DUYET_THUKHO') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_BBNTBQLD_DUYET_THUKHO'))
+  }
+
+  isDuyetKT() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_BBNTBQLD_DUYET_KETOAN') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_BBNTBQLD_DUYET_KETOAN') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_BBNTBQLD_DUYET_KETOAN'))
+  }
+
+  isDuyetLD() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_BBNTBQLD_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_BBNTBQLD_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_BBNTBQLD_DUYET_LDCCUC'))
   }
 
   isCuc() {
@@ -131,11 +153,11 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
   }
 
   isDuyet(row) {
-    return this.userService.isChiCuc() && (row.trangThai === STATUS.CHO_DUYET_TK || row.trangThai === STATUS.CHO_DUYET_KT || row.trangThai === STATUS.CHO_DUYET_LDCC)
+    return this.userService.isChiCuc() && this.isDuyetLD() && (row.trangThai === STATUS.CHO_DUYET_TK || row.trangThai === STATUS.CHO_DUYET_KT || row.trangThai === STATUS.CHO_DUYET_LDCC)
   }
 
   isEdit(row) {
-    return this.userService.isChiCuc() && (row.trangThai == STATUS.DU_THAO || row.trangThai == STATUS.TU_CHOI_TK || row.trangThai == STATUS.TU_CHOI_KT || row.trangThai == STATUS.TU_CHOI_LDCC)
+    return this.userService.isChiCuc() && this.isThem() && (row.trangThai == STATUS.DU_THAO || row.trangThai == STATUS.TU_CHOI_TK || row.trangThai == STATUS.TU_CHOI_KT || row.trangThai == STATUS.TU_CHOI_LDCC)
   }
 
   selectTab(tab: number) {
@@ -182,7 +204,7 @@ export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component imple
       this.formData.value.denNgayKtnt = dayjs(this.formData.value.denNgayKtnt).format('YYYY-MM-DD')
     }
     let body = this.formData.value
-    if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
+    // if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1

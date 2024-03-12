@@ -12,6 +12,10 @@ import {
 import {saveAs} from 'file-saver';
 import {STATUS} from "../../../../../constants/status";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {
+  QuyetDinhPdKhBanTrucTiepService
+} from "../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service";
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-danh-sach-hop-dong-btt',
@@ -23,6 +27,8 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
   isQuanLy: boolean;
   isAddNew: boolean;
+  check: boolean;
+  phanLoai: string;
   listTrangThaiHd: any = [];
   listTrangThaiXh: any = [];
   idQdPd: number = 0;
@@ -39,8 +45,9 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private qdPdKetQuaBttService: QdPdKetQuaBttService,
+    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
+    super(httpClient, storageService, notification, spinner, modal, null);
     this.formData = this.fb.group({
       namKh: null,
       soHopDong: null,
@@ -50,6 +57,7 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
       ngayKyHopDongDen: null,
       trangThai: null,
       loaiVthh: null,
+      lastest: null,
     });
     this.filterTable = {
       namKh: null,
@@ -97,11 +105,8 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   async ngOnInit() {
     try {
       await this.spinner.show();
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        trangThai: STATUS.DA_DUYET_LDC
-      })
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -110,11 +115,69 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  redirectDetail(id: number, boolean?: boolean) {
+  async search() {
+    try {
+      await this.spinner.show();
+      const body = this.formData.value;
+      body.paggingReq = {
+        limit: this.pageSize,
+        page: this.page - 1
+      };
+      const [resKq, resKh] = await Promise.all([
+        this.qdPdKetQuaBttService.search({
+          loaiVthh: this.loaiVthh,
+          trangThai: STATUS.DA_DUYET_LDC,
+        }),
+        this.quyetDinhPdKhBanTrucTiepService.search({
+          loaiVthh: this.loaiVthh,
+          trangThai: STATUS.BAN_HANH,
+          lastest: 1
+        })
+      ]);
+      const dataKq = resKq.data.content.map(item => {
+        return {...item, check: true};
+      });
+      const dataKh = resKh.data.content.map(item => {
+        return {...item, check: false};
+      });
+      const combinedData = [...dataKq,
+        ...dataKh]
+      if (combinedData) {
+        this.dataTable = combinedData;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+            item.children = item.check ? item.children : item.children.filter(s => s.pthucBanTrucTiep === null);
+          });
+          this.dataTable = this.dataTable.filter(s => s.children.length > 0);
+        }
+        this.dataTableAll = cloneDeep(this.dataTable);
+      } else {
+        this.dataTable = [];
+        this.notification.error(MESSAGE.ERROR, resKh.msg);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  redirectDetail(id: number, boolean?: boolean, check?: boolean) {
+    if (id === 0 && this.checkPrice && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
+    if (id === 0 && this.checkPrice && this.checkPrice.booleanNhapXuat) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
+    this.check = check;
     this.isQuanLy = boolean;
     this.isAddNew = !boolean;
+    this.phanLoai = "QĐKQ";
   }
 
   exportDataHopDong(fileName?: string) {
@@ -173,17 +236,21 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
-    const startDate = this.formData.value[formDataKey + 'Tu'];
-    const endDate = this.formData.value[formDataKey + 'Den'];
-    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
-  };
-
   disabledNgayKyHopDongTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyHopDongDen, 'ngayKyHopDong');
+    if (!startValue || !this.formData.value.ngayKyHopDongDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayKyHopDongDen.getFullYear(), this.formData.value.ngayKyHopDongDen.getMonth(), this.formData.value.ngayKyHopDongDen.getDate());
+    return startDay > endDay;
   };
 
   disabledNgayKyHopDongDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyHopDongTu, 'ngayKyHopDong');
+    if (!endValue || !this.formData.value.ngayKyHopDongTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayKyHopDongTu.getFullYear(), this.formData.value.ngayKyHopDongTu.getMonth(), this.formData.value.ngayKyHopDongTu.getDate());
+    return endDay < startDay;
   };
 }

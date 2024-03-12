@@ -301,7 +301,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
 
   async onChangeChiCuc(event) {
-    debugger
     let body = {
       maDvi: event,
       type: this.listType

@@ -9,35 +9,37 @@
               <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="6">
             <label class="search__label"> Số kế hoạch/đề xuất </label>
             <input placeholder="" nz-input formControlName="soDxuat"/>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="8">
             <label class="search__label"> Ngày tạo</label>
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12" class="cus-start-date">
+            <div nz-row>
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayTaoTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayTaoTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
+              <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayTaoDen" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayTaoDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                formControlName="ngayTaoDen" nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
               </div>
             </div>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="8">
             <label class="search__label"> Ngày duyệt</label>
-            <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12" class="cus-start-date">
+            <div nz-row>
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayDuyetTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayDuyetTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
+              <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayDuyetDen" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayDuyetDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                formControlName="ngayDuyetDen" nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
               </div>
             </div>
           </div>
@@ -45,7 +47,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
+          <button nz-button class="search__button--clear" (click)="clearForm({loaiVthh: loaiVthh})">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -243,7 +245,7 @@
                                             (showListEvent)="showList()">
   </app-thong-tin-quyet-dinh-uy-quyen-ban-le>
 </div>
-<!--xem -->
+<!--xem quyết định kế hoạch -->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModal('QdKh')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
@@ -257,6 +259,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem điều chỉnh kế hoạch-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdDc" (nzOnCancel)="closeModal('QdDc')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-chi-tiet-dieu-chinh-ban-truc-tiep [idInput]="idQdDc" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
@@ -270,6 +273,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem đề xuất-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewDxKh" (nzOnCancel)="closeModal('DxKh')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-de-xuat-kh-ban-truc-tiep [idInput]="idDxKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true"

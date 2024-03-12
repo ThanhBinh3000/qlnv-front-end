@@ -27,14 +27,14 @@
       <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && !isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_BBBGM_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_THEM'))"
               type="button" class="btn btn-sub xanh-nhat"
-              (click)="saveAndSend(STATUS.CHO_DUYET_LDCC, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
+              (click)="saveAndApproveAndReject('saveAndSend',STATUS.CHO_DUYET_LDCC, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC)  && !isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_BBBGM_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_THEM'))"
               type="button" class="btn btn-main"
-              (click)="save()">
+              (click)="saveAndApproveAndReject('createUpdate')">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -408,7 +408,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-checkbox-group
-                    [(ngModel)]="danhSachCtieuCluong" [ngModelOptions]="{standalone: true}" nzDisabled>
+                    [(ngModel)]="danhSachCtieuCluong" [ngModelOptions]="{standalone: true}" [nzDisabled]="isView">
                   </nz-checkbox-group>
                 </nz-form-control>
               </nz-form-item>

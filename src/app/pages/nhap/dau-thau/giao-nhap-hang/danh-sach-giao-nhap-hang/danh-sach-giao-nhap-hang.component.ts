@@ -15,6 +15,9 @@ import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { STATUS } from 'src/app/constants/status';
 import { UserLogin } from 'src/app/models/userlogin';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
 
 @Component({
   selector: 'app-danh-sach-giao-nhap-hang',
@@ -22,7 +25,7 @@ import { UserLogin } from 'src/app/models/userlogin';
   styleUrls: ['./danh-sach-giao-nhap-hang.component.scss']
 })
 
-export class DanhSachGiaoNhapHangComponent implements OnInit {
+export class DanhSachGiaoNhapHangComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
   @Input()
@@ -103,15 +106,17 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   };
   constructor(
     private router: Router,
-    private spinner: NgxSpinnerService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
     public userService: UserService,
-    public globals: Globals,
     private danhMucService: DanhMucService,
-    private userSerVice: UserService
+    private userSerVice: UserService,
+    httpClient: HttpClient,
+    spinner: NgxSpinnerService,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    modal: NzModalService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNhapHangService);
   }
 
   async ngOnInit() {
@@ -126,6 +131,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       }
       await this.loadDsCloaiVthh(this.loaiVthh);
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -164,6 +170,10 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   }
 
   redirectToThongTin(id: number, isView?: boolean) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;
@@ -256,6 +266,10 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

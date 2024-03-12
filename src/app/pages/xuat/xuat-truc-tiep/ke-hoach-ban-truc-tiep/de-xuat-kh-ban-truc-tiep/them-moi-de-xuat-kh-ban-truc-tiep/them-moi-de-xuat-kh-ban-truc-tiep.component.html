@@ -37,7 +37,7 @@
               || formData.value.trangThai == STATUS.TU_CHOI_LDC) && !isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM'))"
               type="button" class="btn btn-sub xanh-nhat"
-              (click)="saveAndSend(STATUS.CHO_DUYET_TP, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
+              (click)="saveAndBrowse('saveAndSend' ,STATUS.CHO_DUYET_TP, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
@@ -45,7 +45,7 @@
               || formData.value.trangThai == STATUS.TU_CHOI_LDC)  && !isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM'))"
               type="button" class="btn btn-main"
-              (click)="save()">
+              (click)="saveAndBrowse('createUpdate')">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -242,10 +242,11 @@
               <nz-form-item class="form-item">
                 <nz-form-label [nzNoColon]="true"> Thời gian dự kiến tổ chức bán trực tiếp</nz-form-label>
                 <nz-form-control nz-col>
-                  <div nz-row [nzGutter]="24">
+                  <div nz-row>
                     <div nz-col [nzSpan]="12" class="cus-start-date">
                       <nz-date-picker [nzDisabledDate]="disabledTgianTocChucTu" nzFormat="dd/MM/yyyy"
-                                      formControlName="tgianDkienTu" nzPlaceHolder="Ngày bắt đầu" [nzDisabled]="isView">
+                                      formControlName="tgianDkienTu" nzPlaceHolder="Ngày bắt đầu"
+                                      [nzDisabled]="isView">
                       </nz-date-picker>
                     </div>
                     <div nz-col [nzSpan]="12" class="cus-end-date">
@@ -400,7 +401,7 @@
             <th class="text-left">Điểm kho</th>
             <th class="text-left">Lô kho</th>
             <th class="text-left"> Năm nhập</th>
-            <th class="text-left">Mã đơn vị tài sản</th>
+            <th class="text-left"> Mã phần hàng</th>
             <th class="text-center">Tồn kho</th>
             <th class="text-center">SL xuất bán <br>TT đề xuất</th>
             <th class="text-left">ĐVT</th>

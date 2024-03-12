@@ -156,6 +156,26 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
       ngayXuatDocKho: '',
       tenTrangThai: '',
     };
+
+    console.log("loaiMaQuyen1", this.loaiMaQuyen, this.MA_QUYEN)
+  }
+
+  async ngOnInit() {
+    this.spinner.show();
+    super.ngOnInit();
+    try {
+      this.setMaQuyen();
+      this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd, maDvi: this.userInfo.MA_DVI, trangThai: STATUS.BAN_HANH })
+      await this.timKiem()
+    } catch (e) {
+      console.log('error: ', e);
+      this.notification?.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+    finally {
+      this.spinner.hide()
+    }
+  }
+  setMaQuyen() {
     switch (this.loaiMaQuyen) {
       case 'DCNB_LT_KHACTK':
         this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_KHACTK_KTCL_LT_PKNCL_XEM';
@@ -213,24 +233,6 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
         break;
       default:
         break;
-    }
-  }
-
-  async ngOnInit() {
-    this.spinner.show();
-    super.ngOnInit();
-    try {
-      // if (this.typeVthh == 'tat-ca') {
-      //   this.isTatCa = true;
-      // }
-      this.formData.patchValue({ loaiDc: this.loaiDc, isVatTu: this.isVatTu, thayDoiThuKho: this.thayDoiThuKho, type: this.type, typeQd: this.typeQd, maDvi: this.userInfo.MA_DVI, trangThai: STATUS.BAN_HANH })
-      await this.timKiem()
-    } catch (e) {
-      console.log('error: ', e);
-      this.notification?.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-    finally {
-      this.spinner.hide()
     }
   }
   async timKiem(): Promise<void> {
@@ -583,7 +585,8 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Compon
     return false
   }
   checkRoleView(trangThai: STATUS): boolean {
-    if (this.userService.isAccessPermisson(this.MA_QUYEN.XEM) && trangThai && !this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai)) {
+    console.log("trangThai", trangThai)
+    if (this.userService.isAccessPermisson(this.MA_QUYEN.XEM) && !this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai)) {
       return true
     }
     return false

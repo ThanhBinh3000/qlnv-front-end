@@ -117,6 +117,7 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
         await this.loadDsVthh();
       }
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -133,6 +134,14 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
   }
 
   redirectDetail(id, isView: boolean) {
+    if (id === 0 && this.checkPrice && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
+    if (id === 0 && this.checkPrice && this.checkPrice.booleanNhapXuat) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;
@@ -176,18 +185,22 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
     }
   }
 
-  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
-    const startDate = this.formData.value[formDataKey + 'Tu'];
-    const endDate = this.formData.value[formDataKey + 'Den'];
-    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
-  };
-
   disabledNgayKyQdNvTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyQdNvDen, 'ngayKyQdNv');
+    if (!startValue || !this.formData.value.ngayKyQdNvDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayKyQdNvDen.getFullYear(), this.formData.value.ngayKyQdNvDen.getMonth(), this.formData.value.ngayKyQdNvDen.getDate());
+    return startDay > endDay;
   };
 
   disabledNgayKyQdNvDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyQdNvTu, 'ngayKyQdNv');
+    if (!endValue || !this.formData.value.ngayKyQdNvTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayKyQdNvTu.getFullYear(), this.formData.value.ngayKyQdNvTu.getMonth(), this.formData.value.ngayKyQdNvTu.getDate());
+    return endDay < startDay;
   };
 
   isActionAllowed(action: string, data: any): boolean {

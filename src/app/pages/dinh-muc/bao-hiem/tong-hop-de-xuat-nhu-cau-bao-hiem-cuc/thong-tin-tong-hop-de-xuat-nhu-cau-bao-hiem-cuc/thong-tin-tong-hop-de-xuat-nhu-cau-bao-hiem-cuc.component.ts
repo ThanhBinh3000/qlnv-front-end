@@ -99,7 +99,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     let body = this.formDataTongHop.value;
     if (!body.listSoCv || body.listSoCv.length == 0) {
       let arr = this.listDxCuc.map(item => item.soCv);
-      body.listSoCv = arr && arr.length > 0 ?  arr.toString() : [];
+      body.listSoCv = arr && arr.length > 0 ?  arr.toString() : "";
     } else {
       body.listSoCv = body.listSoCv.toString();
     }
@@ -313,7 +313,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
 
   sumSlHang(row: string, table : any[]) : number {
     let result = 0;
-    let arr = table.filter(it => it.nhomCha);
+    let arr = table.filter(it => !it.nhomCha);
     const sum = arr.reduce((prev, cur) => {
       prev += cur[row];
       return prev;
@@ -384,10 +384,10 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
         khoiTichLt5000 : this.sumTable(tct5000, 'khoiTich'),
         slKhoGt5000 : tcGt5000.length,
         slKhoLt5000 : tct5000.length,
-        giaTriHtGt5000 : this.sumTable(tcGt5000, 'giaTriHtKhoHt'),
-        giaTriHtLt5000 : this.sumTable(tct5000, 'giaTriHtKhoHt'),
-        giaTriKhGt5000 : this.sumTable(tcGt5000, 'giaTriHtKhoKh'),
-        giaTriKhLt5000 : this.sumTable(tct5000, 'giaTriHtKhoKh'),
+        giaTriHtGt5000 : this.sumTable(tcGt5000, 'giaTriDkKhoHt'),
+        giaTriHtLt5000 : this.sumTable(tct5000, 'giaTriDkKhoHt'),
+        giaTriKhGt5000 : this.sumTable(tcGt5000, 'giaTriDkKhoKh'),
+        giaTriKhLt5000 : this.sumTable(tct5000, 'giaTriDkKhoKh'),
       }
       arrResult.push(item);
       arr = chain(arrCopy)
@@ -428,10 +428,10 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
           item.khoiTichLt5000 = this.sumTable(cucLt5000, 'khoiTich');
           item.slKhoGt5000 = cucGt5000.length;
           item.slKhoLt5000 = cucLt5000.length;
-          item.giaTriHtGt5000 = this.sumTable(cucGt5000, 'giaTriHtKhoHt');
-          item.giaTriHtLt5000 = this.sumTable(cucLt5000, 'giaTriHtKhoHt');
-          item.giaTriKhGt5000 = this.sumTable(cucGt5000, 'giaTriHtKhoKh');
-          item.giaTriKhLt5000 = this.sumTable(cucLt5000, 'giaTriHtKhoKh');
+          item.giaTriHtGt5000 = this.sumTable(cucGt5000, 'giaTriDkKhoHt');
+          item.giaTriHtLt5000 = this.sumTable(cucLt5000, 'giaTriDkKhoHt');
+          item.giaTriKhGt5000 = this.sumTable(cucGt5000, 'giaTriDkKhoKh');
+          item.giaTriKhLt5000 = this.sumTable(cucLt5000, 'giaTriDkKhoKh');
           arrResult.push(item);
           item.children.forEach((child1, index) => {
             child1.stt = index + 1;
@@ -441,10 +441,10 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
             child1.khoiTichLt5000 = this.sumTable(ccLt5000, 'khoiTich');
             child1.slKhoGt5000 = ccGt5000.length;
             child1.slKhoLt5000 = ccLt5000.length;
-            child1.giaTriHtGt5000 = this.sumTable(ccGt5000, 'giaTriHtKhoHt');
-            child1.giaTriHtLt5000 = this.sumTable(ccLt5000, 'giaTriHtKhoHt');
-            child1.giaTriKhGt5000 = this.sumTable(ccGt5000, 'giaTriHtKhoKh');
-            child1.giaTriKhLt5000 = this.sumTable(ccLt5000, 'giaTriHtKhoKh');
+            child1.giaTriHtGt5000 = this.sumTable(ccGt5000, 'giaTriDkKhoHt');
+            child1.giaTriHtLt5000 = this.sumTable(ccLt5000, 'giaTriDkKhoHt');
+            child1.giaTriKhGt5000 = this.sumTable(ccGt5000, 'giaTriDkKhoKh');
+            child1.giaTriKhLt5000 = this.sumTable(ccLt5000, 'giaTriDkKhoKh');
             arrResult.push(child1);
             child1.children.forEach(child2 => {
               let dkGt5000 = arrCopy.filter(item =>  item.khoiTich  &&  child2.diemKho &&  item.khoiTich > 5000  && item.nhaKho.startsWith(child2.diemKho) );
@@ -453,10 +453,10 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
               child2.khoiTichLt5000 = this.sumTable(dkLt5000, 'khoiTich');
               child2.slKhoGt5000 = dkGt5000.length;
               child2.slKhoLt5000 = dkLt5000.length;
-              child2.giaTriHtGt5000 = this.sumTable(dkGt5000, 'giaTriHtKhoHt');
-              child2.giaTriHtLt5000 = this.sumTable(dkLt5000, 'giaTriHtKhoHt');
-              child2.giaTriKhGt5000 = this.sumTable(dkGt5000, 'giaTriHtKhoKh');
-              child2.giaTriKhLt5000 = this.sumTable(dkLt5000, 'giaTriHtKhoKh');
+              child2.giaTriHtGt5000 = this.sumTable(dkGt5000, 'giaTriDkKhoHt');
+              child2.giaTriHtLt5000 = this.sumTable(dkLt5000, 'giaTriDkKhoHt');
+              child2.giaTriKhGt5000 = this.sumTable(dkGt5000, 'giaTriDkKhoKh');
+              child2.giaTriKhLt5000 = this.sumTable(dkLt5000, 'giaTriDkKhoKh');
               arrResult.push(child2);
               child2.children.forEach(child3 => {
                 child3.tenDiemKho = '';
@@ -464,10 +464,10 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
                 child3.khoiTichLt5000 = child3.khoiTich && child3.khoiTich <= 5000 ? child3.khoiTich : 0
                 child3.slKhoGt5000 = child3.khoiTich && child3.khoiTich > 5000 ? 1 : 0
                 child3.slKhoLt5000 = child3.khoiTich && child3.khoiTich <= 5000 ? 1 : 0
-                child3.giaTriHtGt5000 = child3.khoiTich && child3.khoiTich > 5000 ? child3.giaTriHtKhoHt : 0
-                child3.giaTriHtLt5000 = child3.khoiTich && child3.khoiTich <= 5000 ? child3.giaTriHtKhoHt : 0
-                child3.giaTriKhGt5000 = child3.khoiTich && child3.khoiTich > 5000 ? child3.giaTriHtKhoKh : 0
-                child3.giaTriKhLt5000 = child3.khoiTich && child3.khoiTich <= 5000 ? child3.giaTriHtKhoKh : 0
+                child3.giaTriHtGt5000 = child3.khoiTich && child3.khoiTich > 5000 ? child3.giaTriDkKhoHt : 0
+                child3.giaTriHtLt5000 = child3.khoiTich && child3.khoiTich <= 5000 ? child3.giaTriDkKhoHt : 0
+                child3.giaTriKhGt5000 = child3.khoiTich && child3.khoiTich > 5000 ? child3.giaTriDkKhoKh : 0
+                child3.giaTriKhLt5000 = child3.khoiTich && child3.khoiTich <= 5000 ? child3.giaTriDkKhoKh : 0
                 arrResult.push(child3);
               })
             })
@@ -531,7 +531,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
             child.slKhoLt5000 = child.slDkLt5000 ?  child.slDkLt5000 : 0
             result.push(child);
           })
-          let sumList = cuc.listQlDinhMucThHangDtqgBh.filter(item => item.nhomCha)
+          let sumList = cuc.listQlDinhMucThHangDtqgBh.filter(item => !item.nhomCha)
           itemCuc.giaTriHtGt5000 = this.sumTable(sumList, 'giaTriHtGt5000');
           itemCuc.giaTriHtLt5000 = this.sumTable(sumList, 'giaTriHtLt5000');
           itemCuc.slKhoGt5000 = this.sumTable(sumList, 'slKhoGt5000');

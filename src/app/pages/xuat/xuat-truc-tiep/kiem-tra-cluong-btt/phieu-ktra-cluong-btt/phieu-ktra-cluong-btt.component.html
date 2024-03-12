@@ -17,17 +17,18 @@
             <label class="search__label"> Số phiếu KNCL </label>
             <input nz-input formControlName="soPhieuKiemNghiem"/>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="6">
             <label class="search__label"> Ngày kiểm nghiệm </label>
             <div nz-row>
-              <div nz-col nzSpan="12" class="cus-start-date">
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartngayKnghiemTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayKiemNghiemMauTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
+              <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartngayKnghiemDen" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayKiemNghiemMauDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                formControlName="ngayKiemNghiemMauDen" nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
               </div>
             </div>
           </div>
@@ -59,7 +60,8 @@
       <div class="buttons">
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_KTCL_VT_KNCL_EXP') : userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_KNCL_EXP')"
-          type="button" class="btn btn-sub" (click)="exportData('danh-sach-phieu-kiem-nghiem-chat-luong-hang-DTQG.xlsx')">
+          type="button" class="btn btn-sub"
+          (click)="exportData('danh-sach-phieu-kiem-nghiem-chat-luong-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>
@@ -208,9 +210,10 @@
 </div>
 <div *ngIf="isDetail">
   <app-them-phieu-ktra-cluong-btt [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-                                  (showListEvent)="showList()">
+                                  [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-them-phieu-ktra-cluong-btt>
 </div>
+<!--Xem quyết định giao nhiệm vụ-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModal('QdNv')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-qd-giao-nv-xuat-btt [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
@@ -223,6 +226,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem biên bản lấy mẫu-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewLayMau" (nzOnCancel)="closeModal('layMau')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-bien-ban-lay-mau-btt [idInput]="idLayMau" [loaiVthh]="loaiVthh" [isViewOnModal]="true"

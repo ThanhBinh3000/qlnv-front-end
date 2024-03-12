@@ -261,10 +261,10 @@
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
   <app-them-moi-quyet-dinh-phe-duyet-ket-qua [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-                                             (showListEvent)="showList()">
+                                             [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-them-moi-quyet-dinh-phe-duyet-ket-qua>
 </div>
-
+<!--Xem quyết định kế hoạch-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal('QdPd')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
@@ -277,12 +277,12 @@
     </button>
   </div>
 </nz-modal>
-
+<!--Xem tổ chức triển khai-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThongTin"
           (nzOnCancel)="closeModal('MaThongBao')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--    <app-thongtin-daugia [idInput]="idThongTin" [isView]="true">-->
-    <!--    </app-thongtin-daugia>-->
+    <app-thongtin-daugia [idInput]="idThongTin" [isView]="true">
+    </app-thongtin-daugia>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal('MaThongBao')" class="modal__button--cancel">

@@ -290,10 +290,11 @@
                                          (showListEvent)="showList()">
   </app-them-de-xuat-ke-hoach-ban-dau-gia>
 </div>
+<!--Xem quyết định kế hoạch-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal('QdPd')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [isView]="true" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
-    </app-them-quyet-dinh-ban-dau-gia>
+    <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [isView]="true" [loaiVthh]="loaiVthh"
+                                     [isViewOnModal]="true"></app-them-quyet-dinh-ban-dau-gia>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal('QdPd')" class="modal__button--cancel">
@@ -302,8 +303,9 @@
     </button>
   </div>
 </nz-modal>
-<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModal('Thop')">
-  <ng-container *nzModalContent class="modal__content">
+<!--Xem tổng hợp-->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModal('Thop')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-tong-hop-ke-hoach-ban-dau-gia [idInput]="idThop" [isView]="true" [loaiVthh]="loaiVthh"
                                                 [isViewOnModal]="true">
     </app-them-moi-tong-hop-ke-hoach-ban-dau-gia>
@@ -315,6 +317,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem chỉ tiêu-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewChiTieu" (nzOnCancel)="closeModal('ChiTieu')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc [id]="idChiTieu" [isViewDetail]="true"

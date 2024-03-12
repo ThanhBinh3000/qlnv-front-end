@@ -24,7 +24,7 @@ import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-
 export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Input() idInput: number;
-
+  @Input() checkPrice: any;
   maTrinh: String;
   selected: boolean = false;
   danhSachCtiet: any[] = [];
@@ -106,6 +106,10 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
   }
 
   async save(isGuiDuyet?: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.setValidator(isGuiDuyet)
     let body = this.formData.value;
     if (this.formData.get('soQdKq').value) {
@@ -139,6 +143,10 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
   }
 
   async guiDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     if (this.formData.invalid) {
       return;
     }
@@ -172,6 +180,10 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = '';
     switch (this.formData.get('trangThai').value) {
       case STATUS.CHO_DUYET_TP: {

@@ -98,6 +98,7 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
       console.log(this.loaiVthh);
       await this.loadDonVi();
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -213,6 +214,10 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -273,6 +278,10 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   }
 
   themMoi(isView: boolean, data: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = data.id;
     this.isDetail = true;
     this.isAddNew = true;
@@ -281,6 +290,10 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, data: any) {
+    if (data == null && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = data.id;
     this.isDetail = true;
     this.isAddNew = false;

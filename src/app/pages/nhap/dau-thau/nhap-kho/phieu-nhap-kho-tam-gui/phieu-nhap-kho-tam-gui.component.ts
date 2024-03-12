@@ -92,6 +92,7 @@ export class PhieuNhapKhoTamGuiComponent extends Base2Component implements OnIni
         this.qdTCDT = this.userInfo.MA_QD;
       }
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -236,6 +237,10 @@ export class PhieuNhapKhoTamGuiComponent extends Base2Component implements OnIni
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -269,6 +274,10 @@ export class PhieuNhapKhoTamGuiComponent extends Base2Component implements OnIni
   }
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     this.idQdGiaoNvNh = idQdGiaoNvNh;
     this.isDetail = true;

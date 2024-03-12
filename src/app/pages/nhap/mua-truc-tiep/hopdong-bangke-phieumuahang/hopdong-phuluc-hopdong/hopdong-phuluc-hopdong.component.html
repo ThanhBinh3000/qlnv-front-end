@@ -219,8 +219,8 @@
   </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-  <app-themmoi-hopdong-phuluc *ngIf="isAddNew" [id]="idSelected" (showListEvent)="showList()" [loaiVthh]="loaiVthh">
+  <app-themmoi-hopdong-phuluc [checkPrice]="checkPrice" *ngIf="isAddNew" [id]="idSelected" (showListEvent)="showList()" [loaiVthh]="loaiVthh">
   </app-themmoi-hopdong-phuluc>
-  <app-quan-ly-hop-dong-mtt *ngIf="isQuanLy" [id]="idSelected" (showListEvent)="showList()" [loaiVthh]="loaiVthh">
+  <app-quan-ly-hop-dong-mtt [checkPrice]="checkPrice" *ngIf="isQuanLy" [id]="idSelected" (showListEvent)="showList()" [loaiVthh]="loaiVthh">
   </app-quan-ly-hop-dong-mtt>
 </ng-container>

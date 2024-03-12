@@ -31,6 +31,9 @@ import * as uuidv4 from "uuid";
 import {
   DialogThemMoiDmNhomHangComponent
 } from "../../../../../../components/dialog/dialog-them-moi-dm-nhom-hang/dialog-them-moi-dm-nhom-hang.component";
+import {
+  BbNghiemThuBaoQuanService
+} from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 
 @Component({
   selector: 'app-thong-tin-bien-ban-chuan-bi-kho',
@@ -43,6 +46,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   @Input() loaiVthh: string;
   @Input() idQdGiaoNvNh: number;
   @Input() maNganLoKho: string;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -88,6 +92,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     private bienBanChuanBiKhoService: QuanLyBienBanChuanBiKhoService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
+    private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanChuanBiKhoService);
     this.formData = this.fb.group(
@@ -272,6 +277,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         maLoKho: data.maLoKho,
         soLuongDdiemGiaoNvNh: data.soLuong,
       })
+      await this.loadLoaiHinhKho(data.maLoKho || data.maNganKho)
     }
   }
 
@@ -421,8 +427,20 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
     // }
   }
 
+  async loadLoaiHinhKho(kho) {
+      if (kho) {
+        let res = await this.bbNghiemThuBaoQuanService.getDataKho(kho);
+        this.formData.patchValue({
+          loaiHinhKho: res.data.lhKho
+        });
+      }
+    }
 
   async save(isGuiDuyet: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     try {
       this.spinner.show();
       this.helperService.markFormGroupTouched(this.formData);
@@ -475,6 +493,10 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         break;
       }
       case this.STATUS.CHO_DUYET_TK: {
+        trangThai = this.STATUS.CHO_DUYET_KT;
+        break;
+      }
+      case this.STATUS.CHO_DUYET_KT: {
         trangThai = this.STATUS.CHO_DUYET_LDCC;
         break;
       }
@@ -520,10 +542,18 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     switch (this.formData.value.trangThai) {
       case this.STATUS.CHO_DUYET_TK: {
         trangThai = this.STATUS.TU_CHOI_TK;
+        break;
+      }
+      case this.STATUS.CHO_DUYET_KT: {
+        trangThai = this.STATUS.TU_CHOI_KT;
         break;
       }
       case this.STATUS.CHO_DUYET_LDCC: {

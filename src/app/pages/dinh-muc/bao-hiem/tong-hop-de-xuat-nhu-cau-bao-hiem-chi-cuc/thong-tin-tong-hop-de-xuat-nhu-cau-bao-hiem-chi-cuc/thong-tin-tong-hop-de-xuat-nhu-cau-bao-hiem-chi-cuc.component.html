@@ -49,7 +49,7 @@
         <div nz-col nzSpan="4">
           <nz-form-label>Năm kế hoạch</nz-form-label>
           <nz-form-control>
-            <nz-select [nzDisabled]="isTongHop" formControlName="namKeHoach"
+            <nz-select [nzDisabled]="isTongHop" formControlName="namKeHoach" (ngModelChange)="changeNamKh($event)"
                        nzAllowClear>
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
               </nz-option>

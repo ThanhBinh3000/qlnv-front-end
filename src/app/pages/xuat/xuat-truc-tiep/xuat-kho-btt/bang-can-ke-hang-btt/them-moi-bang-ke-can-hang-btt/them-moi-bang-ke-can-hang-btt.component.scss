@@ -1,0 +1,21 @@
+.loai-can {
+  position: relative;
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+
+}
+
+.loai-can.ant-col {
+  padding-left: 20px !important;
+}
+
+.loai-can::before {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 12px;
+  bottom: 0;
+  width: 3px;
+  background-color: black;
+}

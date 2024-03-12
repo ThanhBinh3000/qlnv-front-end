@@ -6,25 +6,25 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub do ml-2" (click)="preview(previewName)">
+      <button type="button" class="btn btn-sub do ml-2" (click)="preview(previewName)" *ngIf="isIn()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>In/xem trước</span>
       </button>
       <button
-        *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
+        *ngIf="!isView && isThem() && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
         type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
 
       <button
-        *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
+        *ngIf="!isView && isThem() && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
         type="button" class="btn btn-main ml-2" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
 
-      <button *ngIf="isView && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-sub"
+      <button *ngIf="isView && isThem() && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-sub"
         (click)="guiDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Gửi duyệt</span>
@@ -559,7 +559,7 @@
               <tr>
                 <th width="30px">STT</th>
                 <th>Chỉ tiêu chất lượng</th>
-                <th width="60px">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+                <th width="60px">Chỉ số chất lượng theo {{formData.value.chiSoChatLuongTitle}}</th>
                 <th width="400px">Kết quả phân tích</th>
                 <th>Phương pháp kiểm tra chất lựợng</th>
                 <th>Đánh giá</th>
@@ -593,7 +593,11 @@
                   <td>
                     <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaPt" />
                   </td>
-                  <td>{{data.phuongPhap}}</td>
+                  <td *ngIf="data.maChiTieu === 'ATTP_GAO'">
+                    <input type="text" nz-input class="w-400" [(ngModel)]="data.phuongPhap" />
+                  </td>
+                  <td *ngIf="data.maChiTieu !== 'ATTP_GAO'">{{data.phuongPhap}}</td>
+                  <td>
                   <td>
                     <nz-select [(ngModel)]="data.danhGia" nzAllowClear>
                       <nz-option *ngFor="let p of LIST_DANH_GIA ; let iDG = index" [nzValue]="iDG"

@@ -11,12 +11,12 @@
         <span> Xem trước </span>
       </button>
       <button class="btn btn-sub btn-sm waves-effect xanh-nhat"
-              (click)="saveAndSend(STATUS.DA_KY, 'Bạn có muốn ký hợp đồng ?','Bạn đã ký hợp đồng thành công!')"
+              (click)="saveAndBrowse('saveAndSend', STATUS.DA_KY, 'Bạn có muốn ký hợp đồng ?','Bạn đã ký hợp đồng thành công!')"
               *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isCuc()">
         <i class="icon htvbdh_trinh"></i>
         <span>Ký</span>
       </button>
-      <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()"
+      <button class="btn btn-main btn-sm waves-effect waves-light" (click)="saveAndBrowse('createUpdate')"
               *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isCuc() ">
         <i class="icon  htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -276,10 +276,11 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col [nzSpan]="24"></div>
               <div nz-col [nzSpan]="12">
-                <nz-form-label nzRequired [nzNoColon]="true"> Nội dung bảo đảm thực hiện hợp đồng</nz-form-label>
-                <div nz-row [nzGutter]="24" class="hd-custom-label">
+                <div nz-row [nzGutter]="24">
+                  <div nz-col [nzSpan]="24">
+                    <nz-form-label nzRequired [nzNoColon]="true"> Nội dung bảo đảm thực hiện hợp đồng</nz-form-label>
+                  </div>
                   <div nz-col [nzSpan]="16">
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true"> Giá trị</nz-form-label>
@@ -300,8 +301,8 @@
                   </div>
                   <div nz-col [nzSpan]="24">
                     <nz-form-item class="form-item display-block">
-                      <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
-                      <nz-form-control nz-col>
+                      <nz-form-label nzRequired [nzNoColon]="true"> Ghi chú</nz-form-label>
+                      <nz-form-control nz-col [nzErrorTip]="error">
                         <textarea nz-input [rows]="3" formControlName="ghiChuBaoDam" [readonly]="isView"></textarea>
                       </nz-form-control>
                     </nz-form-item>

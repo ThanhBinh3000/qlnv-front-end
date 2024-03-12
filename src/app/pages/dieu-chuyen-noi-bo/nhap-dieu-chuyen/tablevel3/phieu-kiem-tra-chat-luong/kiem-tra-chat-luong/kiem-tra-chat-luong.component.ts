@@ -124,9 +124,23 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
   };
 
   isShowDS() {
-    if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
-      return true
-    else return false
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKTCL_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKTCL_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKTCL_XEM'))
+  }
+
+  isXoa() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKTCL_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKTCL_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKTCL_XOA'))
+  }
+
+  isExport() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKTCL_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKTCL_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKTCL_EXP'))
+  }
+
+  isThem() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKTCL_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKTCL_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKTCL_THEM'))
+  }
+
+  isDuyet() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKTCL_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKTCL_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKTCL_DUYET_LDCCUC'))
   }
 
   isCuc() {
@@ -201,7 +215,7 @@ export class KiemTraChatLuongComponent extends Base2Component implements OnInit 
       }
 
       let body = this.formData.value
-      if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
+      // if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
       body.paggingReq = {
         limit: this.pageSize,
         page: this.page - 1

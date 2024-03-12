@@ -155,6 +155,10 @@ export class QuanLyBangKeCanHangComponent extends Base2Component implements OnIn
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -166,7 +170,7 @@ export class QuanLyBangKeCanHangComponent extends Base2Component implements OnIn
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyBangKeCanHangService.xoa(item.id).then((res) => {
+          this.quanLyBangKeCanHangService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -216,6 +220,10 @@ export class QuanLyBangKeCanHangComponent extends Base2Component implements OnIn
   }
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number, maNganLoKho?: string) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;

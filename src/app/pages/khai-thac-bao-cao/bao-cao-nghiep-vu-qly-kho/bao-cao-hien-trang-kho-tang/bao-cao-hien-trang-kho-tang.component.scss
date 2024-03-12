@@ -1,0 +1,93 @@
+.bc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .icon_change {
+        display: flex;
+
+        .icon-wrapper {
+            display: block;
+            color: unset !important;
+
+            i {
+                font-size: 24px;
+            }
+
+            i.active {
+                color: #007bff;
+            }
+        }
+
+        .icon-wrapper.left {
+            margin-right: 12px;
+        }
+    }
+}
+
+.bc-content {
+    padding: 10px;
+
+    .title-content {
+        position: relative;
+        padding: 10px;
+    }
+
+    .title-content::before {
+        position: absolute;
+        content: '';
+        top: 0;
+        left: 0;
+        bottom: 0;
+        border-right: 1px solid black;
+    }
+
+    .card_content {
+        text-indent: 4px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+}
+
+.bc-htk_title {
+    text-transform: none;
+    font-size: 16px;
+}
+
+.bc-htk_title.bold {
+    font-weight: bold;
+}
+
+.bc-htk_title.bd-left {
+    position: relative;
+    font-size: 13px;
+    text-indent: 8px;
+
+    &::before {
+        position: absolute;
+        content: '';
+        top: 0;
+        left: 0;
+        bottom: 0;
+        border-right: 2px solid black;
+    }
+}
+::ng-deep{
+  .hien_trang_ton_kho{
+    .ant-card-extra {
+      width: 100%;
+      h3 {
+        margin-bottom: 0;
+        font-size: 20px;
+        font-weight: bold;
+      }
+    }
+  }
+}
+.right-content{
+  .export-dashbroad{
+    i{
+      font-size: 20px;
+    }
+  }
+}

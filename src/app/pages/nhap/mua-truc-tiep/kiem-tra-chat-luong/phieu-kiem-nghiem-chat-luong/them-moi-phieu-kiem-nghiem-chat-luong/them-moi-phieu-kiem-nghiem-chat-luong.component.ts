@@ -39,6 +39,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   id: number;
   @Input()
   showFromTH: boolean;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() idQdGiaoNvNh: number;
@@ -369,7 +370,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   async save(isGuiDuyet?: boolean) {
-
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     if (this.setValidator) {
       try {
         this.spinner.show();
@@ -439,6 +443,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
 
   pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
@@ -493,6 +501,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,

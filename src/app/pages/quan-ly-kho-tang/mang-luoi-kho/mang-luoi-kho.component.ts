@@ -157,6 +157,7 @@ export class MangLuoiKhoComponent implements OnInit {
       tenThuKho: [""],
       slTon: [""],
       ngayNhapDay: [""],
+      ngayXuatDoc: [""],
       sdt: [""],
       idParent: [""],
       isKhoiTao: [false],
@@ -164,7 +165,8 @@ export class MangLuoiKhoComponent implements OnInit {
       loaiHangHoa: [],
       kieuHang: [""],
       idDmDonVi: [],
-      khoiTich: [0]
+      khoiTich: [0],
+      thanhTien: [0]
     });
   }
 
@@ -505,12 +507,14 @@ export class MangLuoiKhoComponent implements OnInit {
         slTon: dataNode.slTon ? dataNode.slTon : 0,
         dviTinh: dataNode.dviTinh ? dataNode.dviTinh : null,
         ngayNhapDay: dataNode.ngayNhapDay ? dataNode.ngayNhapDay : null,
+        ngayXuatDoc: dataNode.ngayXuatDoc ? dataNode.ngayXuatDoc : null,
         loaikhoId: dataNode.loaikhoId,
         trangThai: dataNode.trangThai == TrangThaiHoatDong.HOAT_DONG ? true : false,
         loaiHangHoa: dataNode.loaiHangHoa,
         kieuHang: dataNode.kieuHang,
         diaChi: dataNode.diaChi ?? '',
         idDmDonVi: dataNode.idDmDonVi ?? '',
+        thanhTien: dataNode.thanhTien ? dataNode.thanhTien : 0,
       });
       if (this.levelNode == 7) {
         this.detailDonVi.patchValue({
@@ -820,7 +824,7 @@ export class MangLuoiKhoComponent implements OnInit {
       nzContent: DialogThemMoiSoDuDauKyComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: "900px",
+      nzWidth: "1200px",
       nzFooter: null,
       nzStyle: {top: "50px"},
       nzComponentParams: {

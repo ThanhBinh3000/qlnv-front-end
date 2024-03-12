@@ -137,9 +137,27 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
   };
 
   isShowDS() {
-    if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
-      return true
-    else return false
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKNCL_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKNCL_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKNCL_XEM'))
+  }
+
+  isXoa() {
+    return this.isCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKNCL_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKNCL_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKNCL_XOA'))
+  }
+
+  isExport() {
+    return this.isCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKNCL_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKNCL_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKNCL_EXP'))
+  }
+
+  isThem() {
+    return this.isCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKNCL_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKNCL_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKNCL_THEM'))
+  }
+
+  isDuyetTP() {
+    return this.isCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKNCL_DUYET_TP') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKNCL_DUYET_TP') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKNCL_DUYET_TP'))
+  }
+
+  isDuyetLD() {
+    return this.isCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKNCL_DUYET_LDCUC') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKNCL_DUYET_LDCUC') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKNCL_DUYET_LDCUC'))
   }
 
   isCuc() {
@@ -185,7 +203,7 @@ export class KiemNghiemChatLuongComponent extends Base2Component implements OnIn
       this.formData.value.denNgayLapPhieu = dayjs(this.formData.value.denNgayLapPhieu).format('YYYY-MM-DD')
     }
     let body = this.formData.value
-    if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
+    // if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1

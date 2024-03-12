@@ -265,31 +265,7 @@
   <app-chi-tiet-thong-tin-dau-gia [idInput]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showListDtl()">
   </app-chi-tiet-thong-tin-dau-gia>
 </div>
-<!--xem -->
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModal('QdPdKh')">
-  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
-    </app-them-quyet-dinh-ban-dau-gia>
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="closeModal('QdPdKh')" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdDc" (nzOnCancel)="closeModal('QdPdDc')">
-  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-dieu-chinh [idInput]="idQdDc" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
-    </app-them-moi-dieu-chinh>
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="closeModal('QdPdDc')" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
+<!--Xem đề xuất-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewDxBdg" (nzOnCancel)="closeModal('DxBdg')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-de-xuat-ke-hoach-ban-dau-gia [idInput]="idDxBdg" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
@@ -303,10 +279,37 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem quyết định kế hoạch-->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModal('QdPdKh')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
+    </app-them-quyet-dinh-ban-dau-gia>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('QdPdKh')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<!--Xem điều chỉnh quyết định-->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdDc" (nzOnCancel)="closeModal('QdPdDc')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-dieu-chinh [idInput]="idQdDc" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
+    </app-them-moi-dieu-chinh>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal('QdPdDc')" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<!--Xem quyết định kết quả-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewKqBdg" (nzOnCancel)="closeModal('KqBdg')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--    <app-them-moi-quyet-dinh-phe-duyet-ket-qua [idInput]="idKqBdg" [loaiVthh]="loaiVthh" [isViewOnModal]="true">-->
-    <!--    </app-them-moi-quyet-dinh-phe-duyet-ket-qua>-->
+    <app-them-moi-quyet-dinh-phe-duyet-ket-qua [idInput]="idKqBdg" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-them-moi-quyet-dinh-phe-duyet-ket-qua>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal('KqBdg')" class="modal__button--cancel">

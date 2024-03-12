@@ -36,6 +36,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
   @Input() isView: boolean;
   @Input() typeVthh: string;
   @Input() loaiVthh: string;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -344,17 +345,21 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
   }
 
   pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
-      case STATUS.TU_CHOI_TBP_KTBQ:
+      case STATUS.TUCHOI_TBP_TVQT:
       case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TBP_KTBQ;
+        trangThai = STATUS.CHODUYET_TBP_TVQT;
         mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
-      case STATUS.CHO_DUYET_TBP_KTBQ: {
+      case STATUS.CHODUYET_TBP_TVQT: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         mess = 'Bạn có chắc chắn muốn phê duyệt ?'
         break;
@@ -402,6 +407,10 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
 
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai
     switch (this.formData.get('trangThai').value) {
       case STATUS.CHO_DUYET_TBP_KTBQ: {
@@ -471,6 +480,10 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
   }
 
   async save(isGuiDuyet: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {

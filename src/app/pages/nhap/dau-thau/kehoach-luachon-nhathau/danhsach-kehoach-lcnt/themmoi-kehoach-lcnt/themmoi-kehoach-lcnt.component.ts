@@ -553,8 +553,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     let tongSlChiTieu: number = 0;
     this.listOfData.forEach((item) => {
       item.children.forEach(child => {
-        tongMucDt = tongMucDt + (child.soLuong * child.donGiaTamTinh);
-        tongMucDtDx = tongMucDtDx + (child.soLuong * child.donGia);
+        tongMucDt = tongMucDt + (child.soLuong * child.donGia);
+        tongMucDtDx = tongMucDtDx + (child.soLuong * child.donGiaTamTinh);
         tongSlChiTieu += child.soLuongChiTieu
       })
     });
@@ -1326,15 +1326,15 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
 
 
   initListQuy() {
-    const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth();
-    const quarters = [];
+    // const currentYear = new Date().getFullYear();
+    // const currentMonth = new Date().getMonth();
+    const quarters = [1,2,3,4];
 
-    for (let quarter = 1; quarter <= 4; quarter++) {
-      if (this.formData.get('namKhoach').value < currentYear || (this.formData.get('namKhoach').value === currentYear && quarter <= Math.ceil((currentMonth + 1) / 3))) {
-        quarters.push(quarter);
-      }
-    }
+    // for (let quarter = 1; quarter <= 4; quarter++) {
+    //   if (this.formData.get('namKhoach').value < currentYear || (this.formData.get('namKhoach').value === currentYear && quarter <= Math.ceil((currentMonth + 1) / 3))) {
+    //     quarters.push(quarter);
+    //   }
+    // }
     this.listQuy = [];
     for (const element of quarters) {
       this.listQuy.push({giaTri: "Quý " + element + "/" + this.formData.get("namKhoach").value, ma: element})

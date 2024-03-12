@@ -43,7 +43,12 @@ export class SlGiaTriHangDtqgNhapTrongKyComponent extends Base2Component impleme
   maChiCuc: any;
   listLoaiKyBc: any[] = [];
   listKyBc: any[] = [];
-
+  dsDvtt: any[] = [
+    {text: 'Đồng', value: '01'},
+    {text: 'Nghìn đồng', value: '02'},
+    {text: 'Triệu đồng', value: '03'},
+    {text: 'Tỷ đồng', value: '04'},
+  ]
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -66,6 +71,7 @@ export class SlGiaTriHangDtqgNhapTrongKyComponent extends Base2Component impleme
         tenChiCuc: null,
         dviNhanBaoCao: null,
         dsLoaiBc: null,
+        dvtt: ['01', [Validators.required]],
         loaiKyBc: ['02', [Validators.required]],
         loaiVthh: null,
         chungLoaiVthh: null,

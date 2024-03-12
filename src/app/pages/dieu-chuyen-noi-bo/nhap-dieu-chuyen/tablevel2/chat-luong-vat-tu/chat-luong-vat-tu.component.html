@@ -1,13 +1,13 @@
 <div>
   <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2">
     <ul nz-menu nzMode="horizontal">
-      <li nz-menu-item nzSelected (click)="selectTab(0)">
+      <li nz-menu-item nzSelected (click)="selectTab('DCNB_NHAP_KTCL_VT_BBCBK')" *ngIf="checkBBCBK()">
         Biên bản chuẩn bị kho
       </li>
-      <li nz-menu-item (click)="selectTab(1)">
+      <li nz-menu-item (click)="selectTab('DCNB_NHAP_KTCL_VT_BBLM')" *ngIf="checkBBLM()">
         Biên bản lấy mẫu/bàn giao mẫu
       </li>
-      <li nz-menu-item (click)="selectTab(2)">
+      <li nz-menu-item (click)="selectTab('DCNB_NHAP_KTCL_VT_HSKT')" *ngIf="checkHSKT()">
         Hồ sơ kỹ thuật
       </li>
     </ul>
@@ -15,9 +15,11 @@
 
   <div>
 
-    <app-bien-ban-chuan-bi-kho [loaiDc]="loaiDc" *ngIf="tabSelected == 0"></app-bien-ban-chuan-bi-kho>
-    <app-bien-ban-mau [loaiDc]="loaiDc" [isVatTu]="true" *ngIf="tabSelected == 1"></app-bien-ban-mau>
-    <app-ndc-ho-so-ky-thuat [loaiDc]="loaiDc" *ngIf="tabSelected == 2"></app-ndc-ho-so-ky-thuat>
+    <app-bien-ban-chuan-bi-kho [loaiDc]="loaiDc"
+      *ngIf="tabSelected == 'DCNB_NHAP_KTCL_VT_BBCBK'"></app-bien-ban-chuan-bi-kho>
+    <app-bien-ban-mau [loaiDc]="loaiDc" [isVatTu]="true"
+      *ngIf="tabSelected == 'DCNB_NHAP_KTCL_VT_BBLM'"></app-bien-ban-mau>
+    <app-ndc-ho-so-ky-thuat [loaiDc]="loaiDc" *ngIf="tabSelected == 'DCNB_NHAP_KTCL_VT_HSKT'"></app-ndc-ho-so-ky-thuat>
 
   </div>
 

@@ -465,44 +465,37 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     });
   }
 
-  async save() {
+  async saveAndBrowse(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      if (!this.validateNgay()) {
-        return;
-      }
-      const {soDxuat, ...formDataValue} = this.formData.value;
       const body = {
-        ...formDataValue,
-        soDxuat: soDxuat ? soDxuat + this.maHauTo : null,
+        ...this.formData.value,
+        soDxuat: this.formData.value.soDxuat ? this.formData.value.soDxuat + this.maHauTo : null,
         children: this.dataTable,
       };
-      await this.createUpdate(body);
+      switch (action) {
+        case "createUpdate":
+          if (!this.validateNgay()) {
+            return;
+          }
+          await this.createUpdate(body);
+          break;
+        case "saveAndSend":
+          this.setValidForm();
+          if (this.dataTable.length === 0) {
+            this.notification.error(MESSAGE.ERROR, 'Danh sách danh mục tài sản bán trực tiếp không được để trống');
+            return;
+          }
+          await this.saveAndSend(body, trangThai, msg, msgSuccess);
+          break;
+        default:
+          console.error("Invalid action: ", action);
+          break;
+      }
+    } catch (error) {
+      console.error('Error: ', error);
+    } finally {
       await this.helperService.restoreRequiredForm(this.formData);
-    } catch (error) {
-      console.log('error', error);
-    }
-  }
-
-  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    try {
-      this.setValidForm();
-      if (this.dataTable.length === 0) {
-        this.notification.error(MESSAGE.ERROR, 'Danh sách danh mục tài sản bán đấu giá không được để trống');
-        return;
-      }
-      // if (!this.validatemaDviTsan()){
-      //   return;
-      // }
-      const {soDxuat, ...formDataValue} = this.formData.value;
-      const body = {
-        ...formDataValue,
-        soDxuat: soDxuat ? soDxuat + this.maHauTo : null,
-        children: this.dataTable,
-      };
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
-    } catch (error) {
-      console.log('error', error);
     }
   }
 
@@ -565,14 +558,18 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     if (!startValue || !this.formData.value.tgianDkienDen) {
       return false;
     }
-    return startValue.getTime() > this.formData.value.tgianDkienDen.getTime();
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.tgianDkienDen.getFullYear(), this.formData.value.tgianDkienDen.getMonth(), this.formData.value.tgianDkienDen.getDate());
+    return startDay > endDay;
   };
 
   disabledTgianTocChucDen = (endValue: Date): boolean => {
     if (!endValue || !this.formData.value.tgianDkienTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.tgianDkienTu.getTime();
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.tgianDkienTu.getFullYear(), this.formData.value.tgianDkienTu.getMonth(), this.formData.value.tgianDkienTu.getDate());
+    return endDay < startDay;
   };
 
   setValidForm() {

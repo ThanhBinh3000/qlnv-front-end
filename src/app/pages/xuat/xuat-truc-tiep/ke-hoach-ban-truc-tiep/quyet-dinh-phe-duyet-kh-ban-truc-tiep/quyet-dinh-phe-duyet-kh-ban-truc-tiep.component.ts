@@ -87,6 +87,7 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         type: 'QDKH'
       })
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
     } catch (e) {
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -96,6 +97,14 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   redirectDetail(id, isView: boolean) {
+    if (id === 0 && this.checkPrice && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
+    if (id === 0 && this.checkPrice && this.checkPrice.booleanNhapXuat) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+      return;
+    }
     this.idSelected = id;
     this.isDetail = true;
     this.isView = isView;
@@ -121,18 +130,22 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     }
   }
 
-  isInvalidDateRange = (startValue: Date, endValue: Date, formDataKey: string): boolean => {
-    const startDate = this.formData.value[formDataKey + 'Tu'];
-    const endDate = this.formData.value[formDataKey + 'Den'];
-    return !!startValue && !!endValue && startValue.getTime() > endValue.getTime();
-  };
-
   disabledNgayKyQdTu = (startValue: Date): boolean => {
-    return this.isInvalidDateRange(startValue, this.formData.value.ngayKyQdDen, 'ngayKyQd');
+    if (!startValue || !this.formData.value.ngayKyQdDen) {
+      return false;
+    }
+    const startDay = new Date(startValue.getFullYear(), startValue.getMonth(), startValue.getDate());
+    const endDay = new Date(this.formData.value.ngayKyQdDen.getFullYear(), this.formData.value.ngayKyQdDen.getMonth(), this.formData.value.ngayKyQdDen.getDate());
+    return startDay > endDay;
   };
 
   disabledNgayKyQdDen = (endValue: Date): boolean => {
-    return this.isInvalidDateRange(endValue, this.formData.value.ngayKyQdTu, 'ngayKyQd');
+    if (!endValue || !this.formData.value.ngayKyQdTu) {
+      return false;
+    }
+    const endDay = new Date(endValue.getFullYear(), endValue.getMonth(), endValue.getDate());
+    const startDay = new Date(this.formData.value.ngayKyQdTu.getFullYear(), this.formData.value.ngayKyQdTu.getMonth(), this.formData.value.ngayKyQdTu.getDate());
+    return endDay < startDay;
   };
 
   removeDataInit() {

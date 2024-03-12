@@ -37,11 +37,18 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   rows: any[] = [];
+  listLoaiBc: any[] = [];
   maCuc: any;
   maChiCuc: any;
   dsLoaiBc: any[] = [
     {text: 'Báo cáo Quý', value: 1},
     {text: 'Báo cáo Năm', value: 2}
+  ]
+  dsDvtt: any[] = [
+    {text: 'Đồng', value: '01'},
+    {text: 'Nghìn đồng', value: '02'},
+    {text: 'Triệu đồng', value: '03'},
+    {text: 'Tỷ đồng', value: '04'},
   ]
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -64,7 +71,8 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
         tenCuc: null,
         tenChiCuc: null,
         dviNhanBaoCao: null,
-        loaiBc: null,
+        loaiBc: ['02', [Validators.required]],
+        dvtt: ['01', [Validators.required]],
         loaiKyBc: ['02', [Validators.required]],
         loaiVthh: null,
         chungLoaiVthh: null,
@@ -85,6 +93,7 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
         this.loadDsDonVi(),
         this.loadDsVthh(),
         this.loadDsKyBc(),
+        this.loadDsLoaiBc(),
         this.changLoaiKyBc('02')
       ]);
     } catch (e) {
@@ -288,5 +297,20 @@ export class SlGiaTriHangDtqgComponent extends Base2Component implements OnInit 
     })
     this.maCuc = null;
     this.maChiCuc = null;
+  }
+
+  async changeLoaiBc(event: any){
+    if(event == '01'){
+      this.maCuc = null;
+      this.maChiCuc = null;
+    }
+  }
+
+  async loadDsLoaiBc() {
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_BAO_CAO");
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res, "4444")
+      this.listLoaiBc = res.data.filter(x => x.ma != '01')
+    }
   }
 }

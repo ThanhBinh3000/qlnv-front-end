@@ -47,7 +47,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   @Input() idInput: number;
   @Input() soQd: string;
   @Input() isViewOnModal: boolean;
-
+  @Input() checkPrice: any;
   @Input() isView: boolean;
   @ViewChild('thongtindtvt') thongTinDauThauVt: ThemmoiThongtinDauthauVtComponent;
   @ViewChild('thongtindt') thongTinDauThau: ThemmoiThongtinDauthauComponent;
@@ -187,6 +187,10 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   }
 
   async save(isBanHanh?) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.setValidator(isBanHanh);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {

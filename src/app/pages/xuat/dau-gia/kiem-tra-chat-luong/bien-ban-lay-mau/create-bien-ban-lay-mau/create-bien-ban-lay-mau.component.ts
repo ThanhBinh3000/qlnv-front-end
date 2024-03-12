@@ -29,6 +29,7 @@ import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhC
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
 import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
+import {th} from "date-fns/locale";
 
 @Component({
   selector: 'app-create-bien-ban-lay-mau',
@@ -169,6 +170,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       tenTrangThai: 'Dự Thảo',
       ketQuaNiemPhong: true,
       loaiBienBan: 'LBGM',
+      donViKnghiem: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? null : this.userInfo.TEN_PHONG_BAN,
     });
   }
 
@@ -204,7 +206,17 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       if (firstCheckedItem) {
         this.selectedItems = firstCheckedItem.ma;
       }
-      await this.loadDanhSachCtieuCluong();
+      const ctieuCluong = this.dataTable.filter(item => item.type === BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG)
+      if (ctieuCluong) {
+        this.danhSachCtieuCluong = ctieuCluong.map(item => ({
+          label: item.ten,
+          value: item.ma,
+          chiSoCl: item.chiSoCl,
+          phuongPhap: item.phuongPhap,
+          checked: item.checked,
+          type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
+        }));
+      }
       if (!this.isView) {
         await this.onChange(data.idQdNv)
       }
@@ -369,6 +381,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
           tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
+          diaDiemLayMau: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? null : data.tenDiemKho + ' - ' + this.formData.value.tenDvi,
           soLuong: data.soLuong,
         });
         await this.loadThuKho();
@@ -503,7 +516,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
         value: item.id,
         chiSoCl: item.mucYeuCauXuat,
         phuongPhap: item.phuongPhapXd,
-        checked: true,
+        checked: false,
         type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
       }));
     } catch (e) {
@@ -511,35 +524,29 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     }
   }
 
-  async save() {
+  async saveAndApproveAndReject(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["soQdNv"].setValidators([Validators.required]);
       await this.addDataTable()
       const body = {
         ...this.formData.value,
         children: this.dataTable,
       };
-      await this.createUpdate(body);
-    } catch (e) {
-      console.error('Error: ', e);
-    } finally {
-      await this.helperService.restoreRequiredForm(this.formData);
-    }
-  }
-
-  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    try {
-      await this.helperService.ignoreRequiredForm(this.formData);
-      this.setValidForm();
-      await this.addDataTable()
-      const body = {
-        ...this.formData.value,
-        children: this.dataTable,
-      };
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
-    } catch (e) {
-      console.error('Error: ', e);
+      switch (action) {
+        case "createUpdate":
+          this.formData.controls["soQdNv"].setValidators([Validators.required]);
+          await this.createUpdate(body);
+          break;
+        case "saveAndSend":
+          this.setValidForm();
+          await this.saveAndSend(body, trangThai, msg, msgSuccess);
+          break;
+        default:
+          console.error("Invalid action: ", action);
+          break;
+      }
+    } catch (error) {
+      console.error('Error: ', error);
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
     }

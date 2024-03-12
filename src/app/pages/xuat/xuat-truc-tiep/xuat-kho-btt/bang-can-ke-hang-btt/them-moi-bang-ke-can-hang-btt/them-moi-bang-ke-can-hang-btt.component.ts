@@ -23,13 +23,13 @@ import {
   BangCanKeHangBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/bang-can-ke-hang-btt.service';
 import {DonviService} from 'src/app/services/donvi.service';
-import {chiTietBangCanKeHang} from 'src/app/models/DeXuatKeHoachBanTrucTiep';
 import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
 import {BangKeBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
-import {chiTietBangKeCanHangBdg} from "../../../../../../models/KeHoachBanDauGia";
-import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
+import {AMOUNT_NO_DECIMAL, AMOUNT_THREE_DECIMAL} from "../../../../../../Utility/utils";
+import _ from 'lodash';
+import {chain} from 'lodash'
 
 @Component({
   selector: 'app-them-moi-bang-ke-can-hang-btt',
@@ -41,11 +41,13 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
   @Input() isView: boolean;
   @Input() idInput: number;
   @Input() isViewOnModal: boolean;
+  @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   dataTableChange = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
-  amount = {...AMOUNT_ONE_DECIMAL};
-  amount1 = {...AMOUNT_ONE_DECIMAL};
+  amount = {...AMOUNT_NO_DECIMAL};
+  amount1 = {...AMOUNT_THREE_DECIMAL}
+  amountLeft = { ...AMOUNT_THREE_DECIMAL, align: "left" };
   templateNameVt = "Bảng kê cân hàng vật tư";
   templateNameLt = "Bảng kê cân hàng lương thực";
   TRUC_TIEP = TRUC_TIEP;
@@ -56,6 +58,12 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
   listPhieuXuatKho: any[] = [];
   listDiaDiemXuat: any[] = [];
   loadDanhSachBangKeCan: any[] = [];
+  rowItemCGD: any = {};
+  rowItemKQC: any = {};
+  listPhuongPhapCan: Array<{ label: string, value: string }> = [{
+    label: 'Cân giám định',
+    value: 'can_giam_dinh'
+  }, {label: 'Cân toàn bộ', value: 'can_toan_bo'}]
 
   constructor(
     httpClient: HttpClient,
@@ -68,7 +76,6 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
     private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
     private bangCanKeHangBttService: BangCanKeHangBttService,
     private hopDongBttService: HopDongBttService,
-    private bangKeBttService: BangKeBttService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangCanKeHangBttService);
     this.formData = this.fb.group({
@@ -137,6 +144,10 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       tenLoaiHinhNx: [''],
       tenKieuNx: [''],
       tenTrangThai: [''],
+      phuongPhapCan: [''],
+      trongLuongMotBao: [],
+      trongLuongBaoKcan: [],
+      tongSlBaoBi: [],
       fileDinhKem: [new Array<FileDinhKem>()],
     })
   }
@@ -145,14 +156,11 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
     try {
       await this.spinner.show();
       this.maHauTo = '/BKCH-' + this.userInfo.DON_VI.tenVietTat;
-      this.amount1.align = "left";
       if (this.idInput > 0) {
         await this.getDetail(this.idInput);
       } else {
         await this.initForm();
       }
-      this.emitDataTable()
-      this.updateEditCache()
     } catch (error) {
       console.error('error: ', error);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -174,6 +182,7 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       tenTrangThai: 'Dự Thảo',
       phanLoai: TRUC_TIEP.HOP_DONG,
       tongTrongLuongCaBi: 0,
+      phuongPhapCan: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? 'can_toan_bo' : 'can_giam_dinh',
     })
   }
 
@@ -189,7 +198,11 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
     if (!id) return;
     const data = await this.detail(id);
     this.maTuSinh = this.idInput;
-    this.dataTable = data.children
+    this.dataTableAll = data.children;
+    this.dataTable = chain(this.dataTableAll).groupBy('loai').map((value, key) => ({
+      loai: key,
+      dataChild: value
+    })).value();
     if (!this.isView) {
       await this.onChange(data.idQdNv)
     }
@@ -554,48 +567,75 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
     }
   }
 
-  rowItem: chiTietBangCanKeHang = new chiTietBangCanKeHang();
-  dataEdit: { [key: string]: { edit: boolean; data: chiTietBangCanKeHang } } = {};
 
-  emitDataTable() {
-    this.dataTableChange.emit(this.dataTable);
-  }
-
-  updateEditCache(): void {
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataEdit = {};
-      this.dataTable.forEach((item, index) => {
-        this.dataEdit[index.toString()] = {
-          edit: false,
-          data: {...item},
-        };
-      });
+  addRow(item, name) {
+    if (this.validateThongTin(item, name)) {
+      const data = {...item, loai: name, idVirtual: new Date().getTime()};
+      this.dataTableAll.push(data);
+      this.dataTable = _.chain(this.dataTableAll)
+        .groupBy('loai').map((value, key) => ({loai: key, dataChild: value})).value();
+      const resetItems = {
+        CGD: 'rowItemCGD',
+        KQC: 'rowItemKQC',
+      };
+      if (resetItems[name]) {
+        this[resetItems[name]] = {};
+      }
+      this.calculatorTable();
     }
   }
 
-  addRow() {
+  findTableName(name) {
     if (!this.dataTable) {
-      this.dataTable = [];
+      return null;
     }
-    this.dataTable.push(this.rowItem);
-    this.rowItem = new chiTietBangKeCanHangBdg();
-    this.emitDataTable();
-    this.updateEditCache();
-    this.formData.patchValue({
-      tongTrongLuongCaBi: this.dataTable.reduce((prev, cur) => prev + cur.trongLuongCaBi, 0),
-    });
+    return this.dataTable.find(({loai}) => loai === name) || null;
   }
 
-  clearItemRow() {
-    this.rowItem = new chiTietBangCanKeHang();
-    this.rowItem.id = null;
+  validateThongTin(data, name) {
+    const requirements = {
+      CGD: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? {
+        fields: ['maCan', 'trongLuongCaBi'],
+        errorMessage: "Vui lòng điền đủ thông tin"
+      } : {fields: ['maCan', 'soBaoBi', 'trongLuongCaBi'], errorMessage: "Vui lòng điền đủ thông tin"},
+      KQC: {fields: ['maCan', 'soBaoBi'], errorMessage: "Vui lòng điền đủ thông tin"},
+    };
+    const requirement = requirements[name];
+    if (!requirement) {
+      return false;
+    }
+    for (const field of requirement.fields) {
+      if (!data[field]) {
+        this.notification.error(MESSAGE.ERROR, requirement.errorMessage);
+        return false;
+      }
+    }
+    return true;
   }
 
-  startEdit(index: number) {
-    this.dataEdit[index].edit = true;
+  clearRow(name) {
+    const resetItems = {
+      CGD: 'rowItemCGD',
+      KQC: 'rowItemKQC',
+    };
+    const resetItem = resetItems[name];
+    if (resetItem) {
+      this[resetItem] = {};
+    }
   }
 
-  deleteRow(index: any) {
+  editRow(data: any) {
+    this.dataTableAll.forEach(s => s.isEdit = false);
+    let currentRow = this.dataTableAll.find(s => s.idVirtual == data.idVirtual);
+    currentRow.isEdit = true;
+    this.dataTable = _.chain(this.dataTableAll).groupBy('loai').map((value, key) => ({
+      loai: key,
+      dataChild: value
+    })).value();
+    this.calculatorTable();
+  }
+
+  deleteRow(idVirtual) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -606,11 +646,10 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.dataTable.splice(index, 1);
-          this.updateEditCache();
-          this.formData.patchValue({
-            tongTrongLuongCaBi: this.dataTable.reduce((prev, cur) => prev + cur.trongLuongCaBi, 0),
-          });
+          this.dataTableAll = this.dataTableAll.filter(item => item.idVirtual != idVirtual);
+          this.dataTable = _.chain(this.dataTableAll)
+            .groupBy('loai').map((value, key) => ({loai: key, dataChild: value})).value();
+          this.calculatorTable();
         } catch (e) {
           console.log('error', e);
         }
@@ -618,71 +657,96 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
     });
   }
 
-  saveEdit(idx: number): void {
-    const editedData = this.dataEdit[idx].data;
-    if (editedData) {
-      Object.assign(this.dataTable[idx], editedData);
-      this.dataEdit[idx].edit = false;
+  saveRow(data: any, index: number) {
+    this.updateEditState(data, index, false);
+  }
+
+  cancelEdit(data: any, index: number) {
+    this.updateEditState(data, index, false);
+  }
+
+  updateEditState(data: any, index: number, isEdit: boolean) {
+    const rows = this.dataTableAll.filter(s => s.loai == data.loai);
+    if (rows[index]) {
+      rows[index].isEdit = isEdit;
     }
+    this.calculatorTable();
+  }
+
+  calcTong(columnName, name) {
+    const data = this.dataTable.filter(({loai}) => loai === name) || null;
+    if (data) {
+      return data.reduce((sum, item) => {
+        return sum + item.dataChild.reduce((acc, cur) => acc + (cur[columnName] || 0), 0);
+      }, 0);
+    }
+    return 0;
+  }
+
+  changeTinh(event, columnName, name) {
+    const sum = this.calcTong(columnName, name);
+    let patchData = {};
+    if (name === 'KQC') {
+      patchData['trongLuongBaoKcan'] = event * sum || 0;
+    } else if (name === 'CGD') {
+      patchData['tongTrongTruBi'] = (sum - event) || 0;
+    }
+    this.formData.patchValue(patchData);
+  }
+
+  calculatorTable() {
+    const tongTrongLuongCaBi = this.dataTableAll ?
+      this.dataTableAll
+        .filter(item => item.loai === 'CGD')
+        .reduce((prev, cur) => prev + (cur.trongLuongCaBi || 0), 0)
+      : 0;
     this.formData.patchValue({
-      tongTrongLuongCaBi: this.dataTable.reduce((prev, cur) => prev + cur.trongLuongCaBi, 0),
+      tongSlBaoBi: this.dataTableAll.reduce((prev, cur) => prev + cur.soBaoBi, 0),
+      tongTrongLuongCaBi: tongTrongLuongCaBi
     });
-  }
-
-  cancelEdit(stt: number): void {
-    if (this.dataTable[stt] && this.dataEdit[stt]) {
-      this.dataEdit[stt] = {
-        data: {...this.dataTable[stt]},
-        edit: false,
-      };
-    }
-  }
-
-  calcTong(columnName) {
-    if (!this.dataTable) return 0;
-    return this.dataTable.reduce((sum, cur) => sum + (cur[columnName] || 0), 0);
-  }
-
-  changeTong(event) {
-    if (event > 0) {
-      this.formData.patchValue({
-        tongTrongTruBi: this.formData.value.tongTrongLuongCaBi - event,
-      });
-    }
   }
 
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
   }
 
-  async save() {
+  async saveAndApproveAndReject(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
+      if (this.checkPrice && this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
+      if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+        return;
+      }
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["soQdNv"].setValidators([Validators.required]);
-      this.formData.controls["soPhieuXuatKho"].setValidators([Validators.required]);
       const body = {
         ...this.formData.value,
-        children: this.dataTable,
+        children: this.dataTableAll,
       };
-      await this.createUpdate(body);
-    } catch (e) {
-      console.error('Error: ', e);
-    } finally {
-      await this.helperService.restoreRequiredForm(this.formData);
-    }
-  }
-
-  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    try {
-      await this.helperService.ignoreRequiredForm(this.formData);
-      this.setValidForm();
-      const body = {
-        ...this.formData.value,
-        children: this.dataTable,
-      };
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
-    } catch (e) {
-      console.error('Error: ', e);
+      switch (action) {
+        case "createUpdate":
+          this.formData.controls["soQdNv"].setValidators([Validators.required]);
+          this.formData.controls["soPhieuXuatKho"].setValidators([Validators.required]);
+          await this.createUpdate(body);
+          break;
+        case "saveAndSend":
+          this.setValidForm();
+          await this.saveAndSend(body, trangThai, msg, msgSuccess);
+          break;
+        case "approve":
+          await this.approve(this.idInput, trangThai, msg);
+          break;
+        case "reject":
+          await this.reject(this.idInput, trangThai);
+          break;
+        default:
+          console.error("Invalid action: ", action);
+          break;
+      }
+    } catch (error) {
+      console.error('Error: ', error);
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
     }

@@ -18,12 +18,15 @@ import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
 import { DieuChinhQuyetDinhPdKhmttService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/dieuchinh-khmtt/DieuChinhQuyetDinhPdKhmtt.service';
 import {STATUS} from "../../../../../constants/status";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
 @Component({
   selector: 'app-dieuchinh-luachon-muatt',
   templateUrl: './dieuchinh-luachon-muatt.component.html',
   styleUrls: ['./dieuchinh-luachon-muatt.component.scss']
 })
-export class DieuchinhLuachonMuattComponent implements OnInit {
+export class DieuchinhLuachonMuattComponent extends Base2Component implements OnInit {
   @Input() typeVthh: string;
   isDetail: boolean = false;
   selectedId: number = 0;
@@ -62,13 +65,15 @@ export class DieuchinhLuachonMuattComponent implements OnInit {
   userInfo: UserLogin;
 
   constructor(
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
-    public userService: UserService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private DieuChinhQuyetDinhPdKhmttService: DieuChinhQuyetDinhPdKhmttService,
-    public globals: Globals,
-  ) { }
+  ) {
+    super(httpClient, storageService, notification, spinner, modal, DieuChinhQuyetDinhPdKhmttService);
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -81,6 +86,7 @@ export class DieuchinhLuachonMuattComponent implements OnInit {
         });
       }
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -185,6 +191,10 @@ export class DieuchinhLuachonMuattComponent implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
@@ -255,6 +265,10 @@ export class DieuchinhLuachonMuattComponent implements OnInit {
 
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

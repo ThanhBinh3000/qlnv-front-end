@@ -13,28 +13,28 @@
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC) && isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_DUYET_LDCUC') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC'))"
               type="button" class="btn btn-sub do"
-              (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
+              (click)="saveAndApproveAndReject('reject', STATUS.TU_CHOI_LDC)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span> Từ chối </span>
       </button>
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC) && isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_DUYET_LDCUC') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC'))"
               type="button" class="btn btn-sub xanh-nhat"
-              (click)="approve(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
+              (click)="saveAndApproveAndReject('approve', STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span> Duyệt </span>
       </button>
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP) && isView
                && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_DUYET_TP') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP'))"
               type="button" class="btn btn-sub do"
-              (click)="reject(idInput,STATUS.TU_CHOI_TP)">
+              (click)="saveAndApproveAndReject('reject', STATUS.TU_CHOI_TP)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span> Từ chối </span>
       </button>
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP) && isView
                && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_DUYET_TP') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP'))"
               type="button" class="btn btn-sub xanh-nhat"
-              (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
+              (click)="saveAndApproveAndReject('approve' ,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span> Duyệt </span>
       </button>
@@ -42,7 +42,7 @@
               || formData.value.trangThai == STATUS.TU_CHOI_LDC) && !isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM'))"
               type="button" class="btn btn-sub xanh-nhat"
-              (click)="saveAndSend(STATUS.CHO_DUYET_TP, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
+              (click)="saveAndApproveAndReject('saveAndSend',STATUS.CHO_DUYET_TP, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
@@ -50,7 +50,7 @@
               || formData.value.trangThai == STATUS.TU_CHOI_LDC)  && !isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_THEM') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM'))"
               type="button" class="btn btn-main"
-              (click)="save()">
+              (click)="saveAndApproveAndReject('createUpdate')">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -300,7 +300,7 @@
             <th class="text-left">
               <span style='color: red;'>*</span> Chỉ tiêu chất lượng
             </th>
-            <th class="text-left">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+            <th class="text-left">Chỉ số chất lượng theo {{formData.value.soHieuQuyChuan}}</th>
             <th class="text-left">
               <span style='color: red;'>*</span> Kết quả phân tích
             </th>
@@ -317,7 +317,12 @@
             <tr *ngIf="!data.edit">
               <td class="text-center">{{ i + 1 }}</td>
               <td class="text-left">{{ data.tenChiTieu }}</td>
-              <td class="text-left">{{ data.mucYeuCauXuat }}</td>
+              <td class="text-left" *ngIf="data.maChiTieu == 'ATTP_GAO'">
+                <input nz-input [disabled]="isView" [(ngModel)]="data.mucYeuCauXuat">
+              </td>
+              <td class="text-left" *ngIf="data.maChiTieu != 'ATTP_GAO'">
+                {{ data.mucYeuCauXuat }}
+              </td>
               <td class="text-left">
                 <input nz-input [disabled]="isView" [(ngModel)]="data.ketQua"
                        (ngModelChange)="onChangeKetQua($event, i)"/>

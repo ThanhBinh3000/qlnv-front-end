@@ -121,7 +121,7 @@
                          (click)="redirectToChiTiet(true, dataPhieu.id)">
                         <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
                       </a>
-                      <a
+                      <a (click)="xoaItem(dataPhieu)"
                         *ngIf="dataPhieu.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_XOA')">
                         <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                       </a>
@@ -193,7 +193,7 @@
   </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-  <thong-tin-quan-ly-bang-ke-can-hang [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
+  <thong-tin-quan-ly-bang-ke-can-hang [checkPrice]="checkPrice" [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
     [typeVthh]="typeVthh" [idQdGiaoNvNh]="idQdGiaoNvNh" [maNganLoKho]="maNganLoKho">
   </thong-tin-quan-ly-bang-ke-can-hang>
 </ng-container>

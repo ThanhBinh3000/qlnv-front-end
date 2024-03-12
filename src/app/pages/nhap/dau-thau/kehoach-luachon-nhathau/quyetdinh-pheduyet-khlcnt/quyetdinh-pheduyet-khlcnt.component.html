@@ -253,12 +253,12 @@
   </div>
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
-  <app-themmoi-quyetdinh-khlcnt [isView]="isView" [idInput]="selectedId" [loaiVthh]="loaiVthh"
+  <app-themmoi-quyetdinh-khlcnt [isView]="isView" [idInput]="selectedId" [loaiVthh]="loaiVthh" [checkPrice]="checkPrice"
     (showListEvent)="showList()">
   </app-themmoi-quyetdinh-khlcnt>
 </div>
 <div *ngIf="isDetailVt" class="chi-tiet">
-  <app-themmoi-quyetdinh-khlcnt-vt [isView]="isView" [idInput]="selectedId" [loaiVthh]="loaiVthh"
+  <app-themmoi-quyetdinh-khlcnt-vt [isView]="isView" [idInput]="selectedId" [loaiVthh]="loaiVthh" [checkPrice]="checkPrice"
     (showListEvent)="showList()">
   </app-themmoi-quyetdinh-khlcnt-vt>
 </div>

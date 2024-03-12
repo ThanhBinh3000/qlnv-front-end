@@ -19,7 +19,7 @@
           </div>
           <div nz-col [nzSpan]="5">
             <label class="search__label"> Ngày Ký QĐ </label>
-            <div nz-row [nzGutter]="24">
+            <div nz-row>
               <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayKyQdTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayKyQdTu" nzPlaceHolder="Ngày bắt đầu">
@@ -27,7 +27,8 @@
               </div>
               <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayKyQdDen" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayKyQdDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                formControlName="ngayKyQdDen" nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
               </div>
             </div>
           </div>
@@ -38,7 +39,7 @@
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
+        <button nz-button class="search__button--clear" (click)="clearForm({loaiVthh: loaiVthh, type : 'QDKH'})">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
@@ -89,7 +90,7 @@
           <th class="text-center"> Mã tổng hợp</th>
           <th class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)"> Loại hàng DTQG</th>
           <th class="text-left"> Chủng loại hành DTQG</th>
-          <th class="text-center"> Số ĐV tài sản</th>
+          <th class="text-center"> SL phần hàng</th>
           <th class="text-left">Trạng thái</th>
           <th class="text-center">Hành động</th>
         </tr>
@@ -237,11 +238,11 @@
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
   <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-                                              [dataInit]="dataInit"
+                                              [checkPrice]="checkPrice" [dataInit]="dataInit"
                                               (removeDataInit)="removeDataInit()" (showListEvent)="showList()">
   </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
 </div>
-<!--xem -->
+<!--Xem tổng hợp-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModal('Thop')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-tong-hop-kh-ban-truc-tiep [idInput]="idThop" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
@@ -255,6 +256,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem kế hoạch-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewDxKh" (nzOnCancel)="closeModal('DxKh')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-de-xuat-kh-ban-truc-tiep [idInput]="idDxKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true"

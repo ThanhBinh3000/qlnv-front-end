@@ -20,6 +20,14 @@
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo tiến độ bán đấu giá thóc, gạo theo năm</span>
             </li>
+            <li nz-menu-item [nzSelected]='tabSelected==6' (click)='selectTab(6)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo kế hoạch hỗ trợ gạo cho học sinh</span>
+            </li>
+            <li nz-menu-item [nzSelected]='tabSelected==7' (click)='selectTab(7)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo kết quả hỗ trợ gạo cho học sinh</span>
+            </li>
             <li nz-menu-item [nzSelected]='tabSelected==14' (click)='selectTab(14)'>
               <span nz-icon nzType='fund'></span>
               <span>Tổng hợp tồn kho vật tư</span>
@@ -44,13 +52,17 @@
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo kết quả xuất cấp vật tư, thiết bị</span>
             </li>
-            <li nz-menu-item [nzSelected]='tabSelected==13' (click)='selectTab(13)'>
+            <li nz-menu-item [nzSelected]='tabSelected==16' (click)='selectTab(16)'>
               <span nz-icon nzType='fund'></span>
-              <span>Báo cáo kế hoạch hỗ trợ gạo cho học sinh</span>
+              <span>Báo cáo bán thóc thuộc kế hoạch năm (Phụ lục 01)</span>
             </li>
-            <li nz-menu-item [nzSelected]='tabSelected==14' (click)='selectTab(14)'>
+            <li nz-menu-item [nzSelected]='tabSelected==18' (click)='selectTab(18)'>
               <span nz-icon nzType='fund'></span>
-              <span>Báo cáo kết quả hỗ trợ gạo cho học sinh</span>
+              <span>Danh sách nhà thầu uy tín</span>
+            </li>
+            <li nz-menu-item [nzSelected]='tabSelected==19' (click)='selectTab(19)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo tổng hợp kết quả đấu thầu mua gạo</span>
             </li>
           </ul>
         </li>
@@ -79,6 +91,12 @@
         <ng-container *ngIf='tabSelected == 3'>
           <app-bao-cao-tien-do-bdg-thoc-gao-theo-nam></app-bao-cao-tien-do-bdg-thoc-gao-theo-nam>
         </ng-container>
+        <ng-container *ngIf='tabSelected == 6'>
+          <app-bao-cao-ke-hoach-ho-tro-gao></app-bao-cao-ke-hoach-ho-tro-gao>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 7'>
+          <app-bao-cao-ket-qua-ho-tro-gao></app-bao-cao-ket-qua-ho-tro-gao>
+        </ng-container>
         <ng-container *ngIf='tabSelected == 10'>
           <app-bao-cao-tdo-bdg-hang-theo-nam-nhap [tabSelected]='tabSelected'></app-bao-cao-tdo-bdg-hang-theo-nam-nhap>
         </ng-container>
@@ -88,11 +106,14 @@
         <ng-container *ngIf='tabSelected == 12'>
           <app-bc-ket-qua-xuat-cap-vat-tu></app-bc-ket-qua-xuat-cap-vat-tu>
         </ng-container>
-        <ng-container *ngIf='tabSelected == 13'>
-          <app-bao-cao-ke-hoach-ho-tro-gao></app-bao-cao-ke-hoach-ho-tro-gao>
+        <ng-container *ngIf='tabSelected == 16'>
+          <app-bao-cao-ban-thoc-thuoc-ke-hoach-nam></app-bao-cao-ban-thoc-thuoc-ke-hoach-nam>
         </ng-container>
-        <ng-container *ngIf='tabSelected == 14'>
-          <app-bao-cao-ket-qua-ho-tro-gao></app-bao-cao-ket-qua-ho-tro-gao>
+        <ng-container *ngIf='tabSelected == 18'>
+          <app-bc-danh-sach-nha-thau-uy-tin></app-bc-danh-sach-nha-thau-uy-tin>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 19'>
+          <app-bc-th-ket-qua-dau-thau-gao-theo-nam></app-bc-th-ket-qua-dau-thau-gao-theo-nam>
         </ng-container>
       </div>
     </div>

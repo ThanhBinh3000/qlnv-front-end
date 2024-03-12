@@ -153,9 +153,23 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
   };
 
   isShowDS() {
-    if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
-      return true
-    else return false
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBGN_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBGN_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBGN_XEM'))
+  }
+
+  isXoa() {
+    return this.isCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBGN_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBGN_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBGN_XOA'))
+  }
+
+  isExport() {
+    return this.isCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBGN_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBGN_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBGN_EXP'))
+  }
+
+  isThem() {
+    return this.isCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBGN_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBGN_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBGN_THEM'))
+  }
+
+  isDuyet() {
+    return this.isCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBGN_DUYET') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBGN_DUYET') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBGN_DUYET'))
   }
 
   isCuc() {
@@ -210,7 +224,7 @@ export class BienBanGiaoNhanComponent extends Base2Component implements OnInit {
       this.formData.value.denNgayThoiHanNhap = dayjs(this.formData.value.denNgayThoiHanNhap).format('YYYY-MM-DD')
     }
     let body = this.formData.value
-    if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
+    // if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1

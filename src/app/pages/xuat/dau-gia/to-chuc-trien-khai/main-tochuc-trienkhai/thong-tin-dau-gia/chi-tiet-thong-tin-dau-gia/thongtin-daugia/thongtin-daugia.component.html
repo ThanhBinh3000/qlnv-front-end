@@ -25,7 +25,7 @@
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true"> Mã thông báo bán đấu giá</nz-form-label>
                   <nz-form-control nz-col [nzErrorTip]="error">
-                    <input nz-input formControlName="maThongBao" readonly/>
+                    <input nz-input formControlName="maThongBao" [readonly]="isView"/>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -205,8 +205,7 @@
                       </div>
                       <div nz-col [nzSpan]="4">
                         <nz-form-item>
-                          <nz-form-label nzRequired [nzNoColon]="true"> Bước giá của từng đơn vị tài sản (%)
-                          </nz-form-label>
+                          <nz-form-label nzRequired [nzNoColon]="true"> Bước giá của từng đơn vị tài sản</nz-form-label>
                           <nz-form-control nz-col [nzErrorTip]="error">
                             <input nz-input formControlName="buocGia" [readonly]="isView"/>
                           </nz-form-control>
@@ -455,7 +454,7 @@
                       <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Số biên bản bán đấu giá</nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                          <input nz-input formControlName="soBienBan" readonly/>
+                          <input nz-input formControlName="soBienBan" [readonly]="isView"/>
                         </nz-form-control>
                       </nz-form-item>
                     </div>

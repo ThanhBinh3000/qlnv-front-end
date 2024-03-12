@@ -1,4 +1,4 @@
-<div *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC')">
+<div *ngIf="userService.isAccessPermisson('DCNB_NHAP')">
   <div *ngIf="isShowDS() && !isDetail" class="luong-thuc__danh-sach">
     <div class="bg-trang">
       <nz-card class="mt16 flex-card p-lr16">
@@ -18,7 +18,7 @@
             </div> -->
             <div nz-col nzSpan="3">
               <label class="search__label">Số QĐ ĐC của cục</label>
-              <nz-input-group nzAddOnAfter="/DCNB">
+              <nz-input-group>
                 <nz-input-number class="search__input" formControlName="soQdinh" [nzMin]="1" [nzMax]="999999999"
                   [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
                 </nz-input-number>
@@ -91,15 +91,15 @@
       <div class="group-button">
         <h3 class="text-uppercase">Danh sách phiếu kiểm tra chất lượng</h3>
         <div class="buttons">
-          <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="isChiCuc()">
+          <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="isXoa()">
             <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-sub" (click)="exportDataTC()">
+          <button type="button" class="btn btn-sub" (click)="exportDataTC()" *ngIf="isExport()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Xuất file</span>
           </button>
-          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)" *ngIf="isChiCuc()">
+          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)" *ngIf="isThem()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
@@ -264,15 +264,15 @@
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                               </a>
 
-                              <a *ngIf="row5.trangThai === STATUS.CHO_DUYET_LDCC"
+                              <a *ngIf="row5.trangThai === STATUS.CHO_DUYET_LDCC && isDuyet()"
                                 (click)="redirectDetail(row5.id, true)">
                                 <i class="icon htvbdh_tcdt_pheduyet" title="Duyệt"></i>
                               </a>
 
-                              <a *ngIf="isSua(row5)" (click)="redirectDetail(row5.id, false)">
+                              <a *ngIf="isSua(row5) && isThem()" (click)="redirectDetail(row5.id, false)">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                               </a>
-                              <a *ngIf="row5.trangThai == STATUS.DU_THAO" (click)="xoa(row5)">
+                              <a *ngIf="row5.trangThai == STATUS.DU_THAO && isXoa()" (click)="xoa(row5)">
                                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                               </a>
                             </td>

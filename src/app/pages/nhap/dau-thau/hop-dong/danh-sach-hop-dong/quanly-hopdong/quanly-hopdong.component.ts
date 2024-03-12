@@ -26,6 +26,7 @@ import {saveAs} from 'file-saver';
 export class QuanlyHopdongComponent implements OnInit {
   @Input() id: number;
   @Input() loaiVthh: String;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -298,6 +299,10 @@ export class QuanlyHopdongComponent implements OnInit {
   }
 
   async approve() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let mess = 'Bạn có chắc chắn muốn hoàn thành cập nhật hợp đồng ?'
     if (this.validateData()) {
       mess = 'Còn gói thầu chưa tạo hợp đồng hoặc hợp đồng chưa được ký, bạn có chắc chắn muốn hoàn thành cập nhật hợp đồng ?'

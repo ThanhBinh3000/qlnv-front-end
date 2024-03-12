@@ -165,7 +165,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         soDxuat: data.soDxuat?.split('/')[0]
       });
       this.dataTable = data.children;
-      if (!this.isView){
+      if (!this.isView) {
         await this.getGiaToiThieu();
       }
       if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
@@ -480,44 +480,37 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     });
   }
 
-  async save() {
+  async saveAndBrowse(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
       await this.helperService.ignoreRequiredForm(this.formData);
-      if (!this.validateNgay()) {
-        return;
-      }
-      const {soDxuat, ...formDataValue} = this.formData.value;
       const body = {
-        ...formDataValue,
-        soDxuat: soDxuat ? soDxuat + this.maHauTo : null,
+        ...this.formData.value,
+        soDxuat: this.formData.value.soDxuat ? this.formData.value.soDxuat + this.maHauTo : null,
         children: this.dataTable,
       };
-      await this.createUpdate(body);
+      switch (action) {
+        case "createUpdate":
+          if (!this.validateNgay()) {
+            return;
+          }
+          await this.createUpdate(body);
+          break;
+        case "saveAndSend":
+          this.setValidForm();
+          if (this.dataTable.length === 0) {
+            this.notification.error(MESSAGE.ERROR, 'Danh sách danh mục tài sản bán đấu giá không được để trống');
+            return;
+          }
+          await this.saveAndSend(body, trangThai, msg, msgSuccess);
+          break;
+        default:
+          console.error("Invalid action: ", action);
+          break;
+      }
+    } catch (error) {
+      console.error('Error: ', error);
+    } finally {
       await this.helperService.restoreRequiredForm(this.formData);
-    } catch (error) {
-      console.log('error', error);
-    }
-  }
-
-  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    try {
-      this.setValidForm();
-      if (this.dataTable.length === 0) {
-        this.notification.error(MESSAGE.ERROR, 'Danh sách danh mục tài sản bán đấu giá không được để trống');
-        return;
-      }
-      // if (!this.validatemaDviTsan()){
-      //   return;
-      // }
-      const {soDxuat, ...formDataValue} = this.formData.value;
-      const body = {
-        ...formDataValue,
-        soDxuat: soDxuat ? soDxuat + this.maHauTo : null,
-        children: this.dataTable,
-      };
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
-    } catch (error) {
-      console.log('error', error);
     }
   }
 

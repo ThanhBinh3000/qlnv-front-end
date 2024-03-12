@@ -260,11 +260,13 @@
   </div>
 </ng-container>
 <ng-container class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin *ngIf="isAddNew" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  <app-thong-tin *ngIf="isAddNew" [loaiVthh]="loaiVthh" [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-thong-tin>
-  <app-quanly-hopdong *ngIf="isQuanLy" [idInput]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  <app-quanly-hopdong *ngIf="isQuanLy" [idInput]="idSelected" [loaiVthh]="loaiVthh" [checkPrice]="checkPrice"
+                      (showListEvent)="showList()">
   </app-quanly-hopdong>
 </ng-container>
+<!--Xem quyết định kế hoạch-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal('QdPd')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
@@ -277,10 +279,11 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem quyết định kết quả-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKq" (nzOnCancel)="closeModal('QdPdKq')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--    <app-chi-tiet-qd-pd-ket-qua-bdg [idInput]="idQdPdKq" [loaiVthh]="loaiVthh" [isViewOnModal]="true">-->
-    <!--    </app-chi-tiet-qd-pd-ket-qua-bdg>-->
+    <app-them-moi-quyet-dinh-phe-duyet-ket-qua [idInput]="idQdPdKq" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-them-moi-quyet-dinh-phe-duyet-ket-qua>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal('QdPdKq')" class="modal__button--cancel">

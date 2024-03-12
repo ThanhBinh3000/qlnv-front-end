@@ -3,31 +3,32 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="20">
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="3">
             <label class="search__label"> Năm kế hoạch</label>
             <nz-select formControlName="namKh">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="7">
             <label class="search__label"> Số QĐ giao NV xuất hàng</label>
             <input nz-input formControlName="soQdNv"/>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="7">
             <label class="search__label"> Số phiếu xuất kho </label>
             <input nz-input formControlName="soPhieuXuatKho"/>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="7">
             <label class="search__label"> Ngày xuất kho</label>
-            <div nz-row [nzGutter]="24">
+            <div nz-row>
               <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartNgayXkTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayLapPhieuTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col [nzSpan]="12" class="cus-start-date">
+              <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledStartNgayXkDen" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayLapPhieuDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                formControlName="ngayLapPhieuDen" nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
               </div>
             </div>
           </div>
@@ -51,7 +52,8 @@
       <div class="buttons">
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_XK_VT_PXK_EXP') : userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_PXK_EXP')"
-          type="button" class="btn btn-sub" (click)="exportData('danh-sach-phieu-xuat-kho-ban-truc-tiep-hang-DTQG.xlsx')">
+          type="button" class="btn btn-sub"
+          (click)="exportData('danh-sach-phieu-xuat-kho-ban-truc-tiep-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>
@@ -224,10 +226,11 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-them-moi-phieu-xuat-kho-btt [idInput]="idSelected" [idQdGnv]="idQdNv" [idKiemnghiem]="idKiemnghiem"
-                                   [loaiVthh]="loaiVthh" [isView]="isView"
+                                   [loaiVthh]="loaiVthh" [isView]="isView" [checkPrice]="checkPrice"
                                    (showListEvent)="showList()">
   </app-them-moi-phieu-xuat-kho-btt>
 </div>
+<!--Xem quyết định giao nhiệm vụ-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModal('QdNv')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-qd-giao-nv-xuat-btt [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
@@ -240,6 +243,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem phiếu kiểm nghiệm chất lượng-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewKiemnghiem"
           (nzOnCancel)="closeModal('kiemNghiem')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
@@ -254,6 +258,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem bảng kê cân hàng-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewBangKe"
           (nzOnCancel)="closeModal('bangKe')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">

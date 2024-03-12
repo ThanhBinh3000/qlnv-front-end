@@ -60,7 +60,8 @@
       <div class="buttons">
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTDG_KTCL_VT_KNCL_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_EXP')"
-          type="button" class="btn btn-sub" (click)="exportData('danh-sach-phieu-kiem-nghiem-chat-luong-hang-DTQG.xlsx')">
+          type="button" class="btn btn-sub"
+          (click)="exportData('danh-sach-phieu-kiem-nghiem-chat-luong-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>
@@ -209,13 +210,14 @@
 </div>
 <div *ngIf="isDetail">
   <app-bdg-them-moi-phieu-kiem-nghiem-chat-luong [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-                                                 (showListEvent)="showList()">
+                                                 [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-bdg-them-moi-phieu-kiem-nghiem-chat-luong>
 </div>
-<!-- xem -->
+<!--Xem quyết định giao nhiệm vụ-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModal('QdNv')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-create-giao-xh [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
+    <app-create-giao-xh [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                        [isView]="true">
     </app-create-giao-xh>
   </ng-container>
   <div *nzModalFooter>
@@ -225,9 +227,11 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem biên bản lấy mẫu-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewLayMau" (nzOnCancel)="closeModal('layMau')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-create-bien-ban-lay-mau [idInput]="idLayMau" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
+    <app-create-bien-ban-lay-mau [idInput]="idLayMau" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                 [isView]="true">
     </app-create-bien-ban-lay-mau>
   </ng-container>
   <div *nzModalFooter>
@@ -237,10 +241,12 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem biên bản tịnh kho-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewTinhKho" (nzOnCancel)="closeModal('tinhKho')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--    <app-bdg-them-moi-bien-ban-tinh-kho [idInput]="idTinhKho" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">-->
-    <!--    </app-bdg-them-moi-bien-ban-tinh-kho>-->
+    <app-bdg-them-moi-bien-ban-tinh-kho [idInput]="idTinhKho" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                        [isView]="true">
+    </app-bdg-them-moi-bien-ban-tinh-kho>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal('tinhKho')" class="modal__button--cancel">

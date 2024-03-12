@@ -30,6 +30,7 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
 
   @Input() id: number;
   @Input() loaiVthh: string;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
   idQdKh: number
@@ -241,6 +242,10 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
   }
 
   pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     if(this.validateListHopDong()){
       this.notification.error(MESSAGE.ERROR, 'Vui lòng thêm các hợp đồng cho các đơn vị cung cấp');
       return;
@@ -357,6 +362,10 @@ export class QuanLyHopDongMttComponent extends Base2Component implements OnInit 
   }
 
   async deleteHd(data) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

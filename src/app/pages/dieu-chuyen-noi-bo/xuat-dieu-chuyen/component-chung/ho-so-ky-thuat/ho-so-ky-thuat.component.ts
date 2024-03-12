@@ -92,6 +92,26 @@ export class HoSoKyThuatXuatDieuChuyenComponent extends Base2Component implement
       soBbKtHskt: [],
       type: []
     })
+  }
+
+  async ngOnInit() {
+    await this.spinner.show();
+    this.formData.patchValue({
+      type: 'DCNBX'
+    });
+    try {
+      this.setMaQuyen()
+      await Promise.all([
+        this.search(), this.loadDsDiemKho()
+      ])
+    } catch (e) {
+      console.log('error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+  setMaQuyen() {
     switch (this.loaiMaQuyen) {
       case 'DCNB_VT_KHACTK':
         this.MA_QUYEN.XEM = 'DCNB_XUAT_NBCC_KHACTK_KTCL_VT_XEM';
@@ -119,23 +139,6 @@ export class HoSoKyThuatXuatDieuChuyenComponent extends Base2Component implement
         break;
       default:
         break;
-    }
-  }
-
-  async ngOnInit() {
-    await this.spinner.show();
-    this.formData.patchValue({
-      type: 'DCNBX'
-    });
-    try {
-      await Promise.all([
-        this.search(), this.loadDsDiemKho()
-      ])
-    } catch (e) {
-      console.log('error: ', e);
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      await this.spinner.hide();
     }
   }
   async loadDsDiemKho() {

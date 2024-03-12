@@ -241,11 +241,12 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-create-giao-xh [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-                      (showListEvent)="showList()">
+                      [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-create-giao-xh>
 </div>
-<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewHopDong" (nzOnCancel)="closeModal('hopDong')">
-  <ng-container *nzModalContent class="modal__content">
+<!--Xem hợp đồng-->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewHopDong" (nzOnCancel)="closeModal('hopDong')">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-thong-tin [idHopDong]="idHopDong" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
     </app-thong-tin>
   </ng-container>
@@ -256,10 +257,12 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem biên bản tịnh kho-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewTinhKho" (nzOnCancel)="closeModal('tinhKho')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--    <app-bdg-them-moi-bien-ban-tinh-kho [idInput]="idTinhKho" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">-->
-    <!--    </app-bdg-them-moi-bien-ban-tinh-kho>-->
+    <app-bdg-them-moi-bien-ban-tinh-kho [idInput]="idTinhKho" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+                                        [isView]="true">
+    </app-bdg-them-moi-bien-ban-tinh-kho>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal('tinhKho')" class="modal__button--cancel">

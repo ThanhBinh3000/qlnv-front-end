@@ -1,16 +1,16 @@
 <div>
   <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2">
     <ul nz-menu nzMode="horizontal">
-      <li nz-menu-item nzSelected (click)="selectTab(0)">
+      <li nz-menu-item nzSelected (click)="selectTab('DCNB_NHAP_KTCL_LT_BBNTBQLD')" *ngIf="checkBBNTBQLD()">
         Biên bản nghiệm thu bảo quản lần đầu
       </li>
-      <li nz-menu-item (click)="selectTab(1)">
+      <li nz-menu-item (click)="selectTab('DCNB_NHAP_KTCL_LT_PKTCL')" *ngIf="checkPKTCL()">
         Phiếu kiểm tra chất lượng
       </li>
-      <li nz-menu-item (click)="selectTab(2)">
+      <li nz-menu-item (click)="selectTab('DCNB_NHAP_KTCL_LT_BBLM')" *ngIf="checkBBLM()">
         Biên bản lấy mẫu/bàn giao mẫu
       </li>
-      <li nz-menu-item (click)="selectTab(3)">
+      <li nz-menu-item (click)="selectTab('DCNB_NHAP_KTCL_LT_PKNCL')" *ngIf="checkPKNCL()">
         Phiếu kiểm nghiệm chất lượng
       </li>
     </ul>
@@ -18,18 +18,21 @@
 
   <div class="contentBor chi-tieu__body giao-ke-hoach">
     <div class="contentDetail">
-      <ng-container *ngIf="tabSelected == 0">
+      <ng-container *ngIf="tabSelected == 'DCNB_NHAP_KTCL_LT_BBNTBQLD'">
         <app-bien-ban-nghiem-thu-bao-quan-lan-dau [loaiDc]="loaiDc"
-          *ngIf="tabSelected == 0"></app-bien-ban-nghiem-thu-bao-quan-lan-dau>
+          *ngIf="tabSelected == 'DCNB_NHAP_KTCL_LT_BBNTBQLD'"></app-bien-ban-nghiem-thu-bao-quan-lan-dau>
       </ng-container>
-      <ng-container *ngIf="tabSelected == 1">
-        <app-kiem-tra-chat-luong [loaiDc]="loaiDc" *ngIf="tabSelected == 1"></app-kiem-tra-chat-luong>
+      <ng-container *ngIf="tabSelected == 'DCNB_NHAP_KTCL_LT_PKTCL'">
+        <app-kiem-tra-chat-luong [loaiDc]="loaiDc"
+          *ngIf="tabSelected == 'DCNB_NHAP_KTCL_LT_PKTCL'"></app-kiem-tra-chat-luong>
       </ng-container>
-      <ng-container *ngIf="tabSelected == 2">
-        <app-bien-ban-mau [loaiDc]="loaiDc" [isVatTu]="false" *ngIf="tabSelected == 2"></app-bien-ban-mau>
+      <ng-container *ngIf="tabSelected == 'DCNB_NHAP_KTCL_LT_BBLM'">
+        <app-bien-ban-mau [loaiDc]="loaiDc" [isVatTu]="false"
+          *ngIf="tabSelected == 'DCNB_NHAP_KTCL_LT_BBLM'"></app-bien-ban-mau>
       </ng-container>
-      <ng-container *ngIf="tabSelected == 3">
-        <app-kiem-nghiem-chat-luong [loaiDc]="loaiDc" *ngIf="tabSelected == 3"></app-kiem-nghiem-chat-luong>
+      <ng-container *ngIf="tabSelected == 'DCNB_NHAP_KTCL_LT_PKNCL'">
+        <app-kiem-nghiem-chat-luong [loaiDc]="loaiDc"
+          *ngIf="tabSelected == 'DCNB_NHAP_KTCL_LT_PKNCL'"></app-kiem-nghiem-chat-luong>
       </ng-container>
     </div>
 

@@ -49,13 +49,14 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
       tichLuongSdVt: ['', ],
       theTichSdVt: ['', ],
       theTichSdLt: ['', ],
-      namNhap: ['', Validators.required],
+      namNhap: [''],
       ngayNhapDay: [''],
+      ngayXuatDoc: [''],
       loaiVthh: ['', Validators.required],
       cloaiVthh: [''],
-      slTon: ['', Validators.required],
+      slTon: [0, Validators.required],
       dviTinh: [''],
-      thanhTien: [0, [Validators.required, Validators.min(1)]],
+      thanhTien: [0, [Validators.required, Validators.min(0)]],
       isKhoiTao: [true]
     })
   }
@@ -122,6 +123,7 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
     body.dviTinh = this.formData.value.dviTinh
     body.namNhap = this.formData.value.namNhap
     body.ngayNhapDay = this.formData.value.ngayNhapDay
+    body.ngayXuatDoc = this.formData.value.ngayXuatDoc
     body.trangThai = body.trangThai == true ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
     this.khoService.updateKho(type, body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {

@@ -44,7 +44,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
   listNam: any[] = [];
   listBoNganh: any[] = [];
   listTrangThai: any[] = [
-    { ma: STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: STATUS.DANG_NHAP_DU_LIEU, giaTri: 'Đang nhập dữ liệu' },
     { ma: STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
   ];
 
@@ -111,7 +111,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
+          if (item.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
             item.checked = true;
           }
         });

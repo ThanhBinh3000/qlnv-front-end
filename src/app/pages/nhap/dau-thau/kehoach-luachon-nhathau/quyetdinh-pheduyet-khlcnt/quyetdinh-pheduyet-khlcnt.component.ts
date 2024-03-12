@@ -130,6 +130,7 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
         });
       }
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
       await this.spinner.hide();
     }
     catch (e) {
@@ -144,6 +145,10 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
   }
 
   insert() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
       return;
     }
@@ -166,6 +171,10 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
   }
 
   async goDetail(id: number, roles?: any) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     if (roles != 'NHDTQG_PTDT_KHLCNT_QDLCNT_XEM') {
       if (!this.checkPermission(roles)) {
         return

@@ -152,12 +152,6 @@
                     (click)="xoaItem(row3)">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                   </a>
-                  <a (click)="xoaItem(row3)">
-                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                  </a>
-                  <a (click)="xoaItem(row3)">
-                    <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
-                  </a>
                 </td>
               </tr>
             </ng-container>
@@ -185,7 +179,7 @@
   </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-  <app-thong-tin-bien-ban-giao-nhan [id]="selectedId" (showListEvent)="showList()" [isView]="isViewDetail"
+  <app-thong-tin-bien-ban-giao-nhan [checkPrice]="checkPrice" [id]="selectedId" (showListEvent)="showList()" [isView]="isViewDetail"
     [loaiVthh]="loaiVthh">
   </app-thong-tin-bien-ban-giao-nhan>
 </ng-container>

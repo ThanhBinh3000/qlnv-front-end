@@ -13,28 +13,28 @@
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC) && isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_DUYET_LDCUC') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_DUYET_LDCUC'))"
               type="button" class="btn btn-sub do"
-              (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
+              (click)="saveAndApproveAndReject('reject',STATUS.TU_CHOI_LDC)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span> Từ chối </span>
       </button>
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDC) && isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_DUYET_LDCUC') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_DUYET_LDCUC'))"
               type="button" class="btn btn-sub xanh-nhat"
-              (click)="approve(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
+              (click)="saveAndApproveAndReject('approve',STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span> Duyệt </span>
       </button>
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP) && isView
                && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_DUYET_TP') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_DUYET_TP'))"
               type="button" class="btn btn-sub do"
-              (click)="reject(idInput,STATUS.TU_CHOI_TP)">
+              (click)="saveAndApproveAndReject('reject',STATUS.TU_CHOI_TP)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span> Từ chối </span>
       </button>
       <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP) && isView
                && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_DUYET_TP') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_DUYET_TP'))"
               type="button" class="btn btn-sub xanh-nhat"
-              (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
+              (click)="saveAndApproveAndReject('approve',STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span> Duyệt </span>
       </button>
@@ -42,7 +42,7 @@
               || formData.value.trangThai == STATUS.TU_CHOI_LDC) && !isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM'))"
               type="button" class="btn btn-sub xanh-nhat"
-              (click)="saveAndSend(STATUS.CHO_DUYET_TP, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
+              (click)="saveAndApproveAndReject('saveAndSend', STATUS.CHO_DUYET_TP, 'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
@@ -50,7 +50,7 @@
               || formData.value.trangThai == STATUS.TU_CHOI_LDC)  && !isView
               && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_VT_QDKQCG_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_TCKHBTT_LT_QDKQCG_THEM'))"
               type="button" class="btn btn-main"
-              (click)="save()">
+              (click)="saveAndApproveAndReject('createUpdate')">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -265,7 +265,7 @@
             <th class="text-left"> Chi cục DTNN</th>
             <th class="text-left"> Điểm kho</th>
             <th class="text-left"> Lô kho</th>
-            <th class="text-left"> Mã ĐVTS</th>
+            <th class="text-left"> Mã phần hàng</th>
             <th class="text-center"> SL xuất bán <br>TT đề xuất</th>
             <th class="text-left"> ĐVT</th>
             <th class="text-center"> Đơn giá được <br>duyệt

@@ -431,13 +431,13 @@
               Các chỉ tiêu cần kiểm tra
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-checkbox-group formControlName="ctChatLuong" nzDisabled="true"></nz-checkbox-group>
+              <nz-checkbox-group formControlName="ctChatLuong" [nzDisabled]="isView"></nz-checkbox-group>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="20">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzSpan="24" nzRequired>
+            <nz-form-label [nzNoColon]="true" nzSpan="24">
               File đính kèm ảnh lấy mẫu đã niêm phong
             </nz-form-label>
           </nz-form-item>

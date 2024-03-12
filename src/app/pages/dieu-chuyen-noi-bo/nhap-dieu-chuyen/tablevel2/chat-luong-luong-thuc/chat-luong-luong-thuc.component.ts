@@ -45,14 +45,38 @@ export class ChatLuongLuongThucComponent extends Base2Component implements OnIni
     };
   }
 
-  tabSelected: number = 0;
+  tabSelected: string = 'DCNB_NHAP_KTCL_LT_BBNTBQLD';
 
   ngOnInit(): void {
     console.log('ChatLuongLuongThucComponent', this.loaiDc)
   }
 
-  selectTab(tab: number) {
+  selectTab(tab: string) {
     this.tabSelected = tab;
+  }
+
+  checkBBNTBQLD() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT') && this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_BBNTBQLD')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT') && this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_BBNTBQLD')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT') && this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_BBNTBQLD'))
+  }
+
+  checkPKTCL() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT') && this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKTCL')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT') && this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKTCL')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKTCL'))
+  }
+
+  checkBBLM() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT') && this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_BBLM')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_BBLM')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_BBLM'))
+  }
+
+  checkPKNCL() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT') && this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKNCL')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT') && this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKNCL')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT') && this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKNCL'))
   }
 
 }

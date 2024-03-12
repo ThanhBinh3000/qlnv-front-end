@@ -45,13 +45,37 @@ export class NhapKhoVatTuComponent extends Base2Component implements OnInit {
     };
   }
 
-  tabSelected: number = 0;
+  tabSelected: string = 'DCNB_NHAP_NK_VT_PNK';
 
   ngOnInit(): void {
   }
 
-  selectTab(tab: number) {
+  selectTab(tab: string) {
     this.tabSelected = tab;
+  }
+
+  checkPNK() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT') && this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_PNK')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT') && this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_PNK')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT') && this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_PNK'))
+  }
+
+  checkBKNVT() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT') && this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BKNVT')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT') && this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BKNVT')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BKNVT'))
+  }
+
+  checkBBKTNK() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT') && this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBKTNK')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBKTNK')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBKTNK'))
+  }
+
+  checkBBGN() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT') && this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBGN')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT') && this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBGN')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT') && this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBGN'))
   }
 
 }

@@ -18,6 +18,8 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import {formatNumber} from "@angular/common";
+import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 
 @Component({
@@ -32,6 +34,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   @Input() loaiVthh: string;
   @Input() idQdGiaoNvNh: number;
   @Input() maNganLoKho: string;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -57,6 +60,19 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   listHinhThucBaoQuan: any[] = [];
   listDanhGia: any[] = [];
   formattedSlNhapKho: any;
+  amount = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -67,6 +83,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKtraCluongService);
     this.formData = this.fb.group(
@@ -126,6 +143,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         slKhKb: [],
         slTtKtra: [],
         hthucBquan: [],
+        soHieuQuyChuan: [],
       }
     );
   }
@@ -136,7 +154,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       super.ngOnInit();
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
-        this.loadTieuChuan(),
+        // this.loadTieuChuan(),
         this.loadData(),
         this.loadDsHthucBquan(),
       ]);
@@ -243,12 +261,21 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       this.listDiaDiemNhap = dataChiCuc[0].children;
     }
     if (isSetTc) {
-      let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+      let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh);
       if (dmTieuChuan.data) {
-        this.dataTableChiTieu = dmTieuChuan.data.children;
-        this.dataTableChiTieu.forEach(element => {
-          element.edit = false
+        this.dataTableChiTieu = dmTieuChuan.data;
+        this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
+          return {
+            ...element,
+            edit: true,
+            tenTchuan: element.tenChiTieu,
+            chiSoNhap: element.mucYeuCauXuat,
+            ketQuaKiemTra: element.ketQuaPt,
+            phuongPhap: element.phuongPhapXd,
+            danhGia: element.danhGia
+          }
         });
+        this.formData.get('soHieuQuyChuan').setValue(this.dataTableChiTieu[0].soHieuQuyChuan)
       }
     }
     if (this.maNganLoKho != null) {
@@ -304,7 +331,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
         hthucBquan: data.listBbNtbqld?.find(item => item.id === Math.min(...data.listBbNtbqld?.map(item => item.id)))?.hthucBquan,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
       })
-      this.formattedSlNhapKho = this.formData.get('soLuongNhapKho') ? formatNumber(this.formData.get('soLuongNhapKho').value * 1000, 'vi_VN', '1.0-99') : '0';
+      this.formattedSlNhapKho = this.formData.get('soLuongNhapKho') ? formatNumber(this.formData.get('soLuongNhapKho').value * 1000, 'vi_VN', '1.2-2') : '0';
       await this.loadDsHthucBquan();
     }
   }
@@ -403,6 +430,10 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   }
 
   async save(isGuiDuyet: boolean) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     if (this.validateSave()) {
       await this.spinner.show();
       this.setValidator(isGuiDuyet);
@@ -452,6 +483,10 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   }
 
   pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     if (this.formData.value.soBbNtbq == null) {
       this.notification.error(MESSAGE.ERROR, "Bạn cần tạo biên bản nghiệm thu bảo quản lần đầu trước.")
       return;
@@ -460,13 +495,19 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
     let mess = ''
     switch (this.formData.get('trangThai').value) {
       case STATUS.TU_CHOI_LDCC:
+      case STATUS.TU_CHOI_TK:
       case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_LDCC;
+        trangThai = STATUS.CHO_DUYET_TK;
         mess = 'Bạn có muốn gửi duyệt ?'
         break;
       }
       case STATUS.CHO_DUYET_LDCC: {
         trangThai = STATUS.DA_DUYET_LDCC;
+        mess = 'Bạn có chắc chắn muốn phê duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_TK: {
+        trangThai = STATUS.CHO_DUYET_LDCC;
         mess = 'Bạn có chắc chắn muốn phê duyệt ?'
         break;
       }
@@ -507,6 +548,21 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
+    let trangThai = ''
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.TU_CHOI_LDCC;
+        break;
+      }
+      case STATUS.CHO_DUYET_TK: {
+        trangThai = STATUS.TU_CHOI_TK;
+        break;
+      }
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -523,7 +579,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: STATUS.TU_CHOI_LDCC,
+            trangThai: trangThai,
           };
           let res =
             await this.phieuKtraCluongService.approve(

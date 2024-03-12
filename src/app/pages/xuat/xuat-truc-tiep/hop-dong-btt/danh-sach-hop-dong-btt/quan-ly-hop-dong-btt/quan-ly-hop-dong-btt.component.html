@@ -340,7 +340,7 @@
         && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM') :
             userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_THEM'))">
           <button type="button" class="btn btn-main"
-                  (click)="redirectHopDong(0,false, true)">
+                  (click)="redirectHopDong(0,false, true, true)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
@@ -393,11 +393,11 @@
                   <i class="icon htvbdh_tcdt_tuchoi" title="Xem trước"></i>
                 </a>
                 <a *ngIf="data.trangThai == STATUS.DA_KY"
-                   (click)="redirectHopDong(data.id, true, true) ">
+                   (click)="redirectHopDong(data.id, true, true, true) ">
                   <i class="fa fa-eye" title="Xem chi tiết"></i>
                 </a>
                 <a *ngIf="data.trangThai == STATUS.DU_THAO && !userService.isTongCuc()"
-                   (click)="redirectHopDong(data.id, false, true) ">
+                   (click)="redirectHopDong(data.id, false, true, true) ">
                   <i class="fa fa-pencil" title="Sửa"></i>
                 </a>
                 <a *ngIf="data.trangThai == STATUS.DU_THAO && !userService.isTongCuc()"
@@ -437,9 +437,23 @@
 </ng-container>
 <ng-template #tempHopDong>
   <app-thong-tin-hop-dong-btt [idInput]="idInput" [idHopDong]="idHopDong" [loaiVthh]="loaiVthh" [isView]="isView"
-                              (showListEvent)="redirectHopDong(0, true, false)">
+                              [checkPrice]="checkPrice" [phanLoai]="phanLoai"
+                              (showListEvent)="redirectHopDong(0, true, false, false)">
   </app-thong-tin-hop-dong-btt>
 </ng-template>
+<!--Xem quyết định giao nhiệm vụ -->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-qd-giao-nv-xuat-btt [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-them-moi-qd-giao-nv-xuat-btt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
 <nz-modal [nzWidth]="'75%'" [nzClosable]="false" [(nzVisible)]="showDlgPreview" nzWidth="100%"
           (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">

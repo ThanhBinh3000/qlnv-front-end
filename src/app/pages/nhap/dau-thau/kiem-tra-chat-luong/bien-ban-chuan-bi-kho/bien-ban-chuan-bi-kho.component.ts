@@ -112,6 +112,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
         this.qdTCDT = this.userInfo.MA_QD;
       }
       await this.search();
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -227,6 +228,10 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   }
 
   xoaItem(item: any) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -260,6 +265,10 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   }
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number, maNganLoKho?: string) {
+    if (id == 0 && this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.selectedId = id;
     this.isDetail = true;
     this.idQdGiaoNvNh = idQdGiaoNvNh;
@@ -277,24 +286,14 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
       this.spinner.show();
       try {
         let body = {
-          "maDonVi": this.userInfo.MA_DVI,
-          "maHangHoa": this.loaiVthh,
-          "maNganKho": null,
-          "ngayKiemTraDenNgay": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 1
-            ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
-            : null,
-          "ngayKiemTraTuNgay": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 0
-            ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
-            : null,
-          "ngayLapPhieu": null,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": null,
-          "soBienBan": this.searchFilter.soBienBan,
-          "soQd": this.searchFilter.soQuyetDinhNhap,
-          "str": null,
-          "tenNguoiGiao": null,
-          "trangThai": null
+          paggingReq: null,
+          loaiVthh: this.loaiVthh,
+          trangThai: STATUS.BAN_HANH,
+          namNhap: this.searchFilter.namKh,
+          soQd: this.searchFilter.soQuyetDinhNhap,
+          soBbCbk: this.searchFilter.soBienBan,
+          tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59" : null,
         };
         this.bienBanChuanBiKhoService
           .export(body)

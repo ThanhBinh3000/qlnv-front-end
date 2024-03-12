@@ -9,19 +9,18 @@
               </span>
           </nz-form-label>
           <div nz-row>
-            <div nz-col nzSpan="12" class="cus-start-date">
+            <div nz-col [nzSpan]="12" class="cus-start-date">
               <nz-date-picker [nzDisabledDate]="disabledTgianTocChucTu" nzFormat="dd/MM/yyyy"
-                              formControlName="tgianDkienTu" (ngModelChange)="onChangeThoiGian($event, 'tu')"
-                              nzPlaceHolder="Ngày bắt đầu"
+                              formControlName="tgianDkienTu" nzPlaceHolder="Ngày bắt đầu"
+                              (ngModelChange)="onChangeThoiGian($event, 'tu')"
                               [nzDisabled]=" isView ? true : trangThaiQd">
               </nz-date-picker>
             </div>
-            <div nz-col nzSpan="12" class="cus-end-date">
+            <div nz-col [nzSpan]="12" class="cus-end-date">
               <nz-date-picker [nzDisabledDate]="disabledTgianTocChucDen" nzFormat="dd/MM/yyyy"
-                              formControlName="tgianDkienDen" (ngModelChange)="onChangeThoiGian($event, 'den')"
-                              nzPlaceHolder="Ngày kết thúc"
+                              formControlName="tgianDkienDen" nzPlaceHolder="Ngày kết thúc"
+                              (ngModelChange)="onChangeThoiGian($event, 'den')"
                               [nzDisabled]=" isView ? true : trangThaiQd">
-
               </nz-date-picker>
             </div>
           </div>
@@ -159,7 +158,7 @@
         <th class="text-left">Điểm kho</th>
         <th class="text-left">Lô kho</th>
         <th class="text-left"> Năm nhập</th>
-        <th class="text-left">Mã ĐVTS</th>
+        <th class="text-left">Mã phần hàng</th>
         <th nzWidth="100px" class="text-center wrap"
             [innerHTML]="isView ? 'SL xuất bán <br>TT đề xuất' : 'SL xuất <br>bán TT'"></th>
         <th class="text-left">ĐVT</th>
@@ -220,7 +219,7 @@
         <th class="text-left">Điểm kho</th>
         <th class="text-left">Lô kho</th>
         <th class="text-left"> Năm nhập</th>
-        <th class="text-left">Mã ĐVTS</th>
+        <th class="text-left">Mã phần hàng</th>
         <th nzWidth="100px" class="text-center wrap"
             [innerHTML]="isView ? 'SL xuất bán <br>TT đề xuất' : 'SL xuất <br>bán TT'"></th>
         <th class="text-left">ĐVT</th>

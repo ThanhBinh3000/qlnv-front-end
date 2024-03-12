@@ -384,7 +384,7 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Họ và tên người giao hàng
+              Họ và tên người nhận hàng
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -408,7 +408,7 @@
         <div nz-col nzSpan="8">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Đơn vị/Công ty (của người giao hàng)
+              Đơn vị/Công ty (của người nhận hàng)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -541,13 +541,14 @@
               <td>
                 <!-- {{formData.value.donGia| number: '1.0-1' :
                 'vi_VN'}} -->
-                <nz-form-control [nzErrorTip]="error">
+                <!-- <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
                     <input currencyMask class="money-input" formControlName="donGia"
                       [readOnly]="isView || (!formData.value.tenCloaiVthh && !formData.value.tenLoaiVthh)"
                       [options]="formData.value.loaiVthh === '02'? amount: amount1" />
                   </nz-input-group>
-                </nz-form-control>
+                </nz-form-control> -->
+                {{formData.value.donGia|number:globals.numberFormat:globals.locale}}
               </td>
               <td class="text-right">
                 {{formData.value.thanhTien | number: '1.0-1' :

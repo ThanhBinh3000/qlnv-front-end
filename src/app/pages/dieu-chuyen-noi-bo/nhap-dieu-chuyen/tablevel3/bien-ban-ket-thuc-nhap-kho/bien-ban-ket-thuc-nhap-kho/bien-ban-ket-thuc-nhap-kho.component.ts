@@ -118,9 +118,31 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
   };
 
   isShowDS() {
-    if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
-      return true
-    else return false
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBKTNK_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBKTNK_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBKTNK_XEM'))
+  }
+
+  isXoa() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBKTNK_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBKTNK_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBKTNK_XOA'))
+  }
+
+  isExport() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBKTNK_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBKTNK_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBKTNK_EXP'))
+  }
+
+  isThem() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBKTNK_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBKTNK_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBKTNK_THEM'))
+  }
+
+  isDuyetKTV() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBKTNK_DUYET_KTVBQ') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBKTNK_DUYET_KTVBQ') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBKTNK_DUYET_KTVBQ'))
+  }
+
+  isDuyetKT() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBKTNK_DUYET_KETOAN') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBKTNK_DUYET_KETOAN') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBKTNK_DUYET_KETOAN'))
+  }
+
+  isDuyetLD() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT_BBKTNK_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_VT_BBKTNK_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_VT_BBKTNK_DUYET_LDCCUC'))
   }
 
   isCuc() {
@@ -176,7 +198,7 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
     }
 
     let body = this.formData.value
-    if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
+    // if (body.soQdinh) body.soQdinh = `${body.soQdinh}/DCNB`
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1
@@ -325,7 +347,7 @@ export class BienBanKetThucNhapKhoComponent extends Base2Component implements On
   }
 
   isPheDuyet(row) {
-    return row.trangThai == STATUS.CHO_DUYET_KTVBQ || row.trangThai == STATUS.CHO_DUYET_KT || row.trangThai == STATUS.CHO_DUYET_LDCC
+    return (row.trangThai == STATUS.CHO_DUYET_KTVBQ && this.isDuyetKTV()) || (row.trangThai == STATUS.CHO_DUYET_KT && this.isDuyetKT()) || (row.trangThai == STATUS.CHO_DUYET_LDCC && this.isDuyetLD)
   }
 
   add(data: any) {

@@ -3,13 +3,13 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="24">
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="2">
             <label class="search__label">Năm kế hoạch</label>
             <nz-select formControlName="namKh">
               <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="4">
             <label class="search__label">Số hợp đồng</label>
             <input nz-input formControlName="soHopDong"/>
           </div>
@@ -17,13 +17,13 @@
             <label class="search__label">Tên hợp đồng</label>
             <input nz-input formControlName="tenHopDong"/>
           </div>
-          <div nz-col [nzSpan]="10">
+          <div nz-col [nzSpan]="8">
             <label class="search__label">Đơn vị mua</label>
             <input nz-input formControlName="tenBenMua"/>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="6">
             <label class="search__label"> Ngày ký hợp đồng </label>
-            <div nz-row [nzGutter]="24">
+            <div nz-row>
               <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayKyHopDongTu" nzFormat="dd/MM/yyyy"
                                 formControlName="ngayKyHopDongTu" nzPlaceHolder="Ngày bắt đầu">
@@ -31,7 +31,8 @@
               </div>
               <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayKyHopDongDen" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayKyHopDongDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                                formControlName="ngayKyHopDongDen" nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
               </div>
             </div>
           </div>
@@ -39,7 +40,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm(loaiVthh)">
+          <button nz-button class="search__button--clear" (click)="clearForm({loaiVthh: loaiVthh})">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -62,7 +63,7 @@
         </button>
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_THEM')"
-          type="button" class="btn btn-main" (click)="redirectDetail(0, false)">
+          type="button" class="btn btn-main" (click)="redirectDetail(0, false, false)">
           <i class=" icon htvbdh_dau-cong"></i>
           <span> Thêm hợp đồng </span>
         </button>
@@ -190,13 +191,13 @@
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td class="text-left">{{ data.namKh }}</td>
           <td class="text-left">
-            <a *ngIf="data.soQdPd && data.idQdPd"
+            <a *ngIf="data.soQdPd"
                (click)="openModal(data.idQdPd, 'pheDuyet')"
                style="color: blue"> {{ data.soQdPd}}
             </a>
           </td>
           <td class="text-left">
-            <a *ngIf="data.soQdDc && data.idQdDc"
+            <a *ngIf="data.soQdDc"
                (click)="openModal(data.idQdDc, 'dieuChinh')"
                style="color: blue"> {{ data.soQdDc}}
             </a>
@@ -224,13 +225,13 @@
                   (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? (userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_XEM') && !userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM'))
                   : (userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_XEM') && !userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_THEM')))
                   : (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_XEM') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_XEM'))"
-               (click)="redirectDetail(data.id, true)">
+               (click)="redirectDetail(data.id, true, data.check)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
               *ngIf="data.trangThaiHd != STATUS.DA_HOAN_THANH
                      && (loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_VT_HDPL_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_HDBKPB_LT_HDPL_THEM'))"
-              (click)="redirectDetail(data.id, true)">
+              (click)="redirectDetail(data.id, true, data.check)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
           </td>
@@ -256,29 +257,33 @@
   </div>
 </ng-container>
 <ng-container class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin-hop-dong-btt *ngIf="isAddNew" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  <app-thong-tin-hop-dong-btt *ngIf="isAddNew" [phanLoai]="phanLoai" [loaiVthh]="loaiVthh" (showListEvent)="showList()"
+                              [checkPrice]="checkPrice">
   </app-thong-tin-hop-dong-btt>
-  <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [idInput]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [idInput]="idSelected" [loaiVthh]="loaiVthh" [check]="check"
+                            [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-quan-ly-hop-dong-btt>
 </ng-container>
+<!--Xem quyết định phê duyệt kế hoạch-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal('pheDuyet')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [id]="idQdPd" [isViewDetail]="true"-->
-    <!--                                           [isViewOnModal]="true">-->
-    <!--    </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>-->
+    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPd" [isView]="true" [loaiVthh]="loaiVthh"
+                                                [isViewOnModal]="true">
+    </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeModal('ChiTieu')" class="modal__button--cancel">
+    <button nz-button (click)="closeModal('pheDuyet')" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>
   </div>
 </nz-modal>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal('dieuChinh')">
+<!--Xem điều chỉnh quyết định kế hoạch-->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdDc" (nzOnCancel)="closeModal('dieuChinh')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [id]="idQdPd" [isViewDetail]="true"-->
-    <!--                                           [isViewOnModal]="true">-->
-    <!--    </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>-->
+    <app-chi-tiet-dieu-chinh-ban-truc-tiep [idInput]="idQdDc" [isView]="true" [loaiVthh]="loaiVthh"
+                                           [isViewOnModal]="true">
+    </app-chi-tiet-dieu-chinh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal('dieuChinh')" class="modal__button--cancel">
@@ -287,11 +292,12 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem quyết định kết quả-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdKq" (nzOnCancel)="closeModal('ketQua')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--        <app-chi-tiet-quyet-dinh-chao-gia [id]="idQdKq" [isViewDetail]="true"-->
-    <!--                                               [isViewOnModal]="true">-->
-    <!--        </app-chi-tiet-quyet-dinh-chao-gia>-->
+    <app-chi-tiet-quyet-dinh-chao-gia [idInput]="idQdKq" [isView]="true" [loaiVthh]="loaiVthh"
+                                      [isViewOnModal]="true">
+    </app-chi-tiet-quyet-dinh-chao-gia>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal('ketQua')" class="modal__button--cancel">

@@ -41,6 +41,12 @@ export class NguonHinhThanhDtqgComponent extends Base2Component implements OnIni
   listLoaiKyBc: any[] = [];
   listLoaiBc: any[] = [];
   listKyBc: any[] = [];
+  dsDvtt: any[] = [
+    {text: 'Đồng', value: '01'},
+    {text: 'Nghìn đồng', value: '02'},
+    {text: 'Triệu đồng', value: '03'},
+    {text: 'Tỷ đồng', value: '04'},
+  ]
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -61,6 +67,7 @@ export class NguonHinhThanhDtqgComponent extends Base2Component implements OnIni
         tenCuc: null,
         tenChiCuc: null,
         dviNhanBaoCao: null,
+        dvtt: ['01', [Validators.required]],
         loaiBc: [null, [Validators.required]],
         loaiKyBc: ['02', [Validators.required]],
       }
@@ -106,7 +113,7 @@ export class NguonHinhThanhDtqgComponent extends Base2Component implements OnIni
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_BAO_CAO");
     if (res.msg == MESSAGE.SUCCESS) {
       console.log(res, "4444")
-      this.listLoaiBc = res.data
+      this.listLoaiBc = res.data.filter(x => x.ma != '04' && x.ma != '03')
     }
   }
 

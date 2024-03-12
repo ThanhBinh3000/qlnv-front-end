@@ -39,6 +39,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     },
     { text: "Báo cáo quý", value: 2, thoiHanGuiBc: "Ngày 20 của tháng đầu quý sau" }
   ];
+  whitelistWebService: any = {};
   dsDonVi: any[] = [];
   dataNguonNsnn: any[] = [];
   dataNguonNgoaiNsnn: any[] = [];
@@ -78,14 +79,14 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     this.formData = this.fb.group(
       {
         id: [null],
-        namBc: [dayjs().get("year"), [Validators.required]],
+        namBc: [dayjs().get("year")],
         kyBc: [null],
         loaiBc: [null],
         thoiHanGuiBc: [null],
         thongTuSo: ["130/2018/TT-BTC"],
         bieuSo: ["001.H/BCDTQG-BN"],
         tenDonViGui: [null],
-        maDonViGui: [null],
+        maDonViGui: [null, [Validators.required]],
         tenDonViNhan: [null],
         maDonViNhan: [null],
         ngayTao: [dayjs().format("YYYY-MM-DD")],
@@ -108,6 +109,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     } else {
       await Promise.all([
         this.loadDsDonVi(),
+        this.loadDsKyBc(),
         this.nguonVonGetAll()
       ]);
       this.formData.patchValue({
@@ -142,7 +144,9 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
   }
 
   changeLoaiBc(event) {
-    this.formData.get("thoiHanGuiBc").setValue(this.listLoaiBc.find(item => item.value == event).thoiHanGuiBc);
+    if (event != null) {
+      this.formData.get("thoiHanGuiBc").setValue(this.listLoaiBc.find(item => item.value == event).thoiHanGuiBc);
+    }
   }
 
   initData() {
@@ -318,6 +322,10 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
   }
 
   async save(isBanHanh?: boolean) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      return;
+    }
     this.dataNguonNsnn.forEach(i => {
       i.loaiNguon = 1
     })
@@ -339,15 +347,19 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     }
     if (res.msg == MESSAGE.SUCCESS) {
       this.idInput = res.data.id;
-      if (isBanHanh) {
-        this.pheDuyetBcBn(body);
-      } else {
-        if (this.formData.get("id").value) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      if(await this.checkWhiteList()){
+        if (isBanHanh) {
+          this.pheDuyetBcBn(body);
         } else {
-          this.formData.get("id").setValue(res.data.id);
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          if (this.formData.get("id").value) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          } else {
+            this.formData.get("id").setValue(res.data.id);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          }
         }
+      }else{
+        this.notification.error(MESSAGE.ERROR, MESSAGE.WEB_SERVICE_ERR);
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -385,6 +397,11 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
       this.dataNguonNsnn = this.dataImport.filter(obj => obj.loaiNguon === 1);
       this.dataNguonNgoaiNsnn = this.dataImport.filter(obj => obj.loaiNguon === 2);
     }
+    this.dataNguonNsnn.forEach(item => {
+      item.tongTrongKy = this.nvl(item.muaTangTrongKy) + this.nvl(item.muaBuTrongKy) + this.nvl(item.muaBsungTrongKy) + this.nvl(item.khacTrongKy);
+      item.tongLuyKe = this.nvl(item.muaTangLuyKe) + this.nvl(item.muaBuLuyKe) + this.nvl(item.muaBsungLuyKe) + this.nvl(item.khacLuyKe);
+    })
+    this.tongRowNguon();
   }
   calTongChi() {
     let sum = 0
@@ -444,5 +461,22 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  async loadDsKyBc() {
+    let res = await this.danhMucService.danhMucChungGetAll("WEB_SERVICE");
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res, "3333")
+      this.whitelistWebService = res.data;
+    }
+  }
+
+  async checkWhiteList(){
+    if(this.whitelistWebService.find(x => x.ma == "BCBN_130_01")){
+      return true;
+    }else{
+      return false;
+    }
+
   }
 }

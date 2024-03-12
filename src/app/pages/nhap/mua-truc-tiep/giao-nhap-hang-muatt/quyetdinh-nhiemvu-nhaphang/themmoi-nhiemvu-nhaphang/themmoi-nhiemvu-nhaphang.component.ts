@@ -34,6 +34,7 @@ import {StorageService} from "../../../../../../services/storage.service";
 export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() typeVthh: string;
+  @Input() checkPrice: any;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isViewDetail: boolean;
@@ -143,6 +144,7 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
     }
     this.userInfo = this.userService.getUserLogin();
     this.maQdSuffix = "/" + this.userInfo.MA_QD;
+    console.log(this.maQdSuffix, "this.maQdSuffix")
     await Promise.all([
       await this.getListHopDong(),
       await this.getListCanCuUyQuyen(),
@@ -434,6 +436,10 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
   }
 
   async save(isGuiDuyet?) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     this.setValidator(isGuiDuyet)
     if(this.checkListHopDong()){
       return;
@@ -584,6 +590,10 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
   }
 
   pheDuyet() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     if (this.formData.invalid) {
       this.spinner.hide()
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
@@ -647,6 +657,10 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
   }
 
   tuChoi() {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     let trangThai = ''
     switch (this.formData.get('trangThai').value) {
       case STATUS.CHO_DUYET_TP: {
@@ -959,6 +973,10 @@ export class ThemmoiNhiemvuNhaphangComponent extends Base2Component implements O
   }
 
   async saveDdiemNhap(statusSave, hoanThanh?) {
+    if (this.checkPrice.boolean) {
+      this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+      return;
+    }
     if(!this.validatorDdiemNhap(0, true)){
       return;
     }

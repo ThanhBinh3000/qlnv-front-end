@@ -31,6 +31,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   @Input() isView: boolean;
   @Input() idInput: number;
   @Input() isViewOnModal: boolean;
+  @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
   templateNameVt = "Quyết định giao nhiệm vụ bán đấu giá vật tư";
@@ -135,8 +136,12 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       await this.loadDanhDachNhiemVu();
       const res = await this.hopDongXuatHangService.search(body)
       if (res && res.msg === MESSAGE.SUCCESS) {
-        const soHopDongSet = new Set(this.loadDanhSachQdGiaoNv.map(item => item.soHopDong));
-        this.dataHopDong = res.data.content.filter(item => !soHopDongSet.has(item.soHopDong));
+        res.data.content.forEach(item => {
+          item.children = item.children.filter(a =>
+            !this.loadDanhSachQdGiaoNv.some(s => s.children.some(s1 => s1.maDvi === a.maDvi && item.id === s.idHopDong))
+          );
+        });
+        this.dataHopDong = res.data.content.filter(item => item.maDvi === this.userInfo.MA_DVI && item.children.length > 0);
       }
       const modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH HỢP ĐỒNG BÁN ĐẤU GIÁ',
@@ -146,7 +151,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          dataTable: this.dataHopDong.filter(item => item.maDvi === this.userInfo.MA_DVI),
+          dataTable: this.dataHopDong,
           dataHeader: ['Số hợp đồng', 'Tên hợp đồng', 'Loại hàng hóa'],
           dataColumn: ['soHopDong', 'tenHopDong', 'tenLoaiVthh']
         },
@@ -192,6 +197,9 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
         donViTinh: data.donViTinh,
         tgianGiaoHang: data.tgianGiaoHang,
       });
+      this.loadDanhSachQdGiaoNv = this.loadDanhSachQdGiaoNv.filter(item => item.idHopDong === data.id);
+      const maDviSet = new Set(this.loadDanhSachQdGiaoNv.flatMap(item => item.children.map(child => child.maDvi)));
+      data.children = data.children.filter(child => !maDviSet.has(child.maDvi));
       this.dataTable = data.children;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.map(item => {
@@ -206,6 +214,25 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  deleteChiCuc(index) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable.splice(index, 1)
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 
   async loadDanhDachNhiemVu() {
@@ -226,36 +253,43 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     this.loadDanhSachQdGiaoNv = data
   }
 
-  async save() {
+  async saveAndApproveAndReject(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
+      if (this.checkPrice && this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
+      if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+        return;
+      }
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.formData.controls["soHopDong"].setValidators([Validators.required]);
-      const soQdNv = this.formData.value.soQdNv;
       const body = {
         ...this.formData.value,
-        soQdNv: soQdNv ? soQdNv + this.maHauTo : null,
+        soQdNv: this.formData.value.soQdNv ? this.formData.value.soQdNv + this.maHauTo : null,
         children: this.dataTable,
       };
-      await this.createUpdate(body);
-    } catch (e) {
-      console.error('Error: ', e);
-    } finally {
-      await this.helperService.restoreRequiredForm(this.formData);
-    }
-  }
-
-  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    try {
-      this.setValidForm();
-      const soQdNv = this.formData.value.soQdNv;
-      const body = {
-        ...this.formData.value,
-        soQdNv: soQdNv ? soQdNv + this.maHauTo : null,
-        children: this.dataTable,
-      };
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
-    } catch (e) {
-      console.error('Error: ', e);
+      switch (action) {
+        case "createUpdate":
+          this.formData.controls["soHopDong"].setValidators([Validators.required]);
+          await this.createUpdate(body);
+          break;
+        case "saveAndSend":
+          this.setValidForm();
+          await this.saveAndSend(body, trangThai, msg, msgSuccess);
+          break;
+        case "approve":
+          await this.approve(this.idInput, trangThai, msg);
+          break;
+        case "reject":
+          await this.reject(this.idInput, trangThai);
+          break;
+        default:
+          console.error("Invalid action: ", action);
+          break;
+      }
+    } catch (error) {
+      console.error('Error: ', error);
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
     }

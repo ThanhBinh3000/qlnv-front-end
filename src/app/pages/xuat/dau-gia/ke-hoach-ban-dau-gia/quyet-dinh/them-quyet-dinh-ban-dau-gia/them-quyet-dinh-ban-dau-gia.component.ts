@@ -36,6 +36,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   @Input() idInput: number = 0;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
+  @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   @Output() removeDataInit: EventEmitter<any> = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
@@ -145,10 +146,17 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     this.removeDataInit.emit();
   }
 
-  async save() {
+  async saveAndBrowse(action: string, trangThai?: string, msg?: string, msgSuccess?: string) {
     try {
+      if (this.checkPrice && this.checkPrice.boolean) {
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
+        return;
+      }
+      if (this.checkPrice && this.checkPrice.booleanNhapXuat){
+        this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
+        return;
+      }
       await this.helperService.ignoreRequiredForm(this.formData);
-      this.setValidator();
       const body = {
         ...this.formData.value,
         soQdPd: this.formData.value.soQdPd ? this.formData.value.soQdPd + this.maHauTo : null,
@@ -156,32 +164,24 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         canCuPhapLy: this.canCuPhapLy,
         fileDinhKem: this.fileDinhKem,
       };
-      await this.createUpdate(body);
-      await this.helperService.restoreRequiredForm(this.formData);
-    } catch (e) {
-      console.error('Error: ', e);
-    } finally {
-      await this.helperService.restoreRequiredForm(this.formData);
-    }
-  }
-
-  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
-    try {
-      if (!(await this.validateBanHanhQd(this.dataTable))) {
-        return;
+      switch (action) {
+        case "createUpdate":
+          this.setValidator();
+          await this.createUpdate(body);
+          break;
+        case "saveAndSend":
+          if (!(await this.validateBanHanhQd(this.dataTable))) {
+            return;
+          }
+          this.setValidForm();
+          await this.saveAndSend(body, trangThai, msg, msgSuccess);
+          break;
+        default:
+          console.error("Invalid action: ", action);
+          break;
       }
-      this.setValidForm();
-      const soQdPd = this.formData.value.soQdPd ? `${this.formData.value.soQdPd}${this.maHauTo}` : null;
-      const body = {
-        ...this.formData.value,
-        soQdPd,
-        children: this.danhsachDx,
-        canCuPhapLy: this.canCuPhapLy,
-        fileDinhKem: this.fileDinhKem,
-      };
-      await super.saveAndSend(body, trangThai, msg, msgSuccess);
     } catch (error) {
-      console.error("Lỗi khi lưu và gửi duyệt:", error);
+      console.error('Error: ', error);
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
     }
