@@ -531,6 +531,18 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
     await this.spinner.hide();
   }
 
+  isIn() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKTCL_IN') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKTCL_IN') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKTCL_IN'))
+  }
+
+  isThem() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKTCL_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKTCL_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKTCL_THEM'))
+  }
+
+  isDuyet() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT_PKTCL_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_LT_PKTCL_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_LT_PKTCL_DUYET_LDCCUC'))
+  }
+
   async guiDuyet() {
     let trangThai = STATUS.CHO_DUYET_LDCC;
     let mesg = 'Bạn muốn gửi duyệt văn bản?'
@@ -538,7 +550,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
   }
 
   isTuChoi() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && this.isDuyet()
   }
 
   async tuChoi() {
@@ -550,7 +562,7 @@ export class ThongTinKiemTraChatLuongComponent extends Base2Component implements
   }
 
   isPheDuyet() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && this.isDuyet()
   }
 
   async pheDuyet() {

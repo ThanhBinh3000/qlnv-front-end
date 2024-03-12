@@ -7,17 +7,17 @@
         <span>Quay lại</span>
       </button>
 
-      <button type="button" class="btn btn-sub do ml-2" (click)="preview(previewName)">
+      <button type="button" class="btn btn-sub do ml-2" (click)="preview(previewName)" *ngIf="isIN()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>In/xem trước</span>
       </button>
 
-      <button *ngIf="!isView" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
+      <button *ngIf="!isView && isThem()" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
 
-      <button *ngIf="!isView" type="button" class="btn btn-main ml-2" (click)="save()">
+      <button *ngIf="!isView && isThem()" type="button" class="btn btn-main ml-2" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>

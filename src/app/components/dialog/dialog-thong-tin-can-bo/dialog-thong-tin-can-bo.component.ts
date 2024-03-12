@@ -34,6 +34,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
   optionsPhongBanFilter: any[] = [];
   suggestPhongBan: any[] = [];
   userLDapList: any[] = [];
+  regexComplex: string
 
   constructor(
     private router: Router,
@@ -54,7 +55,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
       fullName: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
       email: [null, [Validators.required, Validators.email]],
       username: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(16)]],
-      password: [null],
+      password: [null, [Validators.required]],
       domain: [null],
       userType: ['DT', [Validators.required]],
       position: [null, [Validators.required]],
@@ -79,6 +80,9 @@ export class DialogThongTinCanBoComponent implements OnInit {
   ];
 
   async ngOnInit() {
+    if (!this.dataEdit && this.formData.value.sysType === 'APP') {
+      await this._cauHinhDangNhap()
+    }
     await Promise.all([
       this.getDmList(),
       this.getSysType(),
@@ -87,6 +91,20 @@ export class DialogThongTinCanBoComponent implements OnInit {
       this.listAllBoNganh(),
     ]);
     await this.bindingData(this.dataEdit);
+  }
+
+  async _cauHinhDangNhap() {
+    let res = await this.cauHinhDangNhapService.chiTiet();
+    let data: any = null
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data.length > 0) {
+        data = res.data[0]
+        console.log("data?.regexComplex", data?.regexComplex)
+        this.regexComplex = ` Mật khẩu yêu cầu ${data.sizePassword ? 'tối thiểu ' + data.sizePassword + ' ký tự ' : ''}${data.includeNumberAndChar ? 'cả số và chữ, chữ hoa và chữ thường ' : ''}${data.minSpecial ? data.minSpecial + ' ký tự đặc biệt' : ''}`
+        this.formData.controls["password"].setValidators([Validators.pattern(data?.regexComplex)]);
+      }
+    }
+
   }
 
   async laytatcadonvi() {
@@ -231,11 +249,13 @@ export class DialogThongTinCanBoComponent implements OnInit {
         this.spinner.hide();
         return;
       }
-      if (this.formData.value.password.length < 8 || this.formData.value.password.length > 20) {
-        this.notification.error(MESSAGE.ERROR, 'Mật khẩu phải từ 8 đến 20 ký tự');
-        this.spinner.hide();
-        return;
-      }
+      // if (this.formData.value.password.length < 8 || this.formData.value.password.length > 20) {
+      //   this.notification.error(MESSAGE.ERROR, 'Mật khẩu phải từ 8 đến 20 ký tự');
+      //   this.spinner.hide();
+      //   return;
+      // }
+    } else {
+      this.formData.controls["password"].clearValidators();
     }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {

@@ -45,13 +45,31 @@ export class NhapKhoLuongThucComponent extends Base2Component implements OnInit 
     };
   }
 
-  tabSelected: number = 0;
+  tabSelected: string = 'DCNB_NHAP_NK_LT_PNK';
 
   ngOnInit(): void {
   }
 
-  selectTab(tab: number) {
+  selectTab(tab: string) {
     this.tabSelected = tab;
+  }
+
+  checkPNK() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT') && this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_PNK')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT') && this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_PNK')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT') && this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_PNK'))
+  }
+
+  checkBKCH() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT') && this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BKCH')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT') && this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BKCH')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BKCH'))
+  }
+
+  checkBBNDK() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT') && this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BBNDK')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BBNDK')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BBNDK'))
   }
 
 }
