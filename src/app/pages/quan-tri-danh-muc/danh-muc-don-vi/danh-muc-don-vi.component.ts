@@ -219,6 +219,7 @@ export class DanhMucDonViComponent implements OnInit {
             maTckt: res.data.maTckt,
             maQhns: res.data.maQhns,
             maTuDinhNghia: res.data.maTuDinhNghia,
+            maDinhDanh: res.data.maDinhDanh,
             trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG,
             type: res.data.type == LOAI_DON_VI.PB,
             ghiChu: res.data.ghiChu,
