@@ -22,7 +22,7 @@
       </div>
       <div nz-col [nzSpan]="12">
         <nz-form-item>
-          <nz-form-label nzRequired>Tích lượng đã sử dụng - LT</nz-form-label>
+          <nz-form-label >Tích lượng đã sử dụng - LT</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-input-group [nzAddOnAfter]="dvi">
               <nz-input-number [nzMax]="detail.tichLuongTkLt ? detail.tichLuongTkLt : 9999999 "  formControlName="tichLuongSdLt" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
@@ -32,7 +32,7 @@
       </div>
       <div nz-col [nzSpan]="12">
         <nz-form-item>
-          <nz-form-label nzRequired>Tích lượng đã sử dụng - VT</nz-form-label>
+          <nz-form-label >Tích lượng đã sử dụng - VT</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-input-group [nzAddOnAfter]="dvi">
               <nz-input-number [nzMax]="detail.tichLuongTkVt ? detail.tichLuongTkVt : 9999999 " [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  formControlName="tichLuongSdVt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
@@ -42,7 +42,7 @@
       </div>
       <div nz-col [nzSpan]="12">
         <nz-form-item>
-          <nz-form-label nzRequired>Thể tích đã sử dụng - LT</nz-form-label>
+          <nz-form-label >Thể tích đã sử dụng - LT</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-input-group [nzAddOnAfter]="m3">
               <nz-input-number [nzMax]="detail.theTichTkLt ? detail.theTichTkLt : 9999999 " [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  formControlName="theTichSdLt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
@@ -52,7 +52,7 @@
       </div>
       <div nz-col [nzSpan]="12">
         <nz-form-item>
-          <nz-form-label nzRequired>Thể tích đã sử dụng - VT</nz-form-label>
+          <nz-form-label >Thể tích đã sử dụng - VT</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-input-group  [nzAddOnAfter]="m3">
               <nz-input-number  [nzMax]="detail.theTichTkVt ? detail.theTichTkVt : 9999999 " [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  formControlName="theTichSdVt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
