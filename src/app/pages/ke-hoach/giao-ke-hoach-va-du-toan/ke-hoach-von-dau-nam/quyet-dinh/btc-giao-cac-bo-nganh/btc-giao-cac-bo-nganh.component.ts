@@ -336,7 +336,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == STATUS.DANG_NHAP_DU_LIEU) {
             item.checked = true;
           }
         });

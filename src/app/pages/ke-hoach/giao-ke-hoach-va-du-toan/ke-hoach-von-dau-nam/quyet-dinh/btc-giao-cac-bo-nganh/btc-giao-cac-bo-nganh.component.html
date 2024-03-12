@@ -173,7 +173,7 @@
         <tr *ngFor="let data of rowSelectionTable.data; let idx = index" (click)="getDetailRow(data.id)">
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != '00'"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
           </td>
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''"
               class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
