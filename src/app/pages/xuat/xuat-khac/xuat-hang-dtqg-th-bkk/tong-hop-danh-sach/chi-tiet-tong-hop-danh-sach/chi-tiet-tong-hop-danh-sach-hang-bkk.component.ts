@@ -235,7 +235,8 @@ export class ChiTietTongHopDanhSachHangBkkComponent extends Base2Component imple
                 let result = await this.createUpdate(this.formData.value);
                 if (result) {
                   this.selectedItem = cloneDeep(result);
-                  await this.buildTableView(result.tongHopDtl);
+                  // await this.buildTableView(result.tongHopDtl);
+                  await this.loadDetail(this.selectedItem.id)
                   this.step.emit({step: 2, item: this.selectedItem});
                 }
               }
@@ -263,7 +264,8 @@ export class ChiTietTongHopDanhSachHangBkkComponent extends Base2Component imple
                 let result = await this.createUpdate(this.formData.value);
                 if (result) {
                   this.selectedItem = cloneDeep(result);
-                  await this.buildTableView(result.tongHopDtl);
+                  // await this.buildTableView(result.tongHopDtl);
+                  await this.loadDetail(this.selectedItem.id)
                   this.step.emit({step: 2, item: this.selectedItem});
                 }
               }

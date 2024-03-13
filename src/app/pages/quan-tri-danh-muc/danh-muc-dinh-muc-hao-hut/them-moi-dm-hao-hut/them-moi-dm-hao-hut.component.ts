@@ -174,6 +174,11 @@ export class ThemMoiDmHaoHutComponent extends Base2Component implements OnInit {
 
   async themMoiItem(data: DmDinhMucHaoHut) {
     this.spinner.show();
+    if (this.checkExitsData(this.rowItem, this.dataTable)) {
+      this.notification.warning(MESSAGE.WARNING, 'Vui lòng không nhập trùng mã định mức');
+      this.spinner.hide();
+      return;
+    }
     if (!this.checkValidators(data)) {
       this.notification.error(MESSAGE.ERROR, "Vui lòng không để trống!!")
       this.spinner.hide();
@@ -209,6 +214,19 @@ export class ThemMoiDmHaoHutComponent extends Base2Component implements OnInit {
       }
     }
     return check;
+  }
+
+  checkExitsData(item, dataItem): boolean {
+    let rs = false;
+    if (dataItem && dataItem.length > 0) {
+      dataItem.forEach(it => {
+        if ((it.maDinhMuc == item.maDinhMuc )) {
+          rs = true;
+          return;
+        }
+      });
+    }
+    return rs;
   }
 
 
@@ -291,7 +309,7 @@ export class ThemMoiDmHaoHutComponent extends Base2Component implements OnInit {
         data.hinhThucBq = data.listHtbq && data.listHtbq.length > 0 ? data.listHtbq.toString() : this.listLoaiHinhBq.toString();
         data.phuongThucBq = data.listPtbq && data.listPtbq.length > 0 ? data.listPtbq.toString() : this.listPhuongThucBq.toString();
         data.loaiHinhBq = data.listLhbq && data.listLhbq.length > 0 ? data.listLhbq.toString() : this.listLoaiHinhBq.toString();
-        data.apDungTai = data.listLhbq && data.listLhbq.length > 0 ? data.listCuc.toString() : this.dsCuc.toString();
+        data.apDungTai = data.listCuc && data.listCuc.length > 0 ? data.listCuc.toString() : this.dsCuc.toString();
       })
       body.maDvi = this.userInfo.MA_DVI;
       body.details = this.dataTable;
@@ -314,7 +332,7 @@ export class ThemMoiDmHaoHutComponent extends Base2Component implements OnInit {
         data.hinhThucBq = data.listHtbq && data.listHtbq.length > 0 ? data.listHtbq.toString() : this.listLoaiHinhBq.map(item => item.ma).toString();
         data.phuongThucBq = data.listPtbq && data.listPtbq.length > 0 ? data.listPtbq.toString() : this.listPhuongThucBq.map(item => item.ma).toString();
         data.loaiHinhBq = data.listLhbq && data.listLhbq.length > 0 ? data.listLhbq.toString() : this.listLoaiHinhBq.map(item => item.ma).toString();
-        data.apDungTai = data.listLhbq && data.listLhbq.length > 0 ? data.listCuc.toString() : this.dsCuc.map(item => item.maDvi).toString();
+        data.apDungTai = data.listCuc && data.listCuc.length > 0 ? data.listCuc.toString() : this.dsCuc.map(item => item.maDvi).toString();
       })
       body.details = this.dataTable;
       await this.createUpdate(body);

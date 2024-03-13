@@ -83,7 +83,7 @@
           <td>{{data.giaTri}}</td>
           <td>{{data.tenTrangThai}}</td>
           <td>
-            <a (click)="them(data, true)"  *ngIf="userService.isAccessPermisson('QTDM_DM_DUNG_CHUNG_XEM')">
+            <a (click)="them(data, true)"  *ngIf="userService.isAccessPermisson('QTDM_DM_DUNG_CHUNG_XEM') ">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a (click)="them(data, false)" *ngIf="userService.isAccessPermisson('QTDM_DM_DUNG_CHUNG_THEM')">

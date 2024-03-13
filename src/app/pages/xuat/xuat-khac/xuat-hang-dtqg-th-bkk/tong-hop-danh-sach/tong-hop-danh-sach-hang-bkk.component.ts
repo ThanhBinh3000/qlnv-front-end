@@ -235,7 +235,7 @@ export class TongHopDanhSachHangBkkComponent  extends Base2Component implements 
       this.formData.patchValue({
         maDanhSach: this.selectedItem.maDanhSach
       });
-      this.exportData("danh-sach-vat-tu-thiet-bi-co-thoi-han-luu-kho-lon-hon-12-thang.xlsx");
+      this.exportData("tong-hop-danh-sach-vat-tu-thiet-bi-hong-hoc-giam-chat-luong-do-nguyen-nhan-bat-kha-khang.xlsx");
     }
   }
 
