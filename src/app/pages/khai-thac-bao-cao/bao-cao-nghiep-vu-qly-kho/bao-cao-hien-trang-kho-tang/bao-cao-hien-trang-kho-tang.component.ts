@@ -97,6 +97,9 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
   tongTonCuoi: number = 0;
   tongConLai: number = 0;
   previewName: string = '';
+  loaiVthhFilterChange: boolean = false;
+  cucFilterChange: boolean = false;
+  chiCucFilterChange: boolean = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -117,12 +120,23 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     });
     this.formData.get('loaiVthh')?.valueChanges.pipe(startWith(this.formData.get('loaiVthh')?.value), pairwise()).subscribe(([prevValue, nextValue]) => {
       if (prevValue !== nextValue) {
+        this.loaiVthhFilterChange = true;
         const findIndex = this.listHangHoa.findIndex(f => f.loaiVthh === nextValue);
         if (findIndex >= 0) {
           this.donViTinh = this.listHangHoa[findIndex].donViTinh;
         } else {
           this.donViTinh = '';
         }
+      }
+    })
+    this.formData.get('maCuc')?.valueChanges.pipe(startWith(this.formData.get('maCuc')?.value), pairwise()).subscribe(([prevValue, nextValue]) => {
+      if (prevValue != nextValue) {
+        this.cucFilterChange = true;
+      }
+    })
+    this.formData.get('maChiCuc')?.valueChanges.pipe(startWith(this.formData.get('maChiCuc')?.value), pairwise()).subscribe(([prevValue, nextValue]) => {
+      if (prevValue != nextValue) {
+        this.chiCucFilterChange = true;
       }
     })
   }
@@ -264,15 +278,21 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
 
   changeLoaiHienTrang(loaiHienTrang: number) {
     this.loaiHienTrang = loaiHienTrang;
-    this.setTichLuongKho([]);
-    this.dataTable = [];
-    this.tieuDeHienTrang = '';
-    this.tongKeHoach = 0;
-    this.tongTonDau = 0;
-    this.tongNhap = 0;
-    this.tongXuat = 0;
-    this.tongTonCuoi = 0;
-    this.tongConLai = 0;
+    this.resetConfig();
+    if (this.loaiVthhFilterChange || this.cucFilterChange || this.chiCucFilterChange) {
+      this.setTichLuongKho([]);
+      this.dataTable = [];
+      this.tieuDeHienTrang = '';
+      this.tongKeHoach = 0;
+      this.tongTonDau = 0;
+      this.tongNhap = 0;
+      this.tongXuat = 0;
+      this.tongTonCuoi = 0;
+      this.tongConLai = 0;
+    }
+    this.loaiVthhFilterChange = false;
+    this.cucFilterChange = false;
+    this.chiCucFilterChange = false;
   }
 
   async ketXuatBaoCao() {
@@ -385,6 +405,8 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
       }
     } catch (error) {
       console.log("e", error)
+    } finally {
+      this.dataConfigTable.donVi = [{ tenTieuChi: 'Tất cả', maTieuChi: 'all', status: true }].concat(this.listChiCuc.map(f => ({ tenTieuChi: f.tenDvi, maTieuChi: f.maDvi, status: true })));
     }
   }
 
@@ -392,12 +414,16 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     if (!val) {
       this.formData.patchValue({ maChiCuc: "" })
       this.listChiCuc = [];
+      this.dataConfigTable.donVi = [{ tenTieuChi: 'Tất cả', maTieuChi: 'all', status: true }].concat(this.listCuc.map(f => ({ tenTieuChi: f.tenDvi, maTieuChi: f.maDvi, status: true })));
       return;
     }
     this.getDsDviCon(val);
   }
 
   async changeChiCuc(val: string) {
+    if (!val) {
+      this.dataConfigTable.donVi = [{ tenTieuChi: 'Tất cả', maTieuChi: 'all', status: true }]
+    }
   }
 
   clearFilter() {
@@ -486,9 +512,21 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
     }
     else {
       if (this.dataConfigTable.donVi[allDonViIndex].status) {
-        dataTichLuongKhoFilter = cloneDeep(this.dataTichLuongKho.filter(f => this.dataConfigTable.tieuChi.findIndex(m => m.tenTieuChi === f.name && m.status) >= 0))
+        // dataTichLuongKhoFilter = cloneDeep(this.dataTichLuongKho.filter(f => this.dataConfigTable.tieuChi.findIndex(m => m.tenTieuChi === f.name && m.status) >= 0))
+        dataTichLuongKhoFilter = cloneDeep(this.dataTichLuongKho.map(f => {
+          if (this.dataConfigTable.tieuChi.findIndex(m => m.tenTieuChi === f.name && m.status) >= 0) {
+            return { ...f }
+          }
+          return { ...f, data: f.data.map(f => null) }
+        }))
       } else {
-        this.dataTichLuongKho.filter(f => this.dataConfigTable.tieuChi.findIndex(m => m.tenTieuChi === f.name && m.status) >= 0).forEach((item: { data: number[], label: string[], group: string, name: string }, index: number) => {
+        // this.dataTichLuongKho.filter(f => this.dataConfigTable.tieuChi.findIndex(m => m.tenTieuChi === f.name && m.status) >= 0).forEach((item: { data: number[], label: string[], group: string, name: string }, index: number) => {
+        this.dataTichLuongKho.map(f => {
+          if (this.dataConfigTable.tieuChi.findIndex(m => m.tenTieuChi === f.name && m.status) >= 0) {
+            return { ...f }
+          }
+          return { ...f, data: f.data.map(f => null) }
+        }).forEach((item: { data: number[], label: string[], group: string, name: string }, index: number) => {
           let listLabel = [];
           let listLabelIndex = []
           let data = [];

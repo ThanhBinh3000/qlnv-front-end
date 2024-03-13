@@ -174,6 +174,11 @@ export class ThemMoiDmHaoHutComponent extends Base2Component implements OnInit {
 
   async themMoiItem(data: DmDinhMucHaoHut) {
     this.spinner.show();
+    if (this.checkExitsData(this.rowItem, this.dataTable)) {
+      this.notification.warning(MESSAGE.WARNING, 'Vui lòng không nhập trùng mã định mức');
+      this.spinner.hide();
+      return;
+    }
     if (!this.checkValidators(data)) {
       this.notification.error(MESSAGE.ERROR, "Vui lòng không để trống!!")
       this.spinner.hide();
@@ -209,6 +214,19 @@ export class ThemMoiDmHaoHutComponent extends Base2Component implements OnInit {
       }
     }
     return check;
+  }
+
+  checkExitsData(item, dataItem): boolean {
+    let rs = false;
+    if (dataItem && dataItem.length > 0) {
+      dataItem.forEach(it => {
+        if ((it.maDinhMuc == item.maDinhMuc )) {
+          rs = true;
+          return;
+        }
+      });
+    }
+    return rs;
   }
 
 
