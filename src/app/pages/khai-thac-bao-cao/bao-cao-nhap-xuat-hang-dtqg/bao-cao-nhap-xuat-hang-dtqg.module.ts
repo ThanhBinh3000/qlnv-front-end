@@ -21,6 +21,7 @@ import {BaoCaoKetQuaHoTroGaoComponent} from "./bao-cao-ket-qua-ho-tro-gao/bao-ca
 import { BaoCaoBanThocThuocKeHoachNamComponent } from './bao-cao-ban-thoc-thuoc-ke-hoach-nam/bao-cao-ban-thoc-thuoc-ke-hoach-nam.component';
 import { BcDanhSachNhaThauUyTinComponent } from './bc-danh-sach-nha-thau-uy-tin/bc-danh-sach-nha-thau-uy-tin.component';
 import { BcThKetQuaDauThauGaoTheoNamComponent } from './bc-th-ket-qua-dau-thau-gao-theo-nam/bc-th-ket-qua-dau-thau-gao-theo-nam.component';
+import { KqXuatGaoCthtChoDiaPhuongTrongNamComponent } from './kq-xuat-gao-ctht-cho-dia-phuong-trong-nam/kq-xuat-gao-ctht-cho-dia-phuong-trong-nam.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { BcThKetQuaDauThauGaoTheoNamComponent } from './bc-th-ket-qua-dau-thau-g
     BaoCaoKetQuaHoTroGaoComponent,
     BaoCaoBanThocThuocKeHoachNamComponent,
     BcDanhSachNhaThauUyTinComponent,
-    BcThKetQuaDauThauGaoTheoNamComponent
+    BcThKetQuaDauThauGaoTheoNamComponent,
+    KqXuatGaoCthtChoDiaPhuongTrongNamComponent
   ],
   imports: [
     CommonModule,
