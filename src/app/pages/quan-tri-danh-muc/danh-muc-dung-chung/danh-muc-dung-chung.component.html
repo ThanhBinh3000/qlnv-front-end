@@ -89,7 +89,7 @@
             <a (click)="them(data, false)" *ngIf="userService.isAccessPermisson('QTDM_DM_DUNG_CHUNG_THEM') && data.trangThai != '00'">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
-            <a (click)="xoaItem(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_DUNG_CHUNG_XOA')">
+            <a (click)="xoaItem(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_DUNG_CHUNG_XOA') && data.trangThai != '00'">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>
           </td>
