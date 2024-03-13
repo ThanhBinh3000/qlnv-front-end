@@ -1,16 +1,20 @@
 <div>
   <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
     <ul nz-menu nzMode="horizontal">
-      <li nz-menu-item nzSelected (click)="selectTab(0)">
+      <li nz-menu-item nzSelected (click)="selectTab('DCNB_NHAP_NBCC_KTCL_LT')"
+        *ngIf="userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_LT')">
         Kiểm tra chất lượng lương thực
       </li>
-      <li nz-menu-item (click)="selectTab(1)">
+      <li nz-menu-item (click)="selectTab('DCNB_NHAP_NBCC_KTCL_VT')"
+        *ngIf="userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_VT')">
         Kiểm tra chất lượng vật tư
       </li>
-      <li nz-menu-item (click)="selectTab(2)">
+      <li nz-menu-item (click)="selectTab('DCNB_NHAP_NBCC_NK_LT')"
+        *ngIf="userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT')">
         Nhập kho lương thực
       </li>
-      <li nz-menu-item (click)="selectTab(3)">
+      <li nz-menu-item (click)="selectTab('DCNB_NHAP_NBCC_NK_VT')"
+        *ngIf="userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_VT')">
         Nhập kho vật tư
       </li>
     </ul>
@@ -18,17 +22,20 @@
 
   <div class="contentBor chi-tieu__body giao-ke-hoach">
     <div class="contentDetail">
-      <ng-container *ngIf="tabSelected == 0">
-        <app-chat-luong-luong-thuc [loaiDc]="loaiDc" *ngIf="tabSelected == 0"></app-chat-luong-luong-thuc>
+      <ng-container *ngIf="tabSelected == 'DCNB_NHAP_NBCC_KTCL_LT'">
+        <app-chat-luong-luong-thuc [loaiDc]="loaiDc"
+          *ngIf="tabSelected == 'DCNB_NHAP_NBCC_KTCL_LT'"></app-chat-luong-luong-thuc>
       </ng-container>
-      <ng-container *ngIf="tabSelected == 1">
-        <app-chat-luong-vat-tu [loaiDc]="loaiDc" *ngIf="tabSelected == 1"></app-chat-luong-vat-tu>
+      <ng-container *ngIf="tabSelected == 'DCNB_NHAP_NBCC_KTCL_VT'">
+        <app-chat-luong-vat-tu [loaiDc]="loaiDc"
+          *ngIf="tabSelected == 'DCNB_NHAP_NBCC_KTCL_VT'"></app-chat-luong-vat-tu>
       </ng-container>
-      <ng-container *ngIf="tabSelected == 2">
-        <app-nhap-kho-luong-thuc [loaiDc]="loaiDc" *ngIf="tabSelected == 2"></app-nhap-kho-luong-thuc>
+      <ng-container *ngIf="tabSelected == 'DCNB_NHAP_NBCC_NK_LT'">
+        <app-nhap-kho-luong-thuc [loaiDc]="loaiDc"
+          *ngIf="tabSelected == 'DCNB_NHAP_NBCC_NK_LT'"></app-nhap-kho-luong-thuc>
       </ng-container>
-      <ng-container *ngIf="tabSelected == 3">
-        <app-nhap-kho-vat-tu [loaiDc]="loaiDc" *ngIf="tabSelected == 3"></app-nhap-kho-vat-tu>
+      <ng-container *ngIf="tabSelected == 'DCNB_NHAP_NBCC_NK_VT'">
+        <app-nhap-kho-vat-tu [loaiDc]="loaiDc" *ngIf="tabSelected == 'DCNB_NHAP_NBCC_NK_VT'"></app-nhap-kho-vat-tu>
       </ng-container>
 
 

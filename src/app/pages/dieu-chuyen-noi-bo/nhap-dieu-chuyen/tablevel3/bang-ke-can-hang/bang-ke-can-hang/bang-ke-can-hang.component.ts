@@ -112,18 +112,32 @@ export class BangKeCanHangComponent extends Base2Component implements OnInit {
     }
   };
 
-  isShowDS() {
-    if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
-      return true
-    else return false
-  }
-
   isCuc() {
     return this.userService.isCuc()
   }
 
   isChiCuc() {
     return this.userService.isChiCuc()
+  }
+
+  isShowDS() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BKCH_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BKCH_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BKCH_XEM'))
+  }
+
+  isXoa() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BKCH_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BKCH_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BKCH_XOA'))
+  }
+
+  isExport() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BKCH_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BKCH_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BKCH_EXP'))
+  }
+
+  isThem() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BKCH_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BKCH_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BKCH_THEM'))
+  }
+
+  isDuyet() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BKCH_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BKCH_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BKCH_DUYET_LDCCUC'))
   }
 
   selectTab(tab: number) {

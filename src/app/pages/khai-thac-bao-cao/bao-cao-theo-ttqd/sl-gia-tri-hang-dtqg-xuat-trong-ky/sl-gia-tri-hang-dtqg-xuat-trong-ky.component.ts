@@ -44,9 +44,10 @@ export class SlGiaTriHangDtqgXuatTrongKyComponent extends Base2Component impleme
     {text: 'Báo cáo Năm', value: 2}
   ]
   dsDvtt: any[] = [
-    {text: 'Nghìn đồng', value: '01'},
-    {text: 'Triệu đồng', value: '02'},
-    {text: 'Tỷ đồng', value: '03'},
+    {text: 'Đồng', value: '01'},
+    {text: 'Nghìn đồng', value: '02'},
+    {text: 'Triệu đồng', value: '03'},
+    {text: 'Tỷ đồng', value: '04'},
   ]
   constructor(httpClient: HttpClient,
               storageService: StorageService,

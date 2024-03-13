@@ -25,7 +25,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
-  tabSelected: number = 0;
+  tabSelected: string = 'QDDC';
 
   @Input()
   loaiVthh: string;
@@ -132,12 +132,14 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
       this.visibleTab = value;
     });
 
+    if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC')) this.tabSelected = "TC"
+    else this.tabSelected = "CUC"
 
 
 
 
-    if (this.isChiCuc()) this.tabSelected = 1;
-    if (this.tabSelected == 0) {
+    if (this.isChiCuc()) this.tabSelected = 'CUC';
+    if (this.tabSelected == 'TC') {
       this.listLoaiDieuChuyen = [
         { ma: "ALL", ten: "Tất cả" },
         { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
@@ -145,7 +147,7 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
       ]
     }
 
-    if (this.tabSelected == 1) {
+    if (this.tabSelected == 'CUC') {
       this.listLoaiDieuChuyen = [
         { ma: "NOi_BO", ten: "Trong nội bộ chi cục" },
         { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
@@ -171,9 +173,9 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
   isShowDS() {
     if (this.isChiCuc()) return true
 
-    if (this.tabSelected == 0 && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
+    if (this.tabSelected == 'TC' && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
       return true
-    else if (this.tabSelected == 1 && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_CUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
+    else if (this.tabSelected == 'CUC' && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_CUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
       return true
     else return false
   }
@@ -190,7 +192,7 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     return this.userService.isChiCuc()
   }
 
-  selectTab(tab: number) {
+  selectTab(tab: string) {
     if (this.isDetail) {
       this.quayLai()
     }

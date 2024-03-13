@@ -6,30 +6,30 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub do ml-2" (click)="preview(previewName)">
+      <button type="button" class="btn btn-sub do ml-2" (click)="preview(previewName)" *ngIf="isIn()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>In/xem trước</span>
       </button>
       <button
-        *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TK || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
+        *ngIf="!isView && isThem() && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TK || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
         type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
 
       <button
-        *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TK || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
+        *ngIf="!isView && isThem() && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TK || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_LDCC)"
         type="button" class="btn btn-main ml-2" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
 
-      <button *ngIf="isChiCuc() && isTuChoi()" type="button" class="btn btn-sub" (click)="tuChoi()">
+      <button *ngIf="isTuChoi()" type="button" class="btn btn-sub" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
 
-      <button *ngIf="isChiCuc() && isPheDuyet()" type="button" class="btn btn-sub" (click)="pheDuyet()">
+      <button *ngIf="isPheDuyet()" type="button" class="btn btn-sub" (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>

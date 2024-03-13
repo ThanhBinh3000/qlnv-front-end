@@ -87,7 +87,8 @@
       <div class="buttons">
         <button
           *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? userService.isAccessPermisson('XHDTQG_PTTT_XK_VT_BKXVT_EXP') : userService.isAccessPermisson('XHDTQG_PTTT_XK_LT_BKCH_EXP')"
-          type="button" class="btn btn-sub" (click)="exportData('danh-sach-bang-ke-can-hang-ban-truc-tiep-hang-DTQG.xlsx')">
+          type="button" class="btn btn-sub"
+          (click)="exportData('danh-sach-bang-ke-can-hang-ban-truc-tiep-hang-DTQG.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span> Xuất file </span>
         </button>
@@ -254,9 +255,10 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-them-moi-bang-ke-can-hang-btt [idInput]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
-                                     [checkPrice]="checkPrice"  (showListEvent)="showList()">
+                                     [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-them-moi-bang-ke-can-hang-btt>
 </div>
+<!--Xem quyết định giao nhiệm vụ-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModal('QdNv')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-qd-giao-nv-xuat-btt [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
@@ -269,6 +271,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem phiếu kiểm nghiệm chất lượng-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewKiemnghiem"
           (nzOnCancel)="closeModal('kiemNghiem')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
@@ -283,6 +286,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem phiếu xuất kho-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewXuatKho"
           (nzOnCancel)="closeModal('xuatKho')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">

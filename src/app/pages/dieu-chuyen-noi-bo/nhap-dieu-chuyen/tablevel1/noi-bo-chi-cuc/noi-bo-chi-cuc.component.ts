@@ -28,12 +28,12 @@ export class NoiBoChiCucComponent extends Base2Component implements OnInit {
 
   }
 
-  tabSelected: number = 0;
+  tabSelected: string = 'DCNB_NHAP_NBCC_KTCL_LT';
 
   ngOnInit(): void {
   }
 
-  selectTab(tab: number) {
+  selectTab(tab: string) {
     this.tabSelected = tab;
   }
 

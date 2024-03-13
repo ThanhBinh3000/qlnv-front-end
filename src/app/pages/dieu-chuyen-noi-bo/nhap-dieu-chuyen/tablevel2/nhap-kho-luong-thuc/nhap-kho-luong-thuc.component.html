@@ -1,13 +1,13 @@
 <div>
   <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2">
     <ul nz-menu nzMode="horizontal">
-      <li nz-menu-item nzSelected (click)="selectTab(0)">
+      <li nz-menu-item nzSelected (click)="selectTab('DCNB_NHAP_NK_LT_PNK')" *ngIf="checkPNK()">
         Phiếu nhập kho
       </li>
-      <li nz-menu-item (click)="selectTab(1)">
+      <li nz-menu-item (click)="selectTab('DCNB_NHAP_NK_LT_BKCH')" *ngIf="checkBKCH()">
         Bảng kê cân hàng
       </li>
-      <li nz-menu-item (click)="selectTab(2)">
+      <li nz-menu-item (click)="selectTab('DCNB_NHAP_NK_LT_BBNDK')" *ngIf="checkBBNDK()">
         Biên bản nhập đầy kho
       </li>
     </ul>
@@ -15,9 +15,11 @@
 
   <div>
 
-    <app-phieu-nhap-kho [loaiDc]="loaiDc" [isVatTu]="false" *ngIf="tabSelected == 0"></app-phieu-nhap-kho>
-    <app-bang-ke-can-hang [loaiDc]="loaiDc" *ngIf="tabSelected == 1"></app-bang-ke-can-hang>
-    <app-bien-ban-nhap-day-du [loaiDc]="loaiDc" *ngIf="tabSelected == 2"></app-bien-ban-nhap-day-du>
+    <app-phieu-nhap-kho [loaiDc]="loaiDc" [isVatTu]="false"
+      *ngIf="tabSelected == 'DCNB_NHAP_NK_LT_PNK'"></app-phieu-nhap-kho>
+    <app-bang-ke-can-hang [loaiDc]="loaiDc" *ngIf="tabSelected == 'DCNB_NHAP_NK_LT_BKCH'"></app-bang-ke-can-hang>
+    <app-bien-ban-nhap-day-du [loaiDc]="loaiDc"
+      *ngIf="tabSelected == 'DCNB_NHAP_NK_LT_BBNDK'"></app-bien-ban-nhap-day-du>
 
   </div>
 

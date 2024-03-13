@@ -441,6 +441,19 @@
                               (showListEvent)="redirectHopDong(0, true, false, false)">
   </app-thong-tin-hop-dong-btt>
 </ng-template>
+<!--Xem quyết định giao nhiệm vụ -->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-qd-giao-nv-xuat-btt [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-them-moi-qd-giao-nv-xuat-btt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
 <nz-modal [nzWidth]="'75%'" [nzClosable]="false" [(nzVisible)]="showDlgPreview" nzWidth="100%"
           (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">

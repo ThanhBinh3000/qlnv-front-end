@@ -32,6 +32,14 @@ export class BcNhapXuatMuaBanHangDTQGService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tien-do-bdg-thoc-gao-theo-nam`;
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
+  keHoachHoTroGaoHocSinh(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ke-hoach-ho-tro-gao-hoc-sinh`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+  ketQuaHoTroGaoHocSinh(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-qua-ho-tro-gao-hoc-sinh`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
 
   bcThongTinDthauMuaVt(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc_thong_tin_dau_thau_mua_vt`;

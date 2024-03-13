@@ -121,9 +121,23 @@ export class PhieuNhapKhoComponent extends Base2Component implements OnInit {
   };
 
   isShowDS() {
-    if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
-      return true
-    else return false
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_PNK_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_PNK_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_PNK_XEM'))
+  }
+
+  isXoa() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_PNK_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_PNK_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_PNK_XOA'))
+  }
+
+  isExport() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_PNK_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_PNK_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_PNK_EXP'))
+  }
+
+  isThem() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_PNK_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_PNK_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_PNK_THEM'))
+  }
+
+  isDuyet() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_PNK_DUYET') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_PNK_DUYET') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_PNK_DUYET'))
   }
 
   isCuc() {

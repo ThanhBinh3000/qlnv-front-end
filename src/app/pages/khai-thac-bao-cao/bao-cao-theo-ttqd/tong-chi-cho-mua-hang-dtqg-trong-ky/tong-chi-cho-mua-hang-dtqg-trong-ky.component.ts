@@ -41,9 +41,10 @@ export class TongChiChoMuaHangDtqgTrongKyComponent extends Base2Component implem
   listLoaiKyBc: any[] = [];
   listLoaiBc: any[] = [];
   dsDvtt: any[] = [
-    {text: 'Nghìn đồng', value: '01'},
-    {text: 'Triệu đồng', value: '02'},
-    {text: 'Tỷ đồng', value: '03'},
+    {text: 'Đồng', value: '01'},
+    {text: 'Nghìn đồng', value: '02'},
+    {text: 'Triệu đồng', value: '03'},
+    {text: 'Tỷ đồng', value: '04'},
   ]
   listKyBc: any[] = [];
   constructor(httpClient: HttpClient,

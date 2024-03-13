@@ -11,7 +11,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <label class="search__label"> Số QĐ điều chỉnh KH bán trực tiếp </label>
-            <input  nz-input formControlName="soQdDc"/>
+            <input nz-input formControlName="soQdDc"/>
           </div>
           <div nz-col [nzSpan]="6">
             <label class="search__label"> Ngày Ký QĐ điều chỉnh KH bán trực tiếp </label>
@@ -219,13 +219,16 @@
                                          [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-chi-tiet-dieu-chinh-ban-truc-tiep>
 </div>
+<!--Xem quyết định kế hoạch-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep *ngIf="lanDieuChinh" [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
+    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep *ngIf="lanDieuChinh" [idInput]="idQdPd" [loaiVthh]="loaiVthh"
+                                                [isViewOnModal]="true"
                                                 [isView]="true">
     </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
-    <app-chi-tiet-dieu-chinh-ban-truc-tiep *ngIf="!lanDieuChinh" [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true"
-                                                [isView]="true">
+    <app-chi-tiet-dieu-chinh-ban-truc-tiep *ngIf="!lanDieuChinh" [idInput]="idQdPd" [loaiVthh]="loaiVthh"
+                                           [isViewOnModal]="true"
+                                           [isView]="true">
     </app-chi-tiet-dieu-chinh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>

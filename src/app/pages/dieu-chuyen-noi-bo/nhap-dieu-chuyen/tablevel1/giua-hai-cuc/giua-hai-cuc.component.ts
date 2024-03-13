@@ -28,12 +28,12 @@ export class GiuaHaiCucComponent extends Base2Component implements OnInit {
 
   }
 
-  tabSelected: number = 0;
+  tabSelected: string = 'DCNB_NHAP_2CUC_KTCL_LT';
 
   ngOnInit(): void {
   }
 
-  selectTab(tab: number) {
+  selectTab(tab: string) {
     this.tabSelected = tab;
   }
 
