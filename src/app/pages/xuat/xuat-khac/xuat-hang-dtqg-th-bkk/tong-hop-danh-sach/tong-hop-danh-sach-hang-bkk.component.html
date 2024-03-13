@@ -228,7 +228,7 @@
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
-      <button class="btn btn-sub" *ngIf="this.selectedItem && this.selectedItem.trangThai != STATUS.GUI_DUYET"
+      <button class="btn btn-sub" *ngIf="this.selectedItem && this.selectedItem.trangThai == STATUS.GUI_DUYET"
               (click)="exportExcel()">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất excel</span>
