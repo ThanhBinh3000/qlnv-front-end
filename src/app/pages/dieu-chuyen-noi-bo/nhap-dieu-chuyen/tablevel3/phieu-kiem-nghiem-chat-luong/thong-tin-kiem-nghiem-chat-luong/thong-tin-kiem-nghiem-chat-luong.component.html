@@ -15,12 +15,12 @@
         <span>Lưu và gửi duyệt</span>
       </button>
 
-      <button *ngIf="!isView" type="button" class="btn btn-main ml-2" (click)="save()">
+      <button *ngIf="!isView && isThem()" type="button" class="btn btn-main ml-2" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
 
-      <button *ngIf="isView && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-sub"
+      <button *ngIf="isView && isThem() && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-sub"
         (click)="guiDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Gửi duyệt</span>
@@ -36,10 +36,10 @@
         <span>Duyệt</span>
       </button>
 
-      <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="banHanh()">
+      <!-- <button *ngIf="isBanHanh()" type="button" class="btn btn-info ml-2" (click)="banHanh()">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
-      </button>
+      </button> -->
 
     </div>
   </nz-affix>

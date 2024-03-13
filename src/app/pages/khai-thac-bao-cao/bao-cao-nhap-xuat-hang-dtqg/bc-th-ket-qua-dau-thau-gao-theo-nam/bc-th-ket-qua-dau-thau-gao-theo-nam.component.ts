@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Base2Component } from '../../../../components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../../../../services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -13,19 +14,18 @@ import * as dayjs from 'dayjs';
 import {saveAs} from "file-saver";
 import { Validators } from '@angular/forms';
 import { MESSAGE } from '../../../../constants/message';
-import { Base2Component } from '../../../../components/base2/base2.component';
 
 @Component({
-  selector: 'app-bao-cao-ket-qua-ho-tro-gao',
-  templateUrl: './bao-cao-ke-hoach-ho-tro-gao.component.html',
-  styleUrls: ['./bao-cao-ke-hoach-ho-tro-gao.component.scss']
+  selector: 'app-bc-th-ket-qua-dau-thau-gao-theo-nam',
+  templateUrl: './bc-th-ket-qua-dau-thau-gao-theo-nam.component.html',
+  styleUrls: ['./bc-th-ket-qua-dau-thau-gao-theo-nam.component.scss']
 })
-export class BaoCaoKeHoachHoTroGaoComponent extends Base2Component implements OnInit {
+export class BcThKetQuaDauThauGaoTheoNamComponent extends Base2Component implements OnInit {
   pdfSrc: any;
   excelSrc: any;
   pdfBlob: any;
   excelBlob: any;
-  nameFile = "ke-hoach-ho-tro-gao-hoc-sinh";
+  nameFile = "bao-cao-th-ket-qua-dau-thau-gao";
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -34,8 +34,6 @@ export class BaoCaoKeHoachHoTroGaoComponent extends Base2Component implements On
               modal: NzModalService,
               private bcNhapXuatMuaBanHangDTQGService: BcNhapXuatMuaBanHangDTQGService,
               public userService: UserService,
-              private donViService: DonviService,
-              private danhMucSv: DanhMucService,
               public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, bcNhapXuatMuaBanHangDTQGService);
     this.formData = this.fb.group(
@@ -64,7 +62,8 @@ export class BaoCaoKeHoachHoTroGaoComponent extends Base2Component implements On
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      await this.bcNhapXuatMuaBanHangDTQGService.keHoachHoTroGaoHocSinh(body).then(async s => {
+      body.fileName = this.nameFile;
+      await this.bcNhapXuatMuaBanHangDTQGService.bcThKetQuaDauThauMuaGao(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, this.nameFile + ".xlsx");
@@ -92,7 +91,7 @@ export class BaoCaoKeHoachHoTroGaoComponent extends Base2Component implements On
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "pdf";
-      await this.bcNhapXuatMuaBanHangDTQGService.keHoachHoTroGaoHocSinh(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.bcThKetQuaDauThauMuaGao(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -110,5 +109,4 @@ export class BaoCaoKeHoachHoTroGaoComponent extends Base2Component implements On
       nam: dayjs().get('year')
     })
   }
-
 }

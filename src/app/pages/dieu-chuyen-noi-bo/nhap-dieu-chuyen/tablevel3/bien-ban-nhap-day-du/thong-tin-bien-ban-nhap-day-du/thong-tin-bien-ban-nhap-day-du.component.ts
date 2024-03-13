@@ -490,6 +490,26 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
     await this.spinner.hide();
   }
 
+  isIn() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BBNDK_IN') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BBNDK_IN') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BBNDK_IN'))
+  }
+
+  isThem() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BBNDK_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BBNDK_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BBNDK_THEM'))
+  }
+
+  isDuyetKTVBQ() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BBNDK_DUYET_KTVBQ') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BBNDK_DUYET_KTVBQ') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BBNDK_DUYET_KTVBQ'))
+  }
+
+  isDuyetKT() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BBNDK_DUYET_KETOAN') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BBNDK_DUYET_KETOAN') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BBNDK_DUYET_KETOAN'))
+  }
+
+  isDuyetLD() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BBNDK_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BBNDK_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BBNDK_DUYET_LDCCUC'))
+  }
+
   async guiDuyet() {
     let trangThai = STATUS.CHO_DUYET_KTVBQ;
     let mesg = 'Bạn muốn gửi duyệt văn bản?'
@@ -497,7 +517,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
   }
 
   isTuChoi() {
-    return (this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ || this.formData.value.trangThai == STATUS.CHO_DUYET_KT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+    return (this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ && this.isDuyetKTVBQ()) || (this.formData.value.trangThai == STATUS.CHO_DUYET_KT && this.isDuyetKT()) || (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && this.isDuyetLD())
   }
 
   async tuChoi() {
@@ -513,7 +533,7 @@ export class ThongTinBienBanNhapDayDuComponent extends Base2Component implements
   }
 
   isPheDuyet() {
-    return (this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ || this.formData.value.trangThai == STATUS.CHO_DUYET_KT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+    return (this.formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ && this.isDuyetKTVBQ()) || (this.formData.value.trangThai == STATUS.CHO_DUYET_KT && this.isDuyetKT()) || (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && this.isDuyetLD())
   }
 
   async pheDuyet() {

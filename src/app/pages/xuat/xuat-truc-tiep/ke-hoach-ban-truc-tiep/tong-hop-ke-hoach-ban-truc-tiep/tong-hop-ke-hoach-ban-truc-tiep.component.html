@@ -226,6 +226,7 @@
                                           (showListEvent)="showList()" (taoQuyetDinh)="taoQuyetDinh($event)">
   </app-them-moi-tong-hop-kh-ban-truc-tiep>
 </div>
+<!--Xem quyết định kế hoạch-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true"

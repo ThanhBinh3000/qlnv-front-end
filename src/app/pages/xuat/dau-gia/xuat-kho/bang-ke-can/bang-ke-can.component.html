@@ -255,6 +255,7 @@
                                 [checkPrice]="checkPrice" (showListEvent)="showList()">
   </app-bdg-chi-tiet-bang-ke-can>
 </div>
+<!--Xem quyết định giao nhiệm vụ-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModal('QdNv')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-create-giao-xh [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
@@ -267,6 +268,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem phiếu kiểm nghiệm chất lượng-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewKiemnghiem"
           (nzOnCancel)="closeModal('kiemNghiem')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
@@ -281,6 +283,7 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem phiếu xuất kho-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewXuatKho"
           (nzOnCancel)="closeModal('xuatKho')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">

@@ -55,12 +55,22 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
+      <div nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18">
         <nz-form-item>
           <nz-form-label>Địa chỉ</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-input-group>
               <input nz-input formControlName="diaChi" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+        <nz-form-item>
+          <nz-form-label nzRequired>Mã định danh</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group>
+              <input nz-input formControlName="maDinhDanh" />
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -134,7 +144,7 @@
       <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" *ngIf="levelNode != 0">
         <nz-form-item>
           <nz-form-label></nz-form-label>
-          <label [nzDisabled]="levelNode == 3" nz-checkbox formControlName="type">Là phòng ban</label>
+          <label [nzDisabled]="levelNode == 3" nz-checkbox formControlName="type">Phòng ban/bộ phận</label>
         </nz-form-item>
       </div>
       <div nz-col nzSpan="8"></div>

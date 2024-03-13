@@ -45,13 +45,31 @@ export class ChatLuongVatTuComponent extends Base2Component implements OnInit {
     };
   }
 
-  tabSelected: number = 0;
+  tabSelected: string = 'DCNB_NHAP_KTCL_VT_BBCBK';
 
   ngOnInit(): void {
   }
 
-  selectTab(tab: number) {
+  selectTab(tab: string) {
     this.tabSelected = tab;
+  }
+
+  checkBBCBK() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_VT') && this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_VT_BBCBK')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_VT') && this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_VT_BBCBK')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_VT') && this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_VT_BBCBK'))
+  }
+
+  checkBBLM() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_VT') && this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_VT_BBLM')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_VT') && this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_VT_BBLM')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_VT') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_VT_BBLM'))
+  }
+
+  checkHSKT() {
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_VT') && this.userService.isAccessPermisson('DCNB_NHAP_NBCC_KTCL_VT_HSKT')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_VT') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_KTCL_VT_HSKT')) ||
+      (this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_VT') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_KTCL_VT_HSKT'))
   }
 
 }

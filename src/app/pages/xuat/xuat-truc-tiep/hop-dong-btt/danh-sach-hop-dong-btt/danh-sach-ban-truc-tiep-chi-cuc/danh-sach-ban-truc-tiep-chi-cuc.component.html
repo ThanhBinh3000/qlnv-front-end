@@ -239,17 +239,19 @@
   </div>
 </ng-container>
 <ng-container class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin-hop-dong-btt *ngIf="isAddNew" [checkPrice]="checkPrice" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  <app-thong-tin-hop-dong-btt *ngIf="isAddNew" [checkPrice]="checkPrice" [loaiVthh]="loaiVthh"
+                              (showListEvent)="showList()">
   </app-thong-tin-hop-dong-btt>
   <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [checkPrice]="checkPrice" [idInput]="idSelected" [loaiVthh]="loaiVthh"
                             (showListEvent)="showList()">
   </app-quan-ly-hop-dong-btt>
 </ng-container>
+<!--Xem quyết định kế hoạch-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModal('QdKh')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true"-->
-    <!--                                                [isView]="true">-->
-    <!--    </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>-->
+    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdKh" [isView]="true" [loaiVthh]="loaiVthh"
+                                                [isViewOnModal]="true">
+    </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal('QdKh')" class="modal__button--cancel">
@@ -258,11 +260,12 @@
     </button>
   </div>
 </nz-modal>
+<!--Xem điều chỉnh quyết định kế hoạch-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdDc" (nzOnCancel)="closeModal('QdDc')">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--    <app-chi-tiet-dieu-chinh-ban-truc-tiep [idInput]="idQdDc" [loaiVthh]="loaiVthh" [isViewOnModal]="true"-->
-    <!--                                           [isView]="true">-->
-    <!--    </app-chi-tiet-dieu-chinh-ban-truc-tiep>-->
+    <app-chi-tiet-dieu-chinh-ban-truc-tiep [idInput]="idQdDc" [isView]="true" [loaiVthh]="loaiVthh"
+                                           [isViewOnModal]="true">
+    </app-chi-tiet-dieu-chinh-ban-truc-tiep>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal('QdDc')" class="modal__button--cancel">

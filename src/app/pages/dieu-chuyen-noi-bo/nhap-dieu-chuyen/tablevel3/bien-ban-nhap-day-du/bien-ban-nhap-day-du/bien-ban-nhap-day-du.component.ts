@@ -174,9 +174,31 @@ export class BienBanNhapDayDuComponent extends Base2Component implements OnInit 
   }
 
   isShowDS() {
-    if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
-      return true
-    else return false
+    return (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BBNDK_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BBNDK_XEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BBNDK_XEM'))
+  }
+
+  isXoa() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BBNDK_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BBNDK_XOA') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BBNDK_XOA'))
+  }
+
+  isExport() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BBNDK_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BBNDK_EXP') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BBNDK_EXP'))
+  }
+
+  isThem() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BBNDK_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BBNDK_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BBNDK_THEM'))
+  }
+
+  isDuyetKTVBQ() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BBNDK_DUYET_KTVBQ') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BBNDK_DUYET_KTVBQ') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BBNDK_DUYET_KTVBQ'))
+  }
+
+  isDuyetKT() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BBNDK_DUYET_KETOAN') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BBNDK_DUYET_KETOAN') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BBNDK_DUYET_KETOAN'))
+  }
+
+  isDuyetLD() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BBNDK_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BBNDK_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BBNDK_DUYET_LDCCUC'))
   }
 
   isCuc() {

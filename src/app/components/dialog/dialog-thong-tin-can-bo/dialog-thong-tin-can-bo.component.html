@@ -188,6 +188,7 @@
         <textarea rows="3" nz-input formControlName="ghiChu" [readOnly]="isView"></textarea>
       </nz-form-item>
       <ng-template #error let-control>
+        <ng-container *ngIf="control.hasError('pattern')">{{regexComplex}}</ng-container>
         <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
         <ng-container *ngIf="control.hasError('email')">{{globals.prop.EMAIL_INVALID}}</ng-container>
         <ng-container *ngIf="control.hasError('minlength')">Vui lòng nhập đủ {{ control.errors.minlength.requiredLength

@@ -42,9 +42,10 @@ export class NguonHinhThanhDtqgComponent extends Base2Component implements OnIni
   listLoaiBc: any[] = [];
   listKyBc: any[] = [];
   dsDvtt: any[] = [
-    {text: 'Nghìn đồng', value: '01'},
-    {text: 'Triệu đồng', value: '02'},
-    {text: 'Tỷ đồng', value: '03'},
+    {text: 'Đồng', value: '01'},
+    {text: 'Nghìn đồng', value: '02'},
+    {text: 'Triệu đồng', value: '03'},
+    {text: 'Tỷ đồng', value: '04'},
   ]
   constructor(httpClient: HttpClient,
               storageService: StorageService,

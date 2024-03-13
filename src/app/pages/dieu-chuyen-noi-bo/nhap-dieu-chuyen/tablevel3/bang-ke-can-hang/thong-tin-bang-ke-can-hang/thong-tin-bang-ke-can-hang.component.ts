@@ -598,7 +598,13 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
     await this.spinner.hide();
   }
 
+  isIN() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BKCH_IN') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BKCH_IN') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BKCH_IN'))
+  }
 
+  isThem() {
+    return this.isChiCuc() && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BKCH_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BKCH_THEM') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BKCH_THEM'))
+  }
 
   isGuiDuyet() {
     return this.isView && this.formData.value.trangThai !== STATUS.DU_THAO
@@ -611,7 +617,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
   }
 
   isTuChoi() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BKCH_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BKCH_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BKCH_DUYET_LDCCUC'))
   }
 
   async tuChoi() {
@@ -623,7 +629,7 @@ export class ThongTinBangKeCanHangComponent extends Base2Component implements On
   }
 
   isPheDuyet() {
-    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC && (this.userService.isAccessPermisson('DCNB_NHAP_NBCC_NK_LT_BKCH_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC_NK_LT_BKCH_DUYET_LDCCUC') || this.userService.isAccessPermisson('DCNB_NHAP_2CUC_NK_LT_BKCH_DUYET_LDCCUC'))
   }
 
   async pheDuyet() {

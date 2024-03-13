@@ -40,9 +40,10 @@ export class KhMuaHangDtqgComponent extends Base2Component implements OnInit {
   maCuc: any;
   maChiCuc: any;
   dsDvtt: any[] = [
-    {text: 'Nghìn đồng', value: '01'},
-    {text: 'Triệu đồng', value: '02'},
-    {text: 'Tỷ đồng', value: '03'},
+    {text: 'Đồng', value: '01'},
+    {text: 'Nghìn đồng', value: '02'},
+    {text: 'Triệu đồng', value: '03'},
+    {text: 'Tỷ đồng', value: '04'},
   ]
 
   constructor(httpClient: HttpClient,

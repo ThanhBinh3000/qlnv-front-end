@@ -45,18 +45,18 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
     this.formData = this.fb.group({
       maDvi: [],
       tenDvi: [],
-      tichLuongSdLt: ['', Validators.required],
-      tichLuongSdVt: ['', Validators.required],
-      theTichSdVt: ['', Validators.required],
-      theTichSdLt: ['', Validators.required],
-      namNhap: ['', Validators.required],
+      tichLuongSdLt: ['', ],
+      tichLuongSdVt: ['', ],
+      theTichSdVt: ['', ],
+      theTichSdLt: ['', ],
+      namNhap: [''],
       ngayNhapDay: [''],
       ngayXuatDoc: [''],
       loaiVthh: ['', Validators.required],
       cloaiVthh: [''],
-      slTon: ['', Validators.required],
+      slTon: [0, Validators.required],
       dviTinh: [''],
-      thanhTien: [0, [Validators.required, Validators.min(1)]],
+      thanhTien: [0, [Validators.required, Validators.min(0)]],
       isKhoiTao: [true]
     })
   }

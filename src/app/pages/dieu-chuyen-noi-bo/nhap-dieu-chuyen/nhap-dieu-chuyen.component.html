@@ -1,12 +1,12 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab(0)">
+    <li nz-menu-item nzSelected (click)="selectTab('NBCHICUC')" *ngIf="userService.isAccessPermisson('DCNB_NHAP_NBCC')">
       TRONG NỘI BỘ CHI CỤC
     </li>
-    <li nz-menu-item (click)="selectTab(1)">
+    <li nz-menu-item (click)="selectTab('TRONGCUC')" *ngIf="userService.isAccessPermisson('DCNB_NHAP_CUNG1CUC')">
       GIỮA 2 CHI CỤC TRONG CÙNG MỘT CỤC
     </li>
-    <li nz-menu-item (click)="selectTab(2)">
+    <li nz-menu-item (click)="selectTab('HAICUC')" *ngIf="userService.isAccessPermisson('DCNB_NHAP_2CUC')">
       GIỮA 2 CỤC DTNN KV
     </li>
   </ul>
@@ -14,13 +14,13 @@
 
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-    <ng-container *ngIf="tabSelected == 0">
+    <ng-container *ngIf="tabSelected == 'NBCHICUC'">
       <app-noi-bo-chi-cuc></app-noi-bo-chi-cuc>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 1">
+    <ng-container *ngIf="tabSelected == 'TRONGCUC'">
       <app-giua-hai-chi-cuc></app-giua-hai-chi-cuc>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 2">
+    <ng-container *ngIf="tabSelected == 'HAICUC'">
       <app-giua-hai-cuc></app-giua-hai-cuc>
     </ng-container>
 

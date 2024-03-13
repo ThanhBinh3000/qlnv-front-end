@@ -32,6 +32,14 @@ export class BcNhapXuatMuaBanHangDTQGService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tien-do-bdg-thoc-gao-theo-nam`;
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
+  keHoachHoTroGaoHocSinh(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ke-hoach-ho-tro-gao-hoc-sinh`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+  ketQuaHoTroGaoHocSinh(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-qua-ho-tro-gao-hoc-sinh`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
 
   bcThongTinDthauMuaVt(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc_thong_tin_dau_thau_mua_vt`;
@@ -60,6 +68,10 @@ export class BcNhapXuatMuaBanHangDTQGService extends BaseService {
   }
   bcDanhSachNhaThauUyTin(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-ds-nha-thau-uy-tin`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+  bcThKetQuaDauThauMuaGao(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-th-kq-dau-thau-mua-gao`;
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 }

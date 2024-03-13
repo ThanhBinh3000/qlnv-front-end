@@ -32,7 +32,7 @@
         <ng-template #suffixIcon>
           <i nz-icon nzType="search"></i>
         </ng-template>
-        <nz-tree #nzTreeComponent [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
+        <nz-tree [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
                  (nzContextMenu)="nzClickNodeTree($event)" [nzSearchValue]="searchValue">
         </nz-tree>
       </nz-card>
