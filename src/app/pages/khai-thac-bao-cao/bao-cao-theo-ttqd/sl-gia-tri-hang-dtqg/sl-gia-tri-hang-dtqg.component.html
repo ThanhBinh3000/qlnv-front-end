@@ -74,7 +74,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6" *ngIf="!userService.isChiCuc() || (userService.isCuc() && formData.value.loaiBc == '02')">
+          <div nz-col [nzSpan]="6" *ngIf="formData.value.loaiBc == '02'">
             <nz-form-item>
               <nz-form-label [nzXs]="6">Chi Cục DTNN</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
@@ -87,7 +87,7 @@
         </div>
       </form>
       <form nzLayout="vertical" nz-form>
-        <div nz-row [nzGutter]="24">
+        <div nz-row [nzGutter]="24" *ngIf="formData.value.loaiBc != '04'">
           <div nz-col [nzSpan]="6">
             <nz-form-item>
               <nz-form-label [nzXs]="7">Loại hàng hóa</nz-form-label>
