@@ -159,14 +159,19 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+            <div nz-col nzXs="24" nzSm="24" nzMd="9" nzLg="9">
               <nz-form-item>
-                <nz-form-label>Trạng thái</nz-form-label>
-                <label nz-checkbox formControlName="trangThai" [nzDisabled]="!isEditData">Hoạt động</label>
+                <nz-form-label>Mã ĐVQHNS</nz-form-label>
+                <nz-form-control>
+                  <nz-input-group>
+                    <input nz-input formControlName="maQhns" [readonly]="!isEditData" />
+                  </nz-input-group>
+                </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="16"></div>
-            <div nz-col nzSpan="8" *ngIf="detailDonVi.value.capDvi == 2">
+            <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6" *ngIf="detailDonVi.value.capDvi == 1">
+            </div>
+            <div nz-col nzSpan="6" *ngIf="detailDonVi.value.capDvi == 2">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Vùng miền</nz-form-label>
                 <nz-form-control>
@@ -176,7 +181,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="16"  *ngIf="detailDonVi.value.capDvi == 2">
+            <div nz-col nzSpan="24"  *ngIf="detailDonVi.value.capDvi == 2">
               <nz-form-item>
                 <nz-form-label>Quản lý các hoạt động DTNN trên các địa bàn tỉnh</nz-form-label>
                 <nz-form-control>
@@ -226,12 +231,20 @@
               </nz-form-item>
             </div>
 
-            <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
-              <nz-form-item *ngIf="detailDonVi.value.capDvi != 1 &&  detailDonVi.value.capDvi != 0">
+            <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8" *ngIf="detailDonVi.value.capDvi != 1 &&  detailDonVi.value.capDvi != 0">
+              <nz-form-item >
                 <nz-form-label></nz-form-label>
                 <label nz-checkbox [nzDisabled]="!isEditData" formControlName="type">Phòng ban/bộ phận</label>
               </nz-form-item>
             </div>
+            <div nz-col nzSpan="16" *ngIf="detailDonVi.value.capDvi != 1 &&  detailDonVi.value.capDvi != 0"></div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+              <nz-form-item>
+                <nz-form-label>Trạng thái</nz-form-label>
+                <label nz-checkbox formControlName="trangThai" [nzDisabled]="!isEditData">Hoạt động</label>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="16"></div>
             <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
               <nz-form-item>
                 <nz-form-label>Ghi chú</nz-form-label>
