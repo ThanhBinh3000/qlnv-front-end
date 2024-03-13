@@ -163,15 +163,21 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
             }
             //Xử lý pp lấy mẫu và chỉ tiêu kiểm tra chất lượng
             if (data.ppLayMau) {
-              let ppLayMauOptions = data.ppLayMau.indexOf(',') > 0 ? data.ppLayMau.split(',') : [data.ppLayMau];
-              ppLayMauOptions = ppLayMauOptions.map((str, index) => ({ label: str, value: index + 1, checked: true }));
+              const ppLayMauOptions = data.ppLayMau.split(';').map(option => {
+                const [label, checked] = option.split('=>');
+                return {label, value: null, checked: checked === 'true'};
+              });
+
               this.formData.patchValue({
                 ppLayMauList: ppLayMauOptions,
               });
             }
+
             if (data.chiTieuKiemTra) {
-              let chiTieuOptions = data.chiTieuKiemTra.indexOf(',') > 0 ? data.chiTieuKiemTra.split(',') : [data.chiTieuKiemTra];
-              chiTieuOptions = chiTieuOptions.map((str, index) => ({ label: str, value: index + 1, checked: true }));
+              const chiTieuOptions = data.chiTieuKiemTra.split(";").map(option => {
+                const [label, checked] = option.split('=>');
+                return {label, value: null, checked: checked === 'true'};
+              });
               this.formData.patchValue({
                 chiTieuKiemTraList: chiTieuOptions,
               });
@@ -395,14 +401,14 @@ export class ThongTinBienBanLayMauBanGiaoMauComponent extends Base2Component imp
     }
     // xử lý pp lấy mẫu và tiêu chuẩn cần lấy mẫu kiểm tra
     if (body.ppLayMauList && body.ppLayMauList.length > 0) {
-      body.ppLayMau = body.ppLayMauList.map(function(item) {
-        return item['label'];
-      }).join(',');
+      body.ppLayMau = body.ppLayMauList.map(function (item) {
+        return item['label'] + '=>' + item.checked;
+      }).join(";");
     }
     if (body.chiTieuKiemTraList && body.chiTieuKiemTraList.length > 0) {
-      body.chiTieuKiemTra = body.chiTieuKiemTraList.map(function(item) {
-        return item['label'];
-      }).join(',');
+      body.chiTieuKiemTra = body.chiTieuKiemTraList.map(function (item) {
+        return item['label'] + '=>' + item.checked;
+      }).join(";");
     }
     // xử lý người liên quan
     if (this.listDaiDienChiCuc && this.listDaiDienChiCuc.length > 0) {
