@@ -238,7 +238,7 @@ export class TongHopDanhSachHangDtqgThuocDienXuatKhoiDmComponent extends Base2Co
       this.formData.patchValue({
         maDanhSach: this.selectedItem.maDanhSach
       });
-      this.exportData("danh-sach-vat-tu-thiet-bi-co-thoi-han-luu-kho-lon-hon-12-thang.xlsx");
+      this.exportData("tong-hop-danh-sach-dtqg-thuoc-dien-xuat-khoi-danh-muc.xlsx");
     }
   }
 

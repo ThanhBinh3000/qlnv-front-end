@@ -72,6 +72,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   amount1 = { ...AMOUNT_TWO_DECIMAL, align: "left" }
   amount = { ...AMOUNT_NO_DECIMAL, align: "left", min: 0, max: 100 };
   chuyenXuatCap: boolean = true;
+  validateSlGiaoChiCuc: { [key: string]: number }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -242,8 +243,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             // res.data.dataDtl.forEach(s => s.idVirtual = uuidv4());
             res.data.dataDtl.forEach(s => s.mId = uuidv4());
             this.formData.patchValue({ ...res.data, trangThaiXh: res.data.trangThaiXh ? res.data.trangThaiXh : STATUS.CHUA_THUC_HIEN });
-            await this.getChiTietQuyetDinhXuatCap();
+            const quyetDinhPdDtl = await this.getChiTietQuyetDinhXuatCap();
             await this.buildTableView();
+            this.getListQuyetDinhGnvTheoQdPd(res.data.idQdPd, quyetDinhPdDtl)
           }
         })
         .catch((e) => {
@@ -263,12 +265,15 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   }
   async getChiTietQuyetDinhXuatCap() {
     const idQdPd = this.formData.value.idQdPd;
+    let quyetDinhPdDtl = [];
     if (idQdPd) {
       const res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(idQdPd);
       if (res.msg === MESSAGE.SUCCESS) {
         this.formData.patchValue({ paXuatGaoChuyenXc: res.data.paXuatGaoChuyenXc })
+        quyetDinhPdDtl = res.data.quyetDinhPdDtl;
       }
     }
+    return quyetDinhPdDtl
   }
   async loadDsDiaDanh() {
     let body = {
@@ -522,6 +527,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
 
 
   async openDialogQdPd() {
+    if (this.formData.value.id) return;
     try {
       await this.spinner.show();
       let res;
@@ -554,7 +560,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           nzWidth: '900px',
           nzFooter: null,
           nzComponentParams: {
-            dataTable: res.data,
+            dataTable: res.data.filter(f => !f.hoanThanhPhanBo),
             dataHeader: ['Số quyết định', 'Ngày phê duyệt', 'Mục đích xuất'],
             dataColumn: ['soBbQd', 'ngayPduyet', 'mucDichXuat']
           },
@@ -623,6 +629,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               paXuatGaoChuyenXc: detail.paXuatGaoChuyenXc
 
             });
+            this.getListQuyetDinhGnvTheoQdPd(detail.id, detail.quyetDinhPdDtl)
             await this.buildTableView();
           }
         });
@@ -634,7 +641,35 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       await this.spinner.hide();
     }
   }
-
+  async getListQuyetDinhGnvTheoQdPd(idQdPd: number, quyetDinhPdDtl: any[]) {
+    if (!idQdPd) return;
+    const res = await this.quyetDinhGiaoNvCuuTroService.search({ idQdPd });
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.validateSlGiaoChiCuc = {};
+      if (this.formData.value.type !== 'XC') {
+        quyetDinhPdDtl = cloneDeep(quyetDinhPdDtl).filter(f => !f.xuatCap);
+        quyetDinhPdDtl.forEach(s => {
+          this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] = (this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] || 0) + s.soLuong;
+        });
+      }
+      else if (this.formData.value.type === 'XC' && !this.formData.value.paXuatGaoChuyenXc) {
+        quyetDinhPdDtl = cloneDeep(quyetDinhPdDtl);
+        quyetDinhPdDtl.forEach(s => {
+          this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] = (this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] || 0) + s.soLuong;
+        });
+      } else if (this.formData.value.type === "XC" && this.formData.value.paXuatGaoChuyenXc) {
+        quyetDinhPdDtl = cloneDeep(quyetDinhPdDtl);
+        quyetDinhPdDtl.forEach(s => {
+          this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] = (this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] || 0) + s.soLuongXc;
+        });
+      }
+      res.data.content.forEach(f => {
+        f.dataDtl.filter(f => f.id !== this.formData.value.id).forEach(s => {
+          this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] = (this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] || 0) - s.soLuongGiao
+        });
+      });
+    }
+  }
   async buildTableView() {
     if (this.formData.value.type !== "XC") {
       this.formData.value.dataDtl.forEach(s => {
@@ -1317,6 +1352,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     let slConLaiGiao = this.formDataDtl.value.slConLaiGiao;
     let tonKhoDvi = this.formDataDtl.value.tonKhoDvi;
     let tonKhoCloaiVthh = this.formDataDtl.value.tonKhoCloaiVthh;
+    let noiDungDx = this.formDataDtl.value.noiDungDx;
+    let namNhap = this.formDataDtl.value.namNhap;
     let tenDvi = Array.isArray(this.listDonVi) && this.listDonVi.find(f => f.maDvi === maDvi) ? this.listDonVi.find(f => f.maDvi === maDvi).tenDvi : null;
     this.formDataDtl.patchValue({ tenDvi: tenDvi })
     this.resetValidatorDataDtl();
@@ -1337,10 +1374,16 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           tonKhoDvi, tonKhoCloaiVthh
         })
         if (this.userService.isCuc()) {
+          // if (this.formData.value.type === "XC" && this.formData.value.paXuatGaoChuyenXc) {
+          //   this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, slConLaiGiao))]);
+          // } else {
+          //   this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi, slConLaiGiao))]);
+          // }
+          // this.formDataDtl.controls['soLuongGiao'].updateValueAndValidity();
           if (this.formData.value.type === "XC" && this.formData.value.paXuatGaoChuyenXc) {
-            this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, slConLaiGiao))]);
+            this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, this.validateSlGiaoChiCuc[`${noiDungDx}-${namNhap}`]))]);
           } else {
-            this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi, slConLaiGiao))]);
+            this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi, this.validateSlGiaoChiCuc[`${noiDungDx}-${namNhap}`]))]);
           }
           this.formDataDtl.controls['soLuongGiao'].updateValueAndValidity();
         }

@@ -67,6 +67,7 @@ export class NewDonViComponent implements OnInit {
       tinhThanhList: [],
       tinhThanh: [""],
       quanHuyen: [""],
+      maQhns: [""],
       phuongXa: [""]
     })
     this.formDonVi.controls['maDviCha'].valueChanges.subscribe(value => {

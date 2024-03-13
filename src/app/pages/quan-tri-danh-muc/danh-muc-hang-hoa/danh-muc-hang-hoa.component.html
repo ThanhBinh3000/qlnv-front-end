@@ -46,11 +46,11 @@
             </div>
           </div>
           <div class="buttons">
-            <button nz-button class="btn btn-sub do" (click)="delete()" *ngIf="userService.isAccessPermisson('QTDM_DM_HANG_DTQG_XOA') && detailHangHoa.value.trangThai != '00'" >
+            <button nz-button class="btn btn-sub do" (click)="delete()" *ngIf="userService.isAccessPermisson('QTDM_DM_HANG_DTQG_XOA')" >
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
               Xóa
             </button>
-            <button nz-button class="btn btn-sub xanh-nhat" (click)="showEdit(true)" *ngIf="!isEditData && userService.isAccessPermisson('QTDM_DM_HANG_DTQG_THEM') && detailHangHoa.value.trangThai != '00' " >
+            <button nz-button class="btn btn-sub xanh-nhat" (click)="showEdit(true)" *ngIf="!isEditData && userService.isAccessPermisson('QTDM_DM_HANG_DTQG_THEM')" >
               <i class="icon htvbdh_bosungfile"></i>
               Sửa
             </button>

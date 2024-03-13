@@ -14,10 +14,10 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button type="button" class="btn btn-sub mr-2" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_IN')" (click)="xemTruoc(idInput,templateName)">
-          <i class="icon htvbdh_totrinh"></i>
-          <span> In/Xem trước </span>
-        </button>
+<!--        <button type="button" class="btn btn-sub mr-2" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_IN')" (click)="xemTruoc(idInput,templateName)">-->
+<!--          <i class="icon htvbdh_totrinh"></i>-->
+<!--          <span> In/Xem trước </span>-->
+<!--        </button>-->
         <button *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_THEM') && this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC"
                 class="btn btn-sub xanh-nhat mr-2" (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
