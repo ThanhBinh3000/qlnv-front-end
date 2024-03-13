@@ -14,12 +14,12 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub xanh-nhat ml-2"
+      <button type="button" class="btn btn-sub xanh-nhat ml-2" *ngIf="formData.value.trangThai =='78'"
               (click)="saveAndSend(STATUS.BAN_HANH,  'Bạn có chắc chắn muốn ban hành?')">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
-      <button type="button" class="btn btn-sub xanh ml-2"
+      <button type="button" class="btn btn-sub xanh ml-2" *ngIf="formData.value.trangThai =='78'"
               (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -238,10 +238,10 @@
 
             </th>
             <th class="text-center" nzRight>
-              <a (click)="themMoiItem(rowItem)" *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_THEM')">
+              <a (click)="themMoiItem(rowItem)" *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_THEM') && formData.value.trangThai =='78'">
                 <i class="icon htvbdh_dau-cong"></i>
               </a>
-              <a *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_THEM')">
+              <a *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_THEM') && formData.value.trangThai =='78'">
                 <i (click)="refresh()" class="icon  htvbdh_nhap-lai1 "></i>
               </a>
             </th>
@@ -295,10 +295,10 @@
                 </nz-select>
               </td>
               <td style="text-align: center;" nzRight>
-                <a (click)="startEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_THEM')">
+                <a (click)="startEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_THEM') && formData.value.trangThai =='78'">
                   <i class="table-icon fa fa-pencil"></i>
                 </a>
-                <a (click)="xoaItem(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_XOA')">
+                <a (click)="xoaItem(data)" *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_XOA') && formData.value.trangThai =='78'">
                   <i class="table-icon fa fa-trash-o do"></i>
                 </a>
               </td>
@@ -422,10 +422,10 @@
               </td>
               <td style="text-align: center;" nzRight>
                 <a (click)="themMoiItem(dataEdit[i].data)"
-                   *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_THEM')">
+                   *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_THEM') && formData.value.trangThai =='78'">
                   <i class="fa fa-save"></i>
                 </a>
-                <a (click)="huyEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_XOA')">
+                <a (click)="huyEdit(i)" *ngIf="userService.isAccessPermisson('QTDM_DM_DINHMUC_HAOHUT_XOA') && formData.value.trangThai =='78'">
                   <i class="fa fa-times do"></i>
                 </a>
               </td>
