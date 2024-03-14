@@ -111,6 +111,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       tenNganLoKho: [],
       loaiHinhKho: [],
       tenNguoiGiamSat: [],
+      ngayNhapPhieuNk: [],
     })
   }
 
@@ -283,8 +284,10 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
+        console.log(data)
         this.formData.patchValue({
           soPhieuNhapKho: data.soPhieuNhapKho,
+          ngayNhapPhieuNk: data.ngayTao,
           nguoiGiaoHang: data.nguoiGiaoHang,
           cmtNguoiGiaoHang: data.cmtNguoiGiaoHang,
           donViGiaoHang: data.donViGiaoHang,

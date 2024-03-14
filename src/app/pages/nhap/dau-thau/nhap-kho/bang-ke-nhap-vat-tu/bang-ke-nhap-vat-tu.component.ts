@@ -200,9 +200,9 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
         }
       };
       for (let j = 0; j < this.dataTable[i].detail.children.length; j++) {
-        this.dataTable[i].detail.children[j].listBangKeVt.forEach(x => {
-          x.phieuNhapKho = this.dataTable[i].detail.children[j].listPhieuNhapKho.filter(item => item.soPhieuNhapKho == x.soPhieuNhapKho)[0];
-        });
+        // this.dataTable[i].detail.children[j].listBangKeVt.forEach(x => {
+        //   x.phieuNhapKho = this.dataTable[i].detail.children[j].listPhieuNhapKho.filter(item => item.soPhieuNhapKho == x.soPhieuNhapKho)[0];
+        // });
         this.expandSet2.add(j)
       }
       this.expandSet.add(i)
@@ -360,14 +360,20 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "ngayTaoBangKeDen": this.searchFilter.ngayTaoBangKe && this.searchFilter.ngayTaoBangKe.length > 1 ? dayjs(this.searchFilter.ngayTaoBangKe[1]).format('YYYY-MM-DD') : null,
-          "soQdNhap": this.searchFilter.soQuyetDinh,
-          "maDvis": [this.userInfo.MA_DVI],
-          "loaiVthh": this.isTatCa ? null : this.loaiVthh,
-          "paggingReq": null,
-          "soBangKe": this.searchFilter.soBangKe,
-          "ngayTaoBangKeTu": this.searchFilter.ngayTaoBangKe && this.searchFilter.ngayTaoBangKe.length > 0 ? dayjs(this.searchFilter.ngayTaoBangKe[0]).format('YYYY-MM-DD') : null,
-        }
+          soQd: this.searchFilter.soQuyetDinh,
+          soBangKe: this.searchFilter.soBangKe,
+          namNhap: this.searchFilter.namKhoach,
+          tuNgayTgianNkho: this.tuNgayNhapHang != null ? dayjs(this.tuNgayNhapHang).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayTgianNkho: this.denNgayNhapHang != null ? dayjs(this.denNgayNhapHang).format('YYYY-MM-DD') + " 23:59:59" : null,
+          tuNgayNk: this.tuNgayNk != null ? dayjs(this.tuNgayNk).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayNk: this.denNgayNk != null ? dayjs(this.denNgayNk).format('YYYY-MM-DD') + " 23:59:59" : null,
+          trangThai: this.STATUS.BAN_HANH,
+          paggingReq: {
+            "limit": this.pageSize,
+            "page": this.page - 1
+          },
+          loaiVthh: this.loaiVthh
+        };
         this.quanLyBangKeVatTuService
           .export(body)
           .subscribe((blob) =>

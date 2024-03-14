@@ -402,7 +402,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   checkQuyenXem(trangThai) {
     if (trangThai) {
       if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_XEM')) {
-        if (trangThai == STATUS.DU_THAO && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM')) {
+        if ((trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TK || trangThai == STATUS.TU_CHOI_LDCC) && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM')) {
           return false;
         } else if (trangThai == STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_LDCCUC')) {
           return false;
