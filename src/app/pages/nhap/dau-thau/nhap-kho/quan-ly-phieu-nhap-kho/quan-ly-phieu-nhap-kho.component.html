@@ -94,7 +94,7 @@
               <td></td>
               <td class="link bold">{{ item.soQd }}</td>
               <td class="bold">{{ item.namNhap }}</td>
-              <td class="bold">{{ item.tgianNkho }}</td>
+              <td class="bold">{{ item.tgianNkho| date: 'dd/MM/yyyy' }}</td>
               <td *ngIf="!loaiVthh.startsWith('02')"></td>
               <td colspan="8"></td>
               <td>
