@@ -16,7 +16,7 @@ import { MESSAGE } from '../../../../constants/message';
 import { Base2Component } from '../../../../components/base2/base2.component';
 
 @Component({
-  selector: 'app-bao-cao-ket-qua-ho-tro-gao',
+  selector: 'app-bao-cao-ke-hoach-ho-tro-gao',
   templateUrl: './bao-cao-ke-hoach-ho-tro-gao.component.html',
   styleUrls: ['./bao-cao-ke-hoach-ho-tro-gao.component.scss']
 })
