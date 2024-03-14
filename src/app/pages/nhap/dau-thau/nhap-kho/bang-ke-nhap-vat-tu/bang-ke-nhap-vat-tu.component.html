@@ -3,18 +3,48 @@
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div class="search__body" nz-row [nzGutter]="20">
-        <div nz-col nzSpan="4">
-          <label class="search__label">Số Quyết định nhập</label>
-          <input class="search__input" placeholder="Nhập Số Quyết định nhập" nz-input
-            [(ngModel)]="searchFilter.soQuyetDinh" />
+        <div nz-col nzSpan="2">
+          <label class="search__label"> Năm kế hoạch </label>
+          <nz-select [(ngModel)]="searchFilter.namKhoach">
+            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+          </nz-select>
         </div>
         <div nz-col nzSpan="4">
-          <label class="search__label">Số bảng kê</label>
-          <input class="search__input" placeholder="Số bảng kê" nz-input [(ngModel)]="searchFilter.soBangKe" />
+          <label class="search__label">Số QĐ giao NV NH</label>
+          <input class="search__input" placeholder="Nhập Số QĐ giao NV NH" nz-input
+                 [(ngModel)]="searchFilter.soQuyetDinh" />
         </div>
         <div nz-col nzSpan="4">
-          <label class="search__label">Ngày tạo bảng kê</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayTaoBangKe" nzFormat="dd/MM/yyyy"></nz-range-picker>
+          <label class="search__label">Số bảng kê nhập vật tư</label>
+          <input class="search__input" placeholder="Số bảng kê nhập vật tư" nz-input [(ngModel)]="searchFilter.soBangKe" />
+        </div>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Thời hạn nhập hàng trước ngày</label>
+          <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="12" class="cus-start-date">
+              <nz-date-picker [nzDisabledDate]="disabledTuNgayNhapHang" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayNhapHang"
+                              nzPlaceHolder="Ngày bắt đầu">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="12" class="cus-end-date">
+              <nz-date-picker [nzDisabledDate]="disabledDenNgayNhapHang" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayNhapHang"
+                              nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+            </div>
+          </div>
+        </div>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Ngày nhập kho</label>
+          <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="12" class="cus-start-date">
+              <nz-date-picker [nzDisabledDate]="disabledStartDate" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayNk"
+                              nzPlaceHolder="Ngày bắt đầu">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="12" class="cus-end-date">
+              <nz-date-picker [nzDisabledDate]="disabledEndDate" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayNk"
+                              nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+            </div>
+          </div>
         </div>
       </div>
       <div class="cangiua group-button-search">
@@ -59,18 +89,19 @@
             <th width="60px">STT</th>
             <th width="30px"></th>
             <th width="30px"></th>
-            <th>Số QĐ giao nhiệm vụ</th>
+            <th>Số QĐ giao NV NH</th>
             <th>Năm kế hoạch</th>
             <th>Thời gian NH trước ngày</th>
             <th>Điểm kho</th>
-            <th>Nhà kho</th>
-            <th>Ngăn kho</th>
-            <th>Lô kho</th>
-            <th>Số bảng kê nhập vật tư</th>
+            <th>Ngăn/Lô kho</th>
+            <th>Số BB gửi hàng</th>
+            <th>Số BB chuẩn bị kho</th>
+            <th>Số BB lấy mẫu/BG mẫu</th>
+            <th>Số hồ sơ kỹ thuật</th>
+            <th>Số bảng kê NVT</th>
+            <th>Ngày nhập bảng kê</th>
             <th>Số phiếu nhập kho</th>
             <th>Ngày nhập kho</th>
-            <th>Số BB lấy mẫu/BG mẫu</th>
-            <th>Số BB gửi hàng</th>
             <th>Trạng thái</th>
             <th>Hành động</th>
           </tr>
@@ -83,10 +114,10 @@
               <td></td>
               <td class="link bold">{{ item.soQd }}</td>
               <td class="bold">{{ item.namNhap }}</td>
-              <td class="bold">{{ item.tgianNkho }}</td>
+              <td class="bold">{{ item.tgianNkho| date: 'dd/MM/yyyy' }}</td>
               <td colspan="10"></td>
               <td>
-                <a (click)="redirectToChiTiet(false, 0,item.id)">
+                <a (click)="redirectToChiTiet(false, 0,item.id)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BKNVT_THEM')">
                   <i class="fa fa-plus"></i>
                 </a>
               </td>
@@ -99,21 +130,26 @@
                   <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
                   <td colspan="3"></td>
                   <td>{{dataDdiem.tenDiemKho}}</td>
-                  <td>{{dataDdiem.tenNhaKho}}</td>
-                  <td>{{dataDdiem.tenNganKho}}</td>
-                  <td>{{dataDdiem.tenLoKho}}</td>
-                  <td colspan="7"></td>
+                  <td>{{dataDdiem.tenLoKho ? dataDdiem.tenLoKho + ' - ' + dataDdiem.tenNganKho : dataDdiem.tenNganKho }}</td>
+                  <td>{{ dataDdiem.bienBanGuiHang?.soBienBanGuiHang }}</td>
+                  <td>{{ dataDdiem.bienBanChuanBiKho?.soBienBan }}</td>
+                  <td>{{ dataDdiem.bienBanLayMau?.soBienBan }}</td>
+                  <td>{{ dataDdiem.hoSoKyThuat?.soHoSoKyThuat }}</td>
+                  <td colspan=""></td>
                 </tr>
                 <ng-container *ngIf="expandSet2.has(y)">
                   <tr class="level-3" *ngFor="let dataPhieu of dataDdiem.listBangKeVt">
                     <td></td>
                     <td></td>
-                    <td colspan="8"></td>
+                    <td colspan="6"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>{{ dataPhieu.soBangKe }}</td>
+                    <td>{{ dataPhieu.ngayNhapKho | date : 'dd/MM/yyyy' }}</td>
                     <td>{{ dataPhieu.soPhieuNhapKho }}</td>
-                    <td>{{ dataPhieu.phieuNhapKho?.ngayNhapKho | date : 'dd/MM/yyyy' }}</td>
-                    <td>{{ dataDdiem.bienBanLayMau?.soBienBan }}</td>
-                    <td>{{ dataDdiem.bienBanGuiHang?.soBienBanGuiHang }}</td>
+                    <td></td>
                     <td>{{ dataPhieu.tenTrangThai }}</td>
                     <td>
                       <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC "

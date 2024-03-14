@@ -116,6 +116,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       ngayQdGiaoNvNh: [],
       tenNganLoKho: [],
       tenThuKho: [],
+      soHoSoKyThuat: [],
     })
   }
 
@@ -283,6 +284,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
         this.formData.patchValue({
           nguoiTaoPhieuKtraCl: data.bienBanGuiHang.tenNguoiTao,
           soBienBanGuiHang: data.bienBanGuiHang.soBienBanGuiHang,
+          soHoSoKyThuat: data.hoSoKyThuat?.soHoSoKyThuat,
         });
       } else {
         // this.listPhieuKtraCl = [];

@@ -102,12 +102,12 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
     this.userInfo = this.userService.getUserLogin();
     await Promise.all([
       this.layTatCaDonViByLevel(),
+      this.loadDsKyBc(),
     ]);
     if (this.idInput != null) {
       await this.loadChiTiet(this.idInput)
     } else {
       await Promise.all([
-        this.loadDsKyBc(),
         this.loadDsDonVi()
       ]);
       this.formData.patchValue({
