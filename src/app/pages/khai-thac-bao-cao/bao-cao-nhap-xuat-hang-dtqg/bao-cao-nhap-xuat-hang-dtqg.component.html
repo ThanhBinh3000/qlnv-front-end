@@ -68,6 +68,10 @@
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo kết quả xuất gạo cứu trợ hỗ trợ địa phương trong năm</span>
             </li>
+            <li nz-menu-item [nzSelected]='tabSelected==21' (click)='selectTab(21)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo tiến độ xuất gạo hỗ trợ học sinh</span>
+            </li>
           </ul>
         </li>
       </ul>
@@ -121,6 +125,9 @@
         </ng-container>
         <ng-container *ngIf='tabSelected == 20'>
           <app-kq-xuat-gao-ctht-cho-dia-phuong-trong-nam></app-kq-xuat-gao-ctht-cho-dia-phuong-trong-nam>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 21'>
+          <app-bc-tien-do-xuat-gao-ho-tro-hoc-sinh></app-bc-tien-do-xuat-gao-ho-tro-hoc-sinh>
         </ng-container>
       </div>
     </div>
