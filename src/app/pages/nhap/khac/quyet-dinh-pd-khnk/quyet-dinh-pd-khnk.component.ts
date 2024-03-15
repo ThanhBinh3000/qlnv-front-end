@@ -15,7 +15,6 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
-import { ItemDetail } from 'src/app/models/itemDetail';
 import { STATUS } from 'src/app/constants/status';
 import { HttpClient } from "@angular/common/http";
 import { Base2Component } from "../../../../components/base2/base2.component";

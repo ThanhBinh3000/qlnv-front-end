@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Base2Component } from '../../../../components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../../../../services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -10,22 +11,22 @@ import { DonviService } from '../../../../services/donvi.service';
 import { DanhMucService } from '../../../../services/danhmuc.service';
 import { Globals } from '../../../../shared/globals';
 import * as dayjs from 'dayjs';
+import * as moment from 'moment';
 import {saveAs} from "file-saver";
 import { Validators } from '@angular/forms';
 import { MESSAGE } from '../../../../constants/message';
-import { Base2Component } from '../../../../components/base2/base2.component';
 
 @Component({
-  selector: 'app-bao-cao-ket-qua-ho-tro-gao',
-  templateUrl: './bao-cao-ket-qua-ho-tro-gao.component.html',
-  styleUrls: ['./bao-cao-ket-qua-ho-tro-gao.component.scss']
+  selector: 'app-kq-xuat-gao-ctht-cho-dia-phuong-trong-nam',
+  templateUrl: './kq-xuat-gao-ctht-cho-dia-phuong-trong-nam.component.html',
+  styleUrls: ['./kq-xuat-gao-ctht-cho-dia-phuong-trong-nam.component.scss']
 })
-export class BaoCaoKetQuaHoTroGaoComponent extends Base2Component implements OnInit {
+export class KqXuatGaoCthtChoDiaPhuongTrongNamComponent extends Base2Component implements OnInit {
   pdfSrc: any;
   excelSrc: any;
   pdfBlob: any;
   excelBlob: any;
-  nameFile = "ket-qua-ho-tro-gao-hoc-sinh";
+  nameFile = "ket-qua-xuat-gao-cuu-tro-ho-tro-dia-phuong-nam";
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -34,13 +35,11 @@ export class BaoCaoKetQuaHoTroGaoComponent extends Base2Component implements OnI
               modal: NzModalService,
               private bcNhapXuatMuaBanHangDTQGService: BcNhapXuatMuaBanHangDTQGService,
               public userService: UserService,
-              private donViService: DonviService,
-              private danhMucSv: DanhMucService,
               public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, bcNhapXuatMuaBanHangDTQGService);
     this.formData = this.fb.group(
       {
-        nam: [dayjs().get("year"), [Validators.required]],
+        ngayBaoCao: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
       }
     );
   }
@@ -64,7 +63,9 @@ export class BaoCaoKetQuaHoTroGaoComponent extends Base2Component implements OnI
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      await this.bcNhapXuatMuaBanHangDTQGService.ketQuaHoTroGaoHocSinh(body).then(async s => {
+      body.nam = body.ngayBaoCao.getFullYear();
+      body.ngayBatDauQuy = moment(body.ngayBaoCao).format('DD/MM/YYYY');
+      await this.bcNhapXuatMuaBanHangDTQGService.bcKqXuatGaoCthtDiaPhuongNam(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, this.nameFile + ".xlsx");
@@ -91,8 +92,10 @@ export class BaoCaoKetQuaHoTroGaoComponent extends Base2Component implements OnI
     try {
       this.spinner.show();
       let body = this.formData.value;
+      body.nam = body.ngayBaoCao.getFullYear();
+      body.ngayBatDauQuy = moment(body.ngayBaoCao).format('DD/MM/YYYY');
       body.typeFile = "pdf";
-      await this.bcNhapXuatMuaBanHangDTQGService.ketQuaHoTroGaoHocSinh(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.bcKqXuatGaoCthtDiaPhuongNam(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });

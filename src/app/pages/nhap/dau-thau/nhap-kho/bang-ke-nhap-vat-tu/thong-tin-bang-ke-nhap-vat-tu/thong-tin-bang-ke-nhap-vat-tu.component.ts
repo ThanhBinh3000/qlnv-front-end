@@ -24,6 +24,7 @@ import { STATUS } from 'src/app/constants/status';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
+import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
 
 @Component({
   selector: 'app-thong-tin-bang-ke-nhap-vat-tu',
@@ -65,6 +66,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     modal: NzModalService,
     private quanLyBangKeVatTuService: QuanLyBangKeVatTuService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
+    private mangLuoiKhoService: MangLuoiKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLyBangKeVatTuService);
     this.formData = this.fb.group({
@@ -105,7 +107,11 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
       lyDoTuChoi: [],
       tenNguoiTao: [],
       tenNguoiPduyet: [],
-      tenTruongPhong: []
+      tenTruongPhong: [],
+      tenNganLoKho: [],
+      loaiHinhKho: [],
+      tenNguoiGiamSat: [],
+      ngayNhapPhieuNk: [],
     })
   }
 
@@ -129,9 +135,10 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
   }
 
   async initForm() {
+    let maBb = 'BKCH-' + this.userInfo.DON_VI.tenVietTat;
     let res = await this.userService.getId("BANG_KE_VT_SEQ");
     this.formData.patchValue({
-      soBangKe: `${res}/${this.formData.get('nam').value}/BKCH-CCDTVP`,
+      soBangKe: `${res}/${this.formData.get('nam').value}/${maBb}`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
@@ -240,11 +247,27 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         soLuongDdiemGiaoNvNh: data.soLuong,
+        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
       });
       this.listSoPhieuNhapKho = data.listPhieuNhapKho;
+      await this.thongTinKho(data.maNhaKho)
     }
   }
 
+  async thongTinKho(event) {
+    if (!event) return;
+    let body = {
+      maDvi: event,
+      capDvi: (event?.length / 2 - 1),
+    };
+    const detail = await this.mangLuoiKhoService.getDetailByMa(body);
+    if (detail.statusCode == 0) {
+      this.formData.patchValue({
+        loaiHinhKho: '',
+        diaDiemKho: detail.data.object.diaChi
+      });
+    }
+  }
   openDialogSoPhieuNhapKho() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số phiếu nhập kho',
@@ -261,8 +284,10 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
+        console.log(data)
         this.formData.patchValue({
           soPhieuNhapKho: data.soPhieuNhapKho,
+          ngayNhapPhieuNk: data.ngayTao,
           nguoiGiaoHang: data.nguoiGiaoHang,
           cmtNguoiGiaoHang: data.cmtNguoiGiaoHang,
           donViGiaoHang: data.donViGiaoHang,
@@ -282,6 +307,11 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.formData.patchValue(
+            {
+              tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
+            }
+          )
           this.dataTable = data.children;
         }
       }

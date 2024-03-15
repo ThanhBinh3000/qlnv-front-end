@@ -195,9 +195,9 @@
             <td></td>
             <td>
               <a *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_XEM') ||
-              ((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')))
+              ((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO'))
               && (data.trangThai == STATUS.CHO_DUYET_TP ? !userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_TP') : true )
-              && (data.trangThai == STATUS.CHO_DUYET_LDC ? !userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_LDCUC') : true )"
+              && (data.trangThai == STATUS.CHO_DUYET_LDC ? !userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_LDCUC') : true ))"
                 (click)="redirectToThongTin(data.id, true)">
                 <span class="icon htvbdh_eye"></span>
               </a>

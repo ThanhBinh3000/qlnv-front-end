@@ -1,33 +1,29 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Base2Component } from '../../../../../../components/base2/base2.component';
-import { NumberToRoman } from '../../../../../../shared/commonFunction';
-import {
-  VtTbCoThoihanLuukhoConSauThangComponent,
-} from '../../../kiemtra-chatluong-vt-tb-truockhi-hethan-luukho/vt-tb-co-thoihan-luukho-con-sau-thang/vt-tb-co-thoihan-luukho-con-sau-thang.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from '../../../../../../services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { DonviService } from '../../../../../../services/donvi.service';
-import { DanhMucService } from '../../../../../../services/danhmuc.service';
-import { chain, cloneDeep, isEmpty } from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Base2Component} from '../../../../../../components/base2/base2.component';
+import {NumberToRoman} from '../../../../../../shared/commonFunction';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from '../../../../../../services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {DonviService} from '../../../../../../services/donvi.service';
+import {DanhMucService} from '../../../../../../services/danhmuc.service';
+import {chain, cloneDeep, isEmpty} from 'lodash';
+import {v4 as uuidv4} from 'uuid';
 import dayjs from 'dayjs';
-import { Validators } from '@angular/forms';
-import { LOAI_HH_XUAT_KHAC } from '../../../../../../constants/config';
-import { MESSAGE } from '../../../../../../constants/message';
+import {Validators} from '@angular/forms';
+import {MESSAGE} from '../../../../../../constants/message';
 import {
   TongHopDanhSachHangXkdmService,
 } from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuathangkhoidm/TongHopDanhSachHangXkdm.service';
 import {
   DanhSachHangDtqgService,
 } from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuathangkhoidm/DanhSachHangDtqg.service';
-import { CHUC_NANG, STATUS } from '../../../../../../constants/status';
+import {CHUC_NANG, STATUS} from '../../../../../../constants/status';
 import {
   QuyetDinhXuatHangKhoiDmService,
 } from '../../../../../../services/qlnv-hang/xuat-hang/xuatkhac/xuathangkhoidm/QuyetDinhXuatHangKhoiDm.service';
-import { MangLuoiKhoService } from '../../../../../../services/qlnv-kho/mangLuoiKho.service';
+import {MangLuoiKhoService} from '../../../../../../services/qlnv-kho/mangLuoiKho.service';
 
 @Component({
   selector: 'app-chi-tiet-tong-hop-danh-sach-hang-dtqg-xuat-khoi-dm',
@@ -186,9 +182,9 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
   }
 
   async changeHangHoa(event: any) {
-    this.formData.patchValue({ cloaiVthh: null });
+    this.formData.patchValue({cloaiVthh: null});
     if (event) {
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
@@ -246,7 +242,6 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
         let idQdXhKdm = this.formData.get('idQdXhKdm').value;
         await this.quyetDinhXuatHangKhoiDmService.getDetail(idQdXhKdm).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
-            console.log(res.data,'aaaaa');
             if (!res.data || res.data.listDtl.length <= 0) {
               this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy quyết định xuất hàng khỏi danh mục');
             } else {
@@ -260,14 +255,14 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
                 this.dataTh = [...this.dataTh, ...item.children];
                 listCLoaiVthh.push(item.ma);
               });
-              console.log(this.dataTh,' this.dataTh this.dataTh this.dataTh this.dataTh');
-              let listLoaiHinhXuatByCLoaiVthh = this.dataTh.map(({ ma, loaiHinhXuat }) => ({ ma, loaiHinhXuat }));
+              console.log(this.dataTh, ' this.dataTh this.dataTh this.dataTh this.dataTh');
+              let listLoaiHinhXuatByCLoaiVthh = this.dataTh.map(({ma, loaiHinhXuat}) => ({ma, loaiHinhXuat}));
               let listDtl = [];
 
               let body = {
                 // listCloaiVthh: ['010102', '021102', '021302', '020301'],
                 // maDvi: '010102',
-                listCloaiVthh : listCLoaiVthh,
+                listCloaiVthh: listCLoaiVthh,
                 maDvi: this.userInfo.MA_DVI,
               };
               let resp = await this.mangLuoiKhoService.dsNganLoKhoTheoCloaiVthh(body);
@@ -299,8 +294,9 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
               let result = await this.createUpdate(this.formData.value);
               if (result) {
                 this.selectedItem = cloneDeep(result);
-                await this.buildTableView(result.tongHopDtl);
-                this.step.emit({ step: 2, item: this.selectedItem });
+                // await this.buildTableView(result.tongHopDtl);
+                await this.loadDetail(this.selectedItem.id)
+                this.step.emit({step: 2, item: this.selectedItem});
               }
             }
           } else {
@@ -332,6 +328,7 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
 
 
   @Input() categoryId: string;
+
   async ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstInit) {
       if (changes.eventOk) {
@@ -359,7 +356,7 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
                 let res = await this.tongHopDanhSachHangXkdmService.approve(body);
                 if (res.msg == MESSAGE.SUCCESS) {
                   this.notification.success(MESSAGE.NOTIFICATION, 'Gửi duyệt tổng hợp thành công.');
-                  this.step.emit({ step: 1 });
+                  this.step.emit({step: 1});
                 } else {
                   this.notification.error(MESSAGE.ERROR, res.msg);
                 }
@@ -375,14 +372,14 @@ export class ChiTietTongHopDanhSachHangDtqgXuatKhoiDmComponent extends Base2Comp
       }
       if (changes.eventCancel) {
         // this.quayLai();
-        this.step.emit({ step: 0 });
-        this.changeShow.emit({ showDetail: false, item: this.selectedItem });
+        this.step.emit({step: 0});
+        this.changeShow.emit({showDetail: false, item: this.selectedItem});
       }
     }
   }
 
   onClickShowDetail() {
-    this.showDetail = !this.showDetail,
-      this.changeShow.emit({ showDetail: this.showDetail, item: this.selectedItem });
+    this.showDetail = !this.showDetail;
+    this.changeShow.emit({showDetail: this.showDetail, item: this.selectedItem});
   }
 }

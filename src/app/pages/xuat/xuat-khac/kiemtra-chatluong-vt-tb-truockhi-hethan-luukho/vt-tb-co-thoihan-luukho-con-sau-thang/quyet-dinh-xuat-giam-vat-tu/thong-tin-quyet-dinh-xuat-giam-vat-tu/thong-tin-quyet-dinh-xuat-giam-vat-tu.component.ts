@@ -63,7 +63,7 @@ export class ThongTinQuyetDinhXuatGiamVatTuComponent extends Base2Component impl
     { value: 0, label: 'Không đạt' },
     { value: 1, label: 'Đạt' },
   ];
-  templateName = 'xuat_khac_ktcl_vat_tu_6_thang_qd_xuat_giam_vt';
+  templateName = 'Quyết định xuất giảm vật tư';
   maQd: string;
 
   constructor(

@@ -376,6 +376,8 @@ export class ChiTietQuyetDinhPdComponent extends Base2Component implements OnIni
     }
     let body = {
       ...this.formData.value,
+      tongSoLuong: this.tongSoLuong,
+      tongSoLuongDx: this.tongSoLuongDx,
       quyetDinhPdDtl: [...this.formData.value.quyetDinhPdDtl, ...this.dataPhanBoXuatCap.filter(f => !!f.maDvi)],
       soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
     }

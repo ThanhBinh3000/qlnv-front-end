@@ -20,6 +20,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import {formatNumber} from "@angular/common";
 import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
 
 
 @Component({
@@ -84,6 +85,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
+    private mangLuoiKhoService: MangLuoiKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKtraCluongService);
     this.formData = this.fb.group(
@@ -181,6 +183,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       maQhns: this.userInfo.DON_VI.maQhns,
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
+      tenKtvBq: this.userInfo.TEN_DAY_DU
     });
     if (this.idQdGiaoNvNh) {
       await this.bindingDataQd(this.idQdGiaoNvNh, true);
@@ -333,8 +336,26 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       })
       this.formattedSlNhapKho = this.formData.get('soLuongNhapKho') ? formatNumber(this.formData.get('soLuongNhapKho').value * 1000, 'vi_VN', '1.2-2') : '0';
       await this.loadDsHthucBquan();
+      await this.tenThuKho(data.maLoKho ? data.maLoKho : data.maNganKho)
     }
   }
+  async tenThuKho(event) {
+    if (!event) return;
+    let body = {
+      maDvi: event,
+      capDvi: (event?.length / 2 - 1),
+    };
+    const detail = await this.mangLuoiKhoService.getDetailByMa(body);
+    if (detail.statusCode == 0) {
+      const detailThuKho = detail.data.object.detailThuKho;
+      if (detailThuKho) {
+        this.formData.patchValue({
+          tenThuKho: detailThuKho.fullName,
+        });
+      }
+    }
+  }
+
 
   async loadTieuChuan() {
     let body = {
