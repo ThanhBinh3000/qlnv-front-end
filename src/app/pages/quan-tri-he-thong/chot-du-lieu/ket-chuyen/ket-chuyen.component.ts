@@ -85,6 +85,9 @@ export class KetChuyenComponent extends Base3Component implements OnInit {
     });
     modalGT.afterClose.subscribe((res) => {
       console.log(res);
+      if(res){
+        this.searchPage();
+      }
     });
   }
 

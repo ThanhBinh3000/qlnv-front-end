@@ -28,6 +28,7 @@ export class TmKetChuyenComponent extends Base2Component implements OnInit {
   listDataSelected = [];
   listChildrenSaved = [];
   listChiCucSelected = [];
+  listChiCucDaKc = [];
   danhMuc: string;
 
   listDvi = [];
@@ -54,6 +55,7 @@ export class TmKetChuyenComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     this.spinner.show()
+    await this.getDviDaDc();
     await this.getDmDonVi();
     this.spinner.hide()
   }
@@ -66,13 +68,42 @@ export class TmKetChuyenComponent extends Base2Component implements OnInit {
        if(res.data){
          let dataCuc = res.data.filter(item => item.type == 'DV');
           dataCuc.forEach( item => {
+            item.checkable = true;
             let children = item.children?.filter(item => item.type == 'DV');
             children.forEach( c => c.children = null);
             item.children = children;
           })
          this.listDvi = dataCuc;
+          this.filterDataSelected();
        }
     });
+  }
+
+
+  filterDataSelected(){
+    console.log(this.listChiCucDaKc)
+    this.listDvi = this.listDvi.filter(item => !this.listChiCucDaKc.includes(item.key));
+    this.listDvi.forEach(item => {
+      if(item.children){
+        item.children = item.children.filter(child => !this.listChiCucDaKc.includes(child.key));
+      }
+    })
+  }
+
+  async getDviDaDc(){
+    let body = {
+      nam : this.formData.value.nam
+    };
+    await this._service.getListDviKc(body).then((res)=>{
+      if(res.data){
+        this.listChiCucDaKc = res.data;
+      }
+    });
+  }
+
+  checkDviKc($event):boolean{
+    console.log($event)
+    return false
   }
 
   changeDvi(event?: any) {
@@ -152,6 +183,7 @@ export class TmKetChuyenComponent extends Base2Component implements OnInit {
         // Check chi cục với cục
         // Đây là cục
         if(dataRes.maDtqgkv != null && dataRes.child && dataRes.child.length > 0){
+          this.listChiCucSelected.push(dataRes.maDtqgkv);
           dataRes.child.forEach( cc => {
             // Ở dây lẫn cả chi cục lẫn phòng ban nên phải check có child ms là chi cục
             if(cc.child && cc.child.length > 0){
