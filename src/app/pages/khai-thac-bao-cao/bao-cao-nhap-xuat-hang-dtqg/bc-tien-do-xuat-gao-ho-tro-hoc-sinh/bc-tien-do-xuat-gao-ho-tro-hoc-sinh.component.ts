@@ -7,28 +7,27 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { BcNhapXuatMuaBanHangDTQGService } from '../../../../services/bao-cao/BcNhapXuatMuaBanHangDTQG.service';
 import { UserService } from '../../../../services/user.service';
-import { DonviService } from '../../../../services/donvi.service';
-import { DanhMucService } from '../../../../services/danhmuc.service';
+import { MangLuoiKhoService } from '../../../../services/qlnv-kho/mangLuoiKho.service';
 import { Globals } from '../../../../shared/globals';
 import * as dayjs from 'dayjs';
-import * as moment from 'moment';
 import {saveAs} from "file-saver";
 import { Validators } from '@angular/forms';
 import { MESSAGE } from '../../../../constants/message';
-import { OldResponseData } from '../../../../interfaces/response';
-import { MangLuoiKhoService } from '../../../../services/qlnv-kho/mangLuoiKho.service';
+import * as moment from 'moment/moment';
+import { DanhMucDungChungService } from '../../../../services/danh-muc-dung-chung.service';
 
 @Component({
-  selector: 'app-kq-xuat-gao-ctht-cho-dia-phuong-trong-nam',
-  templateUrl: './kq-xuat-gao-ctht-cho-dia-phuong-trong-nam.component.html',
-  styleUrls: ['./kq-xuat-gao-ctht-cho-dia-phuong-trong-nam.component.scss']
+  selector: 'app-bc-tien-do-xuat-gao-ho-tro-hoc-sinh',
+  templateUrl: './bc-tien-do-xuat-gao-ho-tro-hoc-sinh.component.html',
+  styleUrls: ['./bc-tien-do-xuat-gao-ho-tro-hoc-sinh.component.scss']
 })
-export class KqXuatGaoCthtChoDiaPhuongTrongNamComponent extends Base2Component implements OnInit {
+export class BcTienDoXuatGaoHoTroHocSinhComponent extends Base2Component implements OnInit {
   pdfSrc: any;
   excelSrc: any;
   pdfBlob: any;
   excelBlob: any;
-  nameFile = "ket-qua-xuat-gao-cuu-tro-ho-tro-dia-phuong-nam";
+  nameFile = "bc-tien-do-xuat-gao-ho-tro-hoc-sinh";
+  listKyHoTro : any[];
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -37,27 +36,39 @@ export class KqXuatGaoCthtChoDiaPhuongTrongNamComponent extends Base2Component i
               modal: NzModalService,
               private bcNhapXuatMuaBanHangDTQGService: BcNhapXuatMuaBanHangDTQGService,
               public userService: UserService,
+              private danhMucService: DanhMucDungChungService,
               public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, bcNhapXuatMuaBanHangDTQGService);
     this.formData = this.fb.group(
       {
+        kyHoTro : [ null,[Validators.required]],
         ngayBaoCao: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
       }
     );
   }
 
   async ngOnInit() {
-    await this.spinner.show();
+    this.spinner.show();
     try {
+      this.getListKyHoTro();
     } catch (e) {
       console.log("error: ", e);
-      await this.spinner.hide();
+      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    await this.spinner.hide();
+    this.spinner.hide();
   }
   downloadPdf() {
     saveAs(this.pdfBlob, this.nameFile + ".pdf");
+  }
+
+  async  getListKyHoTro (){
+    this.listKyHoTro = [];
+    let res = await this.danhMucService.danhMucChungGetAll("MUC_DICH_CT_VT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listKyHoTro = res.data.filter(x => x.phanLoai == '1');
+      console.log(this.listKyHoTro,'aaaaaaaaaaaaaaaaaa');
+    }
   }
 
   async downloadExcel() {
@@ -67,7 +78,7 @@ export class KqXuatGaoCthtChoDiaPhuongTrongNamComponent extends Base2Component i
       body.typeFile = "xlsx";
       body.nam = body.ngayBaoCao.getFullYear();
       body.ngayBatDauQuy = moment(body.ngayBaoCao).format('DD/MM/YYYY');
-      await this.bcNhapXuatMuaBanHangDTQGService.bcKqXuatGaoCthtDiaPhuongNam(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.bcTienDoXuatGaoHoTroHocSinh(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, this.nameFile + ".xlsx");
@@ -97,7 +108,7 @@ export class KqXuatGaoCthtChoDiaPhuongTrongNamComponent extends Base2Component i
       body.nam = body.ngayBaoCao.getFullYear();
       body.ngayBatDauQuy = moment(body.ngayBaoCao).format('DD/MM/YYYY');
       body.typeFile = "pdf";
-      await this.bcNhapXuatMuaBanHangDTQGService.bcKqXuatGaoCthtDiaPhuongNam(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.bcTienDoXuatGaoHoTroHocSinh(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -115,5 +126,4 @@ export class KqXuatGaoCthtChoDiaPhuongTrongNamComponent extends Base2Component i
       nam: dayjs().get('year')
     })
   }
-
 }
