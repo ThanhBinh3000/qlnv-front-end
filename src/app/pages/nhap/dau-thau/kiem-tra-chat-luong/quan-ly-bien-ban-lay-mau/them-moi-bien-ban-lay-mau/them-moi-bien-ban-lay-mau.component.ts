@@ -39,6 +39,7 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
   @Input() isTatCa: boolean;
   @Input() loaiVthh: string;
   @Input() idQdGiaoNvNh: number;
+  @Input() idDdiemGiaoNvNh: number;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -538,6 +539,10 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
       } else {
         this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
       }
+    }
+    if (this.idDdiemGiaoNvNh != null) {
+      let data = this.listDiaDiemNhap.find(item => item.id == this.idDdiemGiaoNvNh)
+      this.bindingDataDdNhap(data)
     }
     await this.spinner.hide();
   }

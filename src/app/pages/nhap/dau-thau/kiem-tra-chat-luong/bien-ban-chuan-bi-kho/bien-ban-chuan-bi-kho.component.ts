@@ -176,7 +176,16 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
         if (this.userService.isChiCuc()) {
           this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
         } else {
-          this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI))[0]
+          let data = [];
+          this.dataTable[i].dtlList.forEach(item => {
+            data = [...data, ...item.children];
+          })
+          this.dataTable[i].detail = {
+            children: data
+          }
+          // console.log(this.userInfo.MA_DVI)
+          // console.log( this.dataTable[i].dtlList)
+          // this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI))[0]
         }
       }
       this.dataTableAll = cloneDeep(this.dataTable);
