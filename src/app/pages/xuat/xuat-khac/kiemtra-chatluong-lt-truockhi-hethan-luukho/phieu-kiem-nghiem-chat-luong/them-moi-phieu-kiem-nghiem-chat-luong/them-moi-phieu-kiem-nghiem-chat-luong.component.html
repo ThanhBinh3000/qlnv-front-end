@@ -18,7 +18,7 @@
           <span>Quay lại</span>
         </button>
         <button *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_PKNCL_IN') && idInput" type='button'
-                class='btn btn-sub do mr-2' (click)='xemTruoc(idInput,templateName)'>
+                class='btn btn-sub mr-2' (click)='xemTruoc(idInput,templateName)'>
           <i class='icon htvbdh_totrinh'></i>
           <span> In/Xem trước </span>
         </button>
@@ -281,60 +281,35 @@
     <!-- //Thông tin chung -->
     <nz-collapse nzAccordion>
       <nz-collapse-panel [nzHeader]="'KẾT QUẢ PHÂN TÍCH CHỈ TIÊU CHẤT LƯỢNG'" [nzActive]='true'>
-        <nz-card class='mg-t-16 flex-card p-lr16 table-card'>
-          <nz-table class='pd-10' #basicTable class='nowrap' [nzFrontPagination]='false'
-                    [nzShowPagination]='false' [nzData]='dataTableChiTieu'>
+        <nz-card class="mg-t-16 flex-card p-lr16 table-card">
+          <nz-table class="pd-10" #basicTable class="nowrap" [nzBordered] [nzFrontPagination]="false"
+                    [nzShowPagination]="false"
+                    [nzData]="dataTableChiTieu">
             <thead>
             <tr>
-              <th width='30px'>STT</th>
+              <th width="30px">STT</th>
               <th>Chỉ tiêu chất lượng</th>
-              <th width='60px'>Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
-              <th width='400px'>Kết quả phân tích</th>
-              <th>Phương pháp</th>
+              <th width="60px">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
+              <th width="400px">Kết quả phân tích</th>
+              <th>Phương pháp kiểm tra chất lượng</th>
               <th>Đánh giá</th>
-              <th width='60px' *ngIf='!(isDisabled() || isView)'>
-                Hành động
-              </th>
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor='let data of basicTable.data; let i = index'>
-              <ng-container *ngIf='!data.edit; else editTemplate'>
-                <td class='text-center'>{{i + 1}}</td>
-                <td>{{data.tenTchuan}}</td>
-                <td>{{data.chiSoXuat}}</td>
-                <td>{{data.ketQuaPt}}</td>
-                <td>{{data.phuongPhap}}</td>
-                <td>{{data.danhGia}}</td>
-
-                <td *ngIf='!(isDisabled() || isView)'>
-                  <a (click)='editRow(i)'>
-                    <i class='fa fa-pencil' title='Sửa'></i>
-                  </a>
-                </td>
-              </ng-container>
-              <ng-template #editTemplate>
-                <td></td>
-                <td>{{data.tenTchuan}}</td>
-                <td>{{data.chiSoXuat}}</td>
-                <td>
-                  <input type='text' nz-input class='w-400' [(ngModel)]='data.ketQuaPt'/>
-                </td>
-                <td>{{data.phuongPhap}}</td>
-                <td>
-                  <nz-select [(ngModel)]=data.danhGia>
-                    <nz-option *ngFor='let p of dsDanhGia' [nzValue]='p.ma' [nzLabel]='p.giaTri'></nz-option>
-                  </nz-select>
-                </td>
-                <td>
-                  <a (click)='saveEdit(i)' class='save'>
-                    <i class='fa fa-save'></i>
-                  </a>
-                  <a (click)='cancelEdit(i)'>
-                    <i class='fa fa-times do'></i>
-                  </a>
-                </td>
-              </ng-template>
+            <tr *ngFor="let data of basicTable.data; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{data.tenChiTieu}}</td>
+              <td>{{data.chiSo}}</td>
+              <td>
+                <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQua" [readOnly]="isView"/>
+              </td>
+              <td>{{data.ppKiemTra}}</td>
+              <td>
+                <nz-select [(ngModel)]="data.danhGia" [disabled]="isView">
+                  <nz-option *ngFor="let item of LIST_DANH_GIA" [nzValue]="item.value" [nzLabel]="item.label">
+                  </nz-option>
+                </nz-select>
+              </td>
             </tr>
             </tbody>
           </nz-table>

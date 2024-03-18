@@ -43,7 +43,7 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
   selectedId: number;
   isFirstInit = true;
   loaiHhXuatKhac = LOAI_HH_XUAT_KHAC;
-  templateName = 'xuat_khac_ktcl_luong_thuc_bao_cao_kq_kiem_dinh';
+  templateName = 'Báo cáo kết quả kiểm định mẫu';
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -89,9 +89,9 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
         tenDviNhan: 'Vụ Khoa học công nghệ bảo quản - Tổng cục DTNN',
       })
       await Promise.all([
-        this.loadMaDs(),
+        await this.loadMaDs(),
+        await this.loadChiTiet(this.idInput),
       ]);
-      await this.loadChiTiet(this.idInput);
     } catch (e) {
       console.log("error: ", e);
       await this.spinner.hide();
@@ -111,7 +111,7 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
             this.formData.patchValue({
               ...res.data,
               soBaoCao: res.data.soBaoCao?.split('/')[0] ?? null,
-
+              listIdTongHop : res.data.idTongHop.split(',')
             }, {emitEvent: false});
 
           }
@@ -130,17 +130,14 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
   }
 
   async loadMaDs() {
-    this.tongHopDanhSachHangDTQGService.search({
+    let body = {
       trangThai: STATUS.GUI_DUYET,
       loai: this.loaiHhXuatKhac.LT_6_THANG,
-      paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: this.page - 1,
-      },
-    }).then(res => {
-      if (res.msg == MESSAGE.SUCCESS) {
+    }
+    let res = await this.tongHopDanhSachHangDTQGService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        if (data && data.content && data.content.length > 0 && this.idTongHop == null) {
+        if (data && data.content && data.content.length > 0 && this.idInput > 0) {
           this.listMaDs = data.content.filter(item => item.soBaoCao == null);
         } else {
           this.listMaDs = data.content
@@ -149,7 +146,7 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
         this.listMaDs = [];
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    });
+
   }
 
   async save() {
@@ -219,22 +216,31 @@ export class ThemMoiBaoCaoKetQuaKiemDinhMauComponent extends Base2Component impl
         let body = {
           trangThai: STATUS.GUI_DUYET,
           loai: this.loaiHhXuatKhac.LT_6_THANG,
-          listId: [$event]
+          listId: $event
         };
         let res = await this.tongHopDanhSachHangDTQGService.search(body);
         if (res.msg == MESSAGE.SUCCESS) {
           let data = res.data;
           this.dataTable = data.content;
-          let selectedMaDs = this.listMaDs.find(f => f.id === $event);
-          if (selectedMaDs) {
-            this.formData.patchValue({
-              maDanhSach: selectedMaDs.maDanhSach
-            });
-          }
+          // let selectedMaDs = this.listMaDs.find(f => f.id === $event);
+          // if (selectedMaDs) {
+          //   this.formData.patchValue({
+          //     maDanhSach: selectedMaDs.maDanhSach
+          //   });
+          // }
+          this.formData.patchValue({
+            maDanhSach: this.dataTable.map(m => m.maDanhSach).join(","),
+            idTongHop: this.dataTable.map(m => m.id).join(","),
+          });
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
         this.dataTable = [...this.dataTable];
+        this.dataTable = this.dataTable.map(item => {
+          const tongSl = item.tongHopDtl.reduce((prev, cur) => prev + cur.slHetHan, 0);
+          return { ...item, tongSl };
+        });
+        this.expandAll()
       } else {
 
       }

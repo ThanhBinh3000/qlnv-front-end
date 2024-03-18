@@ -309,8 +309,6 @@ export class ChiTietTongHopDsHangDtqgComponent extends Base2Component implements
 
   onClickShowDetail() {
     this.showDetail = !this.showDetail;
-    console.log(this.showDetail,1)
-    console.log(this.selectedItem,2)
     this.changeShow.emit({ showDetail: this.showDetail, item: this.selectedItem })
   }
 }
