@@ -55,8 +55,8 @@ export class BaoCaoKetQuaKiemDinhMauComponent extends Base2Component implements 
 
   userInfo: UserLogin;
   userdetail: any = {};
-  selectedId: number = 0;
-  idTongHop: number = 0;
+  selectedId: number;
+  idTongHop: number;
   isView = false;
   children: any = [];
   expandSetString = new Set<string>();

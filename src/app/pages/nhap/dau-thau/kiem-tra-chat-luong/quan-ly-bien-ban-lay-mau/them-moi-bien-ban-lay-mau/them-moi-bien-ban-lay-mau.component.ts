@@ -279,6 +279,8 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
         this.formData.controls['idBbNhapDayKho'].clearValidators();
         this.formData.controls['soBbGuiHang'].setValidators([Validators.required]);
         this.formData.controls['idBbGuiHang'].setValidators([Validators.required]);
+        this.formData.controls['truongBpKtbq'].setValidators([Validators.required]);
+        this.formData.controls['soLuongMau'].setValidators([Validators.required]);
       } else {
         this.formData.controls['ngayLayMau'].setValidators([Validators.required]);
         this.formData.controls['soQdGiaoNvNh'].setValidators([Validators.required]);
@@ -628,6 +630,17 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
   }
 
   async xoaDaiDien(i) {
-    this.viewTableDaiDien.splice(i, 1)
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.viewTableDaiDien.splice(i, 1)
+      },
+    });
   }
 }

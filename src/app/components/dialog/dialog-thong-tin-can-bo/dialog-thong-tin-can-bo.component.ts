@@ -52,14 +52,14 @@ export class DialogThongTinCanBoComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
-      fullName: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
-      email: [null, [Validators.required, Validators.email]],
+      fullName: [null, [Validators.required]],
+      email: [null, [Validators.email]],
       username: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(16)]],
       password: [null, [Validators.required]],
       domain: [null],
       userType: ['DT', [Validators.required]],
       position: [null, [Validators.required]],
-      phoneNo: [null, [Validators.required]],
+      phoneNo: [null,],
       status: ['01', [Validators.required]],
       sysType: ['APP', [Validators.required]],
       dvql: [null, [Validators.required]],

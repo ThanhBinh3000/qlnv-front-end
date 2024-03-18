@@ -193,7 +193,7 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
             id: item.idPhieuKnCl
           };
           this.phieuKiemNgiemClLuongThucHangDTQGService.delete(body).then(async () => {
-            await this.search();
+            await this.timKiem();
             this.spinner.hide();
           });
         } catch (e) {
