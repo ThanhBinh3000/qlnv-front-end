@@ -146,7 +146,7 @@
                                   </td>
                                   <td>{{bb.tenTrangThai}}</td>
                                   <td class="text-left">
-                                    <a (click)="goDetail(bb.id)"
+                                    <a (click)="goDetail(bb.id, true)"
                                        *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKNCL_XEM')">
                                       <i class="fa fa-eye" title="Xem chi tiết"></i>
                                     </a>

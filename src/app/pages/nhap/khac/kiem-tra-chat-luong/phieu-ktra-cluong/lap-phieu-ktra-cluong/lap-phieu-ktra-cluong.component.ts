@@ -24,6 +24,7 @@ import {
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
 import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 @Component({
   selector: 'app-lap-phieu-ktra-cluong',
   templateUrl: './lap-phieu-ktra-cluong.component.html',
@@ -60,6 +61,7 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
     private quyetDinhGiaoNhapHangKhacService: QuyetDinhGiaoNhapHangKhacService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private bbNghiemThuBaoQuanService: BbNghiemThuBaoQuanService,
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKtraCluongService);
     this.formData = this.fb.group(
@@ -116,6 +118,7 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
         trangThai: [],
         tenTrangThai: [],
         tenNguoiTao: [],
+        soHieuQuyChuan: [],
       }
     );
   }
@@ -328,12 +331,12 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
       if (dataChose) {
-        await this.bindingDataQd(dataChose.id);
+        await this.bindingDataQd(dataChose.id, true);
       }
     });
   }
 
-  async bindingDataQd(id) {
+  async bindingDataQd(id, isSetTc?) {
     await this.spinner.show();
     let dataRes = await this.quyetDinhGiaoNhapHangKhacService.getDetail(id)
     const data = dataRes.data;
@@ -356,6 +359,24 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
     let dataChiCuc = data.dtlList;
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = cloneDeep(dataChiCuc);
+    }
+    if (isSetTc) {
+      let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh);
+      if (dmTieuChuan.data) {
+        this.dataTableChiTieu = dmTieuChuan.data;
+        this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
+          return {
+            ...element,
+            edit: true,
+            tenTchuan: element.tenChiTieu,
+            chiSoNhap: element.mucYeuCauXuat,
+            ketQuaKiemTra: element.ketQuaPt,
+            phuongPhap: element.phuongPhapXd,
+            danhGia: element.danhGia
+          }
+        });
+        this.formData.get('soHieuQuyChuan').setValue(this.dataTableChiTieu[0].soHieuQuyChuan)
+      }
     }
     await this.spinner.hide();
   }
@@ -399,15 +420,15 @@ export class LapPhieuKtraCluongComponent extends Base2Component implements OnIni
     modalQD.afterClose.subscribe(async (data) => {
       await this.bindingDataDdNhap(data);
       await this.loadDsBbnt();
-      if (isSetTc) {
-        let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
-        if (dmTieuChuan.data) {
-          this.dataTableChiTieu = dmTieuChuan.data.children;
-          this.dataTableChiTieu.forEach(element => {
-            element.edit = false
-          });
-        }
-      }
+      // if (isSetTc) {
+      //   let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+      //   if (dmTieuChuan.data) {
+      //     this.dataTableChiTieu = dmTieuChuan.data.children;
+      //     this.dataTableChiTieu.forEach(element => {
+      //       element.edit = false
+      //     });
+      //   }
+      // }
     });
   }
 

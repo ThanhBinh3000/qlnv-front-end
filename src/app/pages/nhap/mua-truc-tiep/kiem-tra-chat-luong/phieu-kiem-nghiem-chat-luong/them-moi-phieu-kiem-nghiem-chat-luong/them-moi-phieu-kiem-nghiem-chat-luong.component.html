@@ -344,16 +344,22 @@
             <nz-table class="pd-10" #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
                 [nzData]="dataTableChiTieu">
                 <thead>
-                    <tr>
-                        <th width="30px">STT</th>
-                        <th>Chỉ tiêu chất lượng</th>
-                        <th width="60px">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
-                        <th width="400px">Kết quả phân tích</th>
-                        <th>Phương pháp</th>
-                        <th width="60px">
-                            Hành động
-                        </th>
-                    </tr>
+                <tr>
+                  <th nzWidth="50px" class="text-center wrap"> STT</th>
+                  <th class="text-left">
+                    <span style='color: red;'>*</span> Chỉ tiêu chất lượng
+                  </th>
+                  <th class="text-left">Chỉ số chất lượng theo {{formData.value.soHieuQuyChuan}}</th>
+                  <th class="text-left">
+                    <span style='color: red;'>*</span> Kết quả phân tích
+                  </th>
+                  <th class="text-left">
+                    <span style='color: red;'>*</span> Phương pháp kiểm tra chất lượng
+                  </th>
+                  <th class="text-left">
+                    <span style='color: red;'>*</span> Đánh giá
+                  </th>
+                </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let data of basicTable.data; let i = index">
@@ -361,10 +367,14 @@
                             <td class="text-center">{{i + 1}}</td>
                           <td>{{data.tenChiTieu ? data.tenChiTieu : data.tenTchuan}}</td>
                           <td>{{data.mucYeuCauNhap ? data.mucYeuCauNhap : data.chiSoNhap}}</td>
-                          <td>{{data.ketQuaKiemTra}}</td>
+<!--                          <td>{{data.ketQuaKiemTra}}</td>-->
+                          <td class="text-left">
+                            <input nz-input [disabled]="isView" [(ngModel)]="data.ketQuaKiemTra"
+                                   (ngModelChange)="onChangeKetQua($event, i)"/>
+                          </td>
                           <td>{{data.phuongPhapXd ? data.phuongPhapXd : data.phuongPhap}}</td>
                           <td>
-                            <nz-select [(ngModel)]=data.danhGia>
+                            <nz-select [nzDisabled]="isView" [(ngModel)]=data.danhGia>
                               <nz-option *ngFor="let p of dsDanhGia" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                             </nz-select>
                           </td>
@@ -378,8 +388,12 @@
                             <td></td>
                           <td>{{data.tenChiTieu ? data.tenChiTieu : data.tenTchuan}}</td>
                           <td>{{data.mucYeuCauNhap ? data.mucYeuCauNhap : data.chiSoNhap}}</td>
-                          <td>
-                            <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaKiemTra" />
+<!--                          <td>-->
+<!--                            <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaKiemTra" />-->
+<!--                          </td>-->
+                          <td class="text-left">
+                            <input nz-input [disabled]="isView" [(ngModel)]="data.ketQuaKiemTra"
+                                   (ngModelChange)="onChangeKetQua($event, i)"/>
                           </td>
                           <td>{{data.phuongPhapXd ? data.phuongPhapXd : data.phuongPhap}}</td>
                           <td>
@@ -387,14 +401,14 @@
                               <nz-option *ngFor="let p of dsDanhGia" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                             </nz-select>
                           </td>
-                            <td>
-                                <a (click)="saveEdit(i)" class="save">
-                                    <i class="fa fa-save"></i>
-                                </a>
-                                <a (click)="cancelEdit(i)">
-                                    <i class="fa fa-times do"></i>
-                                </a>
-                            </td>
+<!--                            <td>-->
+<!--                                <a (click)="saveEdit(i)" class="save">-->
+<!--                                    <i class="fa fa-save"></i>-->
+<!--                                </a>-->
+<!--                                <a (click)="cancelEdit(i)">-->
+<!--                                    <i class="fa fa-times do"></i>-->
+<!--                                </a>-->
+<!--                            </td>-->
                         </ng-template>
                     </tr>
                 </tbody>

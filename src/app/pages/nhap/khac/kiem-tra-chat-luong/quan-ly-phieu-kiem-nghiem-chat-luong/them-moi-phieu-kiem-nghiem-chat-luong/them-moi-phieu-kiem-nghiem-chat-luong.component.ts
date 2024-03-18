@@ -145,6 +145,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       tenKyThuatVien: [''],
       ngayKnghiem: [''],
       hthucBquan: [''],
+      soHieuQuyChuan: [],
     });
 
     this.dsDanhGia = [
@@ -177,7 +178,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
       if (this.qdGvuNh) {
         await this.initForm();
-        await this.bindingDataQd(this.qdGvuNh);
+        await this.bindingDataQd(this.qdGvuNh, true);
       }
 
       this.isValid =
@@ -446,15 +447,15 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         tenTruongPhong: this.userInfo.TEN_DAY_DU,
         ngayKnghiem: this.toDay
       })
-      if (!isChiTiet) {
-        let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
-        if (dmTieuChuan.data) {
-          this.dataTableChiTieu = dmTieuChuan.data.children;
-          this.dataTableChiTieu.forEach(element => {
-            element.edit = false
-          });
-        }
-      }
+      // if (!isChiTiet) {
+      //   let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+      //   if (dmTieuChuan.data) {
+      //     this.dataTableChiTieu = dmTieuChuan.data.children;
+      //     this.dataTableChiTieu.forEach(element => {
+      //       element.edit = false
+      //     });
+      //   }
+      // }
     }
   }
 
@@ -681,12 +682,12 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
       if (dataChose) {
-        await this.bindingDataQd(dataChose);
+        await this.bindingDataQd(dataChose, true);
       }
     });
   };
 
-  async bindingDataQd(data) {
+  async bindingDataQd(data, isSetTc?) {
     await this.spinner.show();
     console.log(123)
     this.formData.patchValue({
@@ -714,6 +715,24 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       // } else {
       this.listDiaDiemNhap = dataChiCuc.filter(item => item.maChiCuc.includes(this.userInfo.MA_DVI));
       // }
+    }
+    if (isSetTc) {
+      let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh);
+      if (dmTieuChuan.data) {
+        this.dataTableChiTieu = dmTieuChuan.data;
+        this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
+          return {
+            ...element,
+            edit: true,
+            tenTchuan: element.tenChiTieu,
+            chiSoNhap: element.mucYeuCauXuat,
+            ketQuaKiemTra: element.ketQuaPt,
+            phuongPhap: element.phuongPhapXd,
+            danhGia: element.danhGia
+          }
+        });
+        this.formData.get('soHieuQuyChuan').setValue(this.dataTableChiTieu[0].soHieuQuyChuan)
+      }
     }
     await this.spinner.hide();
   }
