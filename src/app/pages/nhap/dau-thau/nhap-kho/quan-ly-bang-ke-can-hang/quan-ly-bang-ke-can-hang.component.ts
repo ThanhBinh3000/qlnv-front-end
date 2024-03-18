@@ -83,6 +83,7 @@ export class QuanLyBangKeCanHangComponent extends Base2Component implements OnIn
       await Promise.all([
         this.search(),
       ]);
+      await this.checkPriceAdjust('xuất hàng');
       this.spinner.hide();
     }
     catch (e) {
