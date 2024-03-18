@@ -66,8 +66,7 @@ export class BcTienDoXuatGaoHoTroHocSinhComponent extends Base2Component impleme
     this.listKyHoTro = [];
     let res = await this.danhMucService.danhMucChungGetAll("MUC_DICH_CT_VT");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listKyHoTro = res.data.filter(x => x.phanLoai == '1');
-      console.log(this.listKyHoTro,'aaaaaaaaaaaaaaaaaa');
+      this.listKyHoTro = res.data.filter(x => x.phanLoai == '01.04');
     }
   }
 
@@ -76,7 +75,6 @@ export class BcTienDoXuatGaoHoTroHocSinhComponent extends Base2Component impleme
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      body.nam = body.ngayBaoCao.getFullYear();
       body.ngayBatDauQuy = moment(body.ngayBaoCao).format('DD/MM/YYYY');
       await this.bcNhapXuatMuaBanHangDTQGService.bcTienDoXuatGaoHoTroHocSinh(body).then(async s => {
         this.excelBlob = s;
@@ -105,7 +103,6 @@ export class BcTienDoXuatGaoHoTroHocSinhComponent extends Base2Component impleme
     try {
       this.spinner.show();
       let body = this.formData.value;
-      body.nam = body.ngayBaoCao.getFullYear();
       body.ngayBatDauQuy = moment(body.ngayBaoCao).format('DD/MM/YYYY');
       body.typeFile = "pdf";
       await this.bcNhapXuatMuaBanHangDTQGService.bcTienDoXuatGaoHoTroHocSinh(body).then(async s => {

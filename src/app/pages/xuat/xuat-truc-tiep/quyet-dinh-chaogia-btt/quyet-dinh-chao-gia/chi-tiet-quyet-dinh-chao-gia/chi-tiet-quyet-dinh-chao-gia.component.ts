@@ -88,6 +88,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       tenKieuNx: [''],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
+      donViTinh: [''],
       fileCanCu: [new Array<FileDinhKem>()],
       fileDaKy: [new Array<FileDinhKem>()],
     });
@@ -127,7 +128,10 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
     this.formData.patchValue({
       soQdKq: data.soQdKq?.split('/')[0] || null,
     });
-    this.dataTable = data.children;
+    if (data.idChaoGia) {
+      const resChaoGia = await this.chaoGiaMuaLeUyQuyenService.getDetail(data.idChaoGia);
+      this.dataTable = resChaoGia.data.children;
+    }
     if (this.dataTable && this.dataTable.length > 0) {
       await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
     }
@@ -147,7 +151,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       const body = {
         ...this.formData.value,
         soQdKq: this.formData.value.soQdKq ? this.formData.value.soQdKq + this.maHauTo : null,
-        children: this.dataTable,
+        children: this.dataTable.flatMap(item => item.children.flatMap(child => child.children)),
       };
       switch (action) {
         case "createUpdate":
@@ -302,17 +306,7 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
         tenKieuNx: data.tenKieuNx,
         tongSoLuong: data.tongSoLuong,
         tongGiaTriHdong: data.thanhTienDuocDuyet,
-      });
-      data.children.forEach(item => {
-        item.id = null;
-        item.isKetQua = true
-        item.children = item.children
-          .filter(child => child.children && child.children.length > 0)
-          .map(child => {
-            child.id = null;
-            child.children.forEach(s => s.id = null);
-            return child;
-          });
+        donViTinh: data.donViTinh,
       });
       this.dataTable = data.children.filter(item => item.children && item.children.length > 0);
       if (this.dataTable && this.dataTable.length > 0) {

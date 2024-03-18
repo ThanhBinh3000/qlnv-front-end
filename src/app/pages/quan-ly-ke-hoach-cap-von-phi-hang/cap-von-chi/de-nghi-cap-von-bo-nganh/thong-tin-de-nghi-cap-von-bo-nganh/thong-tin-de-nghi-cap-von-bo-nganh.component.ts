@@ -407,9 +407,9 @@ export class ThongTinDeNghiCapVonBoNganhComponent extends Base2Component impleme
       };
       let mes = await this.tongHopTheoDoiCapVonService.getTongTienDaCapTheoHopDong(body);
       if (mes.msg == MESSAGE.SUCCESS) {
-        this.rowItem.kinhPhiDaCap = this.rowItem.loaiTien == '01' ? mes.data : 0;
-        this.rowItem.kinhPhiDaCapNt = this.rowItem.loaiTien != '01' ? mes.data : 0;
-        this.calCulateKinhPhiChuaCap();
+          this.rowItem.kinhPhiDaCap =  mes.data ?  mes.data.tongTien : 0;
+          this.rowItem.kinhPhiDaCapNt =  mes.data ?  mes.data.tongTienNt : 0;
+          this.calCulateKinhPhiChuaCap();
       }
     }
   }
