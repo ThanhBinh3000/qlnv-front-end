@@ -306,8 +306,8 @@ export class ThemmoiDieuchinhMuattComponent extends Base2Component implements On
     if (res.msg == MESSAGE.SUCCESS) {
       this.listQdGoc = res.data
       this.listQdGoc.forEach(item => {
-        item.trangThaiGia = item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length > 0 ? 'Dừng thực hiện để điều chỉnh giá' : '';
-        item.loai = item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length > 0 ? 'Điều chỉnh giá' : ''
+        item.trangThaiGia = item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia?.length > 0 ? 'Dừng thực hiện để điều chỉnh giá' : '';
+        item.loai = item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia?.length > 0 ? 'Điều chỉnh giá' : ''
       })
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
