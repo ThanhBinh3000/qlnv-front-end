@@ -39,6 +39,7 @@ export class QuanLyPhieuNhapKhoComponent extends Base2Component implements OnIni
     ngayNhapKho: '',
     soQuyetDinh: '',
     namKhoach: '',
+    soBbGuiHang: '',
   };
 
   listDiemKho: any[] = [];
@@ -170,7 +171,10 @@ export class QuanLyPhieuNhapKhoComponent extends Base2Component implements OnIni
       ngayNhapKho: '',
       soQuyetDinh: '',
       namKhoach: '',
+      soBbGuiHang: '',
     };
+    this.tuNgayNk = null;
+    this.denNgayNk = null;
     this.search();
   }
 
@@ -223,6 +227,7 @@ export class QuanLyPhieuNhapKhoComponent extends Base2Component implements OnIni
       soPhieu: this.searchFilter.soPhieu,
       soQdGiaoNvNh: this.searchFilter.soQuyetDinh,
       nam: this.searchFilter.namKhoach,
+      soBbGuiHang: this.searchFilter.soBbGuiHang,
       trangThai: STATUS.BAN_HANH,
       paggingReq: {
         "limit": this.pageSize,
@@ -285,6 +290,7 @@ export class QuanLyPhieuNhapKhoComponent extends Base2Component implements OnIni
           soPhieu: this.searchFilter.soPhieu,
           soQdGiaoNvNh: this.searchFilter.soQuyetDinh,
           nam: this.searchFilter.namKhoach,
+          soBbGuiHang: this.searchFilter.soBbGuiHang,
           trangThai: STATUS.BAN_HANH,
           paggingReq: {
             "limit": this.pageSize,
