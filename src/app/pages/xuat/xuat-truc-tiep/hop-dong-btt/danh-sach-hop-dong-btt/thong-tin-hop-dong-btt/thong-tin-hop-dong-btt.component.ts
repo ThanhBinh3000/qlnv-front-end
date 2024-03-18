@@ -57,7 +57,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   dataTablePhuLuc: any[] = [];
   maHopDongSuffix: string = '';
   objHopDongHdr: any = {};
-  listHangHoaAll: any[] = [];
   listTccnChaoGia: any[] = [];
   loadDanhSachHdong: any[] = [];
   listDviTsanFilter: any[] = [];
@@ -177,7 +176,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       this.maHopDongSuffix = `/${this.formData.value.namHd}/HĐMB`;
       await Promise.all([
         this.loadDataComboBox(),
-        this.loadDsVthh()
       ]);
       this.amount.align = "left";
     } catch (e) {
@@ -236,14 +234,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     await Promise.all([
       fetchData('LOAI_HDONG', this.listLoaiHopDong, () => true),
     ]);
-  }
-
-  async loadDsVthh() {
-    const res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-      return;
-    }
-    this.listHangHoaAll = res.data;
   }
 
   async loadChiTiet(id) {
@@ -359,7 +349,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           tenHangHoa: data.moTaHangHoa,
-          donViTinh: this.listHangHoaAll.find(s => s.ma == data.loaiVthh)?.maDviTinh,
+          donViTinh: data.donViTinh,
         })
         await this.loadDanhDachHopDong();
         if (checkPhanLoai) {
@@ -391,19 +381,23 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       idChaoGia: data.idChaoGia,
       slXuatBanQdPd: data.tongSoLuong || 0,
     });
-    this.listTccnChaoGia = data.children.flatMap(item => item.children.flatMap(child => child.children.map(grandchild => grandchild))).filter(info => info.luaChon);
     const filteredItems = this.loadDanhSachHdong.filter(item => item.idQdKq === data.id && item.trangThai === STATUS.DA_KY);
     this.formData.patchValue({
       slXuatBanKyHdong: filteredItems.reduce((acc, item) => acc + item.soLuong, 0),
       slXuatBanChuaKyHdong: data.tongSoLuong - filteredItems.reduce((acc, item) => acc + item.soLuong, 0),
     });
-    this.dataChildren = data.children.map(item => {
-      item.children.forEach(child => {
-        child.children = child.children.filter(s => s.luaChon);
+    const resChaoGia = await this.chaoGiaMuaLeUyQuyenService.getDetail(data.idChaoGia);
+    if (resChaoGia.msg === MESSAGE.SUCCESS || resChaoGia.data) {
+      const dataChaoGia = resChaoGia.data;
+      this.listTccnChaoGia = dataChaoGia.children.flatMap(item => item.children.flatMap(child => child.children.map(grandchild => grandchild))).filter(info => info.luaChon);
+      this.dataChildren = dataChaoGia.children.map(item => {
+        item.children.forEach(child => {
+          child.children = child.children.filter(s => s.luaChon);
+        });
+        return item;
       });
-      return item;
-    });
-    await this.setListDviTsanCuc(this.dataChildren);
+      await this.setListDviTsanCuc(this.dataChildren);
+    }
     if (!this.userService.isChiCuc() && this.idHopDong) {
       await this.maDviTsanCuc(this.formData.value.tenBenMua);
     }
@@ -699,7 +693,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         return;
       }
       const data = res.data;
-      const loaiVthhItem = this.listHangHoaAll.find(s => s.ma == data.loaiVthh);
       this.formData.patchValue({
         namHd: data.namKh,
         idChaoGia: data.id,
@@ -722,7 +715,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         tenCloaiVthh: data.tenCloaiVthh,
         tenHangHoa: data.moTaHangHoa,
         slXuatBanQdPd: data.children.find(item => item.maDvi === this.userInfo.MA_DVI).soLuongChiCuc,
-        donViTinh: loaiVthhItem?.maDviTinh,
+        donViTinh: data.donViTinh,
       });
       await this.loadDanhDachHopDong();
       const filteredItems = this.loadDanhSachHdong.filter(item => item.idChaoGia === data.id && item.trangThai === STATUS.DA_KY);

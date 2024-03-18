@@ -143,14 +143,14 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
       const combinedData = [...dataKq,
         ...dataKh]
       if (combinedData) {
-        this.dataTable = combinedData;
-        if (this.dataTable && this.dataTable.length > 0) {
-          this.dataTable.forEach((item) => {
-            item.checked = false;
-            item.children = item.check ? item.children : item.children.filter(s => s.pthucBanTrucTiep === null);
-          });
-          this.dataTable = this.dataTable.filter(s => s.children.length > 0);
-        }
+        this.dataTable = combinedData.map(item => {
+          return {
+            ...item,
+            checked: false,
+            children: item.check ? item.children : item.children.filter(s => s.pthucBanTrucTiep === null)
+          };
+        }).filter(s => s.check ? s.check : s.children.length > 0);
+
         this.dataTableAll = cloneDeep(this.dataTable);
       } else {
         this.dataTable = [];
