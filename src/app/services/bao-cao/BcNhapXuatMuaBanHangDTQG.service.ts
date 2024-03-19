@@ -82,5 +82,8 @@ export class BcNhapXuatMuaBanHangDTQGService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-tien-do-xuat-gao-hotro-hocsinh`;
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
-
+  chiTietHoTroGaoHocSinh(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-ho-tro-gao-hoc-sinh`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
 }
