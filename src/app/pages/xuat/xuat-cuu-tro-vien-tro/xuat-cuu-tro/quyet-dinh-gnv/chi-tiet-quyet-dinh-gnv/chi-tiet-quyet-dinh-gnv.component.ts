@@ -245,7 +245,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             this.formData.patchValue({ ...res.data, trangThaiXh: res.data.trangThaiXh ? res.data.trangThaiXh : STATUS.CHUA_THUC_HIEN });
             const quyetDinhPdDtl = await this.getChiTietQuyetDinhXuatCap();
             await this.buildTableView();
-            this.getListQuyetDinhGnvTheoQdPd(res.data.idQdPd, quyetDinhPdDtl)
+            this.getListQuyetDinhGnvTheoQdPd(res.data.idQdPd, quyetDinhPdDtl.filter(f => this.userInfo.MA_DVI.startsWith(f.maDvi)))
           }
         })
         .catch((e) => {
@@ -594,22 +594,13 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               quyetDinhPdDtl = cloneDeep(detail.quyetDinhPdDtl);
               quyetDinhPdDtl.forEach(s => {
                 s.idQdPdDtl = s.id;
-                s.soLuongDx = s.soLuongXc;
+                s.soLuongDx = s.soLuong;
                 s.soLuong = 0;
                 s.mId = uuidv4();
                 delete s.id;
               });
             }
-            const soLuong = quyetDinhPdDtl.filter(f => f.maDvi === this.userInfo.MA_DVI).reduce((sum, cur) => {
-
-              if (detail.paXuatGaoChuyenXc) {
-                sum += cur.soLuongXc ? cur.soLuongXc : 0
-              } else {
-                // sum += cur.soLuong ? cur.soLuong : 0
-                sum += cur.soLuongDx ? cur.soLuongDx : 0
-              }
-              return sum
-            }, 0);
+            const soLuong = quyetDinhPdDtl.filter(f => this.userInfo.MA_DVI.startsWith(f.maDvi)).reduce((sum, cur) => sum += cur.soLuongDx ? cur.soLuongDx : 0, 0);
             // const thoiGianGiaoNhan = detail.type === "TH" ? detail.quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI) ? detail.quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI).ngayKetThuc : null : detail.ngayKetThuc;
             this.formData.patchValue({
               idQdPd: detail.id,
@@ -629,7 +620,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               paXuatGaoChuyenXc: detail.paXuatGaoChuyenXc
 
             });
-            this.getListQuyetDinhGnvTheoQdPd(detail.id, detail.quyetDinhPdDtl)
+            this.getListQuyetDinhGnvTheoQdPd(detail.id, detail.quyetDinhPdDtl.filter(f => this.userInfo.MA_DVI.startsWith(f.maDvi)));
             await this.buildTableView();
           }
         });
@@ -702,17 +693,17 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               const rs1 = chain(v).groupBy('namNhap').map((v1, k1) => {
                 const namNhapRow = v1.find(f => f.namNhap === +k1);
                 if (!namNhapRow) return;
-                const rs2 = chain(v)
+                const rs2 = chain(v1)
                   .groupBy("tenChiCuc")
-                  .map((v1, k1) => {
-                    let tenChiCucRow = v1.find(s => k1 && s.tenChiCuc === k1);
+                  .map((v2, k2) => {
+                    let tenChiCucRow = v2.find(s => k2 && s.tenChiCuc === k2);
                     if (!tenChiCucRow) return;
-                    let soLuong = v1.reduce((prev, next) => prev + next.soLuong, 0);
+                    let soLuong = v2.reduce((prev, next) => prev + next.soLuong, 0);
                     return {
                       ...tenChiCucRow,
                       idVirtual: uuidv4(),
                       tenTrangThai: tenChiCucRow.tenTrangThai || 'Đang thực hiện',
-                      childData: v1.filter(f => !!f.tenDiaDiem),
+                      childData: v2.filter(f => !!f.tenDiaDiem),
                       soLuong: soLuong,
                     }
                   }).value().filter(f => !!f);
@@ -728,11 +719,13 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               }).value().filter(f => !!f);
               let soLuong = rs1.reduce((prev, next) => prev + next.soLuong, 0);
               let soLuongGiao = rs1.reduce((prev, next) => prev + next.soLuongGiao, 0);
+              const soLuongDx = rs1.reduce((sum, cur) => sum += cur.soLuongDx, 0);
               return {
                 ...tenLoaiVthhRow,
                 idVirtual: uuidv4(),
                 soLuongGiao: soLuongGiao,
                 soLuong: soLuong,
+                soLuongDx,
                 childData: rs1,
               }
             }).value().filter(f => !!f);
@@ -815,15 +808,17 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           // const soLuongDx = rs.reduce((sum, cur) => sum += cur.soLuongDx, 0);
           // let slGaoThuHoiSauXayXat = rs.reduce((prev, next) => prev + next.slGaoThuHoiSauXayXat, 0);
           // let slThocDeXayXat = rs.reduce((prev, next) => prev + next.slThocDeXayXat, 0);
-          const { soLuongGiao, slGaoThuHoiSauXayXat, slThocDeXayXat } = rs.reduce((obj, cur) => {
+          const { soLuongDx, soLuongGiao, slGaoThuHoiSauXayXat, slThocDeXayXat } = rs.reduce((obj, cur) => {
+            obj.soLuongDx += cur.soLuongDx;
             obj.soLuongGiao += cur.soLuongGiao;
             obj.slGaoThuHoiSauXayXat += cur.slGaoThuHoiSauXayXat;
             obj.slThocDeXayXat += cur.slThocDeXayXat;
             return obj;
-          }, { soLuongGiao: 0, slGaoThuHoiSauXayXat: 0, slThocDeXayXat: 0 });
+          }, { soLuongDx: 0, soLuongGiao: 0, slGaoThuHoiSauXayXat: 0, slThocDeXayXat: 0 });
           return {
             ...noiDungDxRow,
             idVirtual: uuidv4(),
+            soLuongDx,
             soLuongGiao,
             slGaoThuHoiSauXayXat,
             slThocDeXayXat: slThocDeXayXat,
@@ -861,7 +856,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             const rs1 = chain(v1)
               .groupBy("tenChiCuc")
               .map((v2, k2) => {
-                let tenChiCucRow = v1.find(s => k2 && s.tenChiCuc === k2);
+                let tenChiCucRow = v2.find(s => k2 && s.tenChiCuc === k2);
                 if (!tenChiCucRow) return;
                 let slGaoThuHoiSauXayXat = v2.reduce((prev, next) => prev + next.slGaoThuHoiSauXayXat, 0);
                 let slThocDeXayXat = v2.reduce((prev, next) => prev + next.slThocDeXayXat, 0);
@@ -883,9 +878,11 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               slGaoThuHoiSauXayXat,
               slThocDeXayXat,
             }
-          }).filter(f => !!f)
+          }).value().filter(f => !!f);
+          const soLuongDx = rs.reduce((prev, next) => prev + next.soLuongDx, 0);
           return {
             ...noiDungDxRow,
+            soLuongDx,
             idVirtual: uuidv4(),
             childData: rs,
           };
