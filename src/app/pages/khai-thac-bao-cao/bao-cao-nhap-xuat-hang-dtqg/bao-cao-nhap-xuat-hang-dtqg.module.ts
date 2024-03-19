@@ -23,6 +23,9 @@ import { BcDanhSachNhaThauUyTinComponent } from './bc-danh-sach-nha-thau-uy-tin/
 import { BcThKetQuaDauThauGaoTheoNamComponent } from './bc-th-ket-qua-dau-thau-gao-theo-nam/bc-th-ket-qua-dau-thau-gao-theo-nam.component';
 import { KqXuatGaoCthtChoDiaPhuongTrongNamComponent } from './kq-xuat-gao-ctht-cho-dia-phuong-trong-nam/kq-xuat-gao-ctht-cho-dia-phuong-trong-nam.component';
 import { BcTienDoXuatGaoHoTroHocSinhComponent } from './bc-tien-do-xuat-gao-ho-tro-hoc-sinh/bc-tien-do-xuat-gao-ho-tro-hoc-sinh.component';
+import {
+  BaoCaoChiTietHoTroGaoHsComponent
+} from "src/app/pages/khai-thac-bao-cao/bao-cao-nhap-xuat-hang-dtqg/bao-cao-chi-tiet-ho-tro-gao-hs/bao-cao-chi-tiet-ho-tro-gao-hs.component";
 
 
 @NgModule({
@@ -44,7 +47,8 @@ import { BcTienDoXuatGaoHoTroHocSinhComponent } from './bc-tien-do-xuat-gao-ho-t
     BcDanhSachNhaThauUyTinComponent,
     BcThKetQuaDauThauGaoTheoNamComponent,
     KqXuatGaoCthtChoDiaPhuongTrongNamComponent,
-    BcTienDoXuatGaoHoTroHocSinhComponent
+    BcTienDoXuatGaoHoTroHocSinhComponent,
+    BaoCaoChiTietHoTroGaoHsComponent
   ],
   imports: [
     CommonModule,
