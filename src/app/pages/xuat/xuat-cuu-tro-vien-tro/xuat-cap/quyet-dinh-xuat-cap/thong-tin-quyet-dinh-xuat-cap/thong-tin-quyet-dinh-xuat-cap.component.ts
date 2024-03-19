@@ -162,7 +162,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         tenLoaiVthh: [],
         tenCloaiVthh: [],
         tenTrangThai: ['Dự thảo'],
-        quyetDinhPdDtl: [new Array()],
+        quyetDinhPdDtl: [new Array(), [Validators.required, Validators.minLength(1)]],
         fileDinhKem: [new Array<FileDinhKem>()],
         canCu: [new Array<FileDinhKem>()],
         qdPaXuatCapId: [],
@@ -365,27 +365,35 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     this.tongNhuCauXuat = tongNhuCauXuat;
   }
   async save() {
-    await this.helperService.ignoreRequiredForm(this.formData);
-    let body = {
-      ...this.formData.value,
-      soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
+    try {
+      await this.helperService.ignoreRequiredForm(this.formData);
+      let body = {
+        ...this.formData.value,
+        soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
+      }
+      await this.createUpdate(body, null, null, ['paXuatGaoChuyenXc', 'mucDichXuat']);
+      await this.helperService.restoreRequiredForm(this.formData);
+    } catch (error) {
+      console.log("error", error)
     }
-    await this.createUpdate(body, null, null, ['paXuatGaoChuyenXc', 'mucDichXuat']);
-    await this.helperService.restoreRequiredForm(this.formData);
   }
 
   async saveAndSend(trangThaiHienTai: string, msg: string, msgSuccess?: string) {
-    let trangThai;
-    if (trangThaiHienTai == STATUS.DU_THAO || trangThaiHienTai == STATUS.TU_CHOI_LDV || trangThaiHienTai == STATUS.TU_CHOI_LDTC) {
-      trangThai = STATUS.CHO_DUYET_LDV;
-    };
-    if (trangThaiHienTai === STATUS.CHO_DUYET_LDTC) {
-      this.formData.get("soBbQd").setValidators([Validators.required])
-    } else {
-      this.formData.get("soBbQd").clearValidators();
+    try {
+      let trangThai;
+      if (trangThaiHienTai == STATUS.DU_THAO || trangThaiHienTai == STATUS.TU_CHOI_LDV || trangThaiHienTai == STATUS.TU_CHOI_LDTC) {
+        trangThai = STATUS.CHO_DUYET_LDV;
+      };
+      if (trangThaiHienTai === STATUS.CHO_DUYET_LDTC) {
+        this.formData.get("soBbQd").setValidators([Validators.required])
+      } else {
+        this.formData.get("soBbQd").clearValidators();
+      }
+      let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo }
+      await super.saveAndSend(body, trangThai, msg, msgSuccess, ['paXuatGaoChuyenXc', 'mucDichXuat']);
+    } catch (error) {
+      console.log("error", error)
     }
-    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo }
-    await super.saveAndSend(body, trangThai, msg, msgSuccess, ['paXuatGaoChuyenXc', 'mucDichXuat']);
   }
 
   expandAll() {
@@ -412,7 +420,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       if (level == 0) {
         this.formDataDtl.patchValue({
           noiDungDx: data.noiDungDx, idDonViNhan: data.idDonViNhan, loaiVthh: data.loaiVthh,
-          tenLoaiVthh: data.tenLoaiVthh
+          tenLoaiVthh: data.tenLoaiVthh, maDvi: data.maDvi, tenDvi: data.tenDvi
         });
       } else if (level == 1) {
         data.edit = level;
