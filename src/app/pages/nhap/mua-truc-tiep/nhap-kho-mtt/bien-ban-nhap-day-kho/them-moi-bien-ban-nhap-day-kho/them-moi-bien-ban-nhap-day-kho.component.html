@@ -283,6 +283,27 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
+                <div nz-col nzSpan="3">
+                  <nz-form-item>
+                    <nz-form-label [nzNoColon]="true">
+                      Thời hạn lưu kho (tháng)
+                    </nz-form-label>
+                    <nz-form-control [nzErrorTip]="error">
+                      <span class="blue-text">{{formData.value.thanLuuKho}}</span>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzSpan="3">
+                  <nz-form-item>
+                    <nz-form-label [nzNoColon]="true">
+                      Ngày hết hạn lưu kho
+                    </nz-form-label>
+                    <nz-form-control [nzErrorTip]="error">
+                      <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy" formControlName="ngayHetHanLk">
+                      </nz-date-picker>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
                 <div nz-col nzSpan="4">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true">

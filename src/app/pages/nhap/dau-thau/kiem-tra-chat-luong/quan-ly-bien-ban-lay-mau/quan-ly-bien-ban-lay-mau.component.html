@@ -74,8 +74,8 @@
             <th>Ngày lấy mẫu</th>
             <th *ngIf="!loaiVthh.startsWith('02')">Số BB nhập đầy kho</th>
             <th *ngIf="!loaiVthh.startsWith('02')">Ngày nhập đầy kho</th>
-            <th *ngIf="loaiVthh.startsWith('02')">Số BB nhập đầy kho</th>
-            <th *ngIf="loaiVthh.startsWith('02')">Ngày nhập đầy kho</th>
+            <th *ngIf="loaiVthh.startsWith('02')">Số BB kết thúc nhập kho</th>
+            <th *ngIf="loaiVthh.startsWith('02')">Ngày kết thúc nhập kho</th>
             <th>Trạng thái</th>
             <th>Hành động</th>
           </tr>
@@ -89,12 +89,7 @@
               <td class="bold">{{ item.namNhap }}</td>
               <td class="bold">{{ item.tgianNkho }}</td>
               <td colspan="7"></td>
-              <td>
-                <a *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_THEM')"
-                   (click)="redirectToChiTiet(false, 0,item.id)">
-                  <i class="fa fa-plus"></i>
-                </a>
-              </td>
+              <td></td>
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
               <ng-container *ngFor="let bb of item.detail.children, let y = index">
@@ -114,6 +109,12 @@
                   </td>
                   <td>{{bb.bienBanLayMau?.tenTrangThai}}</td>
                   <td>
+                    <a *ngIf="bb.bienBanLayMau == null &&
+                    (loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_BBLMBGM_THEM')
+                    : userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_THEM'))"
+                       (click)="redirectToChiTiet(false, 0,item.id, bb.id)">
+                      <i class="fa fa-plus"></i>
+                    </a>
                     <a *ngIf="bb.bienBanLayMau && hienThiXem(bb.bienBanLayMau)"
                       (click)="redirectToChiTiet(true, bb.bienBanLayMau?.id)">
                       <i class="fa fa-eye" title="Xem chi tiết"></i>
@@ -161,6 +162,7 @@
 </ng-container>
 <ng-container *ngIf="isDetail">
   <them-moi-bien-ban-lay-mau [id]="selectedId" (showListEvent)="showList()" [isView]="isView" [loaiVthh]="loaiVthh" [idQdGiaoNvNh]="idQdGiaoNvNh"
+                             [idDdiemGiaoNvNh]="idDdiemGiaoNvNh"
     [isTatCa]="isTatCa">
   </them-moi-bien-ban-lay-mau>
 </ng-container>

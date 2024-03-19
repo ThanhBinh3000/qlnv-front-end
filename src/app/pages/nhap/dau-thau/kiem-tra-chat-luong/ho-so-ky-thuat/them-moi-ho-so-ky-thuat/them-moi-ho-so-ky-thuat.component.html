@@ -62,7 +62,7 @@
     <!--Thông tin chung-->
     <nz-card class="mg-t-16 flex-card p-lr16">
       <nz-collapse nzAccordion>
-        <nz-collapse-panel [nzHeader]="'Thông tin chung'" [nzActive]="true">
+        <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
           <form nzLayout="vertical" nz-form [formGroup]="formData">
             <div nz-row [nzGutter]="[24]">
               <div nz-col nzSpan="2">
@@ -219,9 +219,9 @@
               </div>
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Số lượng thực nhập</nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Số lượng thực nhập</nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24">
-                    <input readonly nz-input formControlName="soLuong"/>
+                    <span class="blue-text">{{formData.value.soLuong | number : '1.2-2' : 'vi_VN'}}</span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -229,7 +229,7 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24">
-                    <input readonly nz-input formControlName="dvt"/>
+                    <span class="blue-text">{{formData.value.dvt}} </span>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -273,16 +273,16 @@
     <!--End thông tin chung-->
 
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Danh sách hồ sơ tài liệu'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'DANH SÁCH HỒ SƠ TÀI LIỆU'" [nzActive]="true">
         <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
           <thead>
           <tr>
             <th width="50px" class="text-center">STT</th>
-            <th>Tên hồ sơ tài liệu</th>
-            <th width="150px">Loại tài liệu</th>
-            <th width="100px">Số lượng</th>
+            <th><span style="color: red">*</span> Tên hồ sơ tài liệu</th>
+            <th width="150px"><span style="color: red">*</span> Loại tài liệu</th>
+            <th width="100px"><span style="color: red">*</span> Số lượng</th>
             <th>Ghi chú</th>
-            <th>File đính kèm</th>
+            <th><span style="color: red">*</span> File đính kèm</th>
             <th width="100px"></th>
           </tr>
           <tr *ngIf="!isView">
@@ -377,7 +377,7 @@
     </nz-collapse>
 
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Danh sách biên bản'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'DANH SÁCH BIÊN BẢN'" [nzActive]="true">
         <nz-table [nzData]="dataTableBienBan" class="nowrap pd-10" nzBordered>
           <thead>
           <tr>

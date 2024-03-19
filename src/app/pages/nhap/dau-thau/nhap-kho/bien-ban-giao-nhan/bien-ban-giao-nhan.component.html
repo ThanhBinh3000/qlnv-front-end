@@ -109,7 +109,7 @@
             <td class="bold">{{ item.tgianNkho| date: 'dd/MM/yyyy' }}</td>
             <td colspan="9"></td>
             <td>
-              <a (click)="redirectToChiTiet(false, 0,item.id)">
+              <a (click)="redirectToChiTiet(false, 0,item.id)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBGN_THEM')">
                 <i class="fa fa-plus"></i>
               </a>
             </td>

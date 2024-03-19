@@ -320,7 +320,7 @@
             <nz-form-label [nzNoColon]="true">
               Thực nhập
             </nz-form-label>
-            <span class="blue-text">{{formData.value.tichLuong}}</span>
+            <span class="blue-text">{{formData.value.thucNhap}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="3">
@@ -328,7 +328,7 @@
             <nz-form-label [nzNoColon]="true">
               Định mức thực tế thực hiện
             </nz-form-label>
-            <span class="blue-text">{{formData.value.tichLuong}}</span>
+            <span class="blue-text">{{calcDinhMucThucTe()}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="24">

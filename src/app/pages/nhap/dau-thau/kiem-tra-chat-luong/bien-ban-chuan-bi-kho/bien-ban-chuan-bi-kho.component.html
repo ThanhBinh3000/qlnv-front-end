@@ -110,7 +110,10 @@
                     (click)="redirectToChiTiet(true, bb.bienBanChuanBiKho?.id)">
                     <i class="fa fa-eye" title="Xem chi tiết"></i>
                   </a>
-                  <a *ngIf="bb.bienBanChuanBiKho?.trangThai == STATUS.DU_THAO && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM')"
+                  <a *ngIf="(bb.bienBanChuanBiKho?.trangThai == STATUS.DU_THAO
+                  || bb.bienBanChuanBiKho?.trangThai == STATUS.TU_CHOI_TK
+                  || bb.bienBanChuanBiKho?.trangThai == STATUS.TU_CHOI_LDCC
+                  ) && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM')"
                     (click)="redirectToChiTiet(false, bb.bienBanChuanBiKho?.id)">
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>

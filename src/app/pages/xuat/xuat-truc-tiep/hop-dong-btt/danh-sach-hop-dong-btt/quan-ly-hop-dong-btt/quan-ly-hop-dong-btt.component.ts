@@ -117,11 +117,11 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
           tenCloaiVthh: data.tenCloaiVthh,
           tenLoaiHinhNx: data.tenLoaiHinhNx,
           tenKieuNx: data.tenKieuNx,
+          donViTinh: data.donViTinh,
           tongSlXuatBanQdKh: this.check ? data.tongSoLuong : data.children.reduce((acc, item) => acc + item.tongSoLuong, 0),
           tongGiaTriHdong: data.tongGiaTriHdong,
           trangThaiHd: data.trangThaiHd,
           tenTrangThaiHd: data.tenTrangThaiHd,
-          donViTinh: data.children[0]?.donViTinh,
           phuongThucBan: THONG_TIN_BAN_TRUC_TIEP.CHAO_GIA,
           phanLoai: this.check ? "QĐKQ" : "QĐKH",
         });
@@ -248,7 +248,8 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
-    } if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
+    }
+    if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
       return;
     }

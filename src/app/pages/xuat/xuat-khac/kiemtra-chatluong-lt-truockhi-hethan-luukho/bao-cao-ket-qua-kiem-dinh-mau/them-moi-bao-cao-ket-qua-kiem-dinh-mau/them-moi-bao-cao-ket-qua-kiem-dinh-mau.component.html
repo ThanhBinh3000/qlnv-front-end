@@ -19,7 +19,8 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BCKQKD_IN') && idInput" type='button' class='btn btn-sub do mr-2' (click)='preview(idInput)'>
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLLTLK_BCKQKD_IN') && idInput" type='button' class='btn btn-sub mr-2'
+                (click)='xemTruoc(idInput,templateName)'>
           <i class='icon htvbdh_totrinh'></i>
           <span> In/Xem trước </span>
         </button>
@@ -127,9 +128,9 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Mã DSLT <= 6 tháng hết hạn lưu kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error" nz-col nzSpan="24">
-              <nz-select (ngModelChange)="changeMaDs($event)" [nzDisabled]="isView" formControlName="idTongHop"
-                         nzAllowClear nzShowSearch>
-                <nz-option *ngFor="let p of listMaDs" [nzLabel]="p.maDanhSach" [nzValue]="p.id"></nz-option>
+              <nz-select (ngModelChange)="changeMaDs($event)" [nzDisabled]="isView" formControlName="listIdTongHop"
+                         nzMode="multiple">
+                <nz-option *ngFor="let p of listMaDs" [nzLabel]="p.maDanhSach" [nzValue]="p.id.toString()"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -175,7 +176,8 @@
             <td>{{i + 1}}</td>
             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
-                style="width: 35px"></td>
+                style="width: 35px">
+            </td>
             <td><a nz-button nzType="link" *ngIf="item.id!=null">
               {{ item.maDanhSach}}</a>
             </td>
@@ -184,7 +186,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+            <td  class="bold text-right">>{{ item.tongSl|number:globals.numberFormat}}</td>
             <td></td>
             <td></td>
           </tr>
@@ -199,7 +201,7 @@
                 <td>{{lv1.tenDiemKho}}</td>
                 <td>{{lv1.tenLoKho ? lv1.tenLoKho : lv1.tenNganKho}}</td>
                 <td>{{lv1.donViTinh}}</td>
-                <td>{{lv1.slHetHan}}</td>
+                <td class="text-right">{{lv1.slHetHan|number:globals.numberFormat}}</td>
                 <td>{{lv1.soPhieuKnCl ? (lv1.kqThamDinh == true ? "Đạt" : "Không đạt") : ''}}</td>
                 <td class="bold">{{lv1.soPhieuKnCl}}</td>
               </tr>

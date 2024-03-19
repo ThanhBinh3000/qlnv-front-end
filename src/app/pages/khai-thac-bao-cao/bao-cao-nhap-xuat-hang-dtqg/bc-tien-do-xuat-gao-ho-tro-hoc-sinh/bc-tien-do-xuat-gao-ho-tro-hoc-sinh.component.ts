@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Base2Component } from '../../../../components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../../../../services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -6,26 +7,27 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { BcNhapXuatMuaBanHangDTQGService } from '../../../../services/bao-cao/BcNhapXuatMuaBanHangDTQG.service';
 import { UserService } from '../../../../services/user.service';
-import { DonviService } from '../../../../services/donvi.service';
-import { DanhMucService } from '../../../../services/danhmuc.service';
+import { MangLuoiKhoService } from '../../../../services/qlnv-kho/mangLuoiKho.service';
 import { Globals } from '../../../../shared/globals';
 import * as dayjs from 'dayjs';
 import {saveAs} from "file-saver";
 import { Validators } from '@angular/forms';
 import { MESSAGE } from '../../../../constants/message';
-import { Base2Component } from '../../../../components/base2/base2.component';
+import * as moment from 'moment/moment';
+import { DanhMucDungChungService } from '../../../../services/danh-muc-dung-chung.service';
 
 @Component({
-  selector: 'app-bao-cao-ket-qua-ho-tro-gao',
-  templateUrl: './bao-cao-ket-qua-ho-tro-gao.component.html',
-  styleUrls: ['./bao-cao-ket-qua-ho-tro-gao.component.scss']
+  selector: 'app-bc-tien-do-xuat-gao-ho-tro-hoc-sinh',
+  templateUrl: './bc-tien-do-xuat-gao-ho-tro-hoc-sinh.component.html',
+  styleUrls: ['./bc-tien-do-xuat-gao-ho-tro-hoc-sinh.component.scss']
 })
-export class BaoCaoKetQuaHoTroGaoComponent extends Base2Component implements OnInit {
+export class BcTienDoXuatGaoHoTroHocSinhComponent extends Base2Component implements OnInit {
   pdfSrc: any;
   excelSrc: any;
   pdfBlob: any;
   excelBlob: any;
-  nameFile = "ket-qua-ho-tro-gao-hoc-sinh";
+  nameFile = "bc-tien-do-xuat-gao-ho-tro-hoc-sinh";
+  listKyHoTro : any[];
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -34,29 +36,38 @@ export class BaoCaoKetQuaHoTroGaoComponent extends Base2Component implements OnI
               modal: NzModalService,
               private bcNhapXuatMuaBanHangDTQGService: BcNhapXuatMuaBanHangDTQGService,
               public userService: UserService,
-              private donViService: DonviService,
-              private danhMucSv: DanhMucService,
+              private danhMucService: DanhMucDungChungService,
               public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, bcNhapXuatMuaBanHangDTQGService);
     this.formData = this.fb.group(
       {
-        nam: [dayjs().get("year"), [Validators.required]],
+        kyHoTro : [ null,[Validators.required]],
+        ngayBaoCao: [dayjs().format("YYYY-MM-DD"), [Validators.required]],
       }
     );
   }
 
   async ngOnInit() {
-    await this.spinner.show();
+    this.spinner.show();
     try {
+      this.getListKyHoTro();
     } catch (e) {
       console.log("error: ", e);
-      await this.spinner.hide();
+      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    await this.spinner.hide();
+    this.spinner.hide();
   }
   downloadPdf() {
     saveAs(this.pdfBlob, this.nameFile + ".pdf");
+  }
+
+  async  getListKyHoTro (){
+    this.listKyHoTro = [];
+    let res = await this.danhMucService.danhMucChungGetAll("MUC_DICH_CT_VT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listKyHoTro = res.data.filter(x => x.phanLoai == '01.04');
+    }
   }
 
   async downloadExcel() {
@@ -64,7 +75,8 @@ export class BaoCaoKetQuaHoTroGaoComponent extends Base2Component implements OnI
       this.spinner.show();
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      await this.bcNhapXuatMuaBanHangDTQGService.ketQuaHoTroGaoHocSinh(body).then(async s => {
+      body.ngayBatDauQuy = moment(body.ngayBaoCao).format('DD/MM/YYYY');
+      await this.bcNhapXuatMuaBanHangDTQGService.bcTienDoXuatGaoHoTroHocSinh(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, this.nameFile + ".xlsx");
@@ -91,8 +103,9 @@ export class BaoCaoKetQuaHoTroGaoComponent extends Base2Component implements OnI
     try {
       this.spinner.show();
       let body = this.formData.value;
+      body.ngayBatDauQuy = moment(body.ngayBaoCao).format('DD/MM/YYYY');
       body.typeFile = "pdf";
-      await this.bcNhapXuatMuaBanHangDTQGService.ketQuaHoTroGaoHocSinh(body).then(async s => {
+      await this.bcNhapXuatMuaBanHangDTQGService.bcTienDoXuatGaoHoTroHocSinh(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -110,5 +123,4 @@ export class BaoCaoKetQuaHoTroGaoComponent extends Base2Component implements OnI
       nam: dayjs().get('year')
     })
   }
-
 }

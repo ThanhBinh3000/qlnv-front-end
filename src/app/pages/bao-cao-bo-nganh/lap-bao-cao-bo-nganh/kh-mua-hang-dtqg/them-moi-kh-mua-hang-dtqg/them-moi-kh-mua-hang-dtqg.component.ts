@@ -100,13 +100,13 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
     this.userInfo = this.userService.getUserLogin();
     await Promise.all([
       this.layTatCaDonViByLevel(),
+      this.loadDsKyBc(),
     ]);
     if (this.idInput != null) {
       await this.loadChiTiet(this.idInput)
     } else {
       await Promise.all([
         this.loadDsDonVi(),
-        this.loadDsKyBc(),
       ]);
       this.formData.patchValue({
         tenDonViNhan: this.dsDonVi[0].tenDvi,

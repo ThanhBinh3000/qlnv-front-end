@@ -294,7 +294,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-checkbox-group style="display: inline-grid;" formControlName="ppLayMauList"
-                                 [nzDisabled]="true"></nz-checkbox-group>
+                                 [nzDisabled]="isView"></nz-checkbox-group>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -305,7 +305,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-checkbox-group style="display: inline-grid;" formControlName="chiTieuKiemTraList"
-                                 [nzDisabled]="true"></nz-checkbox-group>
+                                 [nzDisabled]="isView"></nz-checkbox-group>
               <!--              <nz-checkbox-group formControlName="chiTieuKiemTra" [nzDisabled]="isView"></nz-checkbox-group>-->
               <!--              <input nz-input formControlName="chiTieuKiemTra" [readonly]="isView"/>-->
             </nz-form-control>

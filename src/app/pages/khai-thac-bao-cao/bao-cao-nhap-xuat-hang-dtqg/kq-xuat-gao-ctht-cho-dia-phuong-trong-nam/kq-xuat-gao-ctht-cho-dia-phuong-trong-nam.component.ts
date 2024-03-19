@@ -15,6 +15,8 @@ import * as moment from 'moment';
 import {saveAs} from "file-saver";
 import { Validators } from '@angular/forms';
 import { MESSAGE } from '../../../../constants/message';
+import { OldResponseData } from '../../../../interfaces/response';
+import { MangLuoiKhoService } from '../../../../services/qlnv-kho/mangLuoiKho.service';
 
 @Component({
   selector: 'app-kq-xuat-gao-ctht-cho-dia-phuong-trong-nam',

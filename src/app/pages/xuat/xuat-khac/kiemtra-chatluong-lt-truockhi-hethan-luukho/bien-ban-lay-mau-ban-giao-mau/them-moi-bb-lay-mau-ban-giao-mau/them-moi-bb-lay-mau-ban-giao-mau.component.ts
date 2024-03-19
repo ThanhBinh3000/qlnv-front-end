@@ -226,8 +226,11 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     }
     let res = await this.tongHopDanhSachHangDTQGService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listDsTongHop = data.content;
+      let data = res.data.content;
+      this.listDsTongHop = data.filter(item =>
+        item.tongHopDtl.every(i => i.soBienBan == null)
+      );
+
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

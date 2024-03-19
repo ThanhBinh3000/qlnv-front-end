@@ -54,7 +54,7 @@ export class ThongTinQuyetDinhGiaoNhiemVuXuatHangComponent extends Base2Componen
   dataThTree: any[] = [];
   dataThTreeXuatHuy: any[] = [];
   expandSetString = new Set<string>();
-  templateName = 'xuat_khac_ktcl_vat_tu_6_thang_qd_giao_nv_xuat_hang';
+  templateName = 'Quyết định giao nhiệm vụ xuất hàng xuất mẫu';
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,

@@ -1,0 +1,61 @@
+<div class="header header-green-background mg-t-16">
+  <div class="header-text">
+    <div class="title-chi-tieu">
+      <span></span>
+      <span>KẾT CHUYỂN CUỐI NĂM</span>
+    </div>
+  </div>
+</div>
+<form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="24" class="pd-t-10">
+      <nz-form-item>
+        <nz-form-label nz-col [nzSpan]="24"  [nzNoColon]="true">Năm</nz-form-label>
+        <nz-select formControlName="nam" nzDisabled >
+          <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24" class="pd-t-10">
+      <nz-form-item>
+        <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Đơn vị</nz-form-label>
+          <nz-tree-select
+            formControlName="maDvi"
+            [nzNodes]="listDvi"
+            (ngModelChange)="onChange($event)"
+            nzShowSearch
+            nzCheckable
+            nzPlaceHolder="Chọn đơn vị"
+          ></nz-tree-select>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24" class="pd-t-10">
+      <nz-form-item>
+        <nz-form-label nz-col [nzSpan]="24"  [nzNoColon]="true">Ghi chú</nz-form-label>
+        <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+          <input nz-input formControlName="ghiChu">
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+<br />
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onCancel()">
+        <i aria-hidden="true" class="fa fa-sign-out"></i>
+        Hủy
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save()">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+</ng-template>
