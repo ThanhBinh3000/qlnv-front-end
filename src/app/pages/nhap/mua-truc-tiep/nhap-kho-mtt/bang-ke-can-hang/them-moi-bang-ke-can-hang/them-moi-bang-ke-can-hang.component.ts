@@ -11,7 +11,7 @@ import { STATUS } from "../../../../../../constants/status";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { isEmpty } from 'lodash';
+import {cloneDeep, isEmpty} from 'lodash';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
@@ -22,6 +22,7 @@ import { PhieuNhapKhoMuaTrucTiepService } from 'src/app/services/phieu-nhap-kho-
 import { BangCanKeMuaTrucTiepService } from 'src/app/services/bang-can-ke-mua-truc-tiep.service';
 import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
 import {chiTietBangCanKeHang} from "../../../../../../models/DeXuatKeHoachBanTrucTiep";
+import {AMOUNT_THREE_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-moi-bang-ke-can-hang',
@@ -42,12 +43,20 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
 
-
+  rowItem: any = {};
+  rowItemGd: any = {};
+  rowItemTb: any = {};
+  dataTableGd: any[] = [];
+  dataTableTb: any[] = [];
+  listFileDinhKem: any[] = [];
+  rowItemEdit: any[] = [];
+  rowItemGdEdit: any[] = [];
+  rowItemTbEdit: any[] = [];
   listSoQuyetDinh: any[] = [];
   listDiaDiemNhap: any[] = [];
   listSoPhieuNhapKho: any[] = [];
-  rowItem: any = {};
   previewName: string = 'ntt_bang_ke_can_hang';
+  amount = { ...AMOUNT_THREE_DECIMAL }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -109,6 +118,9 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       soBangKe: [],
       loaiQd: [],
       tongSlDaTruBaoBi: [''],
+      trongLuongBaoBi: [],
+      trongLuongMotBao: [],
+      phuongPhapCan: ['GD'],
     })
   }
 
@@ -152,7 +164,10 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
           let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
           this.bindingDataDdNhap(dataDdNhap);
           this.bindingDataPhieuNhapKho(data.soPhieuNhapKho.split("/")[0]);
+          console.log(data, "data")
           this.dataTable = data.hhBcanKeHangDtlList;
+          this.dataTableGd = data.chiTietGd;
+          this.dataTableTb = data.chiTietTb;
         }
       }
       await this.spinner.hide();
@@ -340,40 +355,81 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
     return convertTienTobangChu(tien);
   }
 
-  deleteRow(index: any) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-          this.dataTable.splice(index, 1);
-          this.updateEditCache();
-        } catch (e) {
-          console.log('error', e);
-        }
-      },
-    });
-  }
-
-  editRow(stt: number) {
-  }
-
-  addRow() {
-    if (this.validateDataRow()) {
-      if (!this.dataTable) {
-        this.dataTable = [];
+  deleteRow(i: any, type?:string) {
+    if (type != null) {
+      if(type == 'GD') {
+        this.dataTableGd.splice(i, 1)
+      } else if (type == 'TB') {
+        this.dataTableTb.splice(i, 1)
       }
-      this.dataTable = [...this.dataTable, this.rowItem];
-      this.rowItem = new chiTietBangCanKeHang();
-      this.emitDataTable();
-      this.updateEditCache()
+    } else {
+      this.dataTable.splice(i, 1)
     }
   }
+
+  // deleteRow(index: any) {
+  //   this.modal.confirm({
+  //     nzClosable: false,
+  //     nzTitle: 'Xác nhận',
+  //     nzContent: 'Bạn có chắc chắn muốn xóa?',
+  //     nzOkText: 'Đồng ý',
+  //     nzCancelText: 'Không',
+  //     nzOkDanger: true,
+  //     nzWidth: 400,
+  //     nzOnOk: async () => {
+  //       try {
+  //         this.dataTable.splice(index, 1);
+  //         this.updateEditCache();
+  //       } catch (e) {
+  //         console.log('error', e);
+  //       }
+  //     },
+  //   });
+  // }
+
+  editRow(i: number, type?:string) {
+    if (type != null) {
+      if(type == 'GD') {
+        this.dataTableGd[i].edit = true;
+        this.rowItemGdEdit[i] = cloneDeep(this.dataTableGd[i])
+      } else if (type == 'TB') {
+        this.dataTableTb[i].edit = true;
+        this.rowItemTbEdit[i] = cloneDeep(this.dataTableTb[i])
+      }
+    } else {
+      this.dataTable[i].edit = true;
+      this.rowItemEdit[i] = cloneDeep(this.dataTable[i])
+    }
+  }
+
+
+  addRow(type?:string) {
+    if (type != null) {
+      if(type == 'GD') {
+        this.rowItemGd.phanLoai = 'GD'
+        this.dataTableGd = [...this.dataTableGd, this.rowItemGd];
+        this.rowItemGd = {};
+      } else if (type == 'TB') {
+        this.rowItemTb.phanLoai = 'TB'
+        this.dataTableTb = [...this.dataTableTb, this.rowItemTb];
+        this.rowItemTb = {};
+      }
+    } else {
+      this.dataTable = [...this.dataTable, this.rowItem];
+      this.rowItem = {};
+    }
+  }
+  // addRow() {
+  //   if (this.validateDataRow()) {
+  //     if (!this.dataTable) {
+  //       this.dataTable = [];
+  //     }
+  //     this.dataTable = [...this.dataTable, this.rowItem];
+  //     this.rowItem = new chiTietBangCanKeHang();
+  //     this.emitDataTable();
+  //     this.updateEditCache()
+  //   }
+  // }
 
   emitDataTable() {
     this.dataTableChange.emit(this.dataTable);
@@ -393,16 +449,43 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
     }
   }
 
-  saveEdit(idx: number): void {
-    Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
-    this.dataEdit[idx].edit = false;
+  // saveEdit(idx: number): void {
+  //   Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
+  //   this.dataEdit[idx].edit = false;
+  // }
+
+  saveEdit(i: number, type?:string): void {
+    if (type != null) {
+      if(type == 'GD') {
+        this.dataTableGd[i] = cloneDeep(this.rowItemGdEdit[i])
+        this.dataTableGd[i].edit = false;
+      } else if (type == 'TB') {
+        this.dataTableTb[i] = cloneDeep(this.rowItemTbEdit[i])
+        this.dataTableTb[i].edit = false;
+      }
+    } else {
+      this.dataTable[i] = cloneDeep(this.rowItemEdit[i])
+      this.dataTable[i].edit = false;
+    }
   }
 
-  cancelEdit(stt: number): void {
-    this.dataEdit[stt] = {
-      data: {...this.dataTable[stt]},
-      edit: false
-    };
+  // cancelEdit(stt: number): void {
+  //   this.dataEdit[stt] = {
+  //     data: {...this.dataTable[stt]},
+  //     edit: false
+  //   };
+  // }
+
+  cancelEdit(i: number, type?:string): void {
+    if (type != null) {
+      if(type == 'GD') {
+        this.dataTableGd[i].edit = false;
+      } else if (type == 'TB') {
+        this.dataTableTb[i].edit = false;
+      }
+    } else {
+      this.dataTable[i].edit = false;
+    }
   }
 
   updateEditCache(): void {
@@ -416,9 +499,21 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
     }
   }
 
-  clearItemRow() {
-    this.rowItem = {};
+
+  clearItemRow(type?:string) {
+    if (type != null) {
+      if(type == 'GD') {
+        this.rowItemGd = {};
+      } else if (type == 'TB') {
+        this.rowItemTb = {};
+      }
+    } else {
+      this.rowItem = {};
+    }
   }
+  // clearItemRow() {
+  //   this.rowItem = {};
+  // }
 
   pheDuyet() {
     if (this.checkPrice.boolean) {
@@ -551,7 +646,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
         return;
       }
       let body = this.formData.value;
-      body.hhBcanKeHangDtlReqList = this.dataTable;
+      body.hhBcanKeHangDtlReqList = [...this.dataTable, ...this.dataTableGd, ...this.dataTableTb];
       let res;
       if (this.formData.get('id').value > 0) {
         res = await this.bangCanKeMuaTrucTiepService.update(body);
@@ -587,7 +682,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
   }
 
   validateSave() {
-    let tongTrongLuong = this.calcTong('trongLuongCaBaoBi');
+    let tongTrongLuong = this.calcTong('trongLuongCaBi') - this.formData.value.trongLuongBaoBi;
     if (tongTrongLuong != this.formData.value.soLuongNhapKho) {
       this.notification.error(MESSAGE.ERROR, "Tổng trọng lượng bao bì của bảng kê đang không đủ số lượng nhập kho")
       return false;
@@ -603,18 +698,45 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
     return thongTinTrangThaiNhap(trangThai);
   }
 
-  calcTong(columnName) {
-    if (this.dataTable) {
-      const sum = this.dataTable.reduce((prev, cur) => {
-        prev += cur[columnName];
-        return prev;
-      }, 0);
-      this.formData.patchValue({
-        tongSlCaBaoBi: sum
-      })
-      return sum;
+  calcTong(columnName, type?:string) {
+    if (type != null) {
+      if(type == 'GD') {
+        if (this.dataTableGd) {
+          return this.dataTableGd.reduce((prev, cur) => {
+            prev += cur[columnName];
+            return prev;
+          }, 0);
+        }
+      } else if (type == 'TB') {
+        if (this.dataTableTb) {
+          return this.dataTableTb.reduce((prev, cur) => {
+            prev += cur[columnName];
+            return prev;
+          }, 0);
+        }
+      }
+    } else {
+      if (this.dataTable) {
+        return this.dataTable.reduce((prev, cur) => {
+          prev += cur[columnName];
+          return prev;
+        }, 0);
+      }
     }
   }
+
+  // calcTong(columnName) {
+  //   if (this.dataTable) {
+  //     const sum = this.dataTable.reduce((prev, cur) => {
+  //       prev += cur[columnName];
+  //       return prev;
+  //     }, 0);
+  //     this.formData.patchValue({
+  //       tongSlCaBaoBi: sum
+  //     })
+  //     return sum;
+  //   }
+  // }
 
 
   isDisabled() {

@@ -147,7 +147,7 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
       soHd: [''],
       ngayHd: [''],
       ngayLayMau: [dayjs().format('YYYY-MM-DD')],
-      dviKiemNghiem: [''],
+      dviKiemNghiem: ['Phòng KTBQ'],
       soBbNhapDayKho: [''],
       idBbNhapDayKho: [''],
       diaDiemLayMau: [''],
@@ -559,7 +559,8 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
           soBbNhapDayKho: data.bienBanNhapDayKho?.soBienBanNhapDayKho,
           idBbNhapDayKho: data.bienBanNhapDayKho?.id,
           soBbGuiHang: data.bienBanGuiHang?.soBienBanGuiHang,
-          idBbGuiHang: data.bienBanGuiHang?.id
+          idBbGuiHang: data.bienBanGuiHang?.id,
+          diaDiemLayMau: data.tenDiemKho + ' - ' + this.formData.value.tenDvi,
         });
       }
     });
