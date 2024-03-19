@@ -30,6 +30,7 @@ import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {PREVIEW} from "../../../../../../constants/fileType";
 import {convertTienTobangChu} from "../../../../../../shared/commonFunction";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {SoLuongNhapHangService} from "../../../../../../services/qlnv-hang/nhap-hang/sl-nhap-hang.service";
 
 
 @Component({
@@ -131,6 +132,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     private dauThauService: DanhSachDauThauService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private dmTieuChuanService: DanhMucTieuChuanService,
+    private soLuongNhapHangService: SoLuongNhapHangService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, dauThauService);
     this.formData = this.fb.group({
@@ -400,6 +402,19 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     }
+    for (let item of this.listOfData) {
+      for (let child of item.children) {
+        let body = {
+          year: this.formData.value.namKhoach,
+          loaiVthh: this.formData.value.loaiVthh,
+          maDvi: child.maDvi
+        }
+        let soLuongDaLenKh = await this.soLuongNhapHangService.getSoLuongCtkhTheoQd(body);
+        if (soLuongDaLenKh != null) {
+          child.soLuongDaMua = soLuongDaLenKh.data;
+        }
+      }
+    }
   }
 
   isDetailPermission() {
@@ -485,6 +500,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   themMoiCuc(event, goiThau?: string) {
+    event.stopPropagation();
     if (!this.formData.get('loaiVthh').value) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng DTQG');
       return;
@@ -906,6 +922,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           let body = {
             id: this.idInput,
             trangThai: '',
+            ngayPduyet: this.formData.value.ngayPduyet
           };
           switch (this.formData.get('trangThai').value) {
             case STATUS.TU_CHOI_LDC:

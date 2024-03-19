@@ -132,7 +132,9 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
       tinhTrang: [],
       chatLuong: [],
       phuongPhap: [],
-
+      dviCungCap: [],
+      tenNganLoKho: [],
+      tgianNkho: [],
       dvt: []
     })
   }
@@ -457,6 +459,7 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
     const data = dataRes.data;
     this.formData.patchValue({
       soQdGiaoNvNh: data.soQd,
+      tgianNkho: data.tgianNkho,
       idQdGiaoNvNh: data.id,
       ngayQdGiaoNvNh: data.ngayQdinh,
       loaiVthh: data.loaiVthh,
@@ -466,7 +469,8 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
       moTaHangHoa: data.moTaHangHoa,
       soHd: data.soHd,
       ngayHd: data.hopDong.ngayKy,
-      donGiaHd: data.hopDong.donGia
+      donGiaHd: data.hopDong.donGia,
+      dviCungCap: data.hopDong?.tenNhaThau,
     });
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
@@ -509,7 +513,8 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
         tenLoKho: data.tenLoKho,
         soLuongDdiemGiaoNvNh: data.soLuong,
         soPhieuNhapKhoTamGui: data.phieuNhapKhoTamGui.soPhieuNhapKhoTamGui,
-        ngayNhapKhoTamGui: data.phieuNhapKhoTamGui.ngayNhapKho
+        ngayNhapKhoTamGui: data.phieuNhapKhoTamGui.ngayNhapKho,
+        tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
       });
     }
   }
