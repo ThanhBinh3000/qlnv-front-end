@@ -216,7 +216,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     ]);
     if (!this.isView) {
       const findItemByApDung = (array, apDung) => array.find(item => item.apDung === apDung);
-      const loaiHinhXuat = findItemByApDung(this.listLoaiHinhNx, 'XUAT_DG');
+      const loaiHinhXuat = findItemByApDung(this.listLoaiHinhNx, 'XUAT_TT');
       const KieuXuat = findItemByApDung(this.listKieuNx, 'XUAT_DG');
       this.formData.patchValue({
         loaiHinhNx: loaiHinhXuat?.ma,
