@@ -445,7 +445,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   }
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
-    this.formData.controls.soBbQd.setValidators([Validators.required]);
     // if (!this.checkHoanTatPhanBo()) return;
     let body = {
       ...this.formData.value,
@@ -462,7 +461,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     } else {
       this.formData.get("soQdPd").clearValidators();
     }
-    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo }
+    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null }
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
