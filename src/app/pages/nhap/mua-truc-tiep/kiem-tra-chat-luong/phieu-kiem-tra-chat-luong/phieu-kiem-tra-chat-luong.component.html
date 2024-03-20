@@ -158,7 +158,7 @@
                                             " (click)="redirectToChiTiet(false, dataPhieu.id)">
                                                 <i class="fa fa-pencil" title="Sửa"></i>
                                             </a>
-                                          <a *ngIf="dataPhieu.trangThai == STATUS.CHO_DUYET_LDCC  && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_DUYET_LDCC')
+                                          <a *ngIf="(dataPhieu.trangThai == STATUS.CHO_DUYET_LDCC || dataPhieu.trangThai == STATUS.CHO_DUYET_TK) && (userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_DUYET_LDCC') || userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_DUYET_THUKHO'))
                                             " (click)="redirectToChiTiet(true, dataPhieu.id)">
                                             <i class="icon htvbdh_tcdt_pheduyet" title="Phê duyệt"></i>
                                           </a>

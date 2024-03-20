@@ -387,7 +387,8 @@
                      [(ngModel)]="rowItemCGD.soBaoBi"/>
             </th>
             <th class="text-right">
-              <input nz-input class="money-input" currencyMask [options]="amount1" [min]="0"
+              <input nz-input class="money-input" currencyMask
+                     [options]="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? amount : amount1" [min]="0"
                      [(ngModel)]="rowItemCGD.trongLuongCaBi"/>
             </th>
             <th class="text-center">
@@ -406,9 +407,11 @@
               <td class="text-center">{{i + 1}}</td>
               <td class="text-center">{{data.maCan}}</td>
               <td class="text-right" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
-                {{data.soBaoBi|number : '1.2-2' : 'vi_VN'}}
+                {{data.soBaoBi|number:'1.0-0' : 'vi_VN'}}
               </td>
-              <td class="text-right">{{data.trongLuongCaBi|number : '1.2-2' : 'vi_VN'}}</td>
+              <td class="text-right">
+                {{ (!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) ? (data.trongLuongCaBi | number : '1.3-3' : 'vi_VN') : (data.trongLuongCaBi | number:'1.0-0' : 'vi_VN') }}
+              </td>
               <td class="text-center" *ngIf="!isView">
                 <a (click)="editRow(data)">
                   <i class=" fa fa-pencil"></i>
@@ -426,7 +429,7 @@
                        [(ngModel)]="data.soBaoBi"/>
               </td>
               <td class="text-right">
-                <input nz-input class="money-input" currencyMask [options]="amount1" [min]="0"
+                <input nz-input class="money-input" currencyMask [options]="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? amount : amount1" [min]="0"
                        [(ngModel)]="data.trongLuongCaBi"/>
               </td>
               <td class="text-center" *ngIf="!isView">
@@ -446,10 +449,10 @@
               <td></td>
               <td class="text-right text-blue">TỔNG</td>
               <td class="text-right bold text-blue" *ngIf="!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
-                {{ calcTong('soBaoBi', 'CGD')|number : '1.2-2' : 'vi_VN' }}
+                {{ calcTong('soBaoBi', 'CGD')|number:'1.0-0' : 'vi_VN' }}
               </td>
               <td class="text-right bold text-blue">
-                {{ calcTong('trongLuongCaBi', 'CGD')|number : '1.2-2' : 'vi_VN' }}
+                {{ (!loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) ? (calcTong('trongLuongCaBi', 'CGD') | number : '1.3-3' : 'vi_VN') : (calcTong('trongLuongCaBi', 'CGD') | number:'1.0-0' : 'vi_VN') }}
               </td>
               <td *ngIf="!isView"></td>
             </tr>
@@ -489,7 +492,7 @@
             <tr *ngIf="!data.isEdit">
               <td class="text-center">{{i + 1}}</td>
               <td class="text-center">{{data.maCan}}</td>
-              <td class="text-right">{{data.soBaoBi|number : '1.2-2' : 'vi_VN'}}</td>
+              <td class="text-right">{{data.soBaoBi|number:'1.0-0' : 'vi_VN'}}</td>
               <td class="text-center" *ngIf="!isView">
                 <a (click)="editRow(data)">
                   <i class=" fa fa-pencil"></i>
@@ -523,7 +526,7 @@
               <td></td>
               <td class="text-right text-blue">TỔNG</td>
               <td class="text-right bold text-blue">
-                {{ calcTong('soBaoBi', 'KQC')|number : '1.2-2' : 'vi_VN' }}
+                {{ calcTong('soBaoBi', 'KQC')|number:'1.0-0' : 'vi_VN' }}
               </td>
               <td *ngIf="!isView"></td>
             </tr>
@@ -549,7 +552,7 @@
             <nz-form-label [nzNoColon]="true"> Trọng lượng số bao không qua cân kể cả bì (kg)</nz-form-label>
             <nz-form-control nz-col>
               <span style="color: blue" *ngIf="formData.value.trongLuongBaoKcan">
-                {{formData.value.trongLuongBaoKcan|number : '1.2-2' : 'vi_VN'}}
+                {{formData.value.trongLuongBaoKcan|number:'1.0-0' : 'vi_VN'}}
               </span>
             </nz-form-control>
           </nz-form-item>
@@ -559,7 +562,7 @@
             <nz-form-label [nzNoColon]="true"> Tổng số lượng bao bì</nz-form-label>
             <nz-form-control nz-col>
               <span style="color: blue" *ngIf="formData.value.tongSlBaoBi">
-                {{formData.value.tongSlBaoBi|number : '1.2-2' : 'vi_VN'}}
+                {{formData.value.tongSlBaoBi|number:'1.0-0' : 'vi_VN'}}
               </span>
             </nz-form-control>
           </nz-form-item>
@@ -579,7 +582,7 @@
             <nz-form-label [nzNoColon]="true"> Tổng trọng lượng kể cả bao bì (Kg)</nz-form-label>
             <nz-form-control nz-col>
               <span style="color: blue" *ngIf="formData.value.tongTrongLuongCaBi">
-                {{formData.value.tongTrongLuongCaBi|number : '1.2-2' : 'vi_VN'}}
+                {{formData.value.tongTrongLuongCaBi|number:'1.0-0' : 'vi_VN'}}
               </span>
             </nz-form-control>
           </nz-form-item>
@@ -589,7 +592,7 @@
             <nz-form-label [nzNoColon]="true"> Tổng trọng lượng hàng đã trừ bì (Kg) (viết bằng số)</nz-form-label>
             <nz-form-control nz-col>
               <span style="color: blue" *ngIf="formData.value.tongTrongTruBi">
-                {{formData.value.tongTrongTruBi|number : '1.2-2' : 'vi_VN'}}
+                {{formData.value.tongTrongTruBi|number:'1.0-0' : 'vi_VN'}}
               </span>
             </nz-form-control>
           </nz-form-item>
@@ -611,7 +614,7 @@
             <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất (viết bằng số)</nz-form-label>
             <nz-form-control nz-col>
               <span style="color: blue" *ngIf="formData.value.tongTrongLuongCaBi">
-                {{formData.value.tongTrongLuongCaBi|number : '1.2-2' : 'vi_VN'}} {{formData.value.donViTinh}}
+                {{formData.value.tongTrongLuongCaBi|number:'1.0-0' : 'vi_VN'}} {{formData.value.donViTinh}}
               </span>
             </nz-form-control>
           </nz-form-item>

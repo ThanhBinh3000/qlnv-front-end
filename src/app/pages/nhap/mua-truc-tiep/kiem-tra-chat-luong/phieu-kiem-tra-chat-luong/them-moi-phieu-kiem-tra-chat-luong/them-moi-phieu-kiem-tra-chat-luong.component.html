@@ -9,18 +9,18 @@
       <span>In/xem trước</span>
     </button>
     <button class="btn btn-sub xanh-nhat" type="button"
-            *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_THEM') "
+            *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_TK) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_THEM') "
             (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub do" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_DUYET_LDCC')"
+    <button type="button" class="btn btn-sub do" *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC || formData.value.trangThai == STATUS.CHO_DUYET_TK) && (userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_DUYET_LDCC') || userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_DUYET_THUKHO'))"
             (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
     <button class="btn btn-sub xanh-nhat"
-            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC  && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_DUYET_LDCC') "
+            *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC || formData.value.trangThai == STATUS.CHO_DUYET_TK)  && (userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_DUYET_LDCC') || userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_PKTCL_DUYET_THUKHO')) "
             (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>

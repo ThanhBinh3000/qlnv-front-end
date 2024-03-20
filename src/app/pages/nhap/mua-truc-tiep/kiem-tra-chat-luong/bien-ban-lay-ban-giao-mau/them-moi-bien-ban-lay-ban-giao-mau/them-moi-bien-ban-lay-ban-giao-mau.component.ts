@@ -108,7 +108,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
       soHd: [''],
       ngayHd: [''],
       ngayLayMau: [dayjs().format('YYYY-MM-DD')],
-      dviKiemNghiem: ['', [Validators.required]],
+      dviKiemNghiem: ['Phòng KTBQ', [Validators.required]],
       diaDiemLayMau: ['', [Validators.required]],
       soBbNhapDayKho: ['',],
       idBbNhapDayKho: ['',],
@@ -227,6 +227,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
         }
         body.fileDinhKems = this.listFile;
         body.bbanLayMauDtlList = this.viewTableDaiDien;
+        body.chiTieuKiemTra = this.chiTieuChatLuongs.filter(item => item.checked).map(f => `${f.id}-${f.giaTri}`).join(";")
         body.ppLayMau = this.phuongPhapLayMaus.filter(item => item.checked).map(f => `${f.id}-${f.giaTri}`).join(",")
         let res;
         if (this.formData.get('id').value > 0) {
@@ -450,6 +451,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
       }
       if (data.chiTieuKiemTra) {
         const dschiTieuKiemTra = data.chiTieuKiemTra.split(",").map(f => ({ id: f.split("-")[0], giaTri: f.split("-")[1] }))
+        console.log(dschiTieuKiemTra, "dschiTieuKiemTra")
         this.chiTieuChatLuongs = this.chiTieuChatLuongs.map(pp => {
           return {
             ...pp,
@@ -610,6 +612,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
           idBbNhapDayKho: data.bienBanNhapDayKho[0]?.id,
           ngayKetThucNhap: data.bienBanNhapDayKho[0]?.ngayKthucNhap,
           soBangKe: data.bienBanNhapDayKho[0]?.soBangKe,
+          diaDiemLayMau: data.tenDiemKho + ' - ' + this.formData.value.tenDvi,
         });
         this.tenNganLoKho = data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho;
         console.log(data.bienBanNhapDayKho[0]?.ngayKthucNhap, 888888);

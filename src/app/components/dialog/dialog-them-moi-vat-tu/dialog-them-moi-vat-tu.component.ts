@@ -21,6 +21,7 @@ import {STATUS} from "../../../constants/status";
 import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import {SoLuongNhapHangService} from "../../../services/qlnv-hang/nhap-hang/sl-nhap-hang.service";
 import {cloneDeep} from 'lodash';
+import {da} from "date-fns/locale";
 @Component({
   selector: 'dialog-them-moi-vat-tu',
   templateUrl: './dialog-them-moi-vat-tu.component.html',
@@ -122,7 +123,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Địa điểm nhập hàng và số lượng không được để trống.")
       return;
     }
-    // if (this.validateGiaDeXuat()) {
+    if (this.validateGiaDeXuat()) {
       this.listOfData.forEach(item => {
         item.goiThau = this.formData.get('goiThau').value;
       })
@@ -130,7 +131,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         children: this.listOfData,
       })
       this._modalRef.close(this.formData);
-    // }
+    }
   }
 
   onCancel() {
@@ -327,7 +328,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.listDiemKho.push(item);
       }
     }
-    console.log(res, 'aaa')
     let bodyPag = {
       namKeHoach: this.namKhoach,
       loaiVthh: this.loaiVthh,
@@ -339,7 +339,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
     if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
       const data = pag.data[0];
-      console.log(data, 'aaa')
       let donGiaVatQd = 0;
       if (data != null && data.giaQdDcTcdtVat != null && data.giaQdDcTcdtVat > 0) {
         donGiaVatQd = data.giaQdDcTcdtVat
@@ -511,8 +510,23 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   validateGiaDeXuat() {
     for (let chiCuc of this.listOfData) {
-      if (chiCuc.giaToiDa == null) {
-        this.notification.error(MESSAGE.ERROR, chiCuc.tenDvi + ': Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá mua tối đa bạn mới thêm được địa điểm nhập kho vì giá mua đề xuất ở đây nhập vào phải <= giá mua tối đa.');
+      // if (chiCuc.giaToiDa == null) {
+      //   this.notification.error(MESSAGE.ERROR, chiCuc.tenDvi + ': Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá mua tối đa bạn mới thêm được địa điểm nhập kho vì giá mua đề xuất ở đây nhập vào phải <= giá mua tối đa.');
+      //   return false;
+      // } else {
+      //   return true;
+      // }
+      let tongSl = 0;
+      for (let data of this.dataAll) {
+        if (this.formData.value.goiThau !=  data.goiThau)
+        for (let chiCucAll of data.children) {
+          if (chiCucAll.maDvi == chiCuc.maDvi) {
+            tongSl += chiCucAll.soLuong
+          }
+        }
+      }
+      if (tongSl + chiCuc.soLuong > chiCuc.soLuongTheoChiTieu - chiCuc.soLuongDaMua) {
+        this.notification.error(MESSAGE.ERROR, chiCuc.tenDvi + ': Tổng số đề xuất vượt quá số lượng cho phép.');
         return false;
       } else {
         return true;

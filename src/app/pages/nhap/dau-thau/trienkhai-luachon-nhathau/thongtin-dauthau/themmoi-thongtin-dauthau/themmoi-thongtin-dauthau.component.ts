@@ -1,32 +1,33 @@
-import { DatePipe, formatDate } from '@angular/common';
-import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import dayjs from 'dayjs';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DATEPICKER_CONFIG, LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { dauThauGoiThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/dauThauGoiThau.service';
-import { DonviLienQuanService } from 'src/app/services/donviLienquan.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { STATUS } from "../../../../../../constants/status";
-import { cloneDeep, chain } from 'lodash';
+import {DatePipe, formatDate} from '@angular/common';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges,} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {DATEPICKER_CONFIG, LIST_VAT_TU_HANG_HOA} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DonviLienQuanService} from 'src/app/services/donviLienquan.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {
+  QuyetDinhPheDuyetKeHoachLCNTService
+} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {STATUS} from "../../../../../../constants/status";
+import {chain, cloneDeep} from 'lodash';
 import {
   ThongTinDauThauService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
-import { NzModalService } from "ng-zorro-antd/modal";
+import {NzModalService} from "ng-zorro-antd/modal";
 import {
   DialogThongBaoThongTinDauThauComponent
 } from "../../../../../../components/dialog/dialog-thong-bao-thong-tin-dau-thau/dialog-thong-bao-thong-tin-dau-thau.component";
 import {PREVIEW} from "../../../../../../constants/fileType";
-import { saveAs } from "file-saver";
+import {saveAs} from "file-saver";
 import printJS from "print-js";
 import {CurrencyMaskInputMode} from "ngx-currency";
+
 @Component({
   selector: 'app-themmoi-thongtin-dauthau',
   templateUrl: './themmoi-thongtin-dauthau.component.html',
@@ -854,15 +855,10 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
 
   calcTongThanhTienKq() {
     if (this.listOfData) {
-      let sum = 0
-      this.listOfData.forEach(item => {
-        const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.thanhTienNhaThau;
-          return prev;
-        }, 0);
-        sum += sumChild;
-      })
-      return sum;
+      return this.listOfData.reduce((prev, cur) => {
+        prev += cur.thanhTienNhaThau;
+        return prev;
+      }, 0);
     }
   }
 

@@ -342,6 +342,7 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
   }
 
   tinhTongGtriDvi (){
+    console.log(this.listDataGroup)
     for (let dvi of this.listDataGroup) {
       dvi.gtriXuatCuuTro = 0
       dvi.gtriXuatHoTro = 0
@@ -379,6 +380,20 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
     for (let dvi of this.listDataGroup) {
       for (let nhomMh of dvi.children) {
         if (nhomMh.coNhieuMatHang == true) {
+          nhomMh.slXuatTong = 0
+          nhomMh.slXuatCuuTro = 0
+          nhomMh.slXuatHoTro = 0
+          nhomMh.slXuatVienTro = 0
+          nhomMh.slXuatPvuQp = 0
+          nhomMh.slXuatPvuAnNinh = 0
+          nhomMh.slXuatKhac = 0
+          nhomMh.slLuyKeTong = 0
+          nhomMh.slLuyKeCuuTro = 0
+          nhomMh.slLuyKeHoTro = 0
+          nhomMh.slLuyKeVienTro = 0
+          nhomMh.slLuyKePvuQp = 0
+          nhomMh.slLuyKePvuAnNinh = 0
+          nhomMh.slLuyKeKhac = 0
           nhomMh.gtriXuatCuuTro = 0
           nhomMh.gtriXuatHoTro = 0
           nhomMh.gtriXuatVienTro = 0
@@ -394,6 +409,30 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
           nhomMh.gtriLuyKeKhac = 0
           nhomMh.gtriLuyKeTong = 0
           for (let matHang of nhomMh.children) {
+            matHang.gtriXuatTong = matHang.gtriXuatCuuTro +
+              matHang.gtriXuatHoTro +
+              matHang.gtriXuatVienTro +
+              matHang.gtriXuatPvuQp +
+              matHang.gtriXuatPvuAnNinh +
+              matHang.gtriXuatKhac;
+            matHang.slXuatTong = matHang.slXuatCuuTro +
+              matHang.slXuatHoTro +
+              matHang.slXuatVienTro +
+              matHang.slXuatPvuQp +
+              matHang.slXuatPvuAnNinh +
+              matHang.slXuatKhac;
+            matHang.gtriLuyKeTong = matHang.gtriLuyKeCuuTro +
+              matHang.gtriLuyKeHoTro +
+              matHang.gtriLuyKeVienTro +
+              matHang.gtriLuyKePvuQp +
+              matHang.gtriLuyKePvuAnNinh +
+              matHang.gtriLuyKeKhac;
+            matHang.slLuyKeTong = matHang.slLuyKeCuuTro +
+              matHang.slLuyKeHoTro +
+              matHang.slLuyKeVienTro +
+              matHang.slLuyKePvuQp +
+              matHang.slLuyKePvuAnNinh +
+              matHang.slLuyKeKhac;
             nhomMh.gtriXuatCuuTro += this.nvl(matHang.gtriXuatCuuTro)
             nhomMh.gtriXuatHoTro += this.nvl(matHang.gtriXuatHoTro)
             nhomMh.gtriXuatVienTro += this.nvl(matHang.gtriXuatVienTro)
@@ -408,6 +447,20 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
             nhomMh.gtriLuyKePvuAnNinh += this.nvl(matHang.gtriLuyKePvuAnNinh)
             nhomMh.gtriLuyKeKhac += this.nvl(matHang.gtriLuyKeKhac)
             nhomMh.gtriLuyKeTong += this.nvl(matHang.gtriLuyKeTong)
+            nhomMh.slXuatCuuTro += this.nvl(matHang.slXuatCuuTro)
+            nhomMh.slXuatHoTro += this.nvl(matHang.slXuatHoTro)
+            nhomMh.slXuatVienTro += this.nvl(matHang.slXuatVienTro)
+            nhomMh.slXuatPvuQp += this.nvl(matHang.slXuatPvuQp)
+            nhomMh.slXuatPvuAnNinh += this.nvl(matHang.slXuatPvuAnNinh)
+            nhomMh.slXuatKhac += this.nvl(matHang.slXuatKhac)
+            nhomMh.slXuatTong += this.nvl(matHang.slXuatTong)
+            nhomMh.slLuyKeCuuTro += this.nvl(matHang.slLuyKeCuuTro)
+            nhomMh.slLuyKeHoTro += this.nvl(matHang.slLuyKeHoTro)
+            nhomMh.slLuyKeVienTro += this.nvl(matHang.slLuyKeVienTro)
+            nhomMh.slLuyKePvuQp += this.nvl(matHang.slLuyKePvuQp)
+            nhomMh.slLuyKePvuAnNinh += this.nvl(matHang.slLuyKePvuAnNinh)
+            nhomMh.slLuyKeKhac += this.nvl(matHang.slLuyKeKhac)
+            nhomMh.slLuyKeTong += this.nvl(matHang.slLuyKeTong)
           }
         }
       }
@@ -418,6 +471,18 @@ export class ThemMoiSlGtriHangDtqgXcKThuTienComponent extends Base2Component imp
     await this.onFileSelected(event);
     if(this.dataImport.length > 0){
       this.listDataGroup = this.dataImport
+      for (let i = 0; i < this.listDataGroup.length; i++) {
+        this.itemRowMatHang[i] = [];
+        this.itemRowMatHangEdit[i] = [];
+        this.itemRowNhomMhEdit[i] = [];
+        for (let y = 0; y < this.listDataGroup[i].children.length; y++) {
+          this.itemRowMatHang[i][y] = new slGtriHangDtqgXcKThuTien();
+          this.itemRowMatHangEdit[i][y] = [];
+          this.itemRowNhomMhEdit[i][y] = this.listDataGroup[i].children[y];
+        }
+      }
+      this.tinhTongGtriNhomMh();
+      this.tinhTongGtriDvi();
     }
   }
 
