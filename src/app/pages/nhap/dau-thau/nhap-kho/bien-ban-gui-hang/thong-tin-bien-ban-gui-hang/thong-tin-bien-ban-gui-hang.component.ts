@@ -593,7 +593,7 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
     this.listOfData.forEach(s => s.isEdit = false);
     let currentRow = this.listOfData.find(s => s.idVirtual == data.idVirtual);
     currentRow.isEdit = true;
-    this.listOfDataShow = _.chain(this.listOfData).groupBy('loaiBien').map((value, key) => ({
+    this.listOfDataShow = _.chain(this.listOfData).groupBy('loaiBen').map((value, key) => ({
       loaiBen: key,
       dataChild: value
     })).value();
