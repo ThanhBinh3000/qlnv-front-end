@@ -26,6 +26,7 @@ import {
   DialogThemMoiGoiThauComponent
 } from "../../../../../../components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {SoLuongNhapHangService} from "../../../../../../services/qlnv-hang/nhap-hang/sl-nhap-hang.service";
 
 @Component({
   selector: "app-themmoi-kehoach-lcnt-vt",
@@ -86,6 +87,7 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
     private danhMucService: DanhMucService,
     private dauThauService: DanhSachDauThauService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
+    private soLuongNhapHangService: SoLuongNhapHangService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, dauThauService);
     this.formData = this.fb.group({
@@ -231,6 +233,19 @@ export class ThemmoiKehoachLcntVtComponent extends Base2Component implements OnI
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
+    }
+    for (let item of this.listOfData) {
+      for (let child of item.children) {
+        let body = {
+          year: this.formData.value.namKhoach,
+          loaiVthh: this.formData.value.loaiVthh,
+          maDvi: child.maDvi
+        }
+        let soLuongDaLenKh = await this.soLuongNhapHangService.getSoLuongCtkhTheoQd(body);
+        if (soLuongDaLenKh != null) {
+          child.soLuongDaMua = soLuongDaLenKh.data;
+        }
+      }
     }
   }
 
