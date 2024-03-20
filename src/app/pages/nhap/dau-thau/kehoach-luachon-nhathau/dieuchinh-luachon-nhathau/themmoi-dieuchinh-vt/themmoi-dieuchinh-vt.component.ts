@@ -253,8 +253,8 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
           item.soQd = item.soQdDc
         }
         item.thoiDiemKy = item.ngayQd ? formatDate(item.ngayQd, "dd/MM/yyyy", 'en-US') : ''
-        item.trangThaiGia = item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length > 0 ? 'Dừng thực hiện để điều chỉnh giá' : '';
-        item.loai = item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length > 0 ? 'Điều chỉnh giá' : ''
+        item.trangThaiGia = item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia?.length > 0 ? 'Dừng thực hiện để điều chỉnh giá' : '';
+        item.loai = item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia?.length > 0 ? 'Điều chỉnh giá' : ''
       })
     }
     this.spinner.hide();
