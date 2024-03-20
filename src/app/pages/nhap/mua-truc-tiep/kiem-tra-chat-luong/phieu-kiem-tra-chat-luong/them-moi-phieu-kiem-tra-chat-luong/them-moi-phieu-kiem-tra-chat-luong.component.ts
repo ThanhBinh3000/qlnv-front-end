@@ -453,7 +453,13 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
     let mess = ''
     switch (this.formData.get('trangThai').value) {
       case STATUS.TU_CHOI_LDCC:
+      case STATUS.TU_CHOI_TK:
       case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TK;
+        mess = 'Bạn có muốn gửi duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_TK: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         mess = 'Bạn có muốn gửi duyệt ?'
         break;
@@ -504,6 +510,20 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
+    let trangThai;
+    let mess;
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.TU_CHOI_LDCC;
+        mess = 'Bạn có muốn từ chối ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_TK: {
+        trangThai = STATUS.TU_CHOI_TK;
+        mess = 'Bạn có muốn từ chối ?'
+        break;
+      }
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -520,7 +540,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
           let body = {
             id: this.id,
             lyDo: text,
-            trangThai: STATUS.TU_CHOI_LDCC,
+            trangThai: trangThai,
           };
           let res =
             await this.phieuKtraCluongService.approve(
