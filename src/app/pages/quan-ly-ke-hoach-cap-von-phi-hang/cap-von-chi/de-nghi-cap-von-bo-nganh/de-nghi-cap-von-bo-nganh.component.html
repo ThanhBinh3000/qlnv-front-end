@@ -160,7 +160,7 @@
           <td class="text-right">{{ data.ycCapThem  | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a *ngIf="data.trangThaiId !== STATUS.DANG_NHAP_DU_LIEU" (click)="detail(data, true)">
+            <a *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN_XEM')" (click)="detail(data, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
