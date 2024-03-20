@@ -342,7 +342,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
-      this.formData.controls["ghiChu"].setValidators([Validators.required]);
+      // this.formData.controls["ghiChu"].setValidators([Validators.required]);
     } else {
       this.formData.controls["namHd"].clearValidators();
       this.formData.controls["soQdKh"].clearValidators();
@@ -372,7 +372,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       this.formData.controls["tenCloaiVthh"].clearValidators();
       this.formData.controls["cloaiVthh"].clearValidators();
       this.formData.controls["moTaHangHoa"].clearValidators();
-      this.formData.controls["ghiChu"].clearValidators();
+      // this.formData.controls["ghiChu"].clearValidators();
     }
   }
 
@@ -655,6 +655,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
 
   changeDviCungCap($event: any) {
     let dViCc = this.listDviLquan.find(s => s.id === $event);
+    console.log(dViCc, "dViCc")
     if (dViCc) {
       this.formData.patchValue({
         // idDviMua: dViCc.id,

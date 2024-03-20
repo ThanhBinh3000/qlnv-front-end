@@ -162,19 +162,41 @@ export class ThongTinBienBanKetThucNhapKhacNhapKhoVatTuComponent extends Base2Co
         }
     }
 
-    async loadChiTiet(id: number) {
-        await this.spinner.show()
-        if (id) {
-            let data = await this.detail(id);
-            if (data) {
-                this.danhSach = data.hhNkBBKetThucNKDtl
-                this.formData.patchValue(data);
-                this.fileDinhKemReq = data.fileDinhKems
-            }
+  async loadChiTiet(id: number) {
+    await this.spinner.show()
+    if (id) {
+      let data = await this.detail(id);
+      if (data) {
+        console.log(data)
+        this.danhSach = data.hhNkBBKetThucNKDtl
+        this.formData.patchValue(data);
+        this.fileDinhKemReq = data.fileDinhKems
+        this.formData.patchValue({
+          tenNganLoKho: data.tenLoKho ? data.tenLoKho + " - " + data.tenNganKho : data.tenNganKho,
+          tenLoKho: data.tenLoKho,
+          maLoKho: data.maLoKho,
+          tenNganKho: data.tenNganKho,
+          maNganKho: data.maNganKho,
+          tenNhaKho: data.tenNhaKho,
+          maNhaKho: data.maNhaKho,
+          tenDiemKho: data.tenDiemKho,
+          maDiemKho: data.maDiemKho,
 
-        }
-        await this.spinner.hide();
+          loaiVthh: data.loaiVthh,
+          tenLoaiVthh: data.tenLoaiVthh,
+          cloaiVthh: data.cloaiVthh,
+          tenCloaiVthh: data.tenCloaiVthh,
+          tichLuongKhaDung: data.tichLuongKd,
+          donViTinh: data.tenDonViTinh,
+          idKeHoachDtl: data.id,
+
+          soBBLayMau: data.bbLayMau
+        });
+      }
+
     }
+    await this.spinner.hide();
+  }
 
     async getDanhSachTT(data) {
         const body = {
