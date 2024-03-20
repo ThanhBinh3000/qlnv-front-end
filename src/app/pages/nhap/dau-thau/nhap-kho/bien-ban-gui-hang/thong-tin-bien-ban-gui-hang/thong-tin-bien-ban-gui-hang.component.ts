@@ -1,33 +1,41 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import dayjs from 'dayjs';
-import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { BienBanGuiHang, ChiTiet } from 'src/app/models/BienBanGuiHang';
-import { QuyetDinhNhapXuat } from 'src/app/models/QuyetDinhNhapXuat';
-import { UserLogin } from 'src/app/models/userlogin';
-import { BienBanGuiHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/bienBanGuiHang.service';
-import { PhieuNhapKhoTamGuiService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/phieuNhapKhoTamGui.service';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
-import { UserService } from 'src/app/services/user.service';
-import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
-import { PhieuNhapKhoTamGui } from './../../../../../../models/PhieuNhapKhoTamGui';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {BienBanGuiHang, ChiTiet} from 'src/app/models/BienBanGuiHang';
+import {QuyetDinhNhapXuat} from 'src/app/models/QuyetDinhNhapXuat';
+import {UserLogin} from 'src/app/models/userlogin';
+import {BienBanGuiHangService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/bienBanGuiHang.service';
+import {
+  PhieuNhapKhoTamGuiService
+} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/phieuNhapKhoTamGui.service';
+import {
+  QuyetDinhGiaoNhapHangService
+} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
+import {ThongTinHopDongService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
+import {UserService} from 'src/app/services/user.service';
+import {thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
+import {PhieuNhapKhoTamGui} from './../../../../../../models/PhieuNhapKhoTamGui';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {
   DialogQuyetDinhGiaoChiTieuComponent
 } from "../../../../../../components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component";
-import { BaseComponent } from 'src/app/components/base/base.component';
-import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { isEmpty } from 'lodash';
-import { HelperService } from 'src/app/services/helper.service';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
+import {BaseComponent} from 'src/app/components/base/base.component';
+import {
+  DialogTableSelectionComponent
+} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import {isEmpty} from 'lodash';
+import {HelperService} from 'src/app/services/helper.service';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {chain} from 'lodash'
+import _ from 'lodash';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-gui-hang',
@@ -62,6 +70,13 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
   dataTable: any[] = [];
   previewName: string = '13. Biên bản gửi hàng';
   templateName = "Biên bản gửi hàng";
+  idPhieuGiaoNhan: number = 0;
+  isViewPhieuGiaoNhan: boolean = false;
+  listOfData: any[] = [];
+  listOfDataShow: any[] = [];
+  rowItemNhan: any = {};
+  rowItemGiao: any = {};
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -135,7 +150,10 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
       dviCungCap: [],
       tenNganLoKho: [],
       tgianNkho: [],
-      dvt: []
+      dvt: [],
+      canBoTvqt: [''],
+      soBienBan: [''],
+      slLayMau: [],
     })
   }
 
@@ -172,6 +190,7 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
       trangThai: this.STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
       tenNguoiTao: this.userInfo.TEN_DAY_DU,
+      canBoTvqt: this.userInfo.TEN_DAY_DU,
       benNhan: this.userInfo.TEN_DVI,
     });
     if (this.idQdGiaoNvNh) {
@@ -193,7 +212,11 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.dataTable = data.children;
+          this.listOfData = data.children;
+          this.listOfDataShow = chain(this.dataTableAll).groupBy('loaiBen').map((value, key) => ({
+            loaiBen: key,
+            dataChild: value
+          })).value();
           await this.bindingDataQd(data.idQdGiaoNvNh);
           let ddNhap = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
           this.bindingDataDdNhap(ddNhap);
@@ -351,7 +374,7 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
     }
     let body = this.formData.value;
     body.fileDinhKems = this.listFileDinhKem;
-    body.children = this.dataTable;
+    body.children = this.listOfData;
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.bienBanGuiHangService.update(body);
@@ -393,27 +416,6 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
     return thongTinTrangThaiNhap(trangThai);
   }
 
-  addDaiDien(type: string) {
-    if (type === '00') {
-      this.benNhan.loaiBen = type;
-      this.dataTable.push(this.benNhan);
-    } else {
-      this.benGiao.loaiBen = type;
-      this.dataTable.push(this.benGiao);
-    }
-    this.clearDaiDien(type);
-  }
-
-  clearDaiDien(type: string) {
-    if (type === '00') {
-      this.benNhan = new ChiTiet();
-    } else {
-      this.benGiao = new ChiTiet();
-    }
-  }
-  deleteBienBan(i: number) {
-    this.dataTable.splice(i, 1);
-  }
 
   async openDialogSoQd() {
     let body = {
@@ -474,9 +476,10 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
     });
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
-      this.listDiaDiemNhap = dataChiCuc[0].children.filter(item => !isEmpty(item.phieuNhapKhoTamGui));
+      this.listDiaDiemNhap = dataChiCuc.reduce((accumulator, currentItem) => {
+        return accumulator.concat(currentItem.children.filter(child => !isEmpty(child.phieuNhapKhoTamGui)));
+      }, []);
     }
-
     await this.spinner.hide();
   }
 
@@ -501,6 +504,14 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
 
   async bindingDataDdNhap(data) {
     if (data) {
+      const filteredArray = this.listDiaDiemNhap
+        .filter(item => item.phieuNhapKhoTamGui)
+        .map(item => item.phieuNhapKhoTamGui)
+        .filter(s => s.maDiemKho === data.maDiemKho && s.maNhaKho === data.maNhaKho && s.maNganKho === data.maNganKho && s.maLoKho === data.maLoKho);
+      filteredArray.forEach(child => {
+        child.soLuongGiaoNhan = child.children.map(s => s.soLuongThucNhap).reduce((prev, cur) => prev + cur, 0);
+      });
+      this.dataTable = filteredArray;
       this.formData.patchValue({
         idDdiemGiaoNvNh: data.id,
         maDiemKho: data.maDiemKho,
@@ -512,11 +523,104 @@ export class ThongTinBienBanGuiHangComponent extends Base2Component implements O
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
         soLuongDdiemGiaoNvNh: data.soLuong,
-        soPhieuNhapKhoTamGui: data.phieuNhapKhoTamGui.soPhieuNhapKhoTamGui,
-        ngayNhapKhoTamGui: data.phieuNhapKhoTamGui.ngayNhapKho,
         tenNganLoKho: data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho,
+        keToanTruong: this.dataTable[0].keToanTruong,
+        tenNguoiPduyet: this.dataTable[0].tenNguoiPduyet
       });
     }
   }
 
+  calcTong(column) {
+    if (this.dataTable) {
+      return this.dataTable.reduce((sum, cur) => sum + (cur[column] || 0), 0);
+    }
+  }
+
+  addRow(item, name) {
+      const data = {...item, loaiBen: name, idVirtual: new Date().getTime()};
+      this.listOfData.push(data);
+      this.listOfDataShow = _.chain(this.listOfData)
+        .groupBy('loaiBen').map((value, key) => ({loaiBen: key, dataChild: value})).value();
+      const resetItems = {
+        '00': 'rowItemNhan',
+        '01': 'rowItemGiao',
+      };
+      if (resetItems[name]) {
+        this[resetItems[name]] = {};
+      }
+  }
+
+  findTableName(name) {
+    if (!this.listOfDataShow) {
+      return null;
+    }
+    return this.listOfDataShow.find(({loaiBen}) => loaiBen === name) || null;
+  }
+
+  clearRow(name) {
+    const resetItems = {
+      '00': 'rowItemNhan',
+      '01': 'rowItemGiao',
+    };
+    const resetItem = resetItems[name];
+    if (resetItem) {
+      this[resetItem] = {};
+    }
+  }
+
+  deleteRow(idVirtual) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.listOfData = this.listOfData.filter(item => item.idVirtual != idVirtual);
+          this.listOfDataShow = _.chain(this.listOfData)
+            .groupBy('loaiBen').map((value, key) => ({loaiBen: key, dataChild: value})).value();
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
+
+  editRow(data: any) {
+    this.listOfData.forEach(s => s.isEdit = false);
+    let currentRow = this.listOfData.find(s => s.idVirtual == data.idVirtual);
+    currentRow.isEdit = true;
+    this.listOfDataShow = _.chain(this.listOfData).groupBy('loaiBen').map((value, key) => ({
+      loaiBen: key,
+      dataChild: value
+    })).value();
+  }
+
+  saveRow(data: any, index: number) {
+    this.updateEditState(data, index, false);
+  }
+
+  cancelEdit(data: any, index: number) {
+    this.updateEditState(data, index, false);
+  }
+
+  updateEditState(data: any, index: number, isEdit: boolean) {
+    const rows = this.listOfData.filter(s => s.loaiBen == data.loaiBen);
+    if (rows[index]) {
+      rows[index].isEdit = isEdit;
+    }
+  }
+
+  openModal(id: number) {
+    this.idPhieuGiaoNhan = id;
+    this.isViewPhieuGiaoNhan = true;
+  }
+
+  closeModal() {
+    this.idPhieuGiaoNhan = null;
+    this.isViewPhieuGiaoNhan = false;
+  }
 }

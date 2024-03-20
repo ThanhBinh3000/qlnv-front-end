@@ -165,8 +165,8 @@ export class ChiTietDieuChinhBanTrucTiepComponent extends Base2Component impleme
         this.danhSachQdPdKeHoach = res.data.content.map(item => ({
           soQd: item.soQdDc || item.soQdPd,
           ngayKy: item.ngayKyDc || item.ngayKyQd,
-          trangThaiGia: item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length > 0 ? 'Dừng thực hiện để điều chỉnh giá' : '',
-          loai: item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length > 0 ? 'Điều chỉnh giá' : '',
+          trangThaiGia: item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia?.length > 0 ? 'Dừng thực hiện để điều chỉnh giá' : '',
+          loai: item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia?.length > 0 ? 'Điều chỉnh giá' : '',
           ...item
         }));
         const idGocSet = new Set(this.danhSachDieuChinh.map(item => item.idGoc));
