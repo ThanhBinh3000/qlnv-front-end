@@ -340,56 +340,54 @@
       </div>
     </form>
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-      <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-        <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
-                  [nzShowPagination]="false">
-          <thead>
-          <tr>
-            <th rowSpan="2" nzWidth="50px" class="text-center wrap">STT <br>(A)</th>
-            <th rowSpan="2" class="text-center">Tên, nhãn hiệu, quy cách phẩm chất hàng hóa <br>(B)</th>
-            <th rowSpan="2" class="text-center">Mã số <br>(C)</th>
-            <th rowSpan="2" class="text-center">Đơn vị tính <br>(D)</th>
-            <th colSpan="2" class="text-center">Số lượng</th>
-            <th rowSpan="2" class="text-center">Đơn giá <br>(3)</th>
-            <th rowSpan="2" class="text-center">Thành tiền <br>(4) = (2) x (3)</th>
-            <th rowSpan="2" nzWidth="100px" class="text-center wrap" *ngIf="!isView">
-              Hành động
-            </th>
-          </tr>
-          <tr>
-            <th class="text-center">Theo chứng từ <br>(1)</th>
-            <th class="text-center">Thực Xuất <br>(2)</th>
-          </tr>
-          <tr></tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="text-center">1</td>
-            <td class="text-left">{{formData.value.tenCloaiVthh}}</td>
-            <td class="text-right">
-              <input nz-input formControlName="maSo" [readonly]="isView"/>
-            </td>
-            <td class="text-left">{{formData.value.donViTinh}}</td>
-            <td>
-              <input class="money-input" currencyMask [options]="amount1" [min]="0"
-                     formControlName="theoChungTu" readonly/>
-            </td>
-            <td>
-              <input class="money-input" currencyMask [options]="amount1" [min]="0"
-                     formControlName="thucXuat" (ngModelChange)="onChangeTien($event)"
-                     [readonly]="isView"/>
-            </td>
-            <td class="text-right">{{formData.value.donGia|number:globals.numberFormat:globals.locale}}</td>
-            <td class="text-right">{{formData.value.thanhTien|number:globals.numberFormat:globals.locale}}</td>
-            <td class="text-center" *ngIf="!isView">
-              <a (click)="clear()">
-                <i class="fa fa-refresh"></i>
-              </a>
-            </td>
-          </tr>
-          </tbody>
-        </nz-table>
-      </nz-card>
+      <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+                [nzShowPagination]="false">
+        <thead>
+        <tr>
+          <th rowSpan="2" nzWidth="50px" class="text-center wrap">STT <br>(A)</th>
+          <th rowSpan="2" class="text-center">Tên, nhãn hiệu, quy cách phẩm chất hàng hóa <br>(B)</th>
+          <th rowSpan="2" class="text-center">Mã số <br>(C)</th>
+          <th rowSpan="2" class="text-center">Đơn vị tính <br>(D)</th>
+          <th colSpan="2" class="text-center">Số lượng</th>
+          <th rowSpan="2" class="text-center">Đơn giá <br>(3)</th>
+          <th rowSpan="2" class="text-center">Thành tiền <br>(4) = (2) x (3)</th>
+          <th rowSpan="2" nzWidth="100px" class="text-center wrap" *ngIf="!isView">
+            Hành động
+          </th>
+        </tr>
+        <tr>
+          <th class="text-center">Theo chứng từ <br>(1)</th>
+          <th class="text-center">Thực Xuất <br>(2)</th>
+        </tr>
+        <tr></tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="text-center">1</td>
+          <td class="text-left">{{formData.value.tenCloaiVthh}}</td>
+          <td class="text-right">
+            <input nz-input formControlName="maSo" [readonly]="isView"/>
+          </td>
+          <td class="text-left">{{formData.value.donViTinh}}</td>
+          <td>
+            <input class="money-input" currencyMask [options]="amount" [min]="0"
+                   formControlName="theoChungTu" readonly/>
+          </td>
+          <td>
+            <input class="money-input" currencyMask [options]="amount" [min]="0"
+                   formControlName="thucXuat" (ngModelChange)="onChangeTien($event)"
+                   [readonly]="isView"/>
+          </td>
+          <td class="text-right">{{formData.value.donGia|number:'1.0-0' : 'vi_VN'}}</td>
+          <td class="text-right">{{formData.value.thanhTien|number:'1.0-0' : 'vi_VN'}}</td>
+          <td class="text-center" *ngIf="!isView">
+            <a (click)="clear()">
+              <i class="fa fa-refresh"></i>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
     </form>
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="[18, 6]">

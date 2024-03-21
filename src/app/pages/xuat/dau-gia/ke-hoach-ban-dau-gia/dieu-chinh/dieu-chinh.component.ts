@@ -22,6 +22,7 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
   isView = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
+  lanDieuChinh: boolean = false;
   listTrangThai: any = [];
 
   constructor(
@@ -108,7 +109,7 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
-    if (id === 0 && this.checkPrice && this.checkPrice.booleanNhapXuat){
+    if (id === 0 && this.checkPrice && this.checkPrice.booleanNhapXuat) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
       return;
     }
@@ -117,9 +118,10 @@ export class DieuChinhComponent extends Base2Component implements OnInit {
     this.isView = isView;
   }
 
-  openModal(id: number) {
+  openModal(id: number, lanDieuChinh: number) {
     this.idQdPd = id;
     this.isViewQdPd = true;
+    this.lanDieuChinh = lanDieuChinh === 1;
   }
 
   closeModal() {

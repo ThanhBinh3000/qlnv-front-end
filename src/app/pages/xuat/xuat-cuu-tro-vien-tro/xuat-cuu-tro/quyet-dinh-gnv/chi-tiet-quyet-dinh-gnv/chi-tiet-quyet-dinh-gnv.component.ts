@@ -469,7 +469,20 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     this.helperService.markFormGroupTouched(this.formData, []);
     if (this.formData.invalid) {
       return;
+    };
+    let isBanHanh = true
+    if (trangThai === STATUS.BAN_HANH) {
+      isBanHanh = false;
+      let body = {
+        ...this.formData.value,
+        soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
+      }
+      const res = await this.createUpdate(body, null, true);
+      if (res.soBbQd) {
+        isBanHanh = true
+      }
     }
+    if (!isBanHanh) return;
     await super.approve(id, trangThai, msg, role, msgSuccess);
   }
   async updateProcess(trangThai: STATUS, tenTrangThai: string) {

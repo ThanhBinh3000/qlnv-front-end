@@ -277,14 +277,15 @@
           <tbody>
           <ng-container *ngFor="let item of dataTable , let i = index">
             <tr>
-              <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+              <td nzShowExpand="true" [nzExpand]="item.expandSetAll"
+                  (nzExpandChange)="onExpandChangeAll(item, $event)"></td>
               <td class="text-left bold" colspan="4">{{item.tenDvi}}</td>
-              <td class="text-right bold">{{item.soLuongChiCuc|number:globals.numberFormat:globals.locale}}</td>
+              <td class="text-right bold">{{item.soLuongChiCuc|number:'1.0-0' : 'vi_VN'}}</td>
               <td></td>
               <td></td>
-              <td class="text-right bold">{{item.tienDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
+              <td class="text-right bold">{{item.tienDuocDuyet|number:'1.0-0' : 'vi_VN'}}</td>
             </tr>
-            <ng-container *ngIf="expandSet.has(i)">
+            <ng-container *ngIf="item.expandSetAll">
               <tr *ngFor="let children of item.children, let y = index"
                   [ngClass]="{'bg-selected': children.selected}" (click)="selectRow(children)">
                 <td></td>
@@ -294,10 +295,10 @@
                   {{ (children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "") }}
                 </td>
                 <td class="text-left">{{ children.maDviTsan}}</td>
-                <td class="text-right">{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale}}</td>
+                <td class="text-right">{{ children.soLuongDeXuat|number:'1.0-0' : 'vi_VN'}}</td>
                 <td class="text-left">{{ children.donViTinh}}</td>
-                <td class="text-right">{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
-                <td class="text-right">{{ children.thanhTienDuocDuyet|number:globals.numberFormat:globals.locale}}</td>
+                <td class="text-right">{{ children.donGiaDuocDuyet|number:'1.0-0' : 'vi_VN'}}</td>
+                <td class="text-right">{{ children.thanhTienDuocDuyet|number:'1.0-0' : 'vi_VN'}}</td>
               </tr>
             </ng-container>
           </ng-container>
@@ -333,9 +334,9 @@
               <td class="text-left">{{data.diaDiemChaoGia}}</td>
               <td class="text-left">{{data.sdt}}</td>
               <td class="text-left">{{data.ngayChaoGia|date: 'dd/MM/yyyy'}}</td>
-              <td class="text-right">{{data.soLuong|number:globals.numberFormat:globals.locale}}</td>
-              <td class="text-right">{{data.donGia|number:globals.numberFormat:globals.locale}}</td>
-              <td class="text-right">{{data.thanhTien|number:globals.numberFormat:globals.locale}}</td>
+              <td class="text-right">{{data.soLuong|number:'1.0-0' : 'vi_VN'}}</td>
+              <td class="text-right">{{data.donGia|number:'1.0-0' : 'vi_VN'}}</td>
+              <td class="text-right">{{data.thanhTien|number:'1.0-0' : 'vi_VN'}}</td>
               <td class="text-left">{{data.fileDinhKems?.fileName }}</td>
               <td class="text-center">
                 <label nz-checkbox [(ngModel)]="data.luaChon" [nzDisabled]="isView"></label>

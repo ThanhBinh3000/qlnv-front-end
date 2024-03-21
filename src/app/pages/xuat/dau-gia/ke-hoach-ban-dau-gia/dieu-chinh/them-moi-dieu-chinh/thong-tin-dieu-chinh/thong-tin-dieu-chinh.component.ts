@@ -6,7 +6,7 @@ import {cloneDeep} from 'lodash';
 import dayjs from "dayjs";
 import {LOAI_HANG_DTQG} from "../../../../../../../constants/config";
 import {Base2Component} from "../../../../../../../components/base2/base2.component";
-import {AMOUNT_ONE_DECIMAL} from "../../../../../../../Utility/utils";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../../Utility/utils";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../../services/storage.service";
 import {
@@ -16,6 +16,7 @@ import {MESSAGE} from "../../../../../../../constants/message";
 import {
   ThongTinDauGiaService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service";
+import {da} from "date-fns/locale";
 
 @Component({
   selector: 'app-thong-tin-dieu-chinh',
@@ -33,7 +34,7 @@ export class ThongTinDieuChinhComponent extends Base2Component implements OnChan
   @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
-  amount = {...AMOUNT_ONE_DECIMAL};
+  amount = {...AMOUNT_NO_DECIMAL};
   listKho: any[] = []
 
   constructor(
@@ -83,13 +84,17 @@ export class ThongTinDieuChinhComponent extends Base2Component implements OnChan
     const handleDataTableAll = async (dataInputCache: any) => {
       if (dataInputCache) {
         await processChange(dataInputCache);
-        this.dataTableAll = cloneDeep(dataInputCache.children);
+        this.dataTableAll = cloneDeep(dataInputCache.children).map(item => {
+          return {...item, expandSetAll: true};
+        });
       }
     };
     const handleDataTable = async (dataInput: any) => {
       if (dataInput) {
         await processChange(dataInput);
-        this.dataTable = dataInput.children;
+        this.dataTable = dataInput.children.map(item => {
+          return {...item, expandSetAll: true};
+        });
         if (this.dataTable) {
           if (!this.idInput) {
             await this.getdonGiaDuocDuyet(dataInput);
@@ -243,4 +248,5 @@ export class ThongTinDieuChinhComponent extends Base2Component implements OnChan
     const startDay = new Date(tgianDkienTu.getFullYear(), tgianDkienTu.getMonth(), tgianDkienTu.getDate());
     return endDay < startDay;
   };
+  protected readonly da = da;
 }

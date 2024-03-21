@@ -14,7 +14,7 @@ import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {
   DeXuatKhBanTrucTiepService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
-import {AMOUNT_ONE_DECIMAL} from "../../../Utility/utils";
+import {AMOUNT_NO_DECIMAL} from "../../../Utility/utils";
 import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 import * as uuid from "uuid";
 import {cloneDeep} from 'lodash';
@@ -26,7 +26,7 @@ import {cloneDeep} from 'lodash';
 })
 export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
-  amount = {...AMOUNT_ONE_DECIMAL};
+  amount = {...AMOUNT_NO_DECIMAL};
   thongTinXuatBanTrucTiep: DanhSachXuatBanTrucTiep;
   formData: FormGroup;
   dataOriginal: any;

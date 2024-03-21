@@ -285,22 +285,22 @@
           <tbody>
           <ng-container *ngFor="let data of dataTable ;let i = index">
             <tr>
-              <td class="text-center" [nzExpand]="expandSet.has(i)"
-                  (nzExpandChange)="onExpandChange(i, $event)"></td>
+              <td nzShowExpand="true" [nzExpand]="data.expandSetAll"
+                  (nzExpandChange)="onExpandChangeAll(data, $event)"></td>
               <td class="text-left bold">{{ data.tenDvi }}</td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
-              <td class="text-right bold">{{ data.soLuong|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right bold">{{ data.soLuong|number:'1.0-0' : 'vi_VN' }}</td>
               <td class="text-center" *ngIf="!isView && this.formData.value.phanLoai === TRUC_TIEP.CHAO_GIA">
                 <a (click)="deleteChiCuc(i)">
                   <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                 </a>
               </td>
             </tr>
-            <ng-container *ngIf="expandSet.has(i)">
+            <ng-container *ngIf="data.expandSetAll">
               <tr *ngFor="let children of data.children">
                 <td></td>
                 <td></td>
@@ -309,7 +309,7 @@
                 <td class="text-left">{{ children.tenNganKho }}</td>
                 <td class="text-left">{{ children.tenLoKho }}</td>
                 <td class="text-left">{{ children.maDviTsan }}</td>
-                <td class="text-right">{{ children.soLuong|number:globals.numberFormat:globals.locale }}</td>
+                <td class="text-right">{{ children.soLuong|number:'1.0-0' : 'vi_VN' }}</td>
                 <td *ngIf="!isView && this.formData.value.phanLoai === TRUC_TIEP.CHAO_GIA"></td>
               </tr>
             </ng-container>
@@ -320,7 +320,7 @@
             <tr>
               <th class="text-right bold text-blue" colspan="7">TỔNG SỐ</th>
               <th class="text-right bold text-blue">
-                {{ calcTong('soLuong')|number:globals.numberFormat:globals.locale }}
+                {{ calcTong('soLuong')|number:'1.0-0' : 'vi_VN' }}
               </th>
             </tr>
             </tfoot>

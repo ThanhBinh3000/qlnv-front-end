@@ -27,7 +27,7 @@ import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {
   BbNghiemThuBaoQuanService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
-import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-bdg-them-moi-phieu-xuat-kho',
@@ -44,8 +44,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
-  amount = {...AMOUNT_ONE_DECIMAL};
-  amount1 = {...AMOUNT_ONE_DECIMAL};
+  amount = {...AMOUNT_NO_DECIMAL};
   templateNameVt = "Phiếu xuất kho bán đấu giá vật tư";
   templateNameLt = "Phiếu xuất kho bán đấu giá lương thực";
   maTuSinh: number;
@@ -144,7 +143,6 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     try {
       await this.spinner.show();
       this.maHauTo = '/PXK-' + this.userInfo.DON_VI.tenVietTat;
-      this.amount.align = "left";
       if (this.idInput > 0) {
         await this.getDetail(this.idInput);
       } else {

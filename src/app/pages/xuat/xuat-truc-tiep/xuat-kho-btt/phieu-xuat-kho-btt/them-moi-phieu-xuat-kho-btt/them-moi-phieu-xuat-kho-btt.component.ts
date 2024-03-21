@@ -29,7 +29,7 @@ import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {
   BbNghiemThuBaoQuanService
 } from "../../../../../../services/qlnv-hang/nhap-hang/nhap-khac/bbNghiemThuBaoQuan.service";
-import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-moi-phieu-xuat-kho-btt',
@@ -46,8 +46,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
   @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
-  amount = {...AMOUNT_ONE_DECIMAL};
-  amount1 = {...AMOUNT_ONE_DECIMAL};
+  amount = {...AMOUNT_NO_DECIMAL};
   templateNameVt = "Phiếu xuất kho vật tư";
   templateNameLt = "Phiếu xuất kho lương thực";
   TRUC_TIEP = TRUC_TIEP;
@@ -154,7 +153,6 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
     try {
       await this.spinner.show();
       this.maHauTo = '/PXK-' + this.userInfo.DON_VI.tenVietTat;
-      this.amount.align = "left";
       if (this.idInput > 0) {
         await this.getDetail(this.idInput);
       } else {

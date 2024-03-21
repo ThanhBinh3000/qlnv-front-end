@@ -154,15 +154,15 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       return;
     }
     const data = await this.detail(id);
-    const {soQdNv, soHopDong, idChaoGia, children} = data;
     this.formData.patchValue({
-      soQdNv: soQdNv?.split('/')[0] || null,
-      soHopDong: idChaoGia ? null : soHopDong,
+      soQdNv: data.soQdNv?.split('/')[0] || null,
+      soHopDong: data.idChaoGia ? null : data.soHopDong,
     });
     if (data.idChaoGia > 0) {
       await this.onChangeThongTin(data.idChaoGia);
     }
-    this.dataTable = this.userService.isChiCuc() ? children.filter(item => item.maDvi === this.userInfo.MA_DVI) : children
+    const filteredChildren = this.userService.isChiCuc() ? data.children.filter(item => item.maDvi === this.userInfo.MA_DVI) : data.children;
+    this.dataTable = filteredChildren.map(item => ({...item, expandSetAll: true}));
   }
 
   async openDialogHopDong() {
@@ -276,6 +276,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
           return {
             ...item,
             soLuong: item.soLuongKyHopDong,
+            expandSetAll: true,
             children: item.children.map(child => ({
               ...child,
               soLuong: child.soLuongKyHd,
@@ -470,6 +471,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
         child.donGia = child.donGiaDuocDuyet;
       })
       item.soLuong = item.children.reduce((acc, item) => acc + item.soLuongDeXuat, 0);
+      item.expandSetAll = true;
     })
     this.formData.patchValue({
       soLuong: this.dataTable.reduce((acc, item) => acc + item.soLuong, 0)
