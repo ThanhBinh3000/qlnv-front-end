@@ -3,7 +3,7 @@
     <i class="fa fa-chevron-left" aria-hidden="true"></i>
   </li>
   <ng-container *ngFor="let item of lstPage">
-    <li *ngIf="userService.isAccessPermisson(item.code)||item.code ==''" i nz-menu-item [nzMatchRouter]="true"
+    <li *ngIf="userService.isAccessPermisson(item.code)||item.code ==''" nz-menu-item [nzMatchRouter]="true"
         routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">
       <a [routerLink]="item.route" class="main-menu-top">{{ item.title }}</a>
     </li>

@@ -8,13 +8,13 @@
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
       </li>
       <ng-container *ngFor="let route of routes">
-        <li class="nav-item" >
+        <li class="nav-item" *ngIf="route.permission">
                     <span class="nav-link" [ngClass]="
                 route.url && routerUrl.indexOf(route.url) != -1 ? 'active' : ''
               " nz-popover title nzPopoverPlacement="leftBottom" [nzPopoverOverlayClassName]="'dau-thau-tab'"
                           (mouseenter)="updateCssOverlay()" (click)="redirect(route.url)">
                         <i class="icon" [ngClass]="route.icon"></i>
-                        <span class="text">{{ route.url }} ---{{ route.title }}</span>
+                        <span class="text"> {{ route.title }} </span>
                     </span>
         </li>
       </ng-container>

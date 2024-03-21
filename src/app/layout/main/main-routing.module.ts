@@ -6,6 +6,7 @@ import { ErrorComponent } from './error/error.component';
 import { NotAuthenComponent } from './error/not-authen/not-authen.component';
 import { AuthGuard } from 'src/app/guard/auth.guard';
 import { NotFoundComponent } from './error/not-found/not-found.component';
+import {HtCongCuDungCuComponent} from "../../pages/khoi-tao-du-lieu/ht-cong-cu-dung-cu/ht-cong-cu-dung-cu.component";
 
 const routes: Routes = [
   {
@@ -128,10 +129,8 @@ const routes: Routes = [
       {
         path: MAIN_ROUTES.khoiTaoDuLieu,
         loadChildren: () =>
-          import('../../pages/khoi-tao-du-lieu/khoi-tao-du-lieu.module').then(
-            (m) => m.KhoiTaoDuLieuModule,
-          ),
-        // canActivate: [AuthGuard],
+          import('../../pages/khoi-tao-du-lieu/khoi-tao-du-lieu.module').then((m) => m.KhoiTaoDuLieuModule),
+        canActivate: [AuthGuard],
       },
     ],
   },
