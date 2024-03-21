@@ -155,17 +155,17 @@
           <td>{{ data.tenDviThongTri }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a *ngIf="data.trangThai==STATUS.DA_DUYET_LDV || data.trangThai==STATUS.CHO_DUYET_LDV || data.trangThai==STATUS.CHO_DUYET_LDTC || data.trangThai==STATUS.DA_DUYET_LDTC"
+            <a *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_THONGTRI_XEM')"
                (click)="detail(data, true)">
               <i class="fa fa-eye" title="Xem chi tiết"></i>
             </a>
             <a
-              *ngIf="(data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDTC || data.trangThai==STATUS.TU_CHOI_LDV) && userService.isTongCuc()"
+              *ngIf="(data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDTC || data.trangThai==STATUS.TU_CHOI_LDV) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_THONGTRI_SUA')"
               (click)="detail(data, false)">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
             <a
-              *ngIf="(data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDV) && userService.isTongCuc()"
+              *ngIf="(data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDV) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_THONGTRI_XOA')"
               (click)="xoaItem(data)">
               <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
             </a>

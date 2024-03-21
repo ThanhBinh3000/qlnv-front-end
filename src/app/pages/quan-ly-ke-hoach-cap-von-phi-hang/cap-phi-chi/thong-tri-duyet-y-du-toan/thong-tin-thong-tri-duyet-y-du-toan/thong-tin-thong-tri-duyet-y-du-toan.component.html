@@ -41,7 +41,7 @@
     <div class='header mg-t-16'>
       <div class='header-text'>
         <div class='title-chi-tieu'>
-           <span [ngClass]="itemThongTri.trangThai == STATUS.DA_DUYET_LDV ? 'status-xanh' : 'status-do'">
+           <span [ngClass]="(itemThongTri.trangThai == STATUS.DA_DUYET_LDV || itemThongTri.trangThai == STATUS.DA_DUYET_LDTC )? 'status-xanh' : 'status-do'">
                     {{ itemThongTri ? itemThongTri.tenTrangThai : 'Dự thảo' }}
                 </span>
           <!--                    <span *ngIf="!itemThongTri.id" class="du-thao-va-lanh-dao-duyet">-->

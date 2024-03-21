@@ -14,6 +14,7 @@ import {AMOUNT_NO_DECIMAL} from '../../../../../Utility/utils';
 import {PREVIEW} from "../../../../../constants/fileType";
 import printJS from "print-js";
 import {saveAs} from 'file-saver';
+import { v4 as uuidv4 } from 'uuid';
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../services/helper.service";
 
@@ -330,22 +331,22 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   }
 
   cancelEdit(item, type) {
-    // if (type === 'ct1s') {
-    //   let index = this.ct1s.findIndex(x => x.stt === item.stt);
-    //   if (index != -1) {
-    //     let temp = cloneDeep(this.ct1s);
-    //     temp[index] = cloneDeep(this.oldDataEdit1);
-    //     this.ct1s = temp;
-    //   }
-    //   this.rowEdit.isView = true;
-    // } else if (type === 'ct2s') {
-    //   let index = this.itemCt1Selected.ct2List.findIndex(x => x.stt === item.stt);
-    //   if (index != -1) {
-    //     let temp = cloneDeep(this.itemCt1Selected.ct2List);
-    //     temp[index] = cloneDeep(this.oldDataEdit2);
-    //     this.itemCt1Selected.ct2List = temp;
-    //   }
-    // }
+    if (type === 'ct1s') {
+      let index = this.ct1s.findIndex(x => x.stt === item.stt);
+      if (index != -1) {
+        let temp = cloneDeep(this.ct1s);
+        temp[index] = cloneDeep(this.oldDataEdit1);
+        this.ct1s = temp;
+      }
+      this.rowEdit.isView = true;
+    } else if (type === 'ct2s') {
+      let index = this.itemCt1Selected.ct2List.findIndex(x => x.idVirtual === item.idVirtual);
+      if (index != -1) {
+        let temp = cloneDeep(this.itemCt1Selected.ct2List);
+        temp[index] = cloneDeep(this.oldDataEdit2);
+        this.itemCt1Selected.ct2List = temp;
+      }
+    }
     item.edit = false;
   }
 
@@ -417,7 +418,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     } else if (type === 'ct2s') {
       this.sortTableId('ct2s');
       let item = cloneDeep(this.create);
-      item.stt = this.itemCt1Selected.ct2List.length + 1;
+      item.idVirtual = uuidv4();
       item.tenLoaiChiPhi = this.listLoaiChiPhi.find(s => s.ma == item.loaiChiPhi).giaTri;
       if (item.yeuCauCapThem > (item.tongTien - item.kinhPhiDaCap)) {
         this.notification.warning(MESSAGE.WARNING, 'Số tiền yêu cầu cấp thêm lớn hơn kinh phí chưa cấp.');
@@ -447,15 +448,16 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     });
     row.selected = true;
     this.itemCt1Selected = row;
-    // if (this.itemCt1Selected) {
-    //   let ct2List = this.itemCt1Selected.ct2List;
-    //   ct2List.forEach(item => {
-    //     let chiPhi = this.listLoaiChiPhi.find(cp => cp.ma == item.loaiChiPhi);
-    //     if (chiPhi) {
-    //       item.tenLoaiChiPhi = chiPhi.giaTri;
-    //     }
-    //   });
-    // }
+    if (this.itemCt1Selected) {
+      let ct2List = this.itemCt1Selected.ct2List;
+      ct2List.forEach(item => {
+        item.idVirtual =  uuidv4();
+        // let chiPhi = this.listLoaiChiPhi.find(cp => cp.ma == item.loaiChiPhi);
+        // if (chiPhi) {
+        //   item.tenLoaiChiPhi = chiPhi.giaTri;
+        // }
+      });
+    }
   }
 
   tongBang1(data) {
@@ -526,5 +528,19 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
 
   closeDlg() {
     this.showDlgPreview = false;
+  }
+  changeVlTongTien(vl,type,item?){
+    if(type== 'add'){
+      this.create.kinhPhiChuaCap = (vl ?? 0 ) - (this.create.kinhPhiDaCap ?? 0 )
+    }else{
+      item.kinhPhiChuaCap = (vl ?? 0 ) - (item.kinhPhiDaCap ?? 0 )
+    }
+  }
+  changeVlKpDaCap(vl,type,item?){
+    if(type== 'add'){
+      this.create.kinhPhiChuaCap = (this.create.tongTien ?? 0 ) - (vl ?? 0 )
+    }else{
+      item.kinhPhiChuaCap = (item.tongTien ?? 0 ) - (vl ?? 0 )
+    }
   }
 }

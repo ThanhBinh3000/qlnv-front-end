@@ -405,7 +405,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            lyDo: text,
+            lyDoTuChoi: text,
             trangThai: trangThai,
           };
           const res = await this.thongTriDuyetYCapVonService.updateStatus(body);
