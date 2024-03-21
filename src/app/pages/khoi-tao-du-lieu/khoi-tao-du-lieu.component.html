@@ -1,0 +1,27 @@
+<div class="khung">
+  <nz-affix class="fix collapse" id="collapsnav">
+    <div class="navbar-mobile">
+      <app-main-router></app-main-router>
+    </div>
+    <ul class="nav nav-tabs" #myTab id="myTab" role="tablist" nz-menu [nzMode]="'horizontal'">
+      <li nz-submenu class="nav-item next" (click)="startSlide()">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+      </li>
+      <ng-container *ngFor="let route of routes">
+        <li class="nav-item" >
+                    <span class="nav-link" [ngClass]="
+                route.url && routerUrl.indexOf(route.url) != -1 ? 'active' : ''
+              " nz-popover title nzPopoverPlacement="leftBottom" [nzPopoverOverlayClassName]="'dau-thau-tab'"
+                          (mouseenter)="updateCssOverlay()" (click)="redirect(route.url)">
+                        <i class="icon" [ngClass]="route.icon"></i>
+                        <span class="text">{{ route.url }} ---{{ route.title }}</span>
+                    </span>
+        </li>
+      </ng-container>
+      <li nz-submenu class="nav-item prev" (click)="endSlide()">
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </li>
+    </ul>
+  </nz-affix>
+</div>
+<router-outlet></router-outlet>

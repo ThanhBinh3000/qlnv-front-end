@@ -125,6 +125,14 @@ const routes: Routes = [
           import('../../pages/dieu-chuyen-noi-bo/dieu-chuyen-noi-bo.module').then((m) => m.DieuChuyenNoiBoModule),
         canActivate: [AuthGuard],
       },
+      {
+        path: MAIN_ROUTES.khoiTaoDuLieu,
+        loadChildren: () =>
+          import('../../pages/khoi-tao-du-lieu/khoi-tao-du-lieu.module').then(
+            (m) => m.KhoiTaoDuLieuModule,
+          ),
+        // canActivate: [AuthGuard],
+      },
     ],
   },
   {
