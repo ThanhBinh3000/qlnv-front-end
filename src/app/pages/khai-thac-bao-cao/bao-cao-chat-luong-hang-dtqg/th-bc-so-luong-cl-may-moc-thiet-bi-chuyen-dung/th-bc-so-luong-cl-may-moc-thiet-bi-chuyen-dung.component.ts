@@ -14,6 +14,7 @@ import { MESSAGE } from "../../../../constants/message";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { saveAs } from "file-saver";
 import { BcCLuongHangDTQGService } from 'src/app/services/bao-cao/BcCLuongHangDTQG.service';
+import {el} from "date-fns/locale";
 
 @Component({
   selector: 'app-th-bc-so-luong-cl-may-moc-thiet-bi-chuyen-dung',
@@ -64,6 +65,12 @@ export class ThBcSoLuongClMayMocThietBiChuyenDungComponent extends Base2Componen
           value: dayjs().get("year") - i,
           text: dayjs().get("year") - i
         });
+      }
+      if (this.userService.isCuc()) {
+        this.formData.get('maCuc').setValue(this.userInfo.MA_DVI)
+      } else if (this.userService.isChiCuc()) {
+        this.formData.get('maCuc').setValue(this.userInfo.MA_DVI.substring(0, 6))
+        this.formData.get('maChiCuc').setValue(this.userInfo.MA_DVI)
       }
       await Promise.all([
         this.loadDsDonVi(),
