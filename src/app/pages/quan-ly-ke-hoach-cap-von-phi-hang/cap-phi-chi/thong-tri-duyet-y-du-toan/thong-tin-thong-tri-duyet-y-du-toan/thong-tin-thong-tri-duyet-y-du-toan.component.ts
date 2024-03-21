@@ -245,6 +245,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     let body = {
       pageNumber: 1,
       pageSize: 1000,
+      nam : this.formData.get("nam").value
     };
     let res = await this.tongHopDeNghiCapPhiService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
