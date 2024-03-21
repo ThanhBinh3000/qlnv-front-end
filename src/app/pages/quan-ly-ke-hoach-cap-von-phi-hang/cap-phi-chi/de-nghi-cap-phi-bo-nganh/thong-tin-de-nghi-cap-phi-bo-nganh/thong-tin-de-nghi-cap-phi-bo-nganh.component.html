@@ -216,16 +216,16 @@
         </nz-select>
       </td>
       <td>
-        <input class='money-input' [min]='0' currencyMask [options]='amount'
+        <input class='money-input' [min]='0' (ngModelChange)='changeVlTongTien($event,"add")' currencyMask [options]='amount'
                [(ngModel)]='create.tongTien' />
       </td>
       <td>
-        <input class='money-input' [min]='0' [max]='(create.tongTien ?? 0)' currencyMask [options]='amount'
+        <input class='money-input' [min]='0'  (ngModelChange)='changeVlKpDaCap($event,"add")' [max]='(create.tongTien ?? 0)' currencyMask [options]='amount'
                [(ngModel)]='create.kinhPhiDaCap' />
       </td>
       <td>
         <input class='money-input' [min]='0' [disabled]='true' currencyMask [options]='amount'
-               [(ngModel)]='create.tongTien -create.kinhPhiDaCap ' />
+               [(ngModel)]='create.kinhPhiChuaCap' />
       </td>
       <td>
         <input class='money-input' [min]='0' [max]='(create.tongTien ?? 0) - (create.kinhPhiDaCap ?? 0)'
@@ -273,17 +273,17 @@
           </nz-select>
         </td>
         <td>
-          <input class='money-input' [min]='0' currencyMask [options]='amount'
+          <input class='money-input' [min]='0' (ngModelChange)='changeVlTongTien($event,"edit",data)' currencyMask [options]='amount'
                  [(ngModel)]='data.tongTien' />
         </td>
         <td>
-          <input class='money-input' [min]='0' currencyMask [options]='amount'
+          <input class='money-input' [min]='0' (ngModelChange)='changeVlKpDaCap($event,"edit",data)' currencyMask [options]='amount'
                  [(ngModel)]='data.kinhPhiDaCap' [max]='(data.tongTien ?? 0)' />
         </td>
         <td>
           <input class='money-input' [min]='0' [max]='(data.tongTien ?? 0) - (data.kinhPhiDaCap ?? 0)' disabled
                  currencyMask [options]='amount'
-                 [(ngModel)]='data.tongTien - data.kinhPhiDaCap' />
+                 [(ngModel)]='data.kinhPhiChuaCap' />
         </td>
         <td>
           <input class='money-input' [min]='0' currencyMask [options]='amount'
