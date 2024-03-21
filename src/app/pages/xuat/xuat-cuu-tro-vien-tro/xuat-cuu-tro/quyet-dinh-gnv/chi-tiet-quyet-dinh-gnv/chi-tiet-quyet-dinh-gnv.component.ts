@@ -412,9 +412,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     const dataDtlFilterDonVi = this.formData.value.dataDtl.filter(f => f.maDvi && f.maDvi.startsWith(this.userInfo.MA_DVI))
     let dataDtl = [];
     if (this.formData.value.type === 'XC' || tenVthh !== "Vật tư thiết bị") {
-      dataDtl = dataDtlFilterDonVi.map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.loaiVthh}-${f.tenChiCuc}` }));
+      dataDtl = dataDtlFilterDonVi.map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.namNhap}-${f.loaiVthh}-${f.tenChiCuc}` }));
     } else {
-      dataDtl = dataDtlFilterDonVi.map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.cloaiVthh ? f.cloaiVthh : f.loaiVthh}-${f.tenChiCuc}` }));
+      dataDtl = dataDtlFilterDonVi.map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.namNhap}-${f.cloaiVthh ? f.cloaiVthh : f.loaiVthh}-${f.tenChiCuc}` }));
     }
 
     const tongSoLuongPb = dataDtl.reduce((sum, cur) => {
