@@ -16,7 +16,7 @@ import {saveAs} from 'file-saver';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {THONG_TIN_BAN_TRUC_TIEP} from "../../../../../../constants/status";
-import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
+import {AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
 import {cloneDeep} from 'lodash';
 
 @Component({
@@ -31,7 +31,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   @Output() showListEvent = new EventEmitter<any>();
   @Output() dataTableChange = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG
-  amount = {...AMOUNT_ONE_DECIMAL};
+  amount = {...AMOUNT_NO_DECIMAL};
   TRUC_TIEP = THONG_TIN_BAN_TRUC_TIEP
   templateNameVt = "Thông tin bán trực tiếp chào giá vật tư";
   templateNameLt = "Thông tin bán trực tiếp chào giá lương thực";
@@ -88,7 +88,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       await this.spinner.show();
       if (this.idInput > 0) {
         await this.loadDetail(this.idInput)
-        this.onExpandChange(0, true);
       }
     } catch (e) {
       console.log('error: ', e);
@@ -134,8 +133,10 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
           pthucBanTrucTiep: data.pthucBanTrucTiep.toString()
         });
       }
-      this.dataTable = data.children;
-      if (this.dataTable && this.dataTable.length > 0){
+      this.dataTable = data.children.map(item => {
+        return {...item, expandSetAll: true};
+      });
+      if (this.dataTable && this.dataTable.length > 0) {
         await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
       }
       this.fileDinhKem = data.fileDinhKem;
@@ -333,18 +334,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       }
     }
     return isValid;
-  }
-
-  expandSet2 = new Set<number>();
-
-  onExpandChange2(id: number, checked: boolean): void {
-    checked ? this.expandSet2.add(id) : this.expandSet2.delete(id);
-  }
-
-  expandSet3 = new Set<number>();
-
-  onExpandChange3(id: number, checked: boolean): void {
-    checked ? this.expandSet3.add(id) : this.expandSet3.delete(id);
   }
 
   async getNameFile(event?: any, tableName?: string, item?: FileDinhKem, type?: any) {

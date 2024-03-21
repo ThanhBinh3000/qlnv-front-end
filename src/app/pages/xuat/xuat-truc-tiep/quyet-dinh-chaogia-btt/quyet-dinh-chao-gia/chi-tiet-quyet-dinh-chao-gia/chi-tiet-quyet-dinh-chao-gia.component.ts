@@ -103,7 +103,6 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
       } else {
         await this.initForm();
       }
-      this.onExpandChange(0, true);
     } catch (e) {
       console.error('error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -130,7 +129,9 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
     });
     if (data.idChaoGia) {
       const resChaoGia = await this.chaoGiaMuaLeUyQuyenService.getDetail(data.idChaoGia);
-      this.dataTable = resChaoGia.data.children;
+      this.dataTable = resChaoGia.data.children.map(item => {
+        return {...item, expandSetAll: true};
+      });
     }
     if (this.dataTable && this.dataTable.length > 0) {
       await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
@@ -308,7 +309,9 @@ export class ChiTietQuyetDinhChaoGiaComponent extends Base2Component implements 
         tongGiaTriHdong: data.thanhTienDuocDuyet,
         donViTinh: data.donViTinh,
       });
-      this.dataTable = data.children.filter(item => item.children && item.children.length > 0);
+      this.dataTable = data.children.filter(item => item.children && item.children.length > 0).map(item => {
+        return {...item, expandSetAll: true};
+      });
       if (this.dataTable && this.dataTable.length > 0) {
         await this.selectRow(this.dataTable.flatMap(item => item.children)[0]);
       }

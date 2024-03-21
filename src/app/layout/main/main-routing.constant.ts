@@ -22,7 +22,7 @@ export const MAIN_ROUTES = {
   quanTriHeThong: 'quan-tri-he-thong',
   khaiThacBaoCao: 'khai-thac-bao-cao',
   baoCaoBoNganh: 'bao-cao-bo-nganh',
-  // qlkhVonPhi: 'qlkh-von-phi',
+  khoiTaoDuLieu: 'khoi-tao-du-lieu',
 };
 
 export const LIST_PAGES: RouteInfo[] = [
@@ -41,19 +41,11 @@ export const LIST_PAGES: RouteInfo[] = [
     route: `${MAIN_ROUTES.quyetToan}`,
     code: 'QTOANVONPHI'
   },
-  // {
-  //   title: 'Mua hàng DTQG',
-  //   route: `${MAIN_ROUTES.muaHang}`,
-  // },
   {
     title: 'Nhập hàng DTQG',
     route: `${MAIN_ROUTES.nhap}`,
     code: 'NHDTQG'
   },
-  // {
-  //   title: 'Bán hàng DTQG',
-  //   route: MAIN_ROUTES.banHang,
-  // },
   {
     title: 'Xuất hàng DTQG',
     route: MAIN_ROUTES.xuat,
@@ -97,13 +89,8 @@ export const LIST_PAGES: RouteInfo[] = [
   {
     title: 'Khai thác báo cáo',
     route: MAIN_ROUTES.khaiThacBaoCao,
-    // code: ''
     code: 'KTBC'
   },
-  // {
-  //   title: 'Quản lý kế hoạch vốn phí',
-  //   route: MAIN_ROUTES.qlkhVonPhi,
-  // },
   {
     title: 'QTDM',
     route: MAIN_ROUTES.quanTriDanhMuc,
@@ -113,5 +100,10 @@ export const LIST_PAGES: RouteInfo[] = [
     title: 'QTHT',
     route: MAIN_ROUTES.quanTriHeThong,
     code: 'QTHT'
+  },
+  {
+    title: 'Khởi tạo dữ liệu',
+    route: MAIN_ROUTES.khoiTaoDuLieu,
+    code: 'QLKT'
   },
 ];

@@ -266,22 +266,23 @@
           <tbody>
           <ng-container *ngFor="let item of dataTable , let i = index">
             <tr>
-              <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+              <td nzShowExpand="true" [nzExpand]="item.expandSetAll"
+                  (nzExpandChange)="onExpandChangeAll(item, $event)"></td>
               <td class="text-left">{{item.tenDvi}}</td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
-              <td class="text-right bold">{{item.tongSoLuong|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right bold">{{item.tongSoLuong|number:'1.0-0' : 'vi_VN' }}</td>
               <td></td>
               <td></td>
               <td></td>
-              <td class="text-right bold">{{item.tongTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right bold">{{item.tongTienDatTruoc|number:'1.0-0' : 'vi_VN' }}</td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
-            <ng-container *ngIf="expandSet.has(i)">
+            <ng-container *ngIf="item.expandSetAll">
               <tr *ngFor="let children of item.children, let x = index">
                 <td></td>
                 <td></td>
@@ -291,13 +292,13 @@
                 </td>
                 <td class="text-left">{{children.namNhap}}</td>
                 <td class="text-left">{{children.maDviTsan}}</td>
-                <td class="text-right">{{children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
+                <td class="text-right">{{children.soLuongDeXuat|number:'1.0-0' : 'vi_VN' }}</td>
                 <td class="text-left">{{children.donViTinh}} </td>
-                <td class="text-right">{{children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
-                <td class="text-right">{{children.giaKhoiDiem|number:globals.numberFormat:globals.locale }}</td>
-                <td class="text-right">{{children.soTienDatTruoc|number:globals.numberFormat:globals.locale }}</td>
-                <td class="text-right">{{children.donGiaTraGia|number:globals.numberFormat:globals.locale }}</td>
-                <td class="text-right">{{children.thanhTien|number:globals.numberFormat:globals.locale }}</td>
+                <td class="text-right">{{children.donGiaDuocDuyet|number:'1.0-0' : 'vi_VN' }}</td>
+                <td class="text-right">{{children.giaKhoiDiem|number:'1.0-0' : 'vi_VN' }}</td>
+                <td class="text-right">{{children.soTienDatTruoc|number:'1.0-0' : 'vi_VN' }}</td>
+                <td class="text-right">{{children.donGiaTraGia|number:'1.0-0' : 'vi_VN' }}</td>
+                <td class="text-right">{{children.thanhTien|number:'1.0-0' : 'vi_VN' }}</td>
                 <td class="text-left">{{children.toChucCaNhan}}</td>
               </tr>
             </ng-container>

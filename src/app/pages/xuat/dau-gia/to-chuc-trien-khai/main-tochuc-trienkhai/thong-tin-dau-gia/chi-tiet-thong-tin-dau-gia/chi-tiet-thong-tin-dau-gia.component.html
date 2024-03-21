@@ -78,7 +78,7 @@
                     <nz-form-control>
                       <span *ngIf="formData.value.tongTienDatTruoc">
                         <input nz-input class="text-blue bold"
-                               [value]="(formData.value.tongTienDatTruoc|number:globals.numberFormat:globals.locale) + ' (đ)'"
+                               [value]="(formData.value.tongTienDatTruoc|number:'1.0-0' : 'vi_VN') + ' (đ)'"
                                readonly/>
                       </span>
                     </nz-form-control>
@@ -154,7 +154,7 @@
                     <nz-form-control>
                       <span *ngIf="formData.value.tongTienDatTruocDd">
                         <input nz-input class="text-blue bold"
-                               [value]="(formData.value.tongTienDatTruocDd | number:globals.numberFormat:globals.locale) + ' (đ)'"
+                               [value]="(formData.value.tongTienDatTruocDd | number:'1.0-0' : 'vi_VN') + ' (đ)'"
                                readonly/>
                       </span>
                     </nz-form-control>
@@ -190,7 +190,7 @@
                     <nz-form-control>
                       <span *ngIf="formData.value.tongSoLuong">
                        <input nz-input class="text-blue bold"
-                              [value]="(formData.value.tongSoLuong | number:globals.numberFormat:globals.locale) + ' (' + formData.value.donViTinh + ')'"
+                              [value]="(formData.value.tongSoLuong | number:'1.0-0' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
                               readonly/>
                       </span>
                     </nz-form-control>
