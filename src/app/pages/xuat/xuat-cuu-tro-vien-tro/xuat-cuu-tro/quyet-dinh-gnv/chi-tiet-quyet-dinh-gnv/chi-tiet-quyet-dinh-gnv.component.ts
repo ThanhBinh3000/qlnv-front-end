@@ -456,15 +456,22 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     // if (!this.checkHoanTatPhanBo()) return;
-    if (trangThai === STATUS.DA_DUYET_LDC) {
-      this.formData.get("soQdPd").setValidators([Validators.required]);
-    } else {
-      this.formData.get("soQdPd").clearValidators();
-    }
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null }
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
-
+  async approve(id: number, trangThai: STATUS, msg: string, role: any, msgSuccess?: string) {
+    if (trangThai === STATUS.BAN_HANH) {
+      this.formData.get("soBbQd").setValidators([Validators.required]);
+    } else {
+      this.formData.get("soBbQd").clearValidators();
+    }
+    this.formData.get("soBbQd").updateValueAndValidity();
+    this.helperService.markFormGroupTouched(this.formData, []);
+    if (this.formData.invalid) {
+      return;
+    }
+    await super.approve(id, trangThai, msg, role, msgSuccess);
+  }
   async updateProcess(trangThai: STATUS, tenTrangThai: string) {
     this.formData.value.dataDtl.forEach(s => {
       if (s.maDvi.match("^" + this.userInfo.MA_DVI + ".*")) {
