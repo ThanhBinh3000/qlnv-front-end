@@ -44,6 +44,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   listSoQuyetDinh: any[] = [];
   listDiaDiemNhap: any[] = [];
   listPhieuKtraCl: any[] = [];
+  listPhieuXk: any[] = [];
   fileDinhKems: any[] = [];
   listDiemKho: any[] = [];
   listBbLayMau: any[] = [];
@@ -292,9 +293,21 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       s.maNhaKho = s.maDvi.length >= 12 ? s.maDvi.substring(0, 12) : null;
       s.maNganKho = s.maDvi.length >= 14 ? s.maDvi.substring(0, 14) : null;
       s.maLoKho = s.maDvi.length >= 16 ? s.maDvi.substring(0, 16) : null;
-      s.idDtlQdGiaoNvXh = s.id
+      s.idDtlQdGiaoNvXh = s.id;
+      s.tenNganLo = s.tenLoKho ? `${s.tenLoKho}-${s.tenNganKho}` : s.tenNganKho
     });
-    let dataChiCuc = data.dataDtl.filter(item => item.tenChiCuc == this.userInfo.TEN_DVI && item.trangThai === STATUS.DA_HOAN_THANH);
+    const bodyPhieuKncl = {
+      soQdGiaoNv: data.soBbQd,
+      trangThai: STATUS.DA_DUYET_LDC,
+      loaiVthh: this.loaiVthh,
+      type: this.loaiXuat,
+    }
+    const [resPhieuKtraCl, resPhieuXk] = await Promise.all([this.phieuKiemNghiemChatLuongService.search(bodyPhieuKncl), this.phieuXuatKhoService.search({ soQdGiaoNvXh: data.soBbQd })]);
+    this.listPhieuKtraCl = Array.isArray(resPhieuKtraCl?.data?.content) ? resPhieuKtraCl.data.content.map(f => ({ ...f, tenNganLo: f.tenLoKho ? `${f.tenLoKho}-${f.tenNganKho}` : f.tenNganKho })) : [];
+    this.listPhieuXk = Array.isArray(resPhieuXk?.data?.content) ? resPhieuXk.data.content.map(f => ({ ...f, tenNganLo: f.tenLoKho ? `${f.tenLoKho}-${f.tenNganKho}` : f.tenNganKho })) : [];
+    let dataChiCuc = data.dataDtl.filter(item => this.listPhieuKtraCl.findIndex(f => f.tenNganLo === item.tenNganLo) >= 0 &&
+      (this.listPhieuXk.findIndex(f => f.tenNganLo === item.tenNganLo && (f.trangThai !== '00' || (f.trangThai === '00' && f.id !== this.formData.value.id))) == -1)
+      && item.tenChiCuc == this.userInfo.TEN_DVI);
     if (dataChiCuc) {
       this.listDiaDiemNhap = dataChiCuc;
       // this.listDiaDiemNhapFilter = uniqBy(this.listDiaDiemNhap.map(f => ({ ...f, maNganLo: f.maLoKho ? `${f.maLoKho}-${f.maNganKho}` : f.maNganKho })), 'maNganLo')
@@ -341,18 +354,20 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         noiDungDx: data.noiDungDx,
         soLuong: data.soLuong
       })
-      let body = {
-        trangThai: STATUS.DA_DUYET_LDC,
-        loaiVthh: this.loaiVthh,
-        type: this.loaiXuat,
-      }
-      let res = await this.phieuKiemNghiemChatLuongService.search(body)
-      const list = res.data.content.map(f => ({ ...f, tenNganLo: f.tenLoKho ? `${f.tenLoKho}-${f.tenNganKho}` : f.tenNganKho }));
+      // let body = {
+      //   trangThai: STATUS.DA_DUYET_LDC,
+      //   loaiVthh: this.loaiVthh,
+      //   type: this.loaiXuat,
+      // }
+      // let res = await this.phieuKiemNghiemChatLuongService.search(body)
+      // const list = res.data.content.map(f => ({ ...f, tenNganLo: f.tenLoKho ? `${f.tenLoKho}-${f.tenNganKho}` : f.tenNganKho }));
       // this.listPhieuKtraCl = list.filter(item => (item.tenDiemKho == data.tenDiemKho));
       const tenNganLo = data.tenLoKho ? `${data.tenLoKho}-${data.tenNganKho}` : data.tenNganKho;
-      const phieuKtraClData = list.find(f => f.tenNganLo === tenNganLo) ? list.find(f => f.tenNganLo === tenNganLo) : null;
+      const phieuKtraClData = this.listPhieuKtraCl.find(f => f.tenNganLo === tenNganLo) ? this.listPhieuKtraCl.find(f => f.tenNganLo === tenNganLo) : null;
       this.bindingDataPhieuKncl(phieuKtraClData)
-      this.getDetailNganLo(data.maLoKho || data.maNganKho)
+      this.getDetailNganLo(data.maLoKho || data.maNganKho);
+      this.listPhieuKtraCl = [];
+      this.listPhieuXk = [];
       // this.getDsDonViNhan();
     }
   }
