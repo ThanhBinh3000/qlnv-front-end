@@ -62,6 +62,12 @@ export class ThBcSoLuongClCcdcComponent extends Base2Component implements OnInit
           text: dayjs().get("year") - i
         });
       }
+      if (this.userService.isCuc()) {
+        this.formData.get('maCuc').setValue(this.userInfo.MA_DVI)
+      } else if (this.userService.isChiCuc()) {
+        this.formData.get('maCuc').setValue(this.userInfo.MA_DVI.substring(0, 6))
+        this.formData.get('maChiCuc').setValue(this.userInfo.MA_DVI)
+      }
       await Promise.all([
         this.loadDsDonVi()
       ]);
