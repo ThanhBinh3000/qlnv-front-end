@@ -33,7 +33,7 @@ import {v4 as uuidv4} from 'uuid';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
 import {Validators} from "@angular/forms";
 import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
-import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-moi-bien-ban-lay-mau-btt',
@@ -48,7 +48,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
-  amount = {...AMOUNT_ONE_DECIMAL};
+  amount = {...AMOUNT_NO_DECIMAL};
   templateNameVt = "Biên bản lấy mẫu bàn giao mẫu vật tư";
   templateNameLt = "Biên bản lấy mẫu bàn giao mẫu lương thực";
   TRUC_TIEP = TRUC_TIEP;
@@ -213,7 +213,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
         this.selectedItems = firstCheckedItem.ma;
       }
       const ctieuCluong = this.dataTable.filter(item => item.type === BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG)
-      if (ctieuCluong){
+      if (ctieuCluong) {
         this.danhSachCtieuCluong = ctieuCluong.map(item => ({
           label: item.ten,
           value: item.ma,

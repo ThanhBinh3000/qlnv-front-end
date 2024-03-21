@@ -26,7 +26,7 @@ import {
 import {
   PhieuXuatKhoBttService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/phieu-xuat-kho-btt.service";
-import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-moi-bien-ban-tinh-kho',
@@ -41,7 +41,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
-  amount = {...AMOUNT_ONE_DECIMAL};
+  amount = {...AMOUNT_NO_DECIMAL, align: "left"};
   templateNameVt = "Biên bản tịnh kho vật tư";
   templateNameLt = "Biên bản tịnh kho lương thực";
   TRUC_TIEP = TRUC_TIEP;
@@ -146,7 +146,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     try {
       await this.spinner.show();
       this.maHauTo = '-BBTK';
-      this.amount.align = "left";
       if (this.idInput > 0) {
         await this.getDetail(this.idInput);
       } else {

@@ -144,7 +144,8 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       const dataTb = resTb.data;
       const toChuc = dataTb.children.map(s => ({
         ...s,
-        children: s.children.filter(f => f.toChucCaNhan)
+        children: s.children.filter(f => f.toChucCaNhan),
+        expandSetAll: true
       }));
       this.dataTable = toChuc.filter(s => s.children.length !== 0);
       this.calculatorTable(this.dataTable);
@@ -157,7 +158,7 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
         return;
       }
-      if (this.checkPrice && this.checkPrice.booleanNhapXuat){
+      if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
         return;
       }
@@ -276,6 +277,7 @@ export class ThemMoiQuyetDinhPheDuyetKetQuaComponent extends Base2Component impl
       this.dataTable = toChuc.filter(s => s.children.some(f => f.toChucCaNhan));
       this.dataTable.forEach(s => {
         s.children = s.children.filter(f => f.toChucCaNhan);
+        s.expandSetAll = true;
       });
       this.calculatorTable(dataQd);
     } catch (e) {

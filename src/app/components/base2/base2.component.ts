@@ -218,6 +218,10 @@ export class Base2Component implements OnInit {
     }
   }
 
+  onExpandChangeAll(item: any, checked: boolean): void {
+    item.expandSetAll = checked
+  }
+
   filterInTable(key: string, value: string, type?: string) {
     if (value && value != '') {
       this.dataTable = [];
