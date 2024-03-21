@@ -146,8 +146,7 @@
             <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán đề <br>xuất</nz-form-label>
             <nz-form-control nz-col>
               <span style="color: blue" *ngIf="formData.value.tongSoLuong">
-                {{ formData.value.tongSoLuong | number:globals.numberFormat:globals.locale }}
-                ({{ formData.value.donViTinh }})
+                {{ formData.value.tongSoLuong | number:'1.0-0' : 'vi_VN' }} ({{ formData.value.donViTinh }})
               </span>
             </nz-form-control>
           </nz-form-item>
@@ -157,7 +156,7 @@
             <nz-form-label [nzNoColon]="true"> Tổng tiền giá khởi điểm theo <br>đơn giá được duyệt</nz-form-label>
             <nz-form-control nz-col>
                 <span style="color: blue" *ngIf="formData.value.tongTienDuocDuyet">
-                {{ formData.value.tongTienDuocDuyet | number:globals.numberFormat:globals.locale }} (vnd)
+                {{ formData.value.tongTienDuocDuyet | number:'1.0-0' : 'vi_VN' }} (vnd)
                 </span>
             </nz-form-control>
           </nz-form-item>
@@ -167,7 +166,7 @@
             <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước <br>theo đơn giá được duyệt</nz-form-label>
             <nz-form-control nz-col>
                 <span style="color: blue" *ngIf="formData.value.tongKtienDtruocDduyet">
-                {{ formData.value.tongKtienDtruocDduyet | number:globals.numberFormat:globals.locale }} (vnd)
+                {{ formData.value.tongKtienDtruocDduyet | number:'1.0-0' : 'vi_VN' }} (vnd)
                 </span>
             </nz-form-control>
           </nz-form-item>
@@ -199,14 +198,15 @@
       <tbody>
       <ng-container *ngFor="let data of dataTableAll , let idx = index">
         <tr>
-          <td [nzExpand]="expandSet.has(idx)" (nzExpandChange)="onExpandChange(idx, $event)"></td>
+          <td nzShowExpand="true" [nzExpand]="data.expandSetAll"
+              (nzExpandChange)="onExpandChangeAll(data, $event)"></td>
           <td class="text-left" colspan="6">{{ data.tenDvi }}</td>
-          <td class="text-right bold">{{ data.tongSlXuatBanDx|number:globals.numberFormat:globals.locale }}</td>
+          <td class="text-right bold">{{ data.tongSlXuatBanDx|number:'1.0-0' : 'vi_VN' }}</td>
           <td></td>
           <td></td>
           <td></td>
         </tr>
-        <ng-container *ngIf="expandSet.has(idx)">
+        <ng-container *ngIf="data.expandSetAll">
           <tr *ngFor="let children of data.children, let i = index">
             <td></td>
             <td></td>
@@ -218,12 +218,12 @@
             <td class="text-left">{{ children.maDviTsan}}</td>
             <td class="text-left">{{ children.donViTinh}}</td>
             <td class="text-right">
-              {{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}
+              {{ children.soLuongDeXuat|number:'1.0-0' : 'vi_VN' }}
             </td>
-            <td class="text-right">{{ children.donGiaDuocDuyet | number:globals.numberFormat:globals.locale }}</td>
-            <td class="text-right">{{ children.giaKhoiDiemDx|number:globals.numberFormat:globals.locale }}</td>
+            <td class="text-right">{{ children.donGiaDuocDuyet | number:'1.0-0' : 'vi_VN' }}</td>
+            <td class="text-right">{{ children.giaKhoiDiemDx|number:'1.0-0' : 'vi_VN' }}</td>
             <td
-              class="text-right">{{ children.tienDatTruocDuocDuyet | number:globals.numberFormat:globals.locale }}</td>
+              class="text-right">{{ children.tienDatTruocDuocDuyet | number:'1.0-0' : 'vi_VN' }}</td>
           </tr>
         </ng-container>
       </ng-container>
@@ -250,14 +250,15 @@
       <tbody>
       <ng-container *ngFor="let data of dataTable , let idx = index">
         <tr>
-          <td [nzExpand]="expandSet.has(idx)" (nzExpandChange)="onExpandChange(idx, $event)"></td>
+          <td nzShowExpand="true" [nzExpand]="data.expandSetAll"
+              (nzExpandChange)="onExpandChangeAll(data, $event)"></td>
           <td class="text-left" colspan="6">{{ data.tenDvi }}</td>
-          <td class="text-right bold">{{ data.tongSlXuatBanDx|number:globals.numberFormat:globals.locale }}</td>
+          <td class="text-right bold">{{ data.tongSlXuatBanDx|number:'1.0-0' : 'vi_VN' }}</td>
           <td></td>
           <td></td>
           <td></td>
         </tr>
-        <ng-container *ngIf="expandSet.has(idx)">
+        <ng-container *ngIf="data.expandSetAll">
           <tr *ngFor="let children of data.children, let i = index">
             <td></td>
             <td></td>
@@ -270,13 +271,14 @@
             <td class="text-left">{{ children.donViTinh}}</td>
             <td class="text-right">
               <input currencyMask class="money-input" [(ngModel)]="children.soLuongDeXuat"
-                     (ngModelChange)="changeTable($event, idx, i)" [options]="amount" [readOnly]="trangThaiDc ? trangThaiDc : children.toChucCaNhan != null"/>
+                     (ngModelChange)="changeTable($event, idx, i)" [options]="amount"
+                     [readOnly]="trangThaiDc ? trangThaiDc : children.toChucCaNhan != null"/>
             </td>
 
-            <td class="text-right">{{ children.donGiaDuocDuyet | number:globals.numberFormat:globals.locale }}</td>
-            <td class="text-right">{{ children.giaKhoiDiemDx|number:globals.numberFormat:globals.locale }}</td>
+            <td class="text-right">{{ children.donGiaDuocDuyet | number:'1.0-0' : 'vi_VN' }}</td>
+            <td class="text-right">{{ children.giaKhoiDiemDx|number:'1.0-0' : 'vi_VN' }}</td>
             <td
-              class="text-right">{{ children.tienDatTruocDuocDuyet | number:globals.numberFormat:globals.locale }}</td>
+              class="text-right">{{ children.tienDatTruocDuocDuyet | number:'1.0-0' : 'vi_VN' }}</td>
           </tr>
         </ng-container>
       </ng-container>

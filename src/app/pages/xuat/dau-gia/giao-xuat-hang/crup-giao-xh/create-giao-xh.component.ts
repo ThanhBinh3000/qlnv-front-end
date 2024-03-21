@@ -122,7 +122,8 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     this.formData.patchValue({
       soQdNv: data.soQdNv?.split('/')[0]
     });
-    this.dataTable = this.userService.isChiCuc() ? data.children.filter(item => item.maDvi === this.userInfo.MA_DVI) : data.children;
+    const filteredChildren = this.userService.isChiCuc() ? data.children.filter(item => item.maDvi === this.userInfo.MA_DVI) : data.children;
+    this.dataTable = filteredChildren.map(item => ({...item, expandSetAll: true}));
   }
 
   async openDialog() {
@@ -206,6 +207,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
           item.tonKho = item.children.reduce((total, child) => total + child.tonKho, 0);
           item.tenTrangThai = data.tenTrangThaiXh
           item.trangThai = data.trangThaiXh
+          item.expandSetAll = true;
         })
       }
     } catch (e) {

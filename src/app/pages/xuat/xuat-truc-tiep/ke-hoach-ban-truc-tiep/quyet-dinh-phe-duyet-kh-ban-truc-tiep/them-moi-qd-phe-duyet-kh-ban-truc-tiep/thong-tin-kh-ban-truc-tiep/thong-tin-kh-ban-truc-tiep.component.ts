@@ -4,7 +4,7 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {LOAI_HANG_DTQG} from "../../../../../../../constants/config";
 import dayjs from "dayjs";
-import {AMOUNT_ONE_DECIMAL} from "../../../../../../../Utility/utils";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../../Utility/utils";
 import {Base2Component} from "../../../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../../services/storage.service";
@@ -29,7 +29,7 @@ export class ThongTinKhBanTrucTiepComponent extends Base2Component implements On
   @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
-  amount = {...AMOUNT_ONE_DECIMAL};
+  amount = {...AMOUNT_NO_DECIMAL};
 
   constructor(
     httpClient: HttpClient,
@@ -74,13 +74,17 @@ export class ThongTinKhBanTrucTiepComponent extends Base2Component implements On
     const handleDataTableAll = async (dataInputCache: any) => {
       if (dataInputCache) {
         await processChange(dataInputCache);
-        this.dataTableAll = cloneDeep(dataInputCache.children);
+        this.dataTableAll = cloneDeep(dataInputCache.children).map(item => {
+          return {...item, expandSetAll: true};
+        });
       }
     };
     const handleDataTable = async (dataInput: any) => {
       if (dataInput) {
         await processChange(dataInput);
-        this.dataTable = dataInput.children;
+        this.dataTable = dataInput.children.map(item => {
+          return {...item, expandSetAll: true};
+        });
         if (!this.idInput) {
           await this.getdonGiaDuocDuyet(dataInput);
         }
