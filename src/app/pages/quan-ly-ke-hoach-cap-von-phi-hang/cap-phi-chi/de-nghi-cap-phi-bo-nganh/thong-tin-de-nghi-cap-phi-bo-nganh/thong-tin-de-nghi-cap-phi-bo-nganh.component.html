@@ -247,7 +247,7 @@
         <td>{{data.namPhatSinh}}</td>
         <td class='text-right'>{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</td>
         <td class='text-right'>{{data.kinhPhiDaCap | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class='text-right'>{{data.tongTien - data.kinhPhiDaCap | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class='text-right'>{{data.kinhPhiChuaCap | number : '1.0-1' : 'vi_VN'}}</td>
         <td class='text-right'>{{data.yeuCauCapThem | number : '1.0-1' : 'vi_VN'}}</td>
         <td class='text-center' *ngIf='!(isDisableField() || isView)'>
           <a (click)="editRow(data, 'ct2s')">
