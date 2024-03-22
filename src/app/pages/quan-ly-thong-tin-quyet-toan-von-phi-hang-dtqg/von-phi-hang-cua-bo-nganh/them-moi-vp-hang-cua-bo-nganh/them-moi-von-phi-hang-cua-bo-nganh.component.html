@@ -226,21 +226,21 @@
             <td class='text-center'>{{i + 1}} </td>
             <td>{{data.tenBoNganh}}</td>
             <td
-              class='text-right'>{{data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc | number}}</td>
-            <td class='text-right'>{{data.soDtDauNam + data.soDtBsTrongNam  | number}}</td>
-            <td class='text-right'>{{data.soDtDauNam  | number}}</td>
-            <td class='text-right'>{{data.soDtBsTrongNam  | number}}</td>
-            <td class='text-right'>{{data.soDuDtNamTruoc  | number}}</td>
-            <td class='text-right'>{{data.soTuNamTruoc  | number}}</td>
-            <td class='text-right'>{{data.soDuDtNamTruoc + data.soTuNamTruoc  | number}}</td>
-            <td class='text-right'>{{data.soDnQt  | number}}</td>
-            <td class='text-right'>{{data.soTdQt  | number}}</td>
+              class='text-right'>{{data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soDtDauNam + data.soDtBsTrongNam  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soDtDauNam  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soDtBsTrongNam  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soDuDtNamTruoc  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soTuNamTruoc  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soDuDtNamTruoc + data.soTuNamTruoc  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soDnQt  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soTdQt  |  number : '1.0-1' : 'vi_VN'}}</td>
             <td
-              class='text-right'>{{(data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc) - data.soTdQt | number}}</td>
-            <td class='text-right'>{{data.soHuyDt  | number}}</td>
-            <td class='text-right'>{{data.soTuPhaiNop | number}}</td>
-            <td class='text-right'>{{data.soDuNamSau | number}}</td>
-            <td class='text-right'>{{data.soTuNamSau | number}}</td>
+              class='text-right'>{{(data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc) - data.soTdQt |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soHuyDt  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soTuPhaiNop |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soDuNamSau |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soTuNamSau |  number : '1.0-1' : 'vi_VN'}}</td>
             <td class='text-center'>
               <a *ngIf='!isView' (click)='editQtNsChiTw(i)'>
                 <i class='fa fa-pencil' title='Sửa'></i>
@@ -348,21 +348,21 @@
           <td></td>
           <td class='text-right font-weight-bold'>Tổng</td>
           <td
-            class='text-right font-weight-bold'>{{sumCT1('soDtDauNam') + sumCT1('soDtBsTrongNam') + sumCT1('soDuDtNamTruoc') + sumCT1('soTuNamTruoc') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT1('soDtDauNam') + sumCT1('soDtBsTrongNam') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT1('soDtDauNam') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT1('soDtBsTrongNam') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT1('soDuDtNamTruoc') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT1('soTuNamTruoc') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT1('soDuDtNamTruoc') + sumCT1('soTuNamTruoc') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT1('soDnQt') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT1('soTdQt') | number}}</td>
+            class='text-right font-weight-bold'>{{sumCT1('soDtDauNam') + sumCT1('soDtBsTrongNam') + sumCT1('soDuDtNamTruoc') + sumCT1('soTuNamTruoc') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT1('soDtDauNam') + sumCT1('soDtBsTrongNam') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT1('soDtDauNam') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT1('soDtBsTrongNam') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT1('soDuDtNamTruoc') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT1('soTuNamTruoc') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT1('soDuDtNamTruoc') + sumCT1('soTuNamTruoc') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT1('soDnQt') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT1('soTdQt') |  number : '1.0-1' : 'vi_VN'}}</td>
           <td
-            class='text-right font-weight-bold'>{{((sumCT1('soDtDauNam') + sumCT1('soDtBsTrongNam') + sumCT1('soDuDtNamTruoc') + sumCT1('soTuNamTruoc')) - (sumCT1('soTdQt'))) | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT1('soHuyDt') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT1('soTuPhaiNop') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT1('soDuNamSau') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT1('soTuNamSau') | number}}</td>
+            class='text-right font-weight-bold'>{{((sumCT1('soDtDauNam') + sumCT1('soDtBsTrongNam') + sumCT1('soDuDtNamTruoc') + sumCT1('soTuNamTruoc')) - (sumCT1('soTdQt'))) |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT1('soHuyDt') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT1('soTuPhaiNop') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT1('soDuNamSau') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT1('soTuNamSau') |  number : '1.0-1' : 'vi_VN'}}</td>
           <td class='text-right font-weight-bold'></td>
         </tr>
         </tfoot>
@@ -526,21 +526,21 @@
             <td class='text-center'>{{i + 1}} </td>
             <td>{{data.tenBoNganh}}</td>
             <td
-              class='text-right'>{{data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc | number}}</td>
-            <td class='text-right'>{{data.soDtDauNam + data.soDtBsTrongNam  | number}}</td>
-            <td class='text-right'>{{data.soDtDauNam  | number}}</td>
-            <td class='text-right'>{{data.soDtBsTrongNam  | number}}</td>
-            <td class='text-right'>{{data.soDuDtNamTruoc  | number}}</td>
-            <td class='text-right'>{{data.soTuNamTruoc  | number}}</td>
-            <td class='text-right'>{{data.soDuDtNamTruoc + data.soTuNamTruoc  | number}}</td>
-            <td class='text-right'>{{data.soDnQt  | number}}</td>
-            <td class='text-right'>{{data.soTdQt  | number}}</td>
+              class='text-right'>{{data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soDtDauNam + data.soDtBsTrongNam  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soDtDauNam  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soDtBsTrongNam  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soDuDtNamTruoc  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soTuNamTruoc  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soDuDtNamTruoc + data.soTuNamTruoc  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soDnQt  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soTdQt  |  number : '1.0-1' : 'vi_VN'}}</td>
             <td
-              class='text-right'>{{(data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc) - data.soTdQt | number}}</td>
-            <td class='text-right'>{{data.soHuyDt  | number}}</td>
-            <td class='text-right'>{{data.soTuPhaiNop | number}}</td>
-            <td class='text-right'>{{data.soDuNamSau | number}}</td>
-            <td class='text-right'>{{data.soTuNamSau | number}}</td>
+              class='text-right'>{{(data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc) - data.soTdQt |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soHuyDt  |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soTuPhaiNop |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soDuNamSau |  number : '1.0-1' : 'vi_VN'}}</td>
+            <td class='text-right'>{{data.soTuNamSau |  number : '1.0-1' : 'vi_VN'}}</td>
             <td class='text-center'>
               <a *ngIf='!isView' (click)='editQtNsKpChiNvDtqg(i)'>
                 <i class='fa fa-pencil' title='Sửa'></i>
@@ -648,21 +648,21 @@
           <td></td>
           <td class='text-right font-weight-bold'>Tổng</td>
           <td
-            class='text-right font-weight-bold'>{{sumCT2('soDtDauNam') + sumCT2('soDtBsTrongNam') + sumCT2('soDuDtNamTruoc') + sumCT2('soTuNamTruoc') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT2('soDtDauNam') + sumCT2('soDtBsTrongNam') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT2('soDtDauNam') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT2('soDtBsTrongNam') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT2('soDuDtNamTruoc') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT2('soTuNamTruoc') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT2('soDuDtNamTruoc') + sumCT2('soTuNamTruoc') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT2('soDnQt') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT2('soTdQt') | number}}</td>
+            class='text-right font-weight-bold'>{{sumCT2('soDtDauNam') + sumCT2('soDtBsTrongNam') + sumCT2('soDuDtNamTruoc') + sumCT2('soTuNamTruoc') |  number : '1.0-1' : 'vi_VN' }}</td>
+          <td class='text-right font-weight-bold'>{{sumCT2('soDtDauNam') + sumCT2('soDtBsTrongNam') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT2('soDtDauNam') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT2('soDtBsTrongNam') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT2('soDuDtNamTruoc') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT2('soTuNamTruoc') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT2('soDuDtNamTruoc') + sumCT2('soTuNamTruoc') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT2('soDnQt') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT2('soTdQt') |  number : '1.0-1' : 'vi_VN'}}</td>
           <td
-            class='text-right font-weight-bold'>{{((sumCT2('soDtDauNam') + sumCT2('soDtBsTrongNam') + sumCT2('soDuDtNamTruoc') + sumCT2('soTuNamTruoc')) - (sumCT2('soTdQt'))) | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT2('soHuyDt') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT2('soTuPhaiNop') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT2('soDuNamSau') | number}}</td>
-          <td class='text-right font-weight-bold'>{{sumCT2('soTuNamSau') | number}}</td>
+            class='text-right font-weight-bold'>{{((sumCT2('soDtDauNam') + sumCT2('soDtBsTrongNam') + sumCT2('soDuDtNamTruoc') + sumCT2('soTuNamTruoc')) - (sumCT2('soTdQt'))) |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT2('soHuyDt') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT2('soTuPhaiNop') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT2('soDuNamSau') |  number : '1.0-1' : 'vi_VN'}}</td>
+          <td class='text-right font-weight-bold'>{{sumCT2('soTuNamSau') |  number : '1.0-1' : 'vi_VN'}}</td>
           <td class='text-right font-weight-bold'></td>
         </tr>
         </tfoot>
