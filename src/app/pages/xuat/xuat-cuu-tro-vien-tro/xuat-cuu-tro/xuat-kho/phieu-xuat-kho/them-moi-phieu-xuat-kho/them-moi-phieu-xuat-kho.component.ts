@@ -306,7 +306,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     this.listPhieuKtraCl = Array.isArray(resPhieuKtraCl?.data?.content) ? resPhieuKtraCl.data.content.map(f => ({ ...f, tenNganLo: f.tenLoKho ? `${f.tenLoKho}-${f.tenNganKho}` : f.tenNganKho })) : [];
     this.listPhieuXk = Array.isArray(resPhieuXk?.data?.content) ? resPhieuXk.data.content.map(f => ({ ...f, tenNganLo: f.tenLoKho ? `${f.tenLoKho}-${f.tenNganKho}` : f.tenNganKho })) : [];
     let dataChiCuc = data.dataDtl.filter(item => this.listPhieuKtraCl.findIndex(f => f.tenNganLo === item.tenNganLo) >= 0 &&
-      (this.listPhieuXk.findIndex(f => f.tenNganLo === item.tenNganLo && (f.trangThai !== '00' || (f.trangThai === '00' && f.id !== this.formData.value.id))) == -1)
+      (this.listPhieuXk.findIndex(f => f.idPhieuKnCl && f.tenNganLo === item.tenNganLo && (f.trangThai !== '00' || (f.trangThai === '00' && f.id !== this.formData.value.id))) == -1)
       && item.tenChiCuc == this.userInfo.TEN_DVI);
     if (dataChiCuc) {
       this.listDiaDiemNhap = dataChiCuc;
