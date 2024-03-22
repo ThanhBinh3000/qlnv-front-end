@@ -16,4 +16,9 @@ export class MuaBuBoSungBtcService extends BaseService{
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'giao-ke-hoach-mua-bu-bo-sung/quyet-dinh/btc', '/qlnv-khoach');
   }
+
+  chiTietTheoNam(nam: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/giao-ke-hoach-mua-bu-bo-sung/quyet-dinh/btc/chi-tiet-nam/${nam}`;
+    return this.httpClient.get(url).toPromise();
+  }
 }

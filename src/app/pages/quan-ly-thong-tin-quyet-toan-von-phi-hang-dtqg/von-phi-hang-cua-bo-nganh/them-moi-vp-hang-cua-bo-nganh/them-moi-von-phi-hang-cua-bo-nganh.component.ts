@@ -18,6 +18,7 @@ import { PREVIEW } from '../../../../constants/fileType';
 import printJS from 'print-js';
 import { saveAs } from 'file-saver';
 import { QuyetDinhTtcpService } from '../../../../services/quyetDinhTtcp.service';
+import { MuaBuBoSungBtcService } from '../../../../services/mua-bu-bo-sung-btc.service';
 
 @Component({
   selector: 'app-them-moi-von-phi-hang-cua-bo-nganh',
@@ -73,6 +74,7 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
     private vonPhiService: QuyetToanVonPhiService,
     public modal: NzModalService,
     private qdTtcp : QuyetDinhTtcpService,
+    private qdBtcService: MuaBuBoSungBtcService,
     private helperService: HelperService,
     private notification: NzNotificationService,
   ) {
@@ -181,8 +183,10 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
 
  async changeBN() {
     if (this.rowItemQtNsChiTw.maBoNganh) {
+      let namQd = this.formData.get("namQuyetToan").value;
       let maBn  =  this.listBoNganh.find(item => item.code == this.rowItemQtNsChiTw.maBoNganh).maDvi;
-      await this.getDtDauNam(maBn);
+      await this.getDtDauNam(namQd,maBn);
+      await this.getDtBsTrongNam(namQd,maBn);
       this.isAdddsQtNsChiTw = true;
       this.rowItemQtNsChiTw.tenBoNganh = this.listBoNganh.find(item => item.code == this.rowItemQtNsChiTw.maBoNganh).title;
     }
@@ -193,9 +197,8 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
   }
 
 
- async getDtDauNam(maBn){
-    let namQd = this.formData.get("namQuyetToan").value;
-    let res = await this.qdTtcp.chiTietTheoNam(namQd);
+ async getDtDauNam(namQd,maBn){
+   let res = await this.qdTtcp.chiTietTheoNam(namQd);
    if (res.msg == MESSAGE.SUCCESS) {
         if(res.data){
           let dataBn = res.data.listBoNganh.find(it => it.maBoNganh == maBn);
@@ -204,6 +207,18 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
      } else {
        this.notification.error(MESSAGE.ERROR, res.msg);
      }
+  }
+
+  async getDtBsTrongNam(namQd,maBn){
+    let res = await this.qdBtcService.chiTietTheoNam(namQd);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if(res.data){
+        let dataBn = res.data.listBoNganh.find(it => it.maBoNganh == maBn);
+        this.rowItemQtNsChiTw.soDtBsTrongNam = ( dataBn && dataBn.tongTien) ? dataBn.tongTien : 0;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   addQtNsChiTw() {

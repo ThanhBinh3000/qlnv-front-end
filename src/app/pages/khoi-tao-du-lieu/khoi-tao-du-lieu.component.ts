@@ -14,10 +14,28 @@ export class KhoiTaoDuLieuComponent implements OnInit, AfterViewInit {
   routes = [
     {
       icon: 'htvbdh_tcdt_congtrinhnghiencuu',
+      title: 'Mạng lưới kho',
+      url: `/${KHOI_TAO_DU_LIEU_ROUTE}/mang-luoi-kho`,
+      dropdown: 'mang-luoi-kho',
+      idHover: 'mang-luoi-kho',
+      hasTab: false,
+      permission: this.userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ') ? true : false
+    },
+    {
+      icon: 'htvbdh_tcdt_congtrinhnghiencuu',
       title: 'Hiện trạng công cụ, dụng cụ',
       url: `/${KHOI_TAO_DU_LIEU_ROUTE}/ht-cong-cu-dung-cu`,
       dropdown: 'ht-cong-cu-dung-cu',
       idHover: 'ht-cong-cu-dung-cu',
+      hasTab: false,
+      permission: this.userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ') ? true : false
+    },
+    {
+      icon: 'htvbdh_tcdt_congtrinhnghiencuu',
+      title: 'Hiện trạng máy móc thiết bị',
+      url: `/${KHOI_TAO_DU_LIEU_ROUTE}/ht-may-moc-thiet-bi`,
+      dropdown: 'ht-may-moc-thiet-bi',
+      idHover: 'ht-may-moc-thiet-bi',
       hasTab: false,
       permission: this.userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ') ? true : false
     }

@@ -23,6 +23,8 @@ export class TongHopDeNghiCapPhiService extends BaseService {
             url_ += 'maDvis=' + encodeURIComponent('' + body.maDvis) + '&';
         if (body.nam)
             url_ += 'nam=' + encodeURIComponent('' + body.nam) + '&';
+        if (body.trangThais)
+          url_ += 'trangThais=' + encodeURIComponent('' + body.trangThais) + '&';
         if (body.ngayTongHopDenNgay)
             url_ += 'ngayTongHopDenNgay=' + encodeURIComponent('' + body.ngayTongHopDenNgay) + '&';
         if (body.ngayTongHopTuNgay)
