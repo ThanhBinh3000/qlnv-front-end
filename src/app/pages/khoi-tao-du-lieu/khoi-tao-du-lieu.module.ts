@@ -6,10 +6,11 @@ import {ComponentsModule} from "../../components/components.module";
 import {MainModule} from "../../layout/main/main.module";
 import {KhoiTaoDuLieuComponent} from "./khoi-tao-du-lieu.component";
 import {HtCongCuDungCuComponent} from "./ht-cong-cu-dung-cu/ht-cong-cu-dung-cu.component";
+import { HtMayMocThietBiComponent } from './ht-may-moc-thiet-bi/ht-may-moc-thiet-bi.component';
 
 
 @NgModule({
-  declarations: [KhoiTaoDuLieuComponent, HtCongCuDungCuComponent],
+  declarations: [KhoiTaoDuLieuComponent, HtCongCuDungCuComponent, HtMayMocThietBiComponent],
   imports: [
     CommonModule,
     KhoiTaoDuLieuRoutingModule,

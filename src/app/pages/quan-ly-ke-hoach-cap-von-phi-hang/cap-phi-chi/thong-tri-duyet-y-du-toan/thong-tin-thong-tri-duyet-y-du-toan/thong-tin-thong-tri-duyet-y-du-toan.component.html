@@ -16,13 +16,13 @@
       <span>Lưu và gửi duyệt</span>
     </button>
     <button class='btn btn-sub btn-sm waves-effect waves-light'
-            *ngIf='(itemThongTri.trangThai == STATUS.CHO_DUYET_LDV || itemThongTri.trangThai == STATUS.CHO_DUYET_LDTC) && ( userService.isAccessPermisson("VONPHIHANG_PHICHINGVU_THONGTRI_DUYET_LDVU") || userService.isAccessPermisson("VONPHIHANG_PHICHINGVU_THONGTRI_DUYET_LDTC")  )'
+            *ngIf='(itemThongTri.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson("VONPHIHANG_PHICHINGVU_THONGTRI_DUYET_LDVU") ) || ( itemThongTri.trangThai == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson("VONPHIHANG_PHICHINGVU_THONGTRI_DUYET_LDTC"))'
             (click)='pheDuyet()'>
       <i class='icon htvbdh_tcdt_pheduyet'></i>
       <span>Duyệt</span>
     </button>
     <button type='button' class='btn btn-sub'
-            *ngIf='(itemThongTri.trangThai == STATUS.CHO_DUYET_LDV || itemThongTri.trangThai == STATUS.CHO_DUYET_LDTC) &&( userService.isAccessPermisson("VONPHIHANG_PHICHINGVU_THONGTRI_DUYET_LDVU") ||userService.isAccessPermisson("VONPHIHANG_PHICHINGVU_THONGTRI_DUYET_LDTC")  )'
+            *ngIf='(itemThongTri.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson("VONPHIHANG_PHICHINGVU_THONGTRI_DUYET_LDVU") ) || ( itemThongTri.trangThai == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson("VONPHIHANG_PHICHINGVU_THONGTRI_DUYET_LDTC"))'
             (click)='tuChoi()'>
       <i class='icon htvbdh_tcdt_tuchoi do'></i>
       <span>Từ chối</span>
@@ -67,7 +67,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]='true'> Năm</nz-form-label>
             <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
-              <nz-select formControlName='nam'>
+              <nz-select formControlName='nam' (ngModelChange)='changeNam($event)'>
                 <nz-option *ngFor='let p of listNam' [nzValue]='p.value' [nzLabel]='p.text'></nz-option>
               </nz-select>
             </nz-form-control>
