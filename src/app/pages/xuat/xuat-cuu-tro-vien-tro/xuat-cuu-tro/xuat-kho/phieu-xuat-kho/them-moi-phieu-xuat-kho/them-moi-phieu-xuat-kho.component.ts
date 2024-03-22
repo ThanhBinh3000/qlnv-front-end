@@ -454,7 +454,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     }
   }
   async save() {
-    this.helperService.ignoreRequiredForm(this.formData, ['soQdGiaoNvXh']);
+    this.helperService.ignoreRequiredForm(this.formData, ['soQdGiaoNvXh', 'soPhieuKnCl', 'idPhieuKnCl']);
     this.formData.controls['soPhieuXuatKho'].setValidators(Validators.required);
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;
