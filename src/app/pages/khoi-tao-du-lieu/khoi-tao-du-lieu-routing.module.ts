@@ -1,15 +1,8 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import {KhknBaoQuanComponent} from "../khkn-bao-quan/khkn-bao-quan.component";
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from "../../guard/auth.guard";
-import {
-  QuanLyCongTrinhNghienCuuBaoQuanComponent
-} from "../khkn-bao-quan/quan-ly-cong-trinh-nghien-cuu-bao-quan/quan-ly-cong-trinh-nghien-cuu-bao-quan.component";
-import {
-  QuanLyQuyChuanKyThuatQuocGiaComponent
-} from "../khkn-bao-quan/quan-ly-quy-chuan-ky-thuat-quoc-gia/quan-ly-quy-chuan-ky-thuat-quoc-gia.component";
 import {KhoiTaoDuLieuComponent} from "./khoi-tao-du-lieu.component";
-import {HtCongCuDungCuComponent} from "./ht-cong-cu-dung-cu/ht-cong-cu-dung-cu.component";
+import {MangLuoiKhoComponent} from "../quan-ly-kho-tang/mang-luoi-kho/mang-luoi-kho.component";
 
 const routes: Routes = [
   {
@@ -19,7 +12,7 @@ const routes: Routes = [
     children: [
       {
         path: 'ht-cong-cu-dung-cu',
-        component: HtCongCuDungCuComponent,
+        component: MangLuoiKhoComponent,
         canActivate: [AuthGuard],
       },
     ],
