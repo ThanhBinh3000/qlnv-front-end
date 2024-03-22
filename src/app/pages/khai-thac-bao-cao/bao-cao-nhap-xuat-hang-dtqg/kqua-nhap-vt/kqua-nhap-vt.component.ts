@@ -11,7 +11,6 @@ import {Globals} from "../../../../shared/globals";
 import * as dayjs from "dayjs";
 import {Validators} from "@angular/forms";
 import {saveAs} from "file-saver";
-import {MESSAGE} from "../../../../constants/message";
 @Component({
   selector: 'app-kqua-nhap-vt',
   templateUrl: './kqua-nhap-vt.component.html',
@@ -19,7 +18,6 @@ import {MESSAGE} from "../../../../constants/message";
 })
 export class KquaNhapVtComponent extends Base2Component implements OnInit {
   excelBlob: any;
-  listNam: any[] = [];
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -31,37 +29,12 @@ export class KquaNhapVtComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, bcNhapXuatMuaBanHangDTQGService);
     this.formData = this.fb.group(
       {
-        listNam: [, [Validators.required]],
+        nam: [dayjs().get("year"), [Validators.required]],
       }
     );
   }
 
-  async ngOnInit() {
-    await this.spinner.show();
-    try {
-      for (let i = 0; i < 15; i++) {
-        this.listNam.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
-        });
-      }
-      const listNamHt =[];
-      for (let i = 2; i >= 0; i--) {
-        listNamHt.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
-        });
-      }
-      console.log(listNamHt,"listNamHt")
-      this.formData.patchValue({
-        listNam: listNamHt.map(item => item.value)
-      });
-    } catch (e) {
-      console.log("error: ", e);
-      await this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-    await this.spinner.hide();
+  ngOnInit(): void {
   }
 
   async clearFilter() {
