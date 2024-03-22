@@ -419,6 +419,10 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       this.sortTableId('ct2s');
       let item = cloneDeep(this.create);
       item.idVirtual = uuidv4();
+      if (!item.loaiChiPhi || !item.namPhatSinh) {
+        this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
+        return;
+      }
       item.tenLoaiChiPhi = this.listLoaiChiPhi.find(s => s.ma == item.loaiChiPhi).giaTri;
       if (item.yeuCauCapThem > (item.tongTien - item.kinhPhiDaCap)) {
         this.notification.warning(MESSAGE.WARNING, 'Số tiền yêu cầu cấp thêm lớn hơn kinh phí chưa cấp.');
@@ -428,6 +432,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
         this.notification.warning(MESSAGE.WARNING, 'Kinh phí đã cấp lớn hơn tổng tiền.');
         return;
       }
+      item.kinhPhiChuaCap = item.tongTien ??0 - item.kinhPhiDaCap ??0;
       this.itemCt1Selected.ct2List.push(item);
       this.itemCt1Selected.ycCapThemPhi = this.tongCapThemBang2(this.itemCt1Selected);
     }
