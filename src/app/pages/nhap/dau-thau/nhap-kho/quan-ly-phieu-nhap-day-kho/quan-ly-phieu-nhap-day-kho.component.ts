@@ -210,6 +210,8 @@ export class QuanLyPhieuNhapDayKhoComponent extends Base2Component implements On
     };
     this.tuNgayNhapDayKho = null;
     this.denNgayNhapDayKho = null;
+    this.tuNgayTgianNkho = null;
+    this.denNgayTgianNkho = null;
     this.search();
   }
 
