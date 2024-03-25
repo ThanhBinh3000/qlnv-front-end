@@ -27,10 +27,9 @@ export class QuanLyBangKeCanHangComponent extends Base2Component implements OnIn
   @Input() typeVthh: string;
 
   searchFilter = {
+    namKhoach: '',
     soQuyetDinh: '',
-    soBangKe: '',
-    ngayNhap: '',
-    soHopDong: '',
+    soBangKe: ''
   };
 
   listDiemKho: any[] = [];
@@ -61,6 +60,22 @@ export class QuanLyBangKeCanHangComponent extends Base2Component implements OnIn
     tenNhaKho: '',
     tenNganLo: '',
     tenTrangThai: '',
+  };
+
+  tuNgayTao: Date | null = null;
+  denNgayTao: Date | null = null;
+  disabledTuNgayTao = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayTao) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayTao.getTime();
+  };
+
+  disabledDenNgayTao = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayTao) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayTao.getTime();
   };
 
   constructor(
@@ -102,7 +117,12 @@ export class QuanLyBangKeCanHangComponent extends Base2Component implements OnIn
         "limit": this.pageSize,
         "page": this.page - 1
       },
-      loaiVthh: this.typeVthh
+      loaiVthh: this.typeVthh,
+      soQd: this.searchFilter.soQuyetDinh,
+      namNhap: this.searchFilter.namKhoach,
+      soBkch: this.searchFilter.soBangKe,
+      tuNgayTaoBkch: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayTaoBkch: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59" : null,
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -147,11 +167,12 @@ export class QuanLyBangKeCanHangComponent extends Base2Component implements OnIn
 
   clearFilter() {
     this.searchFilter = {
+      namKhoach: '',
       soQuyetDinh: '',
       soBangKe: '',
-      ngayNhap: '',
-      soHopDong: '',
     };
+    this.tuNgayTao = null;
+    this.denNgayTao = null;
     this.search()
   }
 
@@ -242,19 +263,20 @@ export class QuanLyBangKeCanHangComponent extends Base2Component implements OnIn
       this.spinner.show();
       try {
         let body = {
-          "denNgayNhap": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 1 ? dayjs(this.searchFilter.ngayNhap[1]).format('YYYY-MM-DD') : null,
-          "maDvi": this.userInfo.MA_DVI,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": null,
-          "soBangKe": this.searchFilter.soBangKe,
-          "soQdNhap": this.searchFilter.soQuyetDinh,
-          "str": null,
-          "trangThai": null,
-          "tuNgayNhap": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 0 ? dayjs(this.searchFilter.ngayNhap[0]).format('YYYY-MM-DD') : null,
-        }
+          trangThai: this.STATUS.BAN_HANH,
+          paggingReq: {
+            "limit": this.pageSize,
+            "page": this.page - 1
+          },
+          loaiVthh: this.typeVthh,
+          soQd: this.searchFilter.soQuyetDinh,
+          namNhap: this.searchFilter.namKhoach,
+          soBkch: this.searchFilter.soBangKe,
+          tuNgayTaoBkch: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayTaoBkch: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59" : null,
+        };
         this.quanLyBangKeCanHangService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-bang-ke-can-hang.xlsx'),
           );

@@ -275,7 +275,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent extends Base2Component imple
   calcTong() {
     if (this.danhSachCtiet) {
       const sum = this.danhSachCtiet.reduce((prev, cur) => {
-        prev += cur.soLuong;
+        prev += cur.tongSoLuong;
         return prev;
       }, 0);
       return sum;

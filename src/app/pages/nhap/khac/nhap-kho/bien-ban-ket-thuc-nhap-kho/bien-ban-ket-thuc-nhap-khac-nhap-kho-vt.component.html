@@ -3,13 +3,20 @@
         <nz-card class="mt16 flex-card p-lr16">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
                 <div class="search__body" nz-row [nzGutter]="20">
+                  <div nz-col nzSpan="3">
+                    <label class="search__label">Năm kế hoạch</label>
+                    <nz-select formControlName="nam" nzAllowClear>
+                      <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                      </nz-option>
+                    </nz-select>
+                  </div>
                     <div nz-col nzSpan="3">
                         <label class="search__label">Số quyết định nhập</label>
                         <input class="search__input" placeholder="Số quyết định nhập" nz-input
                             formControlName="soQdPdNk" />
                     </div>
                     <div nz-col nzSpan="3">
-                        <label class="search__label">Số biên bản</label>
+                        <label class="search__label">Số BB kết thúc nhập kho</label>
                         <input class="search__input" placeholder="Số biên bản" nz-input formControlName="soBb" />
                     </div>
                     <div nz-col nzSpan="4">
@@ -54,20 +61,20 @@
             </form>
         </nz-card>
         <div class="group-button">
-            <h3>Danh sách biên bản nhập đầy kho </h3>
+            <h3>Danh sách biên bản kết thúc nhập kho</h3>
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteSelect()"
-                    *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_XOA')">
+                    *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_XOA')">
                     <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                     <span>Xóa</span>
                 </button>
-                <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_EXP')" type="button"
+                <button *ngIf="userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_EXP')" type="button"
                     class="btn btn-sub" (click)="export()">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-sub" (click)="print()"
-                    *ngIf="userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_IN')">
+                    *ngIf="userService.isCuc() && userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_IN')">
                     <i class="icon htvbdh_tcdt_print"></i>
                     <span>In</span>
                 </button>
@@ -90,8 +97,8 @@
                         <th>Thời hạn NH</th>
                         <th>Điểm kho</th>
                         <th>Lô kho</th>
-                        <td>Số BB kết thúc NH</td>
-                        <th>Ngày kết thúc nhập</th>
+                        <th>Số BB kết thúc NH</th>
+                        <th>Ngày kết thúc NK</th>
                         <th>Số HSKT</th>
                         <th>Số BB lấy mẫu/ BG mẫu</th>
                         <th>Số phiếu NK</th>

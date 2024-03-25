@@ -44,7 +44,7 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH || formData.value.trangThai == STATUS.DA_DUYET_LDC  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span> QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ </span>
@@ -227,7 +227,7 @@
           <tr [ngClass]="{'bg-selected': i == 0 && this.selected}" (click)="showDetail($event,item)">
             <td [nzExpand]="true"></td>
             <td colspan="2">{{item.tenDvi}}</td>
-            <td class="text-bold">{{ item.tongSoLuong | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-bold text-right">{{ item.tongSoLuong | number : '1.0-1' : 'vi_VN' }}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -237,14 +237,23 @@
               <td></td>
               <td></td>
               <td>{{diemKho.tenDiemKho}}</td>
-              <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
               <td>tấn</td>
-              <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{item.donGiaVat * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right" >{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">{{item.donGiaVat * diemKho.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
             </tr>
           </ng-container>
         </ng-container>
         </tbody>
+        <tfoot>
+        <th></th>
+        <th></th>
+        <th class="text-right text-blue">Tổng</th>
+        <th class="text-right">{{calcTong() | number : '1.0-1' : 'vi_VN'}}</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        </tfoot>
       </nz-table>
       </nz-card>
     </nz-collapse-panel>
@@ -279,9 +288,9 @@
                 <td nzLeft>{{data.diaChi}}</td>
                 <td nzLeft>{{data.sdt}}</td>
                 <td nzLeft>{{data.ngayChaoGia | date: 'dd/MM/yyyy'}}</td>
-                <td nzLeft>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td nzLeft>{{data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                <td nzLeft>{{data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+                <td class="text-right">{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
                 <td nzLeft class="text-blue">{{data.fileDinhKems?.fileName }}</td>
                 <td> <label nz-checkbox [(ngModel)]="data.luaChon"></label></td>
                 <td class="text-center">
@@ -291,8 +300,6 @@
                 </td>
               </ng-container>
             </tr>
-
-          </tbody>
         </nz-table>
         <form nz-form nzLayout="vertical" [formGroup]="formData">
           <div nz-row [nzGutter]="24">

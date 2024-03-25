@@ -455,6 +455,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
         this.loadPhuongPhapLayMau(item.cloaiVthh);
         this.listPhieuKdMau(item.soBienBan, null)
         this.loadChiTieuCl(item);
+        this.tenThuKho(item.maDiaDiem);
       }
     }
   }
@@ -469,7 +470,7 @@ export class ThongTinPhieuKiemDinhChatLuongVtTbComponent extends Base2Component 
       const detailThuKho = detail.data.object.detailThuKho
       if (detailThuKho) {
         this.formData.patchValue({
-          thuKho: detailThuKho.hoTen
+          thuKho: detailThuKho.fullName
         })
       }
     }

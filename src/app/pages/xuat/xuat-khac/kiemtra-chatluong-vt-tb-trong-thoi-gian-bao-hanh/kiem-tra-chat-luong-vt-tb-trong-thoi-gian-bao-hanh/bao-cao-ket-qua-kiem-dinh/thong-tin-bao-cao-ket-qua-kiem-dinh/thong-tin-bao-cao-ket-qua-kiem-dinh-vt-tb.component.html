@@ -168,7 +168,7 @@
         <th width="">Chủng loại</th>
         <th width="">Năm nhập kho</th>
         <th width="">Điểm kho</th>
-        <th width="">Ngăn/Lô kho</th>
+        <th width="">Nhà/Ngăn/Lô kho</th>
         <th width="">ĐVT</th>
         <th width="">Mã đơn vị tài sản</th>
         <th width="">SL mẫu Kiểm định</th>
@@ -210,7 +210,7 @@
               <td>{{lv1.tenCloaiVthh}}</td>
               <td>{{lv1.namNhap}}</td>
               <td>{{lv1.tenDiemKho}}</td>
-              <td>{{lv1.tenLoKho ? lv1.tenNganKho + ' - ' + lv1.tenLoKho : lv1.tenNganKho}}</td>
+              <td>{{lv1.tenNhaKho+'/'+lv1.tenNganKho + (lv1.tenLoKho != null ? '/'+ lv1.tenLoKho : '')}}</td>
               <td>{{lv1.donViTinh}}</td>
               <td>{{lv1.maDviTsan}}</td>
               <td>{{lv1.soLuongMauKd}}</td>
