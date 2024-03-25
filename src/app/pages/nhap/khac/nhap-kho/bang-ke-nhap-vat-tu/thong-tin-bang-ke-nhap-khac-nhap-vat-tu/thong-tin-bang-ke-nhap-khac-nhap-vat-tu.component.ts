@@ -329,7 +329,7 @@ export class ThongTinBangKeNhapKhacNhapVatTuComponent extends Base2Component imp
     // Get data tờ trình
     let body = {
       // trangThai: STATUS.BAN_HANH,
-      // loaiVthh: ['0101', '0102'],
+      loaiVthh: '02',
       soQdinhDcc: this.formData.value.soQdinhDcc,
       loaiDc: this.loaiDc,
       // maDvi: this.userInfo.MA_DVI
