@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Base2Component } from '../../../components/base2/base2.component';
-import { HienTrangMayMoc } from '../../../constants/status';
+import { HienTrangMayMoc, TRANG_THAI_CTNC } from '../../../constants/status';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../../../services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -15,6 +15,7 @@ import {
   PvcThongTinHienTrangComponent
 } from '../../dinh-muc/mang-pvc-cong-cu-dung-cu/hien-trang-ccdc-pvc/pvc-thong-tin-hien-trang/pvc-thong-tin-hien-trang.component';
 import dayjs from 'dayjs';
+import { TienDoThucHien } from '../../../models/KhoaHocCongNgheBaoQuan';
 
 @Component({
   selector: 'app-ht-cong-cu-dung-cu',
@@ -25,7 +26,8 @@ export class HtCongCuDungCuComponent extends Base2Component implements OnInit  {
   isViewDetail : boolean;
   dsCuc : any[] = [];
   dsChiCuc : any[] = [];
-  statusMm = HienTrangMayMoc
+  statusMm = HienTrangMayMoc;
+  TRANG_THAI_CTNC = TRANG_THAI_CTNC;
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -184,4 +186,32 @@ export class HtCongCuDungCuComponent extends Base2Component implements OnInit  {
       },
     });
   }
+
+  themMoiItem() {
+    if (!this.dataTable) {
+      this.dataTable = [];
+    }
+    // if (this.rowItem.noiDung && this.rowItem.sanPham != null) {
+    //   this.sortTableId();
+    //   let item = cloneDeep(this.rowItem);
+    //   item.stt = this.dataTable.length + 1;
+    //   item.edit = false;
+    //   this.dataTable = [
+    //     ...this.dataTable,
+    //     item,
+    //   ];
+    //
+    //   this.rowItem = new TienDoThucHien();
+    //   this.updateEditCache();
+    //   this.emitDataTable();
+    // } else {
+    //   this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đầy đủ thông tin');
+    // }
+  }
+
+  clearData() {
+    // this.rowItem = new TienDoThucHien();
+  }
+
+
 }

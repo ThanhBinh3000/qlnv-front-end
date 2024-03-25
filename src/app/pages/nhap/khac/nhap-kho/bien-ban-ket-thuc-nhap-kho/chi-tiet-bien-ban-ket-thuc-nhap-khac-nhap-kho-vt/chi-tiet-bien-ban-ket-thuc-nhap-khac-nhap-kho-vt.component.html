@@ -11,36 +11,36 @@
 
         <div class="btn-group">
 
-            <button type="button" class="btn btn-sub" (click)="quayLai()">
+            <button type="button" class="btn btn-sub ml-2" (click)="quayLai()">
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
 
-            <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO" type="button"
+            <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO  && this.userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_THEM')" type="button"
                 class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Lưu và gửi duyệt</span>
             </button>
 
-            <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO" type="button"
+            <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO && this.userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_THEM')" type="button"
                 class="btn btn-main ml-2" (click)="save()">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
             </button>
 
-            <button *ngIf="isTuChoi()" type="button" class="btn btn-sub" (click)="pheDuyet(false)">
+            <button *ngIf="isPheDuyet()" type="button" class="btn btn-sub ml-2" (click)="pheDuyet(false)">
                 <i class="icon htvbdh_tcdt_tuchoi do"></i>
                 <span>Từ chối</span>
             </button>
 
-            <button *ngIf="isPheDuyet()" type="button" class="btn btn-sub" (click)="pheDuyet(true)">
+            <button *ngIf="isPheDuyet()" type="button" class="btn btn-sub ml-2" (click)="pheDuyet(true)">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
             </button>
 
-            <button *ngIf="formData.value.id" type="button" class="btn btn-sub xanh-nhat"
+            <button *ngIf="formData.value.id  && this.userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_IN')" type="button" class="btn btn-sub xanh-nhat ml-2"
                 (click)="preview(previewName)">
-                <i class=" icon htvbdh_tcdt_print"></i>
+                <i class=" icon htvbdh_tcdt_print "></i>
                 <span>In/xem trước</span>
             </button>
 
@@ -89,7 +89,7 @@
                     </div>
                     <div nz-col [nzSpan]="3">
                         <nz-form-item>
-                            <nz-form-label nzRequired [nzNoColon]="true">Mã quan hệ ngân sách</nz-form-label>
+                            <nz-form-label nzRequired [nzNoColon]="true">Mã QHNS (quan hệ ngân sách)</nz-form-label>
                             <nz-form-control>
                                 <input nz-input formControlName="maQhns" [readonly]="true" />
                             </nz-form-control>
@@ -99,7 +99,7 @@
                         <nz-form-item>
                             <nz-form-label nzRequired [nzNoColon]="true">Số BB kết thúc nhập kho</nz-form-label>
                             <nz-form-control>
-                                <input nz-input formControlName="soBb" [readonly]="true" />
+                                <input nz-input formControlName="soBb" [readonly]="isView" />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -114,7 +114,7 @@
                     </div>
                     <div nz-col [nzSpan]="4">
                         <nz-form-item>
-                            <nz-form-label [nzNoColon]="true">Số QĐ điều chuyển của cục</nz-form-label>
+                            <nz-form-label [nzNoColon]="true">Số QĐ giao NVNH</nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQD()">
                                     <input [readonly]="true" nz-input formControlName="soQdPdNk" readonly="true" />

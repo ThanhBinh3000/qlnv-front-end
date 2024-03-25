@@ -50,49 +50,43 @@
     </nz-alert>
 
     <nz-card class="mt16 flex-card p-lr16">
-        <div class="mg-t-16 header header-green-background">
-            <div class="header-text">
-                <div class="title-chi-tieu">
-                    <span></span>
-                    <span>THÔNG TIN CHUNG</span>
-                </div>
-            </div>
-        </div>
-        <form nzLayout="vertical" nz-form [formGroup]="formData">
+      <nz-collapse nzAccordion>
+        <nz-collapse-panel nzHeader="THÔNG TIN CHUNG" [nzActive]="true">
+          <form nzLayout="vertical" nz-form [formGroup]="formData">
             <div nz-row [nzGutter]="[18,12]">
-                <div nz-col nzSpan="2">
-                    <nz-form-item class="form-item">
-                        <nz-form-label [nzNoColon]="true" nzRequired>
-                            Năm kế hoạch
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-select formControlName="namKh" nzDisabled>
-                                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="4">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                            Đơn vị
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <input nz-input readonly formControlName="tenDvi" />
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col nzSpan="3">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                            Mã QHNS
-                        </nz-form-label>
-                        <input nz-input readonly formControlName="maQhns" />
-                    </nz-form-item>
-                </div>
+              <div nz-col nzSpan="2">
+                <nz-form-item class="form-item">
+                  <nz-form-label [nzNoColon]="true" nzRequired>
+                    Năm kế hoạch
+                  </nz-form-label>
+                  <nz-form-control [nzErrorTip]="error">
+                    <nz-select formControlName="namKh" nzDisabled>
+                      <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="4">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">
+                    Đơn vị
+                  </nz-form-label>
+                  <nz-form-control [nzErrorTip]="error">
+                    <input nz-input readonly formControlName="tenDvi" />
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzSpan="3">
+                <nz-form-item>
+                  <nz-form-label [nzNoColon]="true">
+                    Mã QHNS
+                  </nz-form-label>
+                  <input nz-input readonly formControlName="maQhns" />
+                </nz-form-item>
+              </div>
               <div nz-col nzSpan="3">
                 <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true" nzRequired> Số phiếu kiểm nghiệm chất lượng</nz-form-label>
+                  <nz-form-label [nzNoColon]="true" nzRequired> Số phiếu KNCL</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <input [readonly]="true" nz-input formControlName="soPhieuKiemNghiemCl" readonly />
                   </nz-form-control>
@@ -125,7 +119,7 @@
               </div>
               <div nz-col nzSpan="3">
                 <nz-form-item class="form-item">
-                  <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ giao nhiệm vụ nhập
+                  <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ giao NV nhập
                     hàng</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
@@ -281,26 +275,26 @@
               </div>
 
 
-<!--                <div nz-col nzSpan="24">-->
-<!--                    <nz-form-item>-->
-<!--                        <nz-form-label [nzNoColon]="true" nzRequired>-->
-<!--                            File đính kèm phiếu kiểm nghiệm chất lượng đã ký-->
-<!--                        </nz-form.-label>-->
-<!--                        <nz-form-control [nzErrorTip]="error">-->
-<!--                            <div class="list-file">-->
-<!--                                <nz-input-group [nzSuffix]="suffixTemplateInfo" nzSize="small">-->
-<!--                                    <input type="text" nz-input />-->
-<!--                                </nz-input-group>-->
-<!--                                <ng-template #suffixTemplateInfo>-->
-<!--                                    <div class="icon-file-dinh-kem">-->
-<!--                                        <i class="icon htvbdh_tcdt_tep"></i>-->
-<!--                                        <input readonly class="input-file" (change)="getNameFile($event)" type="file" />-->
-<!--                                    </div>-->
-<!--                                </ng-template>-->
-<!--                            </div>-->
-<!--                        </nz-form-control>-->
-<!--                    </nz-form-item>-->
-<!--                </div>-->
+              <!--                <div nz-col nzSpan="24">-->
+              <!--                    <nz-form-item>-->
+              <!--                        <nz-form-label [nzNoColon]="true" nzRequired>-->
+              <!--                            File đính kèm phiếu kiểm nghiệm chất lượng đã ký-->
+              <!--                        </nz-form.-label>-->
+              <!--                        <nz-form-control [nzErrorTip]="error">-->
+              <!--                            <div class="list-file">-->
+              <!--                                <nz-input-group [nzSuffix]="suffixTemplateInfo" nzSize="small">-->
+              <!--                                    <input type="text" nz-input />-->
+              <!--                                </nz-input-group>-->
+              <!--                                <ng-template #suffixTemplateInfo>-->
+              <!--                                    <div class="icon-file-dinh-kem">-->
+              <!--                                        <i class="icon htvbdh_tcdt_tep"></i>-->
+              <!--                                        <input readonly class="input-file" (change)="getNameFile($event)" type="file" />-->
+              <!--                                    </div>-->
+              <!--                                </ng-template>-->
+              <!--                            </div>-->
+              <!--                        </nz-form-control>-->
+              <!--                    </nz-form-item>-->
+              <!--                </div>-->
               <div nz-col nzSpan="24">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">
@@ -313,7 +307,9 @@
               </div>
 
             </div>
-        </form>
+          </form>
+        </nz-collapse-panel>
+      </nz-collapse>
         <div class="mg-t-16 header header-green-background">
             <div class="header-text">
                 <div class="title-chi-tieu">
