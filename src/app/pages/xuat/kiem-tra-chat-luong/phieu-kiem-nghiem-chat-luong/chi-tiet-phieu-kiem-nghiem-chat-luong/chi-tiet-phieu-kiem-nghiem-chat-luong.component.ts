@@ -185,13 +185,15 @@ export class ChiTietPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         tenChiCuc: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
         ktvBaoQuan: this.userInfo.TEN_DAY_DU,
+        type: this.loaiXuat
       })
       if (this.inputData) {
         await this.bindingQdGnv(this.inputData.idQdGnv);
         this.loadDsBbLayMau();
-      } else {
-        this.formData.patchValue({ type: this.loaiXuat })
       }
+      // else {
+      //   this.formData.patchValue({ type: this.loaiXuat })
+      // }
     }
   }
   async loadDanhSachHinhThucBaoQuan(cloaiVthh: string) {

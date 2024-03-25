@@ -417,7 +417,8 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Tên đơn vị mua hàng</nz-form-label>
                   <nz-form-control nz-col>
-                    <input nz-input formControlName="tenBenMua" [readonly]="formData.value.phanLoai === 'QĐKQ' ? true : isView"/>
+                    <input nz-input formControlName="tenBenMua"
+                           [readonly]="formData.value.phanLoai === 'QĐKQ' ? true : isView"/>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -425,7 +426,8 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Địa chỉ</nz-form-label>
                   <nz-form-control nz-col>
-                    <input nz-input formControlName="diaChiBenMua" [readonly]="formData.value.phanLoai === 'QĐKQ' ? true : isView"/>
+                    <input nz-input formControlName="diaChiBenMua"
+                           [readonly]="formData.value.phanLoai === 'QĐKQ' ? true : isView"/>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -433,7 +435,8 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Mã số thuế</nz-form-label>
                   <nz-form-control nz-col>
-                    <input nz-input formControlName="mstBenMua" [readonly]="formData.value.phanLoai === 'QĐKQ' ? true : isView"/>
+                    <input nz-input formControlName="mstBenMua"
+                           [readonly]="formData.value.phanLoai === 'QĐKQ' ? true : isView"/>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -535,7 +538,7 @@
                   <nz-form-label [nzNoColon]="true"> Số lượng bán TT</nz-form-label>
                   <nz-form-control nz-col>
                         <span style="color: blue" *ngIf="formData.value.soLuong">
-                          {{ formData.value.soLuong | number:globals.numberFormat:globals.locale }}
+                          {{ formData.value.soLuong | number:'1.0-0' : 'vi_VN' }}
                         </span>
                   </nz-form-control>
                 </nz-form-item>
@@ -570,7 +573,7 @@
                   </nz-form-label>
                   <nz-form-control nz-col>
                         <span style="color: blue" *ngIf="formData.value.slXuatBanQdPd">
-                          {{ formData.value.slXuatBanQdPd | number:globals.numberFormat:globals.locale }}
+                          {{ formData.value.slXuatBanQdPd | number:'1.0-0' : 'vi_VN' }}
                           ({{formData.value.donViTinh}})
                         </span>
                   </nz-form-control>
@@ -582,7 +585,7 @@
                   </nz-form-label>
                   <nz-form-control nz-col>
                         <span style="color: blue" *ngIf="formData.value.slXuatBanKyHdong">
-                          {{ formData.value.slXuatBanKyHdong | number:globals.numberFormat:globals.locale }}
+                          {{ formData.value.slXuatBanKyHdong | number:'1.0-0' : 'vi_VN' }}
                           ({{formData.value.donViTinh}})
                         </span>
                   </nz-form-control>
@@ -594,7 +597,7 @@
                   </nz-form-label>
                   <nz-form-control nz-col>
                         <span style="color: red" *ngIf="formData.value.slXuatBanChuaKyHdong">
-                          {{ formData.value.slXuatBanChuaKyHdong | number:globals.numberFormat:globals.locale }}
+                          {{ formData.value.slXuatBanChuaKyHdong | number:'1.0-0' : 'vi_VN' }}
                           ({{formData.value.donViTinh}})
                         </span>
                   </nz-form-control>
@@ -650,17 +653,18 @@
             <tbody>
             <ng-container *ngFor="let data of dataTable , let idx = index">
               <tr>
-                <td [nzExpand]="expandSet.has(idx)" (nzExpandChange)="onExpandChange(idx, $event)"></td>
+                <td nzShowExpand="true" [nzExpand]="data.expandSetAll"
+                    (nzExpandChange)="onExpandChangeAll(data, $event)"></td>
                 <td colspan="5" class="text-left bold">{{data.tenDvi}}</td>
-                <td class="text-right bold">{{ data.soLuongXuatBan|number:globals.numberFormat:globals.locale }}</td>
-                <td class="text-right bold">{{ data.soLuongKyHopDong|number:globals.numberFormat:globals.locale }}</td>
+                <td class="text-right bold">{{ data.soLuongXuatBan|number:'1.0-0' : 'vi_VN' }}</td>
+                <td class="text-right bold">{{ data.soLuongKyHopDong|number:'1.0-0' : 'vi_VN' }}</td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
               </tr>
-              <ng-container *ngIf="expandSet.has(idx)">
+              <ng-container *ngIf="data.expandSetAll">
                 <tr *ngFor="let children of data.children, let i = index">
                   <td></td>
                   <td></td>
@@ -670,13 +674,13 @@
                     {{ (children.tenLoKho ? children.tenLoKho + " - " : "") + (children.tenNganKho ? children.tenNganKho + " - " : "") + (children.tenNhaKho ? children.tenNhaKho : "") }}
                   </td>
                   <td class="text-left">{{ children.maDviTsan }}</td>
-                  <td class="text-right">{{ children.soLuongDeXuat|number:globals.numberFormat:globals.locale }}</td>
-                  <td class="text-right">{{ children.soLuongKyHd|number:globals.numberFormat:globals.locale }}</td>
+                  <td class="text-right">{{ children.soLuongDeXuat|number:'1.0-0' : 'vi_VN' }}</td>
+                  <td class="text-right">{{ children.soLuongKyHd|number:'1.0-0' : 'vi_VN' }}</td>
                   <td class="text-left">{{ children.donViTinh }}</td>
-                  <td class="text-right">{{ children.donGiaDuocDuyet|number:globals.numberFormat:globals.locale }}</td>
-                  <td class="text-right">{{ children.donGiaDeXuat|number:globals.numberFormat:globals.locale }}</td>
-                  <td class="text-right">{{ children.donGiaKyHd|number:globals.numberFormat:globals.locale }}</td>
-                  <td class="text-right">{{ children.thanhTien|number:globals.numberFormat:globals.locale }}</td>
+                  <td class="text-right">{{ children.donGiaDuocDuyet|number:'1.0-0' : 'vi_VN' }}</td>
+                  <td class="text-right">{{ children.donGiaDeXuat|number:'1.0-0' : 'vi_VN' }}</td>
+                  <td class="text-right">{{ children.donGiaKyHd|number:'1.0-0' : 'vi_VN' }}</td>
+                  <td class="text-right">{{ children.thanhTien|number:'1.0-0' : 'vi_VN' }}</td>
                 </tr>
               </ng-container>
             </ng-container>
@@ -691,10 +695,10 @@
                 <td></td>
                 <td></td>
                 <td
-                  class="text-right bold text-blue"> {{ calcTong('soLuongXuatBan')|number:globals.numberFormat:globals.locale }}
+                  class="text-right bold text-blue"> {{ calcTong('soLuongXuatBan')|number:'1.0-0' : 'vi_VN' }}
                 </td>
                 <td
-                  class="text-right bold text-blue"> {{ calcTong('soLuongKyHopDong')|number:globals.numberFormat:globals.locale }}
+                  class="text-right bold text-blue"> {{ calcTong('soLuongKyHopDong')|number:'1.0-0' : 'vi_VN' }}
                 </td>
                 <td></td>
                 <td></td>
@@ -1241,7 +1245,7 @@
                   <nz-form-label [nzNoColon]="true"> Số lượng</nz-form-label>
                   <nz-form-control nz-col>
                     <span style="color: blue" *ngIf="formData.value.soLuong">
-                      {{ formData.value.soLuong | number:globals.numberFormat:globals.locale }}
+                      {{ formData.value.soLuong | number:'1.0-0' : 'vi_VN' }}
                     </span>
                   </nz-form-control>
                 </nz-form-item>
@@ -1284,7 +1288,7 @@
                   <nz-form-label [nzNoColon]="true"> SL xuất TT ủy quyền cho Chi cục theo QĐ PD KH BTT</nz-form-label>
                   <nz-form-control nz-col>
                     <span style="color: blue" *ngIf="formData.value.slXuatBanQdPd">
-                      {{ formData.value.slXuatBanQdPd | number:globals.numberFormat:globals.locale }}
+                      {{ formData.value.slXuatBanQdPd | number:'1.0-0' : 'vi_VN' }}
                       ({{formData.value.donViTinh}})
                     </span>
                   </nz-form-control>
@@ -1295,7 +1299,7 @@
                   <nz-form-label [nzNoColon]="true"> SL xuất TT ủy quyền cho Chi cục chưa được ký HĐ</nz-form-label>
                   <nz-form-control nz-col>
                     <span style="color: red" *ngIf="formData.value.slXuatBanChuaKyHdong">
-                      {{ formData.value.slXuatBanChuaKyHdong | number:globals.numberFormat:globals.locale }}
+                      {{ formData.value.slXuatBanChuaKyHdong | number:'1.0-0' : 'vi_VN' }}
                       ({{formData.value.donViTinh}})
                     </span>
                   </nz-form-control>
@@ -1347,9 +1351,9 @@
                 {{ (data.tenLoKho ? data.tenLoKho + " - " : "") + (data.tenNganKho ? data.tenNganKho + " - " : "") + (data.tenNhaKho ? data.tenNhaKho : "") }}
               </td>
               <td class="text-left">{{data.maDviTsan}}</td>
-              <td class="text-right">{{data.soLuongKyHd|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right">{{data.soLuongKyHd|number:'1.0-0' : 'vi_VN' }}</td>
               <td class="text-left">{{data.donViTinh}}</td>
-              <td class="text-right">{{data.thanhTien|number:globals.numberFormat:globals.locale }}</td>
+              <td class="text-right">{{data.thanhTien|number:'1.0-0' : 'vi_VN' }}</td>
             </tr>
             </tbody>
             <ng-container *ngIf="dataTable.length > 0">
@@ -1361,7 +1365,7 @@
                 <td></td>
                 <td></td>
                 <td
-                  class="text-right bold text-blue"> {{ calcTong('soLuongKyHd')|number:globals.numberFormat:globals.locale }}
+                  class="text-right bold text-blue"> {{ calcTong('soLuongKyHd')|number:'1.0-0' : 'vi_VN' }}
                 </td>
                 <td></td>
                 <td></td>

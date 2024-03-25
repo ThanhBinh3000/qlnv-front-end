@@ -93,18 +93,16 @@
             <th>Số QĐ giao NV NH</th>
             <th>Năm kế hoạch</th>
             <th>Thời hạn NH trước ngày</th>
-            <th *ngIf="!loaiVthh.startsWith('02')">Số BB NĐK</th>
-            <th *ngIf="loaiVthh.startsWith('02')">Số BB kết thúc NK</th>
-            <th>Ngày bắt đầu nhập</th>
-            <th>Ngày kết thúc nhập</th>
             <th>Điểm kho</th>
-            <th>Nhà kho</th>
-            <th>Ngăn kho</th>
-            <th>Lô kho</th>
-            <th>Số phiếu KT CL</th>
-            <th>Số phiếu NK</th>
+            <th>Ngăn/Lô kho</th>
+            <th *ngIf="loaiVthh.startsWith('02')">Số BB kết thúc NK</th>
+            <th *ngIf="!loaiVthh.startsWith('02')">Số BB Nhập đầy kho</th>
+            <th *ngIf="!loaiVthh.startsWith('02')">Ngày lập BB NĐK</th>
+            <th *ngIf="loaiVthh.startsWith('02')">Ngày kết thúc NK</th>
+            <th>Số phiếu KTCL</th>
             <th>Số bảng kê</th>
-            <th>Ngày nhập kho</th>
+            <th>Số phiếu NK</th>
+<!--            <th>Ngày nhập kho</th>-->
             <th>Trạng thái</th>
             <th>Hành động</th>
           </tr>
@@ -118,7 +116,7 @@
               <td class="link bold">{{ item.soQd }}</td>
               <td class="bold">{{ item.namNhap }}</td>
               <td class="bold">{{ item.tgianNkho }}</td>
-              <td colspan="12"></td>
+              <td colspan="8"></td>
               <td>
                 <a *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBKTNK_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BBNDK_THEM')"
                   (click)="redirectToChiTiet(false, 0,item.id)">
@@ -133,14 +131,13 @@
                   <td></td>
                   <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
                   <td colspan="3"></td>
-                  <td>{{bbNhapDayKho.soBienBanNhapDayKho}}</td>
-                  <td>{{bbNhapDayKho.ngayBatDauNhap | date: 'dd/MM/yyyy' }}</td>
-                  <td>{{bbNhapDayKho.ngayKetThucNhap | date: 'dd/MM/yyyy' }}</td>
                   <td>{{bbNhapDayKho.tenDiemKho}}</td>
-                  <td>{{bbNhapDayKho.tenNhaKho}}</td>
-                  <td>{{bbNhapDayKho.tenNganKho}}</td>
-                  <td>{{bbNhapDayKho.tenLoKho}}</td>
-                  <td colspan="4"></td>
+                  <td>{{bbNhapDayKho.tenLoKho? bbNhapDayKho.tenLoKho + ' - ' + bbNhapDayKho.tenNganKho : bbNhapDayKho.tenNganKho}}</td>
+                  <td>{{bbNhapDayKho.soBienBanNhapDayKho}}</td>
+                  <td *ngIf="!loaiVthh.startsWith('02')">{{bbNhapDayKho.ngayTao | date: 'dd/MM/yyyy' }}</td>
+<!--                  <td *ngIf="loaiVthh.startsWith('02')">{{bbNhapDayKho.ngayBatDauNhap | date: 'dd/MM/yyyy' }}</td>-->
+                  <td *ngIf="loaiVthh.startsWith('02')">{{bbNhapDayKho.ngayKetThucNhap | date: 'dd/MM/yyyy' }}</td>
+                  <td colspan="3"></td>
                   <td>{{bbNhapDayKho.tenTrangThai}}</td>
                   <td>
                     <a *ngIf="hienThiXem(bbNhapDayKho)"
@@ -166,11 +163,11 @@
                   <tr class="level-3" *ngFor="let dataPhieu of bbNhapDayKho.chiTiets">
                     <td></td>
                     <td></td>
-                    <td colspan="11"></td>
+                    <td colspan="8"></td>
                     <td class="link">{{dataPhieu.soPhieuKtraCl}}</td>
-                    <td class="link">{{dataPhieu.soPhieuNhapKho}}</td>
                     <td class="link">{{dataPhieu.soBangKe}}</td>
-                    <td class="bold">{{dataPhieu.ngayNhap | date: 'dd/MM/yyyy'}}</td>
+                    <td class="link">{{dataPhieu.soPhieuNhapKho}}</td>
+<!--                    <td class="bold">{{dataPhieu.ngayNhap | date: 'dd/MM/yyyy'}}</td>-->
                     <td></td>
                     <td></td>
                   </tr>

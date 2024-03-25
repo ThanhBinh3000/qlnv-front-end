@@ -21,6 +21,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {saveAs} from 'file-saver';
 import {v4 as uuidv4} from "uuid";
+import {Validators} from "@angular/forms";
 @Component({
   selector: 'app-them-moi-ho-so-ky-thuat',
   templateUrl: './them-moi-ho-so-ky-thuat.component.html',
@@ -304,6 +305,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
+    this.setValidator(isGuiDuyet);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
@@ -333,6 +335,20 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  setValidator(isGuiDuyet) {
+    if(isGuiDuyet) {
+        this.formData.controls['soQdGiaoNvNh'].setValidators([Validators.required]);
+        this.formData.controls['soBbLayMau'].setValidators([Validators.required]);
+    } else {
+      Object.keys(this.formData.controls).forEach(key => {
+        const control = this.formData.controls[key];
+        control.clearValidators();
+        control.updateValueAndValidity();
+      });
+      this.formData.updateValueAndValidity();
     }
   }
 

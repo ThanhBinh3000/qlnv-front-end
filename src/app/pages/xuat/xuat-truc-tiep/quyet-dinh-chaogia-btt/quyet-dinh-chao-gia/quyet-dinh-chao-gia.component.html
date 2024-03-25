@@ -70,6 +70,7 @@
                  [nzIndeterminate]="indeterminate"></label>
         </th>
         <th nzWidth="50px" class="text-center wrap"> STT</th>
+        <th class="text-left"> Năm kế hoạch</th>
         <th class="text-left"> Số QĐ PDKQ chào giá</th>
         <th class="text-left"> Ngày ký QĐ</th>
         <th class="text-left"> Trích yếu</th>
@@ -83,6 +84,12 @@
       <tr class="header-row search">
         <th></th>
         <th></th>
+        <th>
+          <nz-input-group>
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKh"
+                   (input)="filterInTable('namKh',filterTable.namKh)" size="small"/>
+          </nz-input-group>
+        </th>
         <th>
           <nz-input-group>
             <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdKq"
@@ -144,6 +151,7 @@
                  [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
         </td>
         <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
+        <td class="text-left">{{ data.namKh }}</td>
         <td class="text-left">{{ data.soQdKq }}</td>
         <td class="text-left">{{ data.ngayKy|date:'dd/MM/yyyy' }}</td>
         <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">

@@ -80,7 +80,6 @@
           <th class="text-left"> Số QĐ công văn/tờ trình</th>
           <th class="text-left"> Số QĐ điều chỉnh KH BĐG</th>
           <th class="text-left"> Ngày ký QĐ điều chỉnh</th>
-          <th class="text-left"> Số QĐ cần điều chỉnh</th>
           <th class="text-left"> Số QĐ trước điều chỉnh</th>
           <th class="text-left"> Trích yếu</th>
           <th class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)"> Loại hàng DTQG</th>
@@ -123,12 +122,6 @@
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdCanDc"
                      (input)="filterInTable('soQdCanDc',filterTable.soQdCanDc)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPd"
-                     (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small"/>
             </nz-input-group>
           </th>
           <th *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">
@@ -177,10 +170,9 @@
           <td class="text-left">{{ data.soCongVan }}</td>
           <td class="text-left">{{ data.soQdDc }}</td>
           <td class="text-left">{{ data.ngayKyDc|date:'dd/MM/yyyy' }}</td>
-          <td class="text-left">{{ data.soQdCanDc }}</td>
           <td class="text-left">
-            <a *ngIf="data.soQdPd && data.idQdPd" (click)="openModal(data.idQdPd)"
-               style="color: blue">{{data.soQdPd}}
+            <a *ngIf="data.soQdCanDc && data.idGoc" (click)="openModal(data.idGoc, data.lanDieuChinh)"
+               style="color: blue">{{data.soQdCanDc}}
             </a>
           </td>
           <td class="text-left" style="max-width: 300px; min-width: 250px;  white-space: break-spaces;">
@@ -236,8 +228,14 @@
 <!--Xem quyết định kế hoạch-->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isView]="true">
+    <app-them-quyet-dinh-ban-dau-gia *ngIf="lanDieuChinh" [idInput]="idQdPd" [loaiVthh]="loaiVthh"
+                                     [isViewOnModal]="true"
+                                     [isView]="true">
     </app-them-quyet-dinh-ban-dau-gia>
+    <app-them-moi-dieu-chinh *ngIf="!lanDieuChinh" [idInput]="idQdPd" [loaiVthh]="loaiVthh"
+                             [isViewOnModal]="true"
+                             [isView]="true">
+    </app-them-moi-dieu-chinh>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeModal()" class="modal__button--cancel">

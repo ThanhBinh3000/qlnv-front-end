@@ -99,13 +99,13 @@ export class ThemMoiTongChiMuaHangComponent extends Base2Component implements On
     this.userInfo = this.userService.getUserLogin();
     await Promise.all([
       this.layTatCaDonViByLevel(),
+      this.loadDsKyBc(),
     ]);
     if (this.idInput != null) {
       await this.loadChiTiet(this.idInput)
     } else {
       await Promise.all([
         this.loadDsDonVi(),
-        this.loadDsKyBc(),
         this.nguonVonGetAll()
       ]);
       this.formData.patchValue({

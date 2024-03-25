@@ -20,16 +20,16 @@
             <nz-form-item>
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Loại báo cáo
               </nz-form-label>
-              <nz-select formControlName="loaiBaoCao" >
+              <nz-select formControlName="loaiBaoCao" (ngModelChange)="changeLoaiBc()">
                 <nz-option *ngFor="let p of listLoaiBc" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="4" *ngIf="formData.value.loaiBaoCao && formData.value.loaiBaoCao == 2 ">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Kỳ báo cáo
               </nz-form-label>
-              <nz-select formControlName="kyBc" (ngModelChange)="changeKyBc($event)">
+              <nz-select formControlName="kyBc">
                 <nz-option *ngFor="let p of listQuy" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
             </nz-form-item>

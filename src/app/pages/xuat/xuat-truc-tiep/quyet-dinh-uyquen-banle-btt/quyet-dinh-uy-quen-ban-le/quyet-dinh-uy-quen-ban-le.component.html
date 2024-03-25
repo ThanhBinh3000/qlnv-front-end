@@ -207,7 +207,7 @@
           </td>
           <td class="text-left" *ngIf="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)">{{data.tenLoaiVthh}}</td>
           <td class="text-left">{{ data.tenCloaiVthh}}</td>
-          <td class="text-right">{{ data.tongSoLuong|number:globals.numberFormat:globals.locale}}</td>
+          <td class="text-right">{{ data.tongSoLuong|number:'1.0-0' : 'vi_VN'}}</td>
           <td class="text-left">
             {{{'02': 'Ủy quyền', '03': 'Bán lẻ'}[data.pthucBanTrucTiep] || null}}
           </td>

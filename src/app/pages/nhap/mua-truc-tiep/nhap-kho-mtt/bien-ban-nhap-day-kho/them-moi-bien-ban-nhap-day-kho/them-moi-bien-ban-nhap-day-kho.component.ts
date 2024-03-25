@@ -24,6 +24,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
 import { BienBanDayKhoMuaTrucTiepService } from 'src/app/services/bien-ban-day-kho-mua-truc-tiep.service';
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 
 @Component({
   selector: 'app-them-moi-bien-ban-nhap-day-kho',
@@ -73,6 +74,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
     private bienBanDayKhoMuaTrucTiepService: BienBanDayKhoMuaTrucTiepService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
+    private danhMucService: DanhMucService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanDayKhoMuaTrucTiepService);
     this.formData = this.fb.group({
@@ -119,6 +121,10 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       soBangKeCanHang: [''],
       soBangKe: [],
       loaiQd: [],
+      thanLuuKho: [],
+      ngayHetHanLk: [],
+      loaiVthh: [],
+      cloaiVthh: [],
 
     })
 
@@ -210,6 +216,8 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
     this.formData.patchValue({
       idQdGiaoNvNh: data.id,
       soQuyetDinhNhap: data.soQd,
+      loaiVthh: data.loaiVthh,
+      cloaiVthh: data.cloaiVthh,
       soHdong: data.soHd,
       ngayKiHdong: data.hopDongMttHdrs[0]?.ngayPduyet,
       loaiQd: data.loaiQd,
@@ -276,6 +284,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
     this.formData.patchValue({
       ngayBdauNhap: dataFirst,
     })
+    this.loadThanLuuKho();
   }
 
   isDisableField() {
@@ -591,6 +600,25 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
 
   clearItemRow(i) {
     this.dataTable[i] = {};
+  }
+
+  async loadThanLuuKho () {
+    let res;
+    if (this.formData.value.cloaiVthh) {
+      res = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
+    } else {
+      res = await this.danhMucService.getDetail(this.formData.value.loaiVthh);
+    }
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.formData.get('thanLuuKho').setValue(res.data.thoiHanLk);
+      if(this.formData.get('ngayKthucNhap').value != null) {
+        let ngayKetThucNhap = dayjs(this.formData.get('ngayKthucNhap').value).toDate();
+        ngayKetThucNhap.setMonth(ngayKetThucNhap.getMonth() + res.data.thoiHanLk);
+        this.formData.patchValue({
+          ngayHetHanLk: ngayKetThucNhap,
+        })
+      }
+    }
   }
 
 }

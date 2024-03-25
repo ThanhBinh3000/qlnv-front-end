@@ -18,7 +18,7 @@ import {STATUS} from 'src/app/constants/status';
 import {FileDinhKem} from "../../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {Validators} from "@angular/forms";
 import _ from 'lodash';
-import {AMOUNT_ONE_DECIMAL} from "../../../../../../../../Utility/utils";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-thongtin-daugia',
@@ -31,7 +31,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   @Input() dataDetail
   @Input() dataThongTin
   @Input() idInput
-  amount = {...AMOUNT_ONE_DECIMAL};
+  amount = {...AMOUNT_NO_DECIMAL};
   soLanDauGia: number;
   rowItemKhach: any = {};
   rowItemDgv: any = {};
@@ -211,6 +211,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
           soLuongChiCuc: 0,
           soTienDatTruocChiCuc: 0,
           children: filteredChildren,
+          expandSetAll: true
         };
       }).filter(item => item.children.length > 0);
       await this.calculatorTable();
@@ -249,7 +250,9 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       this.formData.patchValue({
         ketQua: data.ketQua.toString(),
       });
-      this.dataTable = data.children.filter(s => s.children && s.children.length > 0);
+      this.dataTable = data.children.filter(s => s.children && s.children.length > 0).map(item => {
+        return {...item, expandSetAll: true};
+      });
       if (!this.isView) {
         await this.getSoLuongDieuChinh(this.dataDetail.idQdPdDtl);
         this.formData.patchValue({
@@ -280,6 +283,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     const res = await this.quyetDinhPdKhBdgService.getDtlDetail(id);
     if (res.msg === MESSAGE.SUCCESS || res.data) {
       this.dataTable.forEach(item => {
+        item.expandSetAll = true;
         item.children.forEach(child => {
           const matchedS1 = res.data.children
             .flatMap(s => s.children)

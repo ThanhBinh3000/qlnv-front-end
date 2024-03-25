@@ -489,12 +489,16 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
       this.notification.error(MESSAGE.ERROR, "Bạn chưa chọn phương pháp lấy mẫu");
       return;
     }
+    this.formData.get('soBbQd').clearValidators();
+    this.formData.get('soBbQd').updateValueAndValidity();
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd : this.maHauTo };
     // await super.saveAndSend(body, trangThai, msg, msgSuccess);
     // await this.helperService.ignoreRequiredForm(this.formData);
     const data = await this.createUpdate(body, null, true);
     if (data) {
       this.formData.patchValue({ soBbQd: data.soBbQd });
+      this.formData.get('soBbQd').setValidators([Validators.required]);
+      this.formData.get('soBbQd').updateValueAndValidity();
       // await this.helperService.restoreRequiredForm(this.formData);
       this.approve(data.id, trangThai, msg, null, msgSuccess)
     }

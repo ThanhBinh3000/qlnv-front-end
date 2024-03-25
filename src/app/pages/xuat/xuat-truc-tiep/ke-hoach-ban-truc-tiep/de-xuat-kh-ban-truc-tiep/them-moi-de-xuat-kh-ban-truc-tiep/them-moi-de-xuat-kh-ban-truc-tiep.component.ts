@@ -24,6 +24,7 @@ import {
 } from 'src/app/components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
 import {QuyetDinhGiaCuaBtcService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
+import {da} from "date-fns/locale";
 
 @Component({
   selector: 'app-them-moi-de-xuat-kh-ban-truc-tiep',
@@ -159,8 +160,10 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       this.formData.patchValue({
         soDxuat: data.soDxuat?.split('/')[0]
       });
-      this.dataTable = data.children;
-      if (!this.isView){
+      this.dataTable = data.children.map(item => {
+        return {...item, expandSetAll: true};
+      });
+      if (!this.isView) {
         await this.getGiaToiThieu();
       }
       if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
@@ -216,7 +219,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     ]);
     if (!this.isView) {
       const findItemByApDung = (array, apDung) => array.find(item => item.apDung === apDung);
-      const loaiHinhXuat = findItemByApDung(this.listLoaiHinhNx, 'XUAT_DG');
+      const loaiHinhXuat = findItemByApDung(this.listLoaiHinhNx, 'XUAT_TT');
       const KieuXuat = findItemByApDung(this.listKieuNx, 'XUAT_DG');
       this.formData.patchValue({
         loaiHinhNx: loaiHinhXuat?.ma,
@@ -364,16 +367,18 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       },
     });
     modalGT.afterClose.subscribe((data) => {
-      if (!data) {
-        return;
-      }
-      if (index >= 0) {
-        this.dataTable[index] = data;
-      } else {
-        if (!this.validateAddDiaDiem(data)) {
-          return;
+      if (data) {
+        if (index >= 0) {
+          this.dataTable[index] = data;
+        } else {
+          if (!this.validateAddDiaDiem(data)) {
+            return;
+          }
+          this.dataTable.push(data);
         }
-        this.dataTable.push(data);
+        this.dataTable.forEach(item => {
+          item.expandSetAll = true;
+        });
       }
       this.calculatorTable();
     });

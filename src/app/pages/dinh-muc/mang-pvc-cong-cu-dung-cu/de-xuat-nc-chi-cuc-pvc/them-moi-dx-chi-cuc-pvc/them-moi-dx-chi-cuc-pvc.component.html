@@ -95,14 +95,6 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Trích yếu</nz-form-label>
-              <input nz-input formControlName="trichYeu" [readonly]="isView" />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="4">
-          <nz-form-item>
-            <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký</nz-form-label>
               <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký"
                 formControlName="ngayKy">

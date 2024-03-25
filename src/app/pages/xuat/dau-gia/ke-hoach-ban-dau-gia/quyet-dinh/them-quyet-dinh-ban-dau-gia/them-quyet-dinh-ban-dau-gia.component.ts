@@ -152,7 +152,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
         return;
       }
-      if (this.checkPrice && this.checkPrice.booleanNhapXuat){
+      if (this.checkPrice && this.checkPrice.booleanNhapXuat) {
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgNhapXuat);
         return;
       }
@@ -214,8 +214,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       soQdPd: data.soQdPd?.split('/')[0] || null,
       soQuyetDinhDieuBDG: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT ?? null,
       ngayQuyetDinhDieuBDG: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT ?? null,
-      chotDcGia: !!data.qthtChotGiaInfoRes?.qthtChotDieuChinhGia.length,
-      quyetDinhDcGia: !!data.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length,
+      chotDcGia: data.qthtChotGiaInfoRes?.qthtChotDieuChinhGia?.length ?? null,
+      quyetDinhDcGia: data.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia?.length ?? null,
       quyetDinhDc: !!(data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT && data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT),
     });
     this.canCuPhapLy = data.canCuPhapLy;

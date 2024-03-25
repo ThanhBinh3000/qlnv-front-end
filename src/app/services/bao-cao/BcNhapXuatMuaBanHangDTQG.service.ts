@@ -74,4 +74,16 @@ export class BcNhapXuatMuaBanHangDTQGService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-th-kq-dau-thau-mua-gao`;
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
+  bcKqXuatGaoCthtDiaPhuongNam(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-kq-xuat-gao-ctht-dp-nam`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+  bcTienDoXuatGaoHoTroHocSinh(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-tien-do-xuat-gao-hotro-hocsinh`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+  chiTietHoTroGaoHocSinh(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-ho-tro-gao-hoc-sinh`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
 }

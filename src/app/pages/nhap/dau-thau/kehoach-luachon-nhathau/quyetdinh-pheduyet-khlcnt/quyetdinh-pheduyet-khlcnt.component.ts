@@ -16,7 +16,6 @@ import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
-import { ItemDetail } from 'src/app/models/itemDetail';
 import { STATUS } from 'src/app/constants/status';
 import { Base2Component } from "../../../../../components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";

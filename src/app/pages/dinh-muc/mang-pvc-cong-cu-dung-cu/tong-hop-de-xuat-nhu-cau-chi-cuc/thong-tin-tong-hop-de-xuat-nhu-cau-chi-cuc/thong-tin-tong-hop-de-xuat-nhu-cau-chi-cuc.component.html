@@ -208,6 +208,7 @@
         <th rowspan="2" nzWidth="100px" nzAlign="center">Tổng <br /> (6) = (3) + (4) + (5)</th>
         <th rowspan="2" nzWidth="100px" nzAlign="center">SL định mức theo <br /> chỉ tiêu KH năm <br /> (7)</th>
         <th rowspan="2" nzWidth="200px" nzAlign="center">Nhu cầu trang bị <br /> đề xuất <br /> (8)= (7) - (6)</th>
+        <th rowspan="2" nzWidth="200px" nzAlign="center">Địa điểm</th>
         <th rowspan="2" nzWidth="200px">Ghi chú</th>
       </tr>
       <tr>
@@ -244,6 +245,7 @@
           <td class='font-weight-bold text-right'>{{sumSoLuong('nhuCauTb', data.tenCcdc) | number: '1.0-1': 'vi_VN'}}
           </td>
           <td></td>
+          <td></td>
         </tr>
         <ng-container *ngIf='expandSet.has(data.idVirtual)'>
           <tr *ngFor='let item of data.dataChild, let y = index'>
@@ -264,6 +266,7 @@
               <nz-input-number [(ngModel)]='item.nhuCauTb' [nzSize]="'small'" [nzDisabled]='isView'
                 [nzFormatter]='globals.formatter' [nzParser]='globals.parser'></nz-input-number>
             </td>
+            <td><input nz-input [(ngModel)]='item.diaDiem' [readOnly]="true"></td>
             <td><input nz-input [(ngModel)]='item.ghiChu' [readOnly]="isView"></td>
           </tr>
         </ng-container>

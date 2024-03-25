@@ -20,6 +20,10 @@
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo tiến độ bán đấu giá thóc, gạo theo năm</span>
             </li>
+            <li nz-menu-item [nzSelected]='tabSelected==4' (click)='selectTab(4)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo chi tiết hỗ trợ gạo cho học sinh</span>
+            </li>
             <li nz-menu-item [nzSelected]='tabSelected==6' (click)='selectTab(6)'>
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo kế hoạch hỗ trợ gạo cho học sinh</span>
@@ -64,6 +68,14 @@
               <span nz-icon nzType='fund'></span>
               <span>Báo cáo tổng hợp kết quả đấu thầu mua gạo</span>
             </li>
+            <li nz-menu-item [nzSelected]='tabSelected==20' (click)='selectTab(20)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo kết quả xuất gạo cứu trợ hỗ trợ địa phương trong năm</span>
+            </li>
+            <li nz-menu-item [nzSelected]='tabSelected==21' (click)='selectTab(21)'>
+              <span nz-icon nzType='fund'></span>
+              <span>Báo cáo tiến độ xuất gạo hỗ trợ học sinh</span>
+            </li>
           </ul>
         </li>
       </ul>
@@ -91,6 +103,9 @@
         <ng-container *ngIf='tabSelected == 3'>
           <app-bao-cao-tien-do-bdg-thoc-gao-theo-nam></app-bao-cao-tien-do-bdg-thoc-gao-theo-nam>
         </ng-container>
+        <ng-container *ngIf='tabSelected == 4'>
+          <app-bao-cao-chi-tiet-ho-tro-gao-hs></app-bao-cao-chi-tiet-ho-tro-gao-hs>
+        </ng-container>
         <ng-container *ngIf='tabSelected == 6'>
           <app-bao-cao-ke-hoach-ho-tro-gao></app-bao-cao-ke-hoach-ho-tro-gao>
         </ng-container>
@@ -114,6 +129,12 @@
         </ng-container>
         <ng-container *ngIf='tabSelected == 19'>
           <app-bc-th-ket-qua-dau-thau-gao-theo-nam></app-bc-th-ket-qua-dau-thau-gao-theo-nam>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 20'>
+          <app-kq-xuat-gao-ctht-cho-dia-phuong-trong-nam></app-kq-xuat-gao-ctht-cho-dia-phuong-trong-nam>
+        </ng-container>
+        <ng-container *ngIf='tabSelected == 21'>
+          <app-bc-tien-do-xuat-gao-ho-tro-hoc-sinh></app-bc-tien-do-xuat-gao-ho-tro-hoc-sinh>
         </ng-container>
       </div>
     </div>

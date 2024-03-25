@@ -148,6 +148,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         tenNganLoKho: [],
         soBbNhapDayKho: [],
         tgianGiaoDuHang: [],
+        thucNhap: [],
       }
     );
   }
@@ -223,12 +224,14 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       tenCloaiVthh: data.tenCloaiVthh,
       moTaHangHoa: data.moTaHangHoa,
       soHd: data.soHd,
-      tgianGiaoDuHang: data.tgianGiaoDuHang,
+      tgianGiaoDuHang: data.tgianNkho,
     });
     this.loadDataComboBox();
-    let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    // let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc = data.dtlList;
     if (dataChiCuc.length > 0) {
-      this.listDiaDiemNhap = dataChiCuc[0].children.filter(i => i.bienBanChuanBiKho == null);
+      // this.listDiaDiemNhap = dataChiCuc[0].children.filter(i => i.bienBanChuanBiKho == null);
+      this.listDiaDiemNhap = dataChiCuc[0].children;
     }
     if (this.maNganLoKho != null) {
       let dataDdiem = null;
@@ -276,6 +279,8 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
         tenNganLoKho: data.tenLoKho ? data.tenLoKho + " - " + data.tenNganKho : data.tenNganKho,
         maLoKho: data.maLoKho,
         soLuongDdiemGiaoNvNh: data.soLuong,
+        soBbNhapDayKho: data.bienBanNhapDayKho?.soBienBanNhapDayKho,
+        thucNhap: data.bienBanNhapDayKho?.tongSoLuongNhap,
       })
       await this.loadLoaiHinhKho(data.maLoKho || data.maNganKho)
     }
@@ -431,7 +436,8 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       if (kho) {
         let res = await this.bbNghiemThuBaoQuanService.getDataKho(kho);
         this.formData.patchValue({
-          loaiHinhKho: res.data.lhKho
+          loaiHinhKho: res.data.lhKho,
+          tichLuong: (res.data.tichLuongTkLt?res.data.tichLuongTkLt:0) + (res.data.tichLuongTkVt?res.data.tichLuongTkVt:0)
         });
       }
     }
@@ -1013,5 +1019,12 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       this.dsHangPD = cloneDeep(this.dsHangPD)
     }
     this.updateDataTable()
+  }
+
+  calcDinhMucThucTe() {
+    if (this.formData.value.thucNhap != null && this.formData.value.thucNhap != 0) {
+      return this.formData.value.tongKinhPhiDaTh / this.formData.value.thucNhap
+    }
+    return null;
   }
 }

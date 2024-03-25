@@ -7,7 +7,7 @@ import {LOAI_HANG_DTQG} from "../../../../../../../constants/config";
 import {Base2Component} from "../../../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../../services/storage.service";
-import {AMOUNT_ONE_DECIMAL} from "../../../../../../../Utility/utils";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../../Utility/utils";
 import {cloneDeep} from 'lodash';
 import {
   QuyetDinhPdKhBdgService
@@ -30,7 +30,7 @@ export class ThongtinDexuatKhbdgComponent extends Base2Component implements OnCh
   @Input() loaiVthhCache;
   @Output() countChanged: EventEmitter<any> = new EventEmitter();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
-  amount = {...AMOUNT_ONE_DECIMAL};
+  amount = {...AMOUNT_NO_DECIMAL};
 
   constructor(
     httpClient: HttpClient,
@@ -81,13 +81,17 @@ export class ThongtinDexuatKhbdgComponent extends Base2Component implements OnCh
     const handleDataTableAll = async (dataInputCache: any) => {
       if (dataInputCache) {
         await processChange(dataInputCache);
-        this.dataTableAll = cloneDeep(dataInputCache.children);
+        this.dataTableAll = cloneDeep(dataInputCache.children).map(item => {
+          return {...item, expandSetAll: true};
+        });
       }
     };
     const handleDataTable = async (dataInput: any) => {
       if (dataInput) {
         await processChange(dataInput);
-        this.dataTable = dataInput.children;
+        this.dataTable = dataInput.children.map(item => {
+          return {...item, expandSetAll: true};
+        });
         if (!this.idInput) {
           await this.getdonGiaDuocDuyet(dataInput);
         }

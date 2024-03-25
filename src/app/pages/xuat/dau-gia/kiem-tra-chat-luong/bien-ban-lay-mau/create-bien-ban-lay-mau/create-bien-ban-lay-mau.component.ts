@@ -28,8 +28,7 @@ import {v4 as uuidv4} from 'uuid';
 import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
-import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
-import {th} from "date-fns/locale";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-create-bien-ban-lay-mau',
@@ -43,7 +42,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   @Input() isViewOnModal: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
-  amount = {...AMOUNT_ONE_DECIMAL};
+  amount = {...AMOUNT_NO_DECIMAL};
   templateNameVt = "Biên bản lấy mẫu bán đấu giá vật tư";
   templateNameLt = "Biên bản lấy mẫu bán đấu giá lương thực";
   listBienBan: any[] = [];

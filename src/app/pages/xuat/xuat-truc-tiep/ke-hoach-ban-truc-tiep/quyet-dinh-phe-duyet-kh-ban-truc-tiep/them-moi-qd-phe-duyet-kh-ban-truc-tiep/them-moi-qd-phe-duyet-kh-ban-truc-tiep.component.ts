@@ -222,8 +222,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       soQdPd: data.soQdPd?.split('/')[0] || null,
       soQuyetDinhDieuBTT: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT ?? null,
       ngayQuyetDinhDieuBTT: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT ?? null,
-      chotDcGia: !!data.qthtChotGiaInfoRes?.qthtChotDieuChinhGia.length,
-      quyetDinhDcGia: !!data.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length,
+      chotDcGia: data.qthtChotGiaInfoRes?.qthtChotDieuChinhGia?.length ?? null,
+      quyetDinhDcGia: data.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia?.length ?? null,
       quyetDinhDc: !!(data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT && data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT),
     });
     this.canCuPhapLy = data.canCuPhapLy;

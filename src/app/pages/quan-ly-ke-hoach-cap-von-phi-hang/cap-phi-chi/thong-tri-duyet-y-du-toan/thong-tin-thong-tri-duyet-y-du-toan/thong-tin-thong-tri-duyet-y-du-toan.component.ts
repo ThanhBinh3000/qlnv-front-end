@@ -110,7 +110,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     await Promise.all([
       this.getListBoNganh(),
       this.getListDeNghi(),
-      this.getListTongHop(),
+      this.getListTongHop(this.formData.get('nam').value),
     ]);
     if (this.idInput > 0) {
       await this.loadDetail(this.idInput);
@@ -240,15 +240,22 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     }
   }
 
-  async getListTongHop() {
+  async getListTongHop(nam) {
     this.listTongHop = [];
     let body = {
       pageNumber: 1,
       pageSize: 1000,
+      nam : nam,
+      trangThais : [STATUS.DA_DUYET_LDV]
     };
     let res = await this.tongHopDeNghiCapPhiService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listTongHop = res.data.content;
+      if(this.listTongHop == null || this.listTongHop.length >= 0){
+        this.formData.patchValue({
+          soDnCapPhi : null
+        })
+      }
     }
   }
 
@@ -263,6 +270,10 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
 
   back() {
     this.showListEvent.emit();
+  }
+
+  changeNam(val){
+    this.getListTongHop(val);
   }
 
   async loadDetail(id: number) {

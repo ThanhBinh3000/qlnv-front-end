@@ -23,6 +23,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UploadFileService } from './../../../../../../services/uploaFile.service';
 import { FILETYPE } from "../../../../../../constants/fileType";
+import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
+import {count} from "rxjs/operators";
 @Component({
   selector: 'app-them-moi-phieu-kiem-tra-chat-luong',
   templateUrl: './them-moi-phieu-kiem-tra-chat-luong.component.html',
@@ -68,7 +70,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
     public globals: Globals,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
     private danhMucService: DanhMucService,
-    private danhMucTieuChuanService: DanhMucTieuChuanService,
+    private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKtraCluongService);
 
@@ -127,6 +129,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         tenNganLoKho: [],
         soBangKe: [],
         loaiQd: [],
+        soHieuQuyChuan: [],
       }
     );
   }
@@ -238,12 +241,22 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       this.listDiaDiemNhap = dataChiCuc[0].children.filter(x => x.maDiemKho.includes(this.userInfo.MA_DVI));
     }
     if (isSetTc) {
-      let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+      let dmTieuChuan = await this.khCnQuyChuanKyThuat.getQuyChuanTheoCloaiVthh(data.cloaiVthh);
       if (dmTieuChuan.data) {
-        this.dataTableChiTieu = dmTieuChuan.data.children;
-        this.dataTableChiTieu.forEach(element => {
-          element.edit = false
+        this.dataTableChiTieu = dmTieuChuan.data;
+        this.dataTableChiTieu = this.dataTableChiTieu.map(element => {
+          return {
+            ...element,
+            edit: true,
+            tenTchuan: element.tenChiTieu,
+            chiSoNhap: element.mucYeuCauXuat,
+            ketQuaKiemTra: element.ketQuaPt,
+            phuongPhap: element.phuongPhapXd,
+            danhGia: element.danhGia
+          }
         });
+        console.log(this.dataTableChiTieu[0].soHieuQuyChuan)
+        this.formData.get('soHieuQuyChuan').setValue(this.dataTableChiTieu[0].soHieuQuyChuan)
       }
     }
     await this.spinner.hide();
@@ -440,7 +453,13 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
     let mess = ''
     switch (this.formData.get('trangThai').value) {
       case STATUS.TU_CHOI_LDCC:
+      case STATUS.TU_CHOI_TK:
       case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TK;
+        mess = 'Bạn có muốn gửi duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_TK: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         mess = 'Bạn có muốn gửi duyệt ?'
         break;
@@ -491,6 +510,20 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
+    let trangThai;
+    let mess;
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.TU_CHOI_LDCC;
+        mess = 'Bạn có muốn từ chối ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_TK: {
+        trangThai = STATUS.TU_CHOI_TK;
+        mess = 'Bạn có muốn từ chối ?'
+        break;
+      }
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -507,7 +540,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
           let body = {
             id: this.id,
             lyDo: text,
-            trangThai: STATUS.TU_CHOI_LDCC,
+            trangThai: trangThai,
           };
           let res =
             await this.phieuKtraCluongService.approve(

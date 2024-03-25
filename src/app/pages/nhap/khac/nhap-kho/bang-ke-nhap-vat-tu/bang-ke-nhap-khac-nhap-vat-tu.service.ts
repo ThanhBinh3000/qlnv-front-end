@@ -7,6 +7,6 @@ import { BaseService } from "../../../../../services/base.service";
 })
 export class BangKeNhapKhacNhapVatTuService extends BaseService {
     constructor(public httpClient: HttpClient) {
-        super(httpClient, '/nhap-khac/bang-ke-nhap-vt', '/qlnv-hang');
+        super(httpClient, 'nhap-khac/bang-ke-nhap-vt', '/qlnv-hang');
     }
 }

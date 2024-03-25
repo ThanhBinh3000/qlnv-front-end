@@ -176,7 +176,16 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
         if (this.userService.isChiCuc()) {
           this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
         } else {
-          this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI))[0]
+          let data = [];
+          this.dataTable[i].dtlList.forEach(item => {
+            data = [...data, ...item.children];
+          })
+          this.dataTable[i].detail = {
+            children: data
+          }
+          // console.log(this.userInfo.MA_DVI)
+          // console.log( this.dataTable[i].dtlList)
+          // this.dataTable[i].detail = this.dataTable[i].dtlList.filter(item => item.maDvi.includes(this.userInfo.MA_DVI))[0]
         }
       }
       this.dataTableAll = cloneDeep(this.dataTable);
@@ -402,7 +411,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   checkQuyenXem(trangThai) {
     if (trangThai) {
       if (this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_XEM')) {
-        if (trangThai == STATUS.DU_THAO && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM')) {
+        if ((trangThai == STATUS.DU_THAO || trangThai == STATUS.TU_CHOI_TK || trangThai == STATUS.TU_CHOI_LDCC) && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_THEM')) {
           return false;
         } else if (trangThai == STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_LDCCUC')) {
           return false;

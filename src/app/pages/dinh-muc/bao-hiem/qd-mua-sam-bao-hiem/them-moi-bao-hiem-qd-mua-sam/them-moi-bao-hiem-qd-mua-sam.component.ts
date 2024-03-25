@@ -356,7 +356,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
 
   sumSlHang(row: string, table : any[]) : number {
     let result = 0;
-    let arr = table.filter(it => it.nhomCha);
+    let arr = table.filter(it => !it.nhomCha);
     const sum = arr.reduce((prev, cur) => {
       prev += cur[row];
       return prev;

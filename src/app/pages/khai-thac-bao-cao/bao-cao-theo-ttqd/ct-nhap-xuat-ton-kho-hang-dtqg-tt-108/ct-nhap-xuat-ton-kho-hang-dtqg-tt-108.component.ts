@@ -198,6 +198,12 @@ export class CtNhapXuatTonKhoHangDtqgTt108Component extends Base2Component imple
       this.formData.get("loaiBaoCao").setValue(2)
     }
   }
+
+  changeLoaiBc (){
+    if (this.formData.get("loaiBaoCao").value == 2) {
+      this.formData.get("kyBc").setValue(null)
+    }
+  }
   changeNam (event){
     this.formData.patchValue({
       kyBc: null,

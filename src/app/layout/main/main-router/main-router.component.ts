@@ -1,9 +1,8 @@
 // import { Component, OnInit } from '@angular/core';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { ObservableService } from 'src/app/services/observable.service';
-import { LIST_PAGES } from '../main-routing.constant';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {ObservableService} from 'src/app/services/observable.service';
+import {LIST_PAGES} from '../main-routing.constant';
 import {UserService} from "../../../services/user.service";
 import {Router} from "@angular/router";
 

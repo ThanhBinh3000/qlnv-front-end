@@ -412,6 +412,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
           //   return;
           // }
         }
+        this.formData.get('tongSoLuongNhap').setValue(this.calcTong())
         let body = this.formData.value;
         body.chiTiets = this.dataTable;
         body.fileDinhKems = this.listFileDinhKemBb;

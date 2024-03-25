@@ -27,7 +27,7 @@ import {convertTienTobangChu} from 'src/app/shared/commonFunction';
 import {STATUS} from 'src/app/constants/status';
 import {DonviService} from "../../../../../../services/donvi.service";
 import _ from 'lodash';
-import {AMOUNT_ONE_DECIMAL} from "../../../../../../Utility/utils";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-thong-tin',
@@ -44,7 +44,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   @Input() isViewOnModal: boolean;
   @Input() checkPrice: any;
   @Output() showListEvent = new EventEmitter<any>();
-  amount = {...AMOUNT_ONE_DECIMAL};
+  amount = {...AMOUNT_NO_DECIMAL};
   maHopDongSuffix: string = '';
   listLoaiHopDong: any[] = [];
   listHangHoaAll: any[] = [];
@@ -254,7 +254,9 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     this.formData.patchValue({
       soHopDong: soHopDong?.split('/')[0] || null,
     })
-    this.dataTable = cloneDeep(children);
+    this.dataTable = cloneDeep(children).map(item => {
+      return {...item, expandSetAll: true};
+    });
     this.dataTablePhuLuc = phuLuc || [];
     this.objHopDongHdr = data;
   }
@@ -482,6 +484,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       });
       item.soLuongXuatBan = item.children.reduce((total, child) => total + child.soLuong, 0);
       item.thanhTienXuatBan = item.children.reduce((total, child) => total + child.thanhTien, 0);
+      item.expandSetAll = true;
     });
     const calculateTotal = (key) => this.dataTable.reduce((total, item) => total + item[key], 0);
     this.formData.patchValue({

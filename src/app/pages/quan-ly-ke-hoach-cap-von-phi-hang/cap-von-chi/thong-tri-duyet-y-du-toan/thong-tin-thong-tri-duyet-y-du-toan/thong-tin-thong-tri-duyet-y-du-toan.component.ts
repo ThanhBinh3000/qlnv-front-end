@@ -35,6 +35,8 @@ import { AMOUNT_NO_DECIMAL } from '../../../../../Utility/utils';
 import { PREVIEW } from '../../../../../constants/fileType';
 import printJS from 'print-js';
 import { saveAs } from 'file-saver';
+import { OldResponseData } from '../../../../../interfaces/response';
+import { MangLuoiKhoService } from '../../../../../services/qlnv-kho/mangLuoiKho.service';
 
 @Component({
   selector: 'app-thong-tin-thong-tri-duyet-y-du-toan',
@@ -82,6 +84,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   rowItem: any = {};
   chiTietList: any[] = [];
   STATUS = STATUS;
+  detailTCDT: any = {};
   amount = AMOUNT_NO_DECIMAL;
   showDlgPreview = false;
   pdfSrc: any;
@@ -107,6 +110,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     private thongTriDuyetYCapVonService: ThongTriDuyetYCapVonService,
     private cdr: ChangeDetectorRef,
     private helperService: HelperService,
+    private donViService: DonviService,
     private deNghiCapPhiBoNganhService: DeNghiCapVonBoNganhService,
     private tongHopDeNghiCapVonService: TongHopDeNghiCapVonService,
   ) {
@@ -122,10 +126,11 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
-    this.itemThongTri.trangThai = '00';
+    this.itemThongTri.trangThai = STATUS.DU_THAO;
     this.itemThongTri.nam = dayjs().year();
     this.initForm();
     await Promise.all([
+      this.getDetailDonVi('0101'),
       this.getListBoNganh(),
       this.getListDeNghi(),
       this.getListTongHop(),
@@ -140,7 +145,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     this.formData = this.fb.group({
       id: [this.itemThongTri ? this.itemThongTri.id : null, []],
       nam: [this.itemThongTri ? this.itemThongTri.nam : null, [Validators.required]],
-      trangThai: [(this.itemThongTri ? this.itemThongTri.trangThai : '00'), [Validators.required]],
+      trangThai: [(this.itemThongTri ? this.itemThongTri.trangThai : STATUS.DU_THAO), [Validators.required]],
       soThongTri: [this.itemThongTri ? this.itemThongTri.soThongTri : null, [Validators.required]],
       ngayLap: [this.itemThongTri ? this.itemThongTri.ngayLap : null, [Validators.required]],
       lyDoChi: [this.itemThongTri ? this.itemThongTri.lyDoChi : null, [Validators.required]],
@@ -287,7 +292,6 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             // this.back();
           } else {
-            console.log(res.data,'res.datares.datares.data');
             this.guiDuyet(res.data.id);
           }
         } else {
@@ -405,7 +409,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            lyDo: text,
+            lyDoTuChoi: text,
             trangThai: trangThai,
           };
           const res = await this.thongTriDuyetYCapVonService.updateStatus(body);
@@ -493,9 +497,9 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       if (this.formData.value.dviThongTri == 'BTC') {
         let item = {
           'dvCungCapHang': 'Tổng cục dự trữ nhà nước',
-          'nganHang': null,
+          'nganHang': (this.detailTCDT && this.detailTCDT.moTai) ? this.detailTCDT.moTai : '',
           'id': 9999,
-          'soTaiKhoan': null,
+          'soTaiKhoan': (this.detailTCDT && this.detailTCDT.stk) ? this.detailTCDT.stk : '',
           'maHopDong': '',
         };
         this.listDviThuHuong.push(item);
@@ -562,5 +566,15 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
 
   closeDlg() {
     this.showDlgPreview = false;
+  }
+
+
+  async getDetailDonVi(maDvi) {
+    let resDonVi = await this.donViService.getDonVi({ str: maDvi});
+    if (resDonVi.msg == MESSAGE.SUCCESS) {
+      this.detailTCDT = resDonVi.data;
+    } else {
+      this.notification.error(MESSAGE.ERROR, resDonVi.msg);
+    }
   }
 }

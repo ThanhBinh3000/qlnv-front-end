@@ -72,6 +72,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   amount1 = { ...AMOUNT_TWO_DECIMAL, align: "left" }
   amount = { ...AMOUNT_NO_DECIMAL, align: "left", min: 0, max: 100 };
   chuyenXuatCap: boolean = true;
+  validateSlGiaoChiCuc: { [key: string]: number }
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -242,8 +243,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             // res.data.dataDtl.forEach(s => s.idVirtual = uuidv4());
             res.data.dataDtl.forEach(s => s.mId = uuidv4());
             this.formData.patchValue({ ...res.data, trangThaiXh: res.data.trangThaiXh ? res.data.trangThaiXh : STATUS.CHUA_THUC_HIEN });
-            await this.getChiTietQuyetDinhXuatCap();
+            const quyetDinhPdDtl = await this.getChiTietQuyetDinhXuatCap();
             await this.buildTableView();
+            this.getListQuyetDinhGnvTheoQdPd(res.data.idQdPd, quyetDinhPdDtl.filter(f => this.userInfo.MA_DVI.startsWith(f.maDvi)))
           }
         })
         .catch((e) => {
@@ -263,12 +265,15 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   }
   async getChiTietQuyetDinhXuatCap() {
     const idQdPd = this.formData.value.idQdPd;
+    let quyetDinhPdDtl = [];
     if (idQdPd) {
       const res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(idQdPd);
       if (res.msg === MESSAGE.SUCCESS) {
         this.formData.patchValue({ paXuatGaoChuyenXc: res.data.paXuatGaoChuyenXc })
+        quyetDinhPdDtl = res.data.quyetDinhPdDtl;
       }
     }
+    return quyetDinhPdDtl
   }
   async loadDsDiaDanh() {
     let body = {
@@ -407,9 +412,9 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     const dataDtlFilterDonVi = this.formData.value.dataDtl.filter(f => f.maDvi && f.maDvi.startsWith(this.userInfo.MA_DVI))
     let dataDtl = [];
     if (this.formData.value.type === 'XC' || tenVthh !== "Vật tư thiết bị") {
-      dataDtl = dataDtlFilterDonVi.map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.loaiVthh}-${f.tenChiCuc}` }));
+      dataDtl = dataDtlFilterDonVi.map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.namNhap}-${f.loaiVthh}-${f.tenChiCuc}` }));
     } else {
-      dataDtl = dataDtlFilterDonVi.map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.cloaiVthh ? f.cloaiVthh : f.loaiVthh}-${f.tenChiCuc}` }));
+      dataDtl = dataDtlFilterDonVi.map(f => ({ ...f, noiDungDxTenChiCuc: `${f.noiDungDx}-${f.namNhap}-${f.cloaiVthh ? f.cloaiVthh : f.loaiVthh}-${f.tenChiCuc}` }));
     }
 
     const tongSoLuongPb = dataDtl.reduce((sum, cur) => {
@@ -440,7 +445,6 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
   }
   async save() {
     await this.helperService.ignoreRequiredForm(this.formData);
-    this.formData.controls.soBbQd.setValidators([Validators.required]);
     // if (!this.checkHoanTatPhanBo()) return;
     let body = {
       ...this.formData.value,
@@ -452,15 +456,35 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
 
   async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
     // if (!this.checkHoanTatPhanBo()) return;
-    if (trangThai === STATUS.DA_DUYET_LDC) {
-      this.formData.get("soQdPd").setValidators([Validators.required]);
-    } else {
-      this.formData.get("soQdPd").clearValidators();
-    }
-    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd + this.maHauTo }
+    let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null }
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
-
+  async approve(id: number, trangThai: STATUS, msg: string, role: any, msgSuccess?: string) {
+    if (trangThai === STATUS.BAN_HANH) {
+      this.formData.get("soBbQd").setValidators([Validators.required]);
+    } else {
+      this.formData.get("soBbQd").clearValidators();
+    }
+    this.formData.get("soBbQd").updateValueAndValidity();
+    this.helperService.markFormGroupTouched(this.formData, []);
+    if (this.formData.invalid) {
+      return;
+    };
+    let isBanHanh = true
+    if (trangThai === STATUS.BAN_HANH) {
+      isBanHanh = false;
+      let body = {
+        ...this.formData.value,
+        soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd + this.maHauTo : null
+      }
+      const res = await this.createUpdate(body, null, true);
+      if (res.soBbQd) {
+        isBanHanh = true
+      }
+    }
+    if (!isBanHanh) return;
+    await super.approve(id, trangThai, msg, role, msgSuccess);
+  }
   async updateProcess(trangThai: STATUS, tenTrangThai: string) {
     this.formData.value.dataDtl.forEach(s => {
       if (s.maDvi.match("^" + this.userInfo.MA_DVI + ".*")) {
@@ -522,6 +546,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
 
 
   async openDialogQdPd() {
+    if (this.formData.value.id) return;
     try {
       await this.spinner.show();
       let res;
@@ -554,7 +579,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           nzWidth: '900px',
           nzFooter: null,
           nzComponentParams: {
-            dataTable: res.data,
+            dataTable: res.data.filter(f => !f.hoanThanhPhanBo),
             dataHeader: ['Số quyết định', 'Ngày phê duyệt', 'Mục đích xuất'],
             dataColumn: ['soBbQd', 'ngayPduyet', 'mucDichXuat']
           },
@@ -588,22 +613,13 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               quyetDinhPdDtl = cloneDeep(detail.quyetDinhPdDtl);
               quyetDinhPdDtl.forEach(s => {
                 s.idQdPdDtl = s.id;
-                s.soLuongDx = s.soLuongXc;
+                s.soLuongDx = s.soLuong;
                 s.soLuong = 0;
                 s.mId = uuidv4();
                 delete s.id;
               });
             }
-            const soLuong = quyetDinhPdDtl.filter(f => f.maDvi === this.userInfo.MA_DVI).reduce((sum, cur) => {
-
-              if (detail.paXuatGaoChuyenXc) {
-                sum += cur.soLuongXc ? cur.soLuongXc : 0
-              } else {
-                // sum += cur.soLuong ? cur.soLuong : 0
-                sum += cur.soLuongDx ? cur.soLuongDx : 0
-              }
-              return sum
-            }, 0);
+            const soLuong = quyetDinhPdDtl.filter(f => this.userInfo.MA_DVI.startsWith(f.maDvi)).reduce((sum, cur) => sum += cur.soLuongDx ? cur.soLuongDx : 0, 0);
             // const thoiGianGiaoNhan = detail.type === "TH" ? detail.quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI) ? detail.quyetDinhPdDtl.find(f => f.maDvi === this.userInfo.MA_DVI).ngayKetThuc : null : detail.ngayKetThuc;
             this.formData.patchValue({
               idQdPd: detail.id,
@@ -623,6 +639,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               paXuatGaoChuyenXc: detail.paXuatGaoChuyenXc
 
             });
+            this.getListQuyetDinhGnvTheoQdPd(detail.id, detail.quyetDinhPdDtl.filter(f => this.userInfo.MA_DVI.startsWith(f.maDvi)));
             await this.buildTableView();
           }
         });
@@ -634,7 +651,35 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
       await this.spinner.hide();
     }
   }
-
+  async getListQuyetDinhGnvTheoQdPd(idQdPd: number, quyetDinhPdDtl: any[]) {
+    if (!idQdPd) return;
+    const res = await this.quyetDinhGiaoNvCuuTroService.search({ idQdPd });
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.validateSlGiaoChiCuc = {};
+      if (this.formData.value.type !== 'XC') {
+        quyetDinhPdDtl = cloneDeep(quyetDinhPdDtl).filter(f => !f.xuatCap);
+        quyetDinhPdDtl.forEach(s => {
+          this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] = (this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] || 0) + s.soLuong;
+        });
+      }
+      else if (this.formData.value.type === 'XC' && !this.formData.value.paXuatGaoChuyenXc) {
+        quyetDinhPdDtl = cloneDeep(quyetDinhPdDtl);
+        quyetDinhPdDtl.forEach(s => {
+          this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] = (this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] || 0) + s.soLuong;
+        });
+      } else if (this.formData.value.type === "XC" && this.formData.value.paXuatGaoChuyenXc) {
+        quyetDinhPdDtl = cloneDeep(quyetDinhPdDtl);
+        quyetDinhPdDtl.forEach(s => {
+          this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] = (this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] || 0) + s.soLuongXc;
+        });
+      }
+      res.data.content.forEach(f => {
+        f.dataDtl.filter(f => f.id !== this.formData.value.id).forEach(s => {
+          this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] = (this.validateSlGiaoChiCuc[`${s.noiDungDx}-${s.namNhap}`] || 0) - s.soLuongGiao
+        });
+      });
+    }
+  }
   async buildTableView() {
     if (this.formData.value.type !== "XC") {
       this.formData.value.dataDtl.forEach(s => {
@@ -667,17 +712,17 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               const rs1 = chain(v).groupBy('namNhap').map((v1, k1) => {
                 const namNhapRow = v1.find(f => f.namNhap === +k1);
                 if (!namNhapRow) return;
-                const rs2 = chain(v)
+                const rs2 = chain(v1)
                   .groupBy("tenChiCuc")
-                  .map((v1, k1) => {
-                    let tenChiCucRow = v1.find(s => k1 && s.tenChiCuc === k1);
+                  .map((v2, k2) => {
+                    let tenChiCucRow = v2.find(s => k2 && s.tenChiCuc === k2);
                     if (!tenChiCucRow) return;
-                    let soLuong = v1.reduce((prev, next) => prev + next.soLuong, 0);
+                    let soLuong = v2.reduce((prev, next) => prev + next.soLuong, 0);
                     return {
                       ...tenChiCucRow,
                       idVirtual: uuidv4(),
                       tenTrangThai: tenChiCucRow.tenTrangThai || 'Đang thực hiện',
-                      childData: v1.filter(f => !!f.tenDiaDiem),
+                      childData: v2.filter(f => !!f.tenDiaDiem),
                       soLuong: soLuong,
                     }
                   }).value().filter(f => !!f);
@@ -693,11 +738,13 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               }).value().filter(f => !!f);
               let soLuong = rs1.reduce((prev, next) => prev + next.soLuong, 0);
               let soLuongGiao = rs1.reduce((prev, next) => prev + next.soLuongGiao, 0);
+              const soLuongDx = rs1.reduce((sum, cur) => sum += cur.soLuongDx, 0);
               return {
                 ...tenLoaiVthhRow,
                 idVirtual: uuidv4(),
                 soLuongGiao: soLuongGiao,
                 soLuong: soLuong,
+                soLuongDx,
                 childData: rs1,
               }
             }).value().filter(f => !!f);
@@ -780,15 +827,17 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           // const soLuongDx = rs.reduce((sum, cur) => sum += cur.soLuongDx, 0);
           // let slGaoThuHoiSauXayXat = rs.reduce((prev, next) => prev + next.slGaoThuHoiSauXayXat, 0);
           // let slThocDeXayXat = rs.reduce((prev, next) => prev + next.slThocDeXayXat, 0);
-          const { soLuongGiao, slGaoThuHoiSauXayXat, slThocDeXayXat } = rs.reduce((obj, cur) => {
+          const { soLuongDx, soLuongGiao, slGaoThuHoiSauXayXat, slThocDeXayXat } = rs.reduce((obj, cur) => {
+            obj.soLuongDx += cur.soLuongDx;
             obj.soLuongGiao += cur.soLuongGiao;
             obj.slGaoThuHoiSauXayXat += cur.slGaoThuHoiSauXayXat;
             obj.slThocDeXayXat += cur.slThocDeXayXat;
             return obj;
-          }, { soLuongGiao: 0, slGaoThuHoiSauXayXat: 0, slThocDeXayXat: 0 });
+          }, { soLuongDx: 0, soLuongGiao: 0, slGaoThuHoiSauXayXat: 0, slThocDeXayXat: 0 });
           return {
             ...noiDungDxRow,
             idVirtual: uuidv4(),
+            soLuongDx,
             soLuongGiao,
             slGaoThuHoiSauXayXat,
             slThocDeXayXat: slThocDeXayXat,
@@ -826,7 +875,7 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
             const rs1 = chain(v1)
               .groupBy("tenChiCuc")
               .map((v2, k2) => {
-                let tenChiCucRow = v1.find(s => k2 && s.tenChiCuc === k2);
+                let tenChiCucRow = v2.find(s => k2 && s.tenChiCuc === k2);
                 if (!tenChiCucRow) return;
                 let slGaoThuHoiSauXayXat = v2.reduce((prev, next) => prev + next.slGaoThuHoiSauXayXat, 0);
                 let slThocDeXayXat = v2.reduce((prev, next) => prev + next.slThocDeXayXat, 0);
@@ -848,9 +897,11 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
               slGaoThuHoiSauXayXat,
               slThocDeXayXat,
             }
-          }).filter(f => !!f)
+          }).value().filter(f => !!f);
+          const soLuongDx = rs.reduce((prev, next) => prev + next.soLuongDx, 0);
           return {
             ...noiDungDxRow,
+            soLuongDx,
             idVirtual: uuidv4(),
             childData: rs,
           };
@@ -1317,6 +1368,8 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
     let slConLaiGiao = this.formDataDtl.value.slConLaiGiao;
     let tonKhoDvi = this.formDataDtl.value.tonKhoDvi;
     let tonKhoCloaiVthh = this.formDataDtl.value.tonKhoCloaiVthh;
+    let noiDungDx = this.formDataDtl.value.noiDungDx;
+    let namNhap = this.formDataDtl.value.namNhap;
     let tenDvi = Array.isArray(this.listDonVi) && this.listDonVi.find(f => f.maDvi === maDvi) ? this.listDonVi.find(f => f.maDvi === maDvi).tenDvi : null;
     this.formDataDtl.patchValue({ tenDvi: tenDvi })
     this.resetValidatorDataDtl();
@@ -1337,10 +1390,16 @@ export class ChiTietQuyetDinhGnvComponent extends Base2Component implements OnIn
           tonKhoDvi, tonKhoCloaiVthh
         })
         if (this.userService.isCuc()) {
+          // if (this.formData.value.type === "XC" && this.formData.value.paXuatGaoChuyenXc) {
+          //   this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, slConLaiGiao))]);
+          // } else {
+          //   this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi, slConLaiGiao))]);
+          // }
+          // this.formDataDtl.controls['soLuongGiao'].updateValueAndValidity();
           if (this.formData.value.type === "XC" && this.formData.value.paXuatGaoChuyenXc) {
-            this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, slConLaiGiao))]);
+            this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, this.validateSlGiaoChiCuc[`${noiDungDx}-${namNhap}`]))]);
           } else {
-            this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi, slConLaiGiao))]);
+            this.formDataDtl.controls['soLuongGiao'].setValidators([Validators.required, Validators.min(1), Validators.max(Math.min(soLuongDx, tonKhoDvi, this.validateSlGiaoChiCuc[`${noiDungDx}-${namNhap}`]))]);
           }
           this.formDataDtl.controls['soLuongGiao'].updateValueAndValidity();
         }

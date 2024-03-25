@@ -15,7 +15,7 @@ import {
   DeXuatKhBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 import {QuyetDinhGiaTCDTNNService} from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
-import {AMOUNT_ONE_DECIMAL} from "../../../Utility/utils";
+import {AMOUNT_NO_DECIMAL} from "../../../Utility/utils";
 import * as uuid from "uuid";
 import {cloneDeep} from 'lodash';
 
@@ -27,7 +27,7 @@ import {cloneDeep} from 'lodash';
 
 export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   LOAI_HANG_DTQG = LOAI_HANG_DTQG;
-  amount = {...AMOUNT_ONE_DECIMAL};
+  amount = {...AMOUNT_NO_DECIMAL};
   thongtinPhanLo: DanhSachPhanLo;
   formData: FormGroup;
   dataOriginal: any;
