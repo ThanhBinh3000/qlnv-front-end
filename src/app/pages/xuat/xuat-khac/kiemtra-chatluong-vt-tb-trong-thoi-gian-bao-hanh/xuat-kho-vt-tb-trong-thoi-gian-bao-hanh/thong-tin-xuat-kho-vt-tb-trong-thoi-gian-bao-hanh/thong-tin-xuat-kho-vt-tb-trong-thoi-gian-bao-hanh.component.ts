@@ -81,8 +81,8 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         maNganKho: [],
         maLoKho: [],
         slTonKho: ['', [Validators.required]],
-        idPhieuKncl: [],
-        soPhieuKncl: [''],
+        idPhieuKdcl: [],
+        soPhieuKdcl: [''],
         ngayKn: [],
         loaiVthh: [],
         cloaiVthh: [],
@@ -170,7 +170,7 @@ export class ThongTinXuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Compo
         canBoLapPhieu: this.userInfo.TEN_DAY_DU,
         soPhieu: `${id}/${this.formData.get('namKeHoach').value}/${this.maPhieu}`,
         ngayXuatNhap: dayjs().format('YYYY-MM-DD'),
-        ngayKyCanCu: dayjs().format('YYYY-MM-DD'),
+        // ngayKyCanCu: dayjs().format('YYYY-MM-DD'),
         loaiVthh: this.loaiVthh
       });
     }

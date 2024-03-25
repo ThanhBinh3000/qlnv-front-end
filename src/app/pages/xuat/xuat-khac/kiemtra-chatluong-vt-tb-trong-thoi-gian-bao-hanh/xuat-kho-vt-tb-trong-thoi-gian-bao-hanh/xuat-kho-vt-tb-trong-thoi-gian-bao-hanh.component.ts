@@ -164,12 +164,12 @@ export class XuatKhoVtTbTrongThoiGianBaoHanhComponent extends Base2Component imp
           .value();
 
         let namKeHoach = quyetDinh ? quyetDinh.namKeHoach : null;
-        let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayXuat : null;
+        let ngayKyCanCu = quyetDinh ? quyetDinh.ngayKyCanCu : null;
         return {
           idVirtual: uuid.v4(),
           soCanCu: key != "null" ? key : '',
           namKeHoach: namKeHoach,
-          ngayQdGiaoNvXh: ngayQdGiaoNvXh,
+          ngayKyCanCu: ngayKyCanCu,
           childData: rs
         };
       })
