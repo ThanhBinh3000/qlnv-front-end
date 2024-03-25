@@ -14,7 +14,7 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button type="button" class="btn btn-sub mr-2" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKDCL_IN')" (click)="xemTruoc(idInput,templateName)">
+        <button type="button" class="btn btn-sub mr-2" *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PKDCL_IN') && idInput > 0" (click)="xemTruoc(idInput,templateName)">
           <i class="icon htvbdh_totrinh"></i>
           <span> In/Xem trước </span>
         </button>
@@ -276,7 +276,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Đơn vị kiểm định</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="dviKiemDinh" [disabled]="isView"/>
+                  <input nz-input formControlName="dviKiemDinh" [readonly]="isView"/>
                 </nz-form-control>
               </nz-form-item>
             </div>

@@ -172,10 +172,10 @@
                         <td class="bold">{{lv3.soPhieu}}</td>
                         <td>{{lv3.ngayXuatNhap| date:globals.dateFormat}}</td>
                         <td>{{ lv3.loai === 'XUAT_MAU' ? 'Xuất hàng lấy mẫu' : (lv3.loai === 'XUAT_HUY' ? 'Xuất mẫu bị hủy khỏi kho' : (lv3.loai === 'XUAT_BH' ? 'Xuất để bảo hành' : '')) }}</td>
-                        <td><a *ngIf="lv3.soPhieuKnCl" nzType="link"
-                               (click)="openPhieuKnClModal(lv3.idPhieuKnCl)">{{lv3.soPhieuKnCl}}</a></td>
+                        <td><a *ngIf="lv3.soPhieuKdcl" nzType="link"
+                               (click)="openPhieuKnClModal(lv3.idPhieuKdcl)">{{lv3.soPhieuKdcl}}</a></td>
                         <td>{{lv3.soLanLm}}</td>
-                        <td>{{lv3.ngayGiamDinh| date:globals.dateFormat }}</td>
+                        <td>{{lv3.ngayKdcl| date:globals.dateFormat }}</td>
                         <td>{{lv3.tenTrangThai}}</td>
                         <td class="text-left">
                           <a *ngIf="userService.isAccessPermisson('XHDTQG_XK_KTCLVTBH_PXK_XEM')
@@ -237,8 +237,8 @@
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!--    <app-them-moi-phieu-kn-cl [idInput]="idPhieuKnCl" [loaiVthh]="loaiVthh" [isView]="true">-->
-    <!--    </app-them-moi-phieu-kn-cl>-->
+        <app-thong-tin-phieu-kiem-dinh-chat-luong-vt-tb [idInput]="idPhieuKnCl"  [isView]="true">
+        </app-thong-tin-phieu-kiem-dinh-chat-luong-vt-tb>
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closePhieuKnClModal()" class="modal__button--cancel">
