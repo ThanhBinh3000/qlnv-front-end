@@ -413,12 +413,11 @@ export class ThongTinBienBanKetThucNhapKhacNhapKhoVatTuComponent extends Base2Co
         this.approve(this.idInput, trangThai, mesg);
     }
 
-    isTuChoi() {
-        return this.userService.isChiCuc() && [STATUS.CHO_DUYET_KTVBQ, STATUS.CHO_DUYET_KT, STATUS.CHO_DUYET_LDCC].includes(this.formData.value.trangThai)
-    }
-
     isPheDuyet() {
-        return this.userService.isChiCuc() && [STATUS.CHO_DUYET_KTVBQ, STATUS.CHO_DUYET_KT, STATUS.CHO_DUYET_LDCC].includes(this.formData.value.trangThai);
+      return this.userService.isChiCuc()
+        && ((STATUS.CHO_DUYET_KTVBQ === this.formData.value.trangThai && this.userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_DUYET_KTVBQ'))
+          || (STATUS.CHO_DUYET_KT === this.formData.value.trangThai && this.userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_DUYET_KETOAN'))
+          || (STATUS.CHO_DUYET_LDCC === this.formData.value.trangThai && this.userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_DUYET_LDCCUC')))
     }
 
     async pheDuyet(isPheDuyet?: boolean) {

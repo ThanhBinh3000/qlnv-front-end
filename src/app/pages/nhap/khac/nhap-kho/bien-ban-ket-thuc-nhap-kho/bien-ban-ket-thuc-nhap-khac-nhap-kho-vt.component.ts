@@ -106,7 +106,6 @@ export class BienBanKetThucNhapKhacNhapKhoVatTuComponent extends Base2Component 
       denNgayThoiHan: null,
       tuNgayNhapKho: null,
       denNgayNhapKho: null,
-
       tuNgayKtnk: null,
       denNgayKtnk: null
     })
@@ -505,18 +504,21 @@ export class BienBanKetThucNhapKhacNhapKhoVatTuComponent extends Base2Component 
 
   }
   checkRoleAdd() {
-    return this.userService.isChiCuc();
+    return this.userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_THEM') && this.userService.isChiCuc();
   }
   checkRoleView(trangThai: STATUS): boolean {
-    return trangThai && !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai)
+    return this.userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_XEM') &&  trangThai && !this.checkRoleEdit(trangThai) && !this.checkRoleApprove(trangThai) && !this.checkRoleDelete(trangThai)
   }
   checkRoleEdit(trangThai: STATUS): boolean {
-    return this.userService.isChiCuc() && [STATUS.DU_THAO, STATUS.TU_CHOI_LDCC].includes(trangThai)
+    return this.userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_THEM') &&  this.userService.isChiCuc() && [STATUS.DU_THAO, STATUS.TU_CHOI_LDCC].includes(trangThai)
   }
   checkRoleApprove(trangThai: STATUS): boolean {
-    return this.userService.isChiCuc() && STATUS.CHO_DUYET_LDCC === trangThai
+    return this.userService.isChiCuc()
+      && ((STATUS.CHO_DUYET_KTVBQ === trangThai && this.userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_DUYET_KTVBQ'))
+      || (STATUS.CHO_DUYET_KT === trangThai && this.userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_DUYET_KETOAN'))
+      || (STATUS.CHO_DUYET_LDCC === trangThai && this.userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_DUYET_LDCCUC')))
   }
   checkRoleDelete(trangThai: STATUS): boolean {
-    return this.userService.isChiCuc() && STATUS.DU_THAO === trangThai
+    return this.userService.isAccessPermisson('NHDTQG_NK_NK_VT_BBKTNK_XOA') && this.userService.isChiCuc() && STATUS.DU_THAO === trangThai
   }
 }
