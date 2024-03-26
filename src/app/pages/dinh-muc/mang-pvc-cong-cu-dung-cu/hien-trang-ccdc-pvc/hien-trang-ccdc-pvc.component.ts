@@ -41,6 +41,7 @@ export class HienTrangCcdcPvcComponent extends Base2Component implements OnInit 
       namKeHoach: [null],
       tenCcdc: [null],
       maCcdc: [null],
+      trangThaiKt: ["00"], // hoàn thành
     });
   }
 
