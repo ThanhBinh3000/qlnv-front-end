@@ -145,6 +145,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     // const newMaThongBao = idThongBao + "/" + this.dataDetail.nam + "/TB-ĐG";
     // const newSoBienBan = idThongBao + "/" + this.dataDetail.nam + "/BB-ĐG";
     this.formData.patchValue({
+      id:idThongBao,
       nam: this.dataDetail.nam,
       idQdPd: this.dataDetail.idQdPd,
       soQdPd: this.dataDetail.soQdPd,
