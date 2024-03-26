@@ -5,6 +5,7 @@ import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 @Component({
   selector: 'app-main-hop-dong',
   templateUrl: './main-hop-dong.component.html',
+  styleUrls: ['./main-hop-dong.component.scss'],
 })
 export class MainHopDongComponent implements OnInit {
   @Input() loaiVthh: string;

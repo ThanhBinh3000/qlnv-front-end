@@ -1,0 +1,73 @@
+@import 'src/app/pages/dieu-chuyen-noi-bo/dieu-chuyen-noi-bo.component.scss';
+
+.dcnb.modal-card {
+  padding: 16px;
+  border: 1px solid #d9d9d9;
+
+  nz-form-item {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+.dcnb-footer.nut {
+  padding: 16px 10px !important;
+}
+
+.check-box {
+  margin-bottom: 12px;
+  margin-top: 12px;
+}
+
+.btn-huy-bo {
+  margin-right: 10px;
+  color: #FF4D4F;
+  font-weight: 500;
+  border-color: #FF4D4F !important;
+  background-color: #FFF3F3;
+}
+
+.modal__button--cancel {
+  background-color: white;
+  color: red;
+  border: 1px solid #f44336;
+  margin-right: 5px;
+}
+
+.icon-cancel {
+  color: red;
+}
+
+.level2-border {
+  .ant-menu-horizontal {
+    line-height: 27px;
+    padding: 8px 12px 0px 12px;
+    border-bottom: none;
+    background: #F8F8F8;
+
+    &:not(.ant-menu-dark) {
+      & > .ant-menu-item {
+        font-size: 13px;
+        font-weight: 500;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+      }
+
+      & > .ant-menu-item-selected,
+      & > .ant-menu-item:hover {
+        color: #fff;
+        background: #4e5484;
+
+        &:after {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .ant-affix .ant-menu-horizontal {
+    padding-top: 1px;
+  }
+}

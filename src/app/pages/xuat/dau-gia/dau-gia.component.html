@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MN_LV1" class="level1">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level1">
   <ul nz-menu nzMode="horizontal">
     <li [nzSelected]="tabSelected==0" nz-menu-item (click)="selectTab(0)"
         *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG') && !userService.isChiCuc()">
@@ -30,7 +30,7 @@
     </li>
   </ul>
 </nz-affix>
-<div class="contentBor chi-tieu__body giao-ke-hoach xuat_dau_gia">
+<div class="contentBor">
   <div class="contentDetail">
     <ng-container *ngIf="tabSelected == 0">
       <app-ke-hoach-ban-dau-gia></app-ke-hoach-ban-dau-gia>
