@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {DanhMucService} from "../../../../services/danhmuc.service";
 import {MESSAGE} from "../../../../constants/message";
 import {UserService} from "../../../../services/user.service";
+import {Globals} from "../../../../shared/globals";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-ket-qua',
@@ -15,6 +16,7 @@ export class QuyetDinhPheDuyetKetQuaComponent implements OnInit {
   constructor(
     public userService: UserService,
     private danhMucService: DanhMucService,
+    public globals: Globals
   ) {
   }
 
