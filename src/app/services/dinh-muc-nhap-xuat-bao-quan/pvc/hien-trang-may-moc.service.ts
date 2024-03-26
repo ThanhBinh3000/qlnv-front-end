@@ -17,4 +17,8 @@ export class HienTrangMayMocService extends BaseService{
     const url = `${environment.SERVICE_API}${this.GATEWAY}/hien-trang-cong-cu-dung-cu/chot-du-lieu`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
+  hoanThanhKhoiTao(body): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/hien-trang-cong-cu-dung-cu/hoan-thanh`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
 }
