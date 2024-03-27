@@ -1,0 +1,50 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab('1')" *ngIf="userService.isAccessPermisson('QTDM')">
+      Hợp đồng mua
+    </li>
+    <li nz-menu-item (click)="selectTab('2')" *ngIf="userService.isAccessPermisson('QTDM')">
+      Hợp đồng bán
+    </li>
+    <li nz-menu-item (click)="selectTab('3')" *ngIf="userService.isAccessPermisson('QTDM')">
+      Hợp đồng kinh tế ĐTXD kho tàng
+    </li>
+    <li nz-menu-item (click)="selectTab('4')" *ngIf="userService.isAccessPermisson('QTDM')">
+      Hợp đồng sửa chữa lớn hàng năm
+    </li>
+    <li nz-menu-item (click)="selectTab('5')" *ngIf="userService.isAccessPermisson('QTDM')">
+      Hợp đồng sửa chữa thường xuyên
+    </li>
+    <li nz-menu-item (click)="selectTab('6')" *ngIf="userService.isAccessPermisson('QTDM')">
+      Hợp đồng mua bán màng PVC và các công cụ, dụng cụ
+    </li>
+    <li nz-menu-item (click)="selectTab('7')" *ngIf="userService.isAccessPermisson('QTDM')">
+      Hợp đồng mua sắm máy móc, thiết bị chuyên dụng
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == '1'">
+      <app-hop-dong-mua></app-hop-dong-mua>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == '2'">
+      <app-hop-dong-ban></app-hop-dong-ban>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == '3'">
+      <app-hop-dong-kinh-te-dtxd></app-hop-dong-kinh-te-dtxd>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == '4'">
+      <app-hop-dong-sua-chua-lon></app-hop-dong-sua-chua-lon>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == '5'">
+      <app-hop-dong-sua-chua-tx></app-hop-dong-sua-chua-tx>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == '6'">
+      <app-hop-dong-pvc-ccdc></app-hop-dong-pvc-ccdc>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == '7'">
+      <app-hop-dong-mm-tbcd></app-hop-dong-mm-tbcd>
+    </ng-container>
+  </div>
+</div>
