@@ -20,7 +20,7 @@ export class HopDongComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        if (!this.userService.isAccessPermisson('QLDM')) {
+        if (!this.userService.isAccessPermisson('QTDM')) {
             this.router.navigateByUrl('/error/401')
         }
         this.isVisibleChangeTab$.subscribe((value: boolean) => {
