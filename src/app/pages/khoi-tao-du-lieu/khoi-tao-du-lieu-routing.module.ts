@@ -5,7 +5,9 @@ import {KhoiTaoDuLieuComponent} from "./khoi-tao-du-lieu.component";
 import {MangLuoiKhoComponent} from "../quan-ly-kho-tang/mang-luoi-kho/mang-luoi-kho.component";
 import {HtCongCuDungCuComponent} from './ht-cong-cu-dung-cu/ht-cong-cu-dung-cu.component';
 import {HtMayMocThietBiComponent} from './ht-may-moc-thiet-bi/ht-may-moc-thiet-bi.component';
-import {HopDongSuaChuaLonComponent} from "./hop-dong-sua-chua-lon/hop-dong-sua-chua-lon.component";
+import {HopDongComponent} from "./hop-dong/hop-dong.component";
+import {CongTacDauGiaComponent} from "./cong-tac-dau-gia/cong-tac-dau-gia.component";
+import {CongTacDauThauComponent} from "./cong-tac-dau-thau/cong-tac-dau-thau.component";
 
 const routes: Routes = [
   {
@@ -34,8 +36,18 @@ const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
-        path: 'sua-chua-kho-tang',
-        component: HopDongSuaChuaLonComponent,
+        path: 'hop-dong',
+        component: HopDongComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'cong-tac-dau-gia',
+        component: CongTacDauGiaComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'cong-tac-dau-thau',
+        component: CongTacDauThauComponent,
         canActivate: [AuthGuard],
       },
     ],
