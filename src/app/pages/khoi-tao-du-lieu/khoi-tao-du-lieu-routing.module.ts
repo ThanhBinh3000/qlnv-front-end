@@ -3,8 +3,9 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from "../../guard/auth.guard";
 import {KhoiTaoDuLieuComponent} from "./khoi-tao-du-lieu.component";
 import {MangLuoiKhoComponent} from "../quan-ly-kho-tang/mang-luoi-kho/mang-luoi-kho.component";
-import { HtCongCuDungCuComponent } from './ht-cong-cu-dung-cu/ht-cong-cu-dung-cu.component';
-import { HtMayMocThietBiComponent } from './ht-may-moc-thiet-bi/ht-may-moc-thiet-bi.component';
+import {HtCongCuDungCuComponent} from './ht-cong-cu-dung-cu/ht-cong-cu-dung-cu.component';
+import {HtMayMocThietBiComponent} from './ht-may-moc-thiet-bi/ht-may-moc-thiet-bi.component';
+import {HopDongSuaChuaLonComponent} from "./hop-dong-sua-chua-lon/hop-dong-sua-chua-lon.component";
 
 const routes: Routes = [
   {
@@ -30,6 +31,11 @@ const routes: Routes = [
       {
         path: 'ht-may-moc-thiet-bi',
         component: HtMayMocThietBiComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'sua-chua-kho-tang',
+        component: HopDongSuaChuaLonComponent,
         canActivate: [AuthGuard],
       },
     ],
