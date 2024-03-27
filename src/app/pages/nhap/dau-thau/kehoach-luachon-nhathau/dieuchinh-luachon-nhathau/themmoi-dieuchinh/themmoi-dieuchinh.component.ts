@@ -267,14 +267,10 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       loaiVthh: this.loaiVthh,
       namKhoach: this.formData.get('nam') ? this.formData.get('nam').value : null,
       lastest: 1,
-      paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: 0
-      },
     }
-    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
+    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.dsQdDuocDieuChinh(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listQdGoc = res.data.content;
+      this.listQdGoc = res.data;
       this.listQdGoc.forEach(item => {
         if (item.soQdDc != null) {
           item.soQd = item.soQdDc
@@ -284,6 +280,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         item.loai = item.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia?.length > 0 ? 'Điều chỉnh giá' : ''
       })
     }
+    console.log(this.listQdGoc)
     this.spinner.hide();
     const modalQD = this.modal.create({
       nzTitle: 'DANH SÁCH SỐ QĐ CẦN ĐIỀU CHỈNH',
@@ -294,8 +291,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdGoc,
-        dataHeader: ["Số QĐ cần điều chỉnh", "Ngày ký QĐ", 'Trạng thái', 'Loại'],
-        dataColumn: ["soQd", "thoiDiemKy", 'trangThaiGia', 'loai']
+        dataHeader: ["Số QĐ cần điều chỉnh", "Ngày ký QĐ", 'Trạng thái', 'Ngày chốt điều chỉnh giá', 'Ngày hiệu lực'],
+        dataColumn: ["soQd", "thoiDiemKy", 'trangThaiGia', '', '']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -320,18 +317,16 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
           idQdGoc: $event,
           soQdGoc: data.soQdDc? data.soQdDc : data.soQd,
           ngayQdGoc: data.ngayQd,
-          soQd: data.children[0]?.dxuatKhLcntHdr?.soQd,
+          // soQd: data.children[0]?.dxuatKhLcntHdr?.soQd,
           lanDieuChinh: data.lanDieuChinh ? data.lanDieuChinh + 1 : 1,
         })
-        if (data.loaiVthh.startsWith('02')) {
-          this.dataInput = data;
-          // this.dataInputCache = cloneDeep(this.dataInput);
+        // data.children.forEach(item => {
+        //
+        // })
           this.danhsachDx = data.children
-        } else {
-          this.danhsachDx = data.children
-              .filter(item =>
-              !item.children.every(child => child.qdPdHsmt?.trangThai == this.STATUS.BAN_HANH)
-            );
+          //     .filter(item =>
+          //     !item.children.every(child => child.qdPdHsmt?.trangThai == this.STATUS.BAN_HANH)
+          //   );
           for (let item of this.danhsachDx) {
             item.children = item.children.filter(x => (x.qdPdHsmt == null || x.qdPdHsmt?.trangThai != STATUS.BAN_HANH));
           }
@@ -347,12 +342,12 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
             tgianNhang: data.tgianNhang,
             tgianThienHd: data.tgianThienHd
           })
-        }
         if (this.danhsachDx != null && this.danhsachDx.length > 0) {
           await this.showDetail(event, this.danhsachDx[0])
-        } else {
-          this.notification.warning(MESSAGE.WARNING, 'QĐ phê duyệt HSMT đã được ban hành với tất cả các gói thầu!');
         }
+        // else {
+        //   this.notification.warning(MESSAGE.WARNING, 'QĐ phê duyệt HSMT đã được ban hành với tất cả các gói thầu!');
+        // }
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -646,6 +641,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       this.selected = false
       $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
       $event.target.parentElement.classList.add('selectedRow');
+      this.formData.get('soQd').setValue(this.danhsachDx[index].dxuatKhLcntHdr?.soQd)
       this.maDviSelected = this.danhsachDx[index].maDvi
       this.dataInput = this.danhsachDx[index];
       this.dataInputCache = cloneDeep(this.danhsachDxCache[index]);
@@ -654,6 +650,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       await this.spinner.hide();
     } else {
       this.selected = true
+      this.formData.get('soQd').setValue(this.danhsachDx[0].dxuatKhLcntHdr?.soQd)
       this.dataInput = this.danhsachDx[0];
       this.dataInputCache = this.danhsachDxCache[0];
       this.index = 0;

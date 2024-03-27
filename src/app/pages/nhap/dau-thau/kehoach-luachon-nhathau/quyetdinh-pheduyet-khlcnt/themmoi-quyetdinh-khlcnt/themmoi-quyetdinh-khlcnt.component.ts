@@ -966,6 +966,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
                 donGiaVatQd = data.giaQdTcdtVat
               }
               chiCuc.donGia = donGiaVatQd
+              chiCuc.donGiaLastest = donGiaVatQd
             } else {
               chiCuc.donGia = null
             }

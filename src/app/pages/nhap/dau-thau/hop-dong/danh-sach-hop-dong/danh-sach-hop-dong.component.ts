@@ -52,6 +52,7 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   indeterminate = false;
   idGoiThau: number = 0;
   openQdPdKhlcnt = false;
+  openQdPdKhlcntVt = false;
   qdPdKhlcntId: number = 0;
   openQdPdKqlcnt = false;
   qdPdKqlcntId: number = 0;
@@ -457,11 +458,19 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
 
   openQdPdKhlcntModal(id: number) {
     this.qdPdKhlcntId = id;
-    this.openQdPdKhlcnt = true;
+    if (this.loaiVthh.startsWith('02')) {
+      this.openQdPdKhlcntVt = true;
+    } else {
+      this.openQdPdKhlcnt = true;
+    }
   }
   closeQdPdKhlcntModal() {
     this.qdPdKhlcntId = null;
-    this.openQdPdKhlcnt = false;
+    if (this.loaiVthh.startsWith('02')) {
+      this.openQdPdKhlcntVt = false;
+    } else {
+      this.openQdPdKhlcnt = false;
+    }
   }
 
   openQdPdKqlcntModal(id: number) {

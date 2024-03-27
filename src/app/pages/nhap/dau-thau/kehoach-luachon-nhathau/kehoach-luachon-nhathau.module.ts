@@ -69,7 +69,8 @@ import {
     ThemmoiTonghopKhlcntComponent,
     ThongtinDexuatComponent,
     MainKehoachLuachonNhathauComponent,
-    DieuchinhLuachonNhathauComponent
+    DieuchinhLuachonNhathauComponent,
+    ThemmoiQuyetdinhKhlcntVtComponent
   ]
 })
 export class KehoachLuachonNhathauModule { }

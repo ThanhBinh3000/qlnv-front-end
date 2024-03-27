@@ -27,6 +27,7 @@ import {PREVIEW} from "../../../../../../constants/fileType";
 import {saveAs} from "file-saver";
 import printJS from "print-js";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {QuyetDinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 
 @Component({
   selector: 'app-themmoi-thongtin-dauthau',
@@ -50,6 +51,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     trangThai: ""
   };
   showDlgPreview = false;
+  showCapNhatGia = false;
   daCoKqLcnt = false;
   pdfSrc: any;
   wordSrc: any;
@@ -70,6 +72,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     // private dauThauGoiThauService: dauThauGoiThauService,
     private thongTinDauThauService: ThongTinDauThauService,
     private donviLienQuanService: DonviLienQuanService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
   ) {
     this.formData = this.fb.group({
       namKhoach: [''],
@@ -112,6 +115,10 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       // tgianTrinhKqTcg: [''],
       // tgianTrinhTtd: [''],
       ghiChuTtdt: [''],
+      soQdGiaCuThe: [''],
+      ngayKyQdGiaCuThe: [''],
+      ghiChuQdGiaCuThe: [''],
+      maDvi: [''],
     });
   }
   idGoiThau: number = 0;
@@ -137,6 +144,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
 
   danhsachDx: any[] = [];
   listOfData: any[] = [];
+  listQdGiaCuThe: any[] = [];
   listDataDetail: any[] = [];
   listData: any[] = [];
   listDataCuc: any[] = [];
@@ -285,8 +293,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         }
         let tongThanhTien = 0;
         for (let j = 0; j < this.listOfData[i].children.length; j++) {
-          tongThanhTien += this.listOfData[i].children[j].soLuong * this.listOfData[i].children[j].donGia
-          tongMucDt += this.listOfData[i].children[j].soLuong * this.listOfData[i].children[j].donGia
+          tongThanhTien += this.listOfData[i].children[j].soLuong * this.listOfData[i].children[j].donGiaLastest
+          tongMucDt += this.listOfData[i].children[j].soLuong * this.listOfData[i].children[j].donGiaLastest
           this.expandSet2.add(j)
         }
         this.listOfData[i].thanhTien = tongThanhTien * 1000
@@ -531,6 +539,54 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     await this.spinner.hide()
   }
 
+  async updateGia() {
+    this.spinner.show();
+    let uniqueArr: any[] = [];
+    for (let gthau of this.listOfData) {
+      for (let chiCuc of gthau.children) {
+        let bodyPag = {
+          namKeHoach: this.formData.value.namKhoach,
+          loaiVthh: gthau.loaiVthh,
+          cloaiVthh: gthau.cloaiVthh,
+          trangThai: STATUS.BAN_HANH,
+          maDvi: chiCuc.maDvi,
+          loaiGia: 'LG03'
+        }
+        let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
+        if (pag.msg == MESSAGE.SUCCESS && pag.data.length > 0) {
+          const data = pag.data[0];
+          let donGiaVatQd = 0;
+          if (data != null && data.giaQdDcTcdtVat != null && data.giaQdDcTcdtVat > 0) {
+            donGiaVatQd = data.giaQdDcTcdtVat
+          } else {
+            donGiaVatQd = data.giaQdTcdtVat
+          }
+          chiCuc.donGiaUpdate = donGiaVatQd
+          uniqueArr.push(chiCuc);
+          this.formData.patchValue({
+            soQdGiaCuThe : data.soQdTcdt,
+            ngayKyQdGiaCuThe : data.ngayKyTcdt
+          })
+        }
+      }
+    }
+    this.listQdGiaCuThe = uniqueArr.filter((obj, index, self) =>
+        index === self.findIndex((t) => (
+          t.maDvi === obj.maDvi
+        ))
+    );
+    this.spinner.hide();
+    this.showCapNhatGia = true;
+  }
+
+  acceptUpdateGia() {
+    for (let gthau of this.listOfData) {
+      for (let chiCuc of gthau.children) {
+        chiCuc.donGiaLastest = chiCuc.donGiaUpdate
+      }
+    }
+    this.showCapNhatGia = false;
+  }
 
   async saveGoiThau() {
     await this.spinner.show()
@@ -822,6 +878,10 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   closeDlg() {
     this.showDlgPreview = false;
   }
+
+  closeCapNhatGia() {
+    this.showCapNhatGia = false;
+  }
   printPreview(){
     printJS({printable: this.printSrc, type: 'pdf', base64: true})
   }
@@ -844,7 +904,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       let sum = 0
       this.listOfData.forEach(item => {
         const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong * cur.donGia;
+          prev += cur.soLuong * cur.donGiaLastest;
           return prev;
         }, 0);
         sum += sumChild;
@@ -855,10 +915,22 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
 
   calcTongThanhTienKq() {
     if (this.listOfData) {
-      return this.listOfData.reduce((prev, cur) => {
-        prev += cur.thanhTienNhaThau;
-        return prev;
-      }, 0);
+      if (this.isShowFromKq) {
+        let sum  = 0;
+        this.listOfData.forEach(item => {
+          const sumChild = item.children.reduce((prev, cur) => {
+            prev += cur.soLuong * item.donGiaNhaThau;
+            return prev;
+          }, 0);
+          sum += sumChild;
+        })
+        return sum * 1000;
+      } else {
+        return this.listOfData.reduce((prev, cur) => {
+          prev += cur.soLuong * cur.donGiaNhaThau * 1000;
+          return prev;
+        }, 0);
+      }
     }
   }
 
