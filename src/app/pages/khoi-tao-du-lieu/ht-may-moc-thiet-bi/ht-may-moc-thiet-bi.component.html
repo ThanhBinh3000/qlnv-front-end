@@ -73,6 +73,8 @@
         <tbody>
         <tr>
           <td></td>
+          <td *ngIf="userService.isTongCuc()"></td>
+          <td *ngIf="!userService.isChiCuc()"></td>
           <td>
             <nz-input-group>
               <nz-select [(ngModel)]='rowItem.maTaiSan' (ngModelChange)='onChangeCcdc($event)' nzAllowClear nzShowSearch
