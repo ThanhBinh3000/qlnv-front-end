@@ -141,11 +141,11 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   }
 
   async initForm() {
-    let idThongBao = await this.helperService.getId("XH_TC_TTIN_BDG_HDR_SEQ");
+    // let idThongBao = await this.helperService.getId("XH_TC_TTIN_BDG_HDR_SEQ");
     // const newMaThongBao = idThongBao + "/" + this.dataDetail.nam + "/TB-ĐG";
     // const newSoBienBan = idThongBao + "/" + this.dataDetail.nam + "/BB-ĐG";
     this.formData.patchValue({
-      id:idThongBao,
+      // id:idThongBao,
       nam: this.dataDetail.nam,
       idQdPd: this.dataDetail.idQdPd,
       soQdPd: this.dataDetail.soQdPd,
@@ -304,10 +304,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     }
   }
 
-  getDateRange(start, end) {
-    return (start && end) ? [start, end] : null;
-  }
-
   async handleCancel() {
     this.modal.closeAll();
   }
@@ -317,6 +313,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       await this.helperService.ignoreRequiredForm(this.formData);
       this.formData.controls["maThongBao"].setValidators([Validators.required]);
       const body = this.prepareFormData();
+      console.log(body)
       await this.createUpdate(body);
     } catch (e) {
       console.error('Error: ', e);
