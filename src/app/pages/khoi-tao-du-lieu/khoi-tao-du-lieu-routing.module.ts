@@ -13,6 +13,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
+        path: '',
+        redirectTo: 'mang-luoi-kho',
+        pathMatch: 'full',
+      },
+      {
         path: 'mang-luoi-kho',
         component: MangLuoiKhoComponent,
         canActivate: [AuthGuard],
