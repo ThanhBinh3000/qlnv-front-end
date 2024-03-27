@@ -342,6 +342,11 @@
                 </div>
             </div>
             <div class="buttons">
+              <button
+                class="btn btn-sub xanh-nhat" (click)="updateGia()">
+                <i class="icon htvbdh_checkfile2"></i>
+                <span>Cập nhật giá gói thầu</span>
+              </button>
                 <button
                     *ngIf="idGoiThau > 0 && !isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && !isView && !daCoKqLcnt"
                     class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThauPopup()">
@@ -543,8 +548,8 @@
                               <td></td>
                               <td class="text-center">Tấn</td>
                               <td class="text-right blue-text">{{diemKho.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
-                              <td class="text-right">{{chiCuc.donGia | number : '1.2-2' : 'vi_VN'}}</td>
-                              <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number : '1.2-2' : 'vi_VN'}}</td>
+                              <td class="text-right">{{chiCuc.donGiaLastest | number : '1.2-2' : 'vi_VN'}}</td>
+                              <td class="text-right">{{diemKho.soLuong * chiCuc.donGiaLastest * 1000 | number : '1.2-2' : 'vi_VN'}}</td>
                               <td></td>
                               <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.kqlcntDtl?.donGiaVat : null) | number : '1.2-2' : 'vi_VN'}}</td>
                               <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? diemKho.soLuong * dtGoiThau.kqlcntDtl?.donGiaVat * 1000 : null) | number:'1.2-2' : 'vi_VN' }}</td>
@@ -727,6 +732,68 @@
     </nz-card>
     <!-- END DANH SÁCH CÁC GÓI THẦU -->
 </div>
+<nz-modal [(nzVisible)]="showCapNhatGia" nzTitle="CẬP NHẬT GIÁ GÓI THẦU" nzWidth="60%"
+          (nzOnCancel)="closeCapNhatGia()">
+  <div *nzModalContent class="modal__content">
+    <form nzLayout="horizontal" [formGroup]="formData" nz-form>
+      <nz-card class="mg-t-16 flex-card p-lr16 ">
+        <div nz-row [nzGutter]="24">
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true"> Số QĐ giá cụ thể</nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="soQdGiaCuThe" readonly/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="12">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true"> Ngày ký</nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="ngayKyQdGiaCuThe" readonly/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
+              <textarea rows="3" class="search__input" nz-input formControlName="ghiChuQdGiaCuThe" readonly></textarea>
+            </nz-form-item>
+          </div>
+        </div>
+      </nz-card>
+      <nz-table class="nowrap" nzBordered>
+        <thead>
+        <tr>
+          <th nzWidth="5%">STT</th>
+          <th nzWidth="70%">Chi cục DTNN</th>
+          <th nzWidth="25%">Đơn giá có VAT (đ/kg)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of listQdGiaCuThe , let i = index">
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ item.tenDvi }}</td>
+            <td>{{ item.donGiaUpdate | number : '1.2-2' : 'vi_VN' }}</td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeCapNhatGia()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+    <button nz-button (click)="acceptUpdateGia()"
+            class="modal__button--save">
+      <i class="icon htvbdh_tcdt_save"></i>
+      <span>Cập nhật</span>
+    </button>
+  </div>
+</nz-modal>
 <nz-modal [(nzVisible)]="showDlgPreview" nzTitle="THÔNG TIN ĐẤU THẦU" nzWidth="100%"
           (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">

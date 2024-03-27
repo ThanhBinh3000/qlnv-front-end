@@ -346,6 +346,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         donGiaVatQd = data.giaQdTcdtVat
       }
       this.thongTinChiCuc.donGia = donGiaVatQd
+      this.thongTinChiCuc.donGiaLastest = donGiaVatQd
     } else {
       this.thongTinChiCuc.donGia = null
     }

@@ -237,24 +237,29 @@ export class QuanlyHopdongComponent implements OnInit {
     });
     if(data.qdKhlcntDtl?.children) {
       let tongMucDt = 0;
+      let tongMucDtGoiTrung = 0;
       data.qdKhlcntDtl?.children.forEach(i => {
-         tongMucDt += i.donGiaNhaThau * i.soLuong * 1000
+        i.children.forEach(z => {
+          tongMucDt += z.donGiaLastest * z.soLuong * 1000
+        });
+        tongMucDtGoiTrung += i.donGiaNhaThau * i.soLuong * 1000
       })
       this.formData.patchValue({
-        tongMucDt: tongMucDt
+        tongMucDt: tongMucDt,
+        tongMucDtGoiTrung: tongMucDtGoiTrung,
       })
     }
     this.dataTable = data.qdKhlcntDtl?.children.filter(item => item.trangThaiDt == STATUS.THANH_CONG && data.listIdGthau.includes(item.id));
     if (data.listHopDong) {
       let soLuong = 0
-      let tongMucDtGoiTrung = 0;
+      // let tongMucDtGoiTrung = 0;
       let soHdDaKy = 0
       this.dataTable.forEach(item => {
         let hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0];
         item.hopDong = hopDong
         if (item.hopDong) {
           soLuong += item.hopDong.soLuong;
-          tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
+          // tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
         }
       })
       data.listHopDong.forEach(i => {
@@ -265,7 +270,7 @@ export class QuanlyHopdongComponent implements OnInit {
       this.formData.patchValue({
         soHdDaKy: soHdDaKy,
         soLuongNhapKh: data.qdKhlcntDtl?.soLuong,
-        tongMucDtGoiTrung: tongMucDtGoiTrung,
+        // tongMucDtGoiTrung: tongMucDtGoiTrung,
         soGthauTruot: this.formData.get('soGthau').value - this.formData.get('soGthauTrung').value,
       })
     };

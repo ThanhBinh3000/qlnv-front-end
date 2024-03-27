@@ -311,6 +311,19 @@
     </button>
   </div>
 </nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdPdKhlcntVt"
+                     (nzOnCancel)="closeQdPdKhlcntModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-themmoi-quyetdinh-khlcnt-vt [idInput]="qdPdKhlcntId" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-themmoi-quyetdinh-khlcnt-vt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeQdPdKhlcntModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
 <!--<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdPdKqlcnt"-->
 <!--  (nzOnCancel)="closeQdPdKqlcntModal()">-->
 <!--  <ng-container *nzModalContent class="modal__content custom-scroll-modal">-->

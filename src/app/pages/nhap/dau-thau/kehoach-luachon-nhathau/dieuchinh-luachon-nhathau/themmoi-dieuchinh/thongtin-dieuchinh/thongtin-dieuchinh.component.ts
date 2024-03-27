@@ -530,7 +530,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
       let sum = 0
       this.listOfData.forEach(item => {
         const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong * item.donGia;
+          prev += cur.soLuong * cur.donGia;
           return prev;
         }, 0);
         sum += sumChild;
