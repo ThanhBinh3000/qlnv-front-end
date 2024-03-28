@@ -126,6 +126,7 @@ export class DanhSachGoiThau {
   thanhTienDx?: number;
   thanhTienQd?: number;
   giaToiDa: number;
+  donGiaLastest: number;
 }
 
 export class CanCuXacDinh {
