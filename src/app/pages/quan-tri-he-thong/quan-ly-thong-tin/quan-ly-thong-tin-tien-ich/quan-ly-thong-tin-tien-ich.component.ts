@@ -232,16 +232,12 @@ export class QuanLyThongTinTienIchComponent extends Base2Component implements On
   }
 
   async add(row?: any) {
-    await this.spinner.show();
-
-    await this.spinner.hide();
-
     const modalQD = this.modal.create({
       nzTitle: !row ? 'THÊM MỚI THÔNG TIN VÀ PHẦN MỀM TIỆN ÍCH' : 'CẬP NHẬT THÔNG TIN VÀ PHẦN MỀM TIỆN ÍCH',
       nzContent: ThemThongTinTienIchComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1000px',
+      nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {
         data: row
