@@ -33,7 +33,7 @@ export class ThemThongTinTienIchComponent extends Base2Component implements OnIn
     insertTable: true,
     toolbarButtons:
       ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'insertTable', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting', 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'indent', 'outdent', 'paragraphFormat', 'formatOL', 'formatUL', 'quote', 'insertLink', 'insertImage', 'insertVideo', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertFile', 'insertHR', 'undo', 'redo', 'fullscreen', 'print', 'getPDF', 'spellChecker', 'selectAll', 'html', 'help']
-    , height: '300px',
+    , height: '280px',
     placeholderText: 'Nhập vào đây...',
     autoScroll: true,
     // imageUploadURL: '/upload/image',
