@@ -37,7 +37,7 @@
         <nz-form-item>
           <nz-form-label nzFor="captchaText">Captcha</nz-form-label>
           <nz-form-control nzErrorTip="Captcha là bắt buộc!">
-            <nz-input-group nzPrefixIcon="captcha" [nzAddOnAfter]="suffixButton">
+            <nz-input-group nzPrefixIcon="block" [nzAddOnAfter]="suffixButton">
               <input type="text" nz-input formControlName="captchaText" placeholder="Captcha" />
             </nz-input-group>
           </nz-form-control>
@@ -45,8 +45,8 @@
         <ng-template #suffixButton>
           <img nz-image width="200px" height="30px" [src]="imgCaptcha" alt="" />
           &nbsp;&nbsp;&nbsp;
-          <a>
-            <i class='fa fa-refresh' title="Đổi mật khẩu" (click)="getCaptcha()"></i>
+          <a (click)="getCaptcha()">
+            <i class='fa fa-refresh'></i>
           </a>
         </ng-template>
 

@@ -166,11 +166,14 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Số quyết định</nz-form-label>
+            <nz-form-label [nzRequired]="!isCuc() && thongTinChiTieuKeHoachNam.trangThai !== STATUS.DA_DUYET_LDC"
+              [nzNoColon]="true" class="text-left"> Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
                 <nz-input-number formControlName="soQuyetDinh" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                  [nzSize]="'small'" [nzDisabled]="isViewDetail" placeholder="Nhập số quyết định">
+                  [nzSize]="'small'"
+                  [nzDisabled]="isViewDetail && thongTinChiTieuKeHoachNam.trangThai !== STATUS.DA_DUYET_LDC"
+                  placeholder="Nhập số quyết định">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -182,7 +185,8 @@
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayKy"
-                [nzDisabled]="isViewDetail" nzPlaceHolder="Ngày ký">
+                [nzDisabled]="isViewDetail && thongTinChiTieuKeHoachNam.trangThai !== STATUS.DA_DUYET_LDC"
+                nzPlaceHolder="Ngày ký">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -194,7 +198,8 @@
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayHieuLuc"
-                [nzDisabled]="isViewDetail" nzPlaceHolder="Ngày hiệu lực">
+                [nzDisabled]="isViewDetail && thongTinChiTieuKeHoachNam.trangThai !== STATUS.DA_DUYET_LDC"
+                nzPlaceHolder="Ngày hiệu lực">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -266,7 +271,9 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ pháp lý</nz-form-label>
             <div class="list-file">
-              <file-list [isCanCuPL]="true" [disabled]="isViewDetail" [isViewDetail]="isViewDetail"
+              <file-list [isCanCuPL]="true"
+                [disabled]="isViewDetail && thongTinChiTieuKeHoachNam.trangThai !== STATUS.DA_DUYET_LDC"
+                [isViewDetail]="isViewDetail && thongTinChiTieuKeHoachNam.trangThai !== STATUS.DA_DUYET_LDC"
                 [data]="listCcPhapLy"></file-list>
             </div>
           </nz-form-item>
@@ -277,7 +284,9 @@
               dấu</nz-form-label>
             <nz-form-control>
               <div class="list-file">
-                <file-list [disabled]="isViewDetail" [data]="fileDinhKems" [isViewDetail]="isViewDetail"></file-list>
+                <file-list [disabled]="isViewDetail && thongTinChiTieuKeHoachNam.trangThai !== STATUS.DA_DUYET_LDC"
+                  [data]="fileDinhKems"
+                  [isViewDetail]="isViewDetail && thongTinChiTieuKeHoachNam.trangThai !== STATUS.DA_DUYET_LDC"></file-list>
               </div>
             </nz-form-control>
           </nz-form-item>

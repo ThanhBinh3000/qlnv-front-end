@@ -1901,6 +1901,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   guiDuyet() {
     if (this.isCuc()) {
       this.formData.controls["soCongVan"].clearValidators();
+      this.formData.controls["soQuyetDinh"].clearValidators();
     }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -1940,16 +1941,31 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: async () => {
-        this.spinner.show();
+
         try {
+          let body: any = {
+            id: this.id
+          };
           let trangThai;
           switch (this.thongTinChiTieuKeHoachNam.trangThai) {
             case STATUS.DA_DUYET_LDC: {
               trangThai = STATUS.BAN_HANH;
+              body = this.formData.value
+              body.soQuyetDinh = body.soQuyetDinh ? `${body.soQuyetDinh}/${this.qdTCDT}` : ''
+              body.dcKeHoachNamLtDtl = this.dsKeHoachLuongThucClone.map((lt) => {
+                return {
+                  ...lt,
+                  dcKeHoachNamLtTtDtl: [...lt.tkdnGao, ...lt.tkdnThoc, ...lt.ntnGao, ...lt.ntnThoc, ...lt.xtnGao, ...lt.xtnThoc, ...lt.tkcnGao, ...lt.tkcnThoc]
+                }
+              })
+              body.dcKeHoachNamMuoiDtl = this.dsMuoiClone
+              body.dcKeHoachNamVatTuDtl = [...this.dataVatTuNhap, ...this.dataVatTuXuat]
+              body.fileDinhKemReq = this.fileDinhKems
+              body.canCus = this.listCcPhapLy
               break;
             }
             case STATUS.CHO_DUYET_LDC: {
-              trangThai = STATUS.BAN_HANH;
+              trangThai = STATUS.DA_DUYET_LDC;
               break;
             }
             case STATUS.CHO_DUYET_TP: {
@@ -1957,10 +1973,12 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
               break;
             }
           }
-          let body = {
-            id: this.id,
-            trangThai: trangThai,
-          };
+          body.trangThai = trangThai;
+          if (this.isCuc()) {
+            this.formData.controls["soCongVan"].clearValidators();
+          }
+          this.helperService.markFormGroupTouched(this.formData);
+          this.spinner.show();
           const res = await this.quyetDinhDieuChinhCTKHService.duyet(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
@@ -2091,6 +2109,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   save(isGuiDuyet?: boolean, kbh?: boolean) {
     if (this.isCuc()) {
       this.formData.controls["soCongVan"].clearValidators();
+      this.formData.controls["soQuyetDinh"].clearValidators();
     }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -2105,7 +2124,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       return;
     }
     let body = this.formData.value
-    body.soQuyetDinh = `${body.soQuyetDinh}/${this.qdTCDT}`
+    body.soQuyetDinh = body.soQuyetDinh ? `${body.soQuyetDinh}/${this.qdTCDT}` : ''
     body.dcKeHoachNamLtDtl = this.dsKeHoachLuongThucClone.map((lt) => {
       return {
         ...lt,
@@ -3135,8 +3154,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       await this.quyetDinhDieuChinhCTKHService.xuatBaoCaoNhapVt({
         id: this.id,
         namKeHoach: this.formData.value.namKeHoach,
-        soQuyetDinh : this.thongTinChiTieuKeHoachNam.soQuyetDinh,
-        ngayKy : this.formData.value.ngayKy,
+        soQuyetDinh: this.thongTinChiTieuKeHoachNam.soQuyetDinh,
+        ngayKy: this.formData.value.ngayKy,
       }).then(async (response) => {
         if (response && response.status == 200) {
           const contentDisposition = response.headers.get('content-disposition');
