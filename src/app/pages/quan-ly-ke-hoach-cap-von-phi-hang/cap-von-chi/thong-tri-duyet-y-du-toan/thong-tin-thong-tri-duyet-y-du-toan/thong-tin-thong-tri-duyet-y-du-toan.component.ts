@@ -491,6 +491,10 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   async changeDonVi() {
     this.formData.patchValue({
       'dviThuHuong': null,
+      'nganHang' : null,
+      'soTaiKhoan' : null,
+      'tenLoaiTien':  null,
+      'loaiTien':  null,
     });
     this.listDviThuHuong = [];
     if (this.formData.value.dviThongTri) {
@@ -518,10 +522,14 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         }
       }
     }
+    console.log(this.listDviThuHuong,'this.listDviThuHuongthis.listDviThuHuong');
   }
 
-  async changeDonViThuHuong() {
-    let data = this.listDviThuHuong.find(s => s.id == this.formData.value.dviThuHuong);
+  async changeDonViThuHuong(val) {
+    console.log(this.listDviThuHuong,' this.listDviThuHuong this.listDviThuHuong');
+    console.log(this.formData.value.dviThuHuong,' this.formData.value.dviThuHuong');
+    let data = this.listDviThuHuong.find(s => s.id == val);
+    console.log(data,'datadatadata');
     if (data) {
       this.formData.patchValue({
         dviThuHuongStk: data.soTaiKhoan,
@@ -573,6 +581,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     let resDonVi = await this.donViService.getDonVi({ str: maDvi});
     if (resDonVi.msg == MESSAGE.SUCCESS) {
       this.detailTCDT = resDonVi.data;
+      console.log(this.detailTCDT,'this.detailTCDTthis.detailTCDTthis.detailTCDT');
     } else {
       this.notification.error(MESSAGE.ERROR, resDonVi.msg);
     }

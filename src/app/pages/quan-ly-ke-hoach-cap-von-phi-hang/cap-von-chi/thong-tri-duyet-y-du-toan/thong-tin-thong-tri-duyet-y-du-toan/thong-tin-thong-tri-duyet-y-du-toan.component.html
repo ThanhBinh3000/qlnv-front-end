@@ -136,7 +136,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]='true'>Đơn vị thụ hưởng</nz-form-label>
             <nz-form-control nz-col [nzSpan]='24' [nzErrorTip]='error'>
-              <nz-select formControlName='dviThuHuong' [nzDisabled]='isView' (ngModelChange)='changeDonViThuHuong()'
+              <nz-select formControlName='dviThuHuong' [nzDisabled]='isView' (ngModelChange)='changeDonViThuHuong($event)'
                          nzAllowClear>
                 <nz-option *ngFor='let p of listDviThuHuong' [nzValue]='p.id'
                            [nzLabel]="p.dvCungCapHang + ' - ' +  p.maHopDong"></nz-option>
