@@ -14,6 +14,7 @@ import { Base2Component } from "src/app/components/base2/base2.component";
 import moment from "moment";
 import dayjs from "dayjs";
 import { DanhMucService } from "src/app/services/danhmuc.service";
+import "froala-editor/js/plugins.pkgd.min.js";
 
 @Component({
   selector: 'app-them-thong-tin-tien-ich',
@@ -31,8 +32,8 @@ export class ThemThongTinTienIchComponent extends Base2Component implements OnIn
   editorConfig = {
     insertTable: true,
     toolbarButtons:
-        ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript','insertTable','fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting','alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'indent', 'outdent', 'paragraphFormat', 'formatOL', 'formatUL', 'quote','insertLink', 'insertImage', 'insertVideo', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertFile', 'insertHR','undo', 'redo', 'fullscreen', 'print', 'getPDF', 'spellChecker', 'selectAll', 'html', 'help']
-    ,height: '300px',
+      ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'insertTable', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting', 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'indent', 'outdent', 'paragraphFormat', 'formatOL', 'formatUL', 'quote', 'insertLink', 'insertImage', 'insertVideo', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertFile', 'insertHR', 'undo', 'redo', 'fullscreen', 'print', 'getPDF', 'spellChecker', 'selectAll', 'html', 'help']
+    , height: '300px',
     placeholderText: 'Nhập vào đây...',
     autoScroll: true,
     // imageUploadURL: '/upload/image',
