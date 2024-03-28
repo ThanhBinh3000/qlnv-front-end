@@ -40,11 +40,14 @@
             ],
             "styles": [
               "src/theme.less",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
+              "node_modules/froala-editor/css/froala_style.min.css"
             ],
             "scripts": [
               "src/assets/js/flow.js",
-              "src/assets/js/vgcaplugin.js"
+              "src/assets/js/vgcaplugin.js",
+              "node_modules/froala-editor/js/froala_editor.pkgd.min.js"
             ]
           },
           "configurations": {
@@ -111,7 +114,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
+              "node_modules/froala-editor/css/froala_style.min.css"
             ],
             "scripts": []
           }
@@ -121,6 +126,13 @@
   },
   "defaultProject": "qlnv",
   "scripts": [
-    "node_modules/apexcharts/dist/apexcharts.min.js"
+    "node_modules/apexcharts/dist/apexcharts.min.js",
+    "node_modules/froala-editor/js/froala_editor.pkgd.min.js"
+  ],
+  "styles": [
+    "src/theme.less",
+    "src/styles.scss",
+    "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
+    "node_modules/froala-editor/css/froala_style.min.css"
   ]
 }

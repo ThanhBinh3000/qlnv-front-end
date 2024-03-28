@@ -1,7 +1,4 @@
-<div>
-  <div>
-    <form nz-form nzLayout="vertical" [formGroup]="formData">
-
+    <form nz-form nzLayout="vertical" [formGroup]="formData" >
       <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="12">
           <nz-form-item>
@@ -69,8 +66,11 @@
               Nội dung
             </nz-form-label>
             <nz-form-control>
-              <textarea rows="3" nz-input placeholder="Nhập nội dung" [readonly]="isView"
+              <textarea [froalaEditor]='editorConfig' nz-input placeholder="Nhập nội dung" [readonly]="isView"
                 formControlName="content"></textarea>
+<!--              <editor formControlName="content"-->
+<!--                      [disabled]="false"></editor>-->
+<!--              <ngx-editor formControlName="content"></ngx-editor>-->
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -99,9 +99,7 @@
           </nz-form-item>
         </div>
       </div>
-
     </form>
-  </div>
   <div class="modal-footer">
     <div class="nut">
       <div class="cantrai">
@@ -121,4 +119,3 @@
   <ng-template #error let-control>
     <app-template-error #error [control]="control"></app-template-error>
   </ng-template>
-</div>
