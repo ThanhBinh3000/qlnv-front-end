@@ -11,6 +11,7 @@ import { HopDongComponent } from './hop-dong/hop-dong.component';
 import {HopDongModule} from "./hop-dong/hop-dong.module";
 import { CongTacDauGiaComponent } from './cong-tac-dau-gia/cong-tac-dau-gia.component';
 import { CongTacDauThauComponent } from './cong-tac-dau-thau/cong-tac-dau-thau.component';
+import {CongTacDauGiaModule} from "./cong-tac-dau-gia/cong-tac-dau-gia.module";
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { CongTacDauThauComponent } from './cong-tac-dau-thau/cong-tac-dau-thau.c
     ComponentsModule,
     MainModule,
     HopDongModule,
+    CongTacDauGiaModule
   ]
 })
 export class KhoiTaoDuLieuModule { }

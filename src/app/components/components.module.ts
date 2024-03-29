@@ -292,6 +292,9 @@ import { DialogThemMoiDmNhomHangComponent } from './dialog/dialog-them-moi-dm-nh
 import { DialogChonDanhMucChoBieuMauComponent } from './dialog/dialog-chon-danh-muc-cho-bieu-mau/dialog-chon-danh-muc-cho-bieu-mau.component';
 import { DialogCongVanComponent } from './dialog/dialog-cong-van/dialog-cong-van.component';
 import { DialogDoiMatKhauComponent } from './dialog/dialog-doi-mat-khau/dialog-doi-mat-khau.component';
+import {
+  DialogThemDiaDiemKhoiTaoDuLieuComponent
+} from "./dialog/dialog-them-dia-diem-khoi-tao-du-lieu/dialog-them-dia-diem-khoi-tao-du-lieu.component";
 @NgModule({
   declarations: [
     //components
@@ -414,6 +417,7 @@ import { DialogDoiMatKhauComponent } from './dialog/dialog-doi-mat-khau/dialog-d
     DialogThemMoiDmNhomHangComponent,
     DialogCongVanComponent,
     DialogDoiMatKhauComponent,
+    DialogThemDiaDiemKhoiTaoDuLieuComponent,
   ],
   imports: [
     CommonModule,
