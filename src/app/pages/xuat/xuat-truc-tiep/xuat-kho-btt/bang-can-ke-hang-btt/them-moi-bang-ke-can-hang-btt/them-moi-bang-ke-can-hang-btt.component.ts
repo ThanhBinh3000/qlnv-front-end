@@ -24,7 +24,6 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/bang-can-ke-hang-btt.service';
 import {DonviService} from 'src/app/services/donvi.service';
 import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
-import {BangKeBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
 import {LOAI_HANG_DTQG} from 'src/app/constants/config';
 import {FileDinhKem} from "../../../../../../models/CuuTro";
 import {AMOUNT_NO_DECIMAL, AMOUNT_THREE_DECIMAL} from "../../../../../../Utility/utils";
@@ -203,6 +202,11 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       loai: key,
       dataChild: value
     })).value();
+    if (data.phuongPhapCan) {
+      this.formData.patchValue({
+        phuongPhapCan: data.phuongPhapCan.toString()
+      });
+    }
     if (!this.isView) {
       await this.onChange(data.idQdNv)
     }
