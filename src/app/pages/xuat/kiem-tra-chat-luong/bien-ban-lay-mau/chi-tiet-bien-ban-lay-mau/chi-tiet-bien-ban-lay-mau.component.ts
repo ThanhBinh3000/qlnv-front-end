@@ -494,11 +494,13 @@ export class ChiTietBienBanLayMauComponent extends Base2Component implements OnI
     let body = { ...this.formData.value, soBbQd: this.formData.value.soBbQd ? this.formData.value.soBbQd : this.maHauTo };
     // await super.saveAndSend(body, trangThai, msg, msgSuccess);
     // await this.helperService.ignoreRequiredForm(this.formData);
-    const data = await this.createUpdate(body, null, true);
+    const data = await this.createUpdate(body, null, true, ['id', 'soBbQd']);
     if (data) {
       this.formData.patchValue({ soBbQd: data.soBbQd });
       this.formData.get('soBbQd').setValidators([Validators.required]);
+      this.formData.get('id').setValidators([Validators.required]);
       this.formData.get('soBbQd').updateValueAndValidity();
+      this.formData.get('id').updateValueAndValidity();
       // await this.helperService.restoreRequiredForm(this.formData);
       this.approve(data.id, trangThai, msg, null, msgSuccess)
     }
