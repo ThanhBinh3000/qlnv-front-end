@@ -118,7 +118,8 @@
                     <i class="fa fa-pencil" title="Sửa"></i>
                   </a>
                   <a *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_THUKHO') && bb.bienBanChuanBiKho?.trangThai == STATUS.CHO_DUYET_TK)
-              || (userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_LDCCUC') && bb.bienBanChuanBiKho?.trangThai == STATUS.CHO_DUYET_LDCC) "
+              || (userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_KETOAN') && bb.bienBanChuanBiKho?.trangThai == STATUS.CHO_DUYET_KT)
+               || (userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_LDCCUC') && bb.bienBanChuanBiKho?.trangThai == STATUS.CHO_DUYET_LDCC)"
                     (click)="redirectToChiTiet(true, bb.bienBanChuanBiKho?.id)">
                     <i class="icon htvbdh_tcdt_pheduyet"></i>
                   </a>
