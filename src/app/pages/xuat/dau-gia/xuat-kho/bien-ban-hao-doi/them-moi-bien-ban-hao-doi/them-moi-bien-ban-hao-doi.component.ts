@@ -505,7 +505,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
           await this.createUpdate(body);
           break;
         case "saveAndSend":
-          this.formData.controls["trichYeu"].setValidators([Validators.required]);
           this.setValidForm();
           await this.saveAndSend(body, trangThai, msg, msgSuccess);
           break;
