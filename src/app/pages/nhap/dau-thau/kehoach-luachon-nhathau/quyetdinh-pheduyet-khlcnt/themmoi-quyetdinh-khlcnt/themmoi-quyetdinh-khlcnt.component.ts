@@ -208,11 +208,11 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     data.forEach(item => {
       item.children.forEach(async res => {
         for (const elm of res.children) {
-          if (elm.donGia == null) {
-            this.notification.error(MESSAGE.ERROR, elm.tenDvi + " chưa được phê duyệt giá mua cụ thể.");
-            shouldStop = true;
-            continue;
-          }
+          // if (elm.donGia == null) {
+          //   this.notification.error(MESSAGE.ERROR, elm.tenDvi + " chưa được phê duyệt giá mua cụ thể.");
+          //   shouldStop = true;
+          //   continue;
+          // }
           let body = {
             loaiGia: "LG01",
             namKeHoach: this.formData.value.namKhoach,
@@ -232,22 +232,22 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
               }
             }
           }
-          if (elm.giaToiDa == null) {
-            this.notification.error(MESSAGE.ERROR, elm.tenDvi + " chưa được phê duyệt giá mua tối đa.");
-            shouldStop = true;
-            continue;
-          } else if (elm.donGiaTamTinh > elm.giaToiDa ) {
-            this.notification.error(MESSAGE.ERROR, elm.tenDvi + ": Đơn giá đề xuất không được lớn hơn giá tối đa.");
-            shouldStop = true;
-            continue;
-          }
-          elm.children.forEach(i => {
-            if (i.soLuong > res.soLuong) {
-              this.notification.error(MESSAGE.ERROR, "Số lượng của Điểm kho không được lớn hơn số lượng gói thầu");
-              shouldStop = true;
-              return;
-            }
-          });
+          // if (elm.giaToiDa == null) {
+          //   this.notification.error(MESSAGE.ERROR, elm.tenDvi + " chưa được phê duyệt giá mua tối đa.");
+          //   shouldStop = true;
+          //   continue;
+          // } else if (elm.donGiaTamTinh > elm.giaToiDa ) {
+          //   this.notification.error(MESSAGE.ERROR, elm.tenDvi + ": Đơn giá đề xuất không được lớn hơn giá tối đa.");
+          //   shouldStop = true;
+          //   continue;
+          // }
+          // elm.children.forEach(i => {
+          //   if (i.soLuong > res.soLuong) {
+          //     this.notification.error(MESSAGE.ERROR, "Số lượng của Điểm kho không được lớn hơn số lượng gói thầu");
+          //     shouldStop = true;
+          //     return;
+          //   }
+          // });
           if (shouldStop) {
             return;
           }
