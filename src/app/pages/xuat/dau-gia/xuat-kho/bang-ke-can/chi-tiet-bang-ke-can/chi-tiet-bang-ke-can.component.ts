@@ -46,7 +46,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   templateNameLt = "Bảng kê cân hàng bán đấu giá lương thực";
   amount = {...AMOUNT_NO_DECIMAL};
   amount1 = {...AMOUNT_THREE_DECIMAL}
-  amountLeft = { ...AMOUNT_THREE_DECIMAL, align: "left" };
+  amountLeft = {...AMOUNT_THREE_DECIMAL, align: "left"};
   maTuSinh: number;
   maHauTo: any;
   flagInit: Boolean = false;
@@ -193,6 +193,11 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       loai: key,
       dataChild: value
     })).value();
+    if (data.phuongPhapCan) {
+      this.formData.patchValue({
+        phuongPhapCan: data.phuongPhapCan.toString()
+      });
+    }
     if (!this.isView) {
       await this.onChange(data.idQdNv)
     }
@@ -619,8 +624,9 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   calcTong(columnName, name) {
-    const data = this.dataTable.filter(({loai}) => loai === name) || null;
-    if (data) {
+    const data = this.dataTable.filter(({loai}) => loai === name);
+    console.log(data, 999);
+    if (data.length > 0) {
       return data.reduce((sum, item) => {
         return sum + item.dataChild.reduce((acc, cur) => acc + (cur[columnName] || 0), 0);
       }, 0);

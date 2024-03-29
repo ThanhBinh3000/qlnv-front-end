@@ -166,7 +166,7 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label [nzRequired]="!isCuc() && thongTinChiTieuKeHoachNam.trangThai !== STATUS.DA_DUYET_LDC"
+            <nz-form-label [nzRequired]="!isCuc() || thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC"
               [nzNoColon]="true" class="text-left"> Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
@@ -181,7 +181,8 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" class="text-left"> Ngày ký
+            <nz-form-label [nzRequired]="!isCuc() || thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC"
+              [nzNoColon]="true" class="text-left"> Ngày ký
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayKy"
@@ -194,7 +195,8 @@
 
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" class="text-left"> Ngày hiệu lực
+            <nz-form-label [nzRequired]="!isCuc() || thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC"
+              [nzNoColon]="true" class="text-left"> Ngày hiệu lực
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayHieuLuc"

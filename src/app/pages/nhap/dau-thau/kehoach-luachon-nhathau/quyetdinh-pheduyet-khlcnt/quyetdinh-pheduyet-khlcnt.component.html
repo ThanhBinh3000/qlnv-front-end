@@ -219,8 +219,8 @@
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
               <a *ngIf="loaiVthh === '02' &&
-              ((userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_DUYET') && formData.value.trangThai == STATUS.CHO_DUYET_LDV)
-                 || (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && formData.value.trangThai == STATUS.DA_DUYET_LDV))"
+              ((userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_DUYET') && data.trangThai == STATUS.CHO_DUYET_LDV)
+                 || (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && data.trangThai == STATUS.DA_DUYET_LDV))"
                  (click)="goDetail(data.id, 'NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
               </a>
