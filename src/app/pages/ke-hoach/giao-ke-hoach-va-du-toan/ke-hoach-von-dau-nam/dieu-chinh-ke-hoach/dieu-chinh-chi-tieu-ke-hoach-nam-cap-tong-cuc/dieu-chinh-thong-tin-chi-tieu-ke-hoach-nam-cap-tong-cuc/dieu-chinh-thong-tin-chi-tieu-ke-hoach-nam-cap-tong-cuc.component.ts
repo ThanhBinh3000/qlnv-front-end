@@ -891,8 +891,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       tenTrangThai: 'Đang nhập dữ liệu',
       tenDonVi: [],
       soQuyetDinh: [, [Validators.required]],
-      ngayKy: [dayjs().format('YYYY-MM-DD')],
-      ngayHieuLuc: [dayjs().format('YYYY-MM-DD')],
+      ngayKy: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
+      ngayHieuLuc: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       soQuyetDinhGiaoCuaTc: [, [Validators.required]],
       quyetDinhGiaoCuaTcId: [, [Validators.required]],
       soQuyetDinhGiaoNam: [],
@@ -1901,7 +1901,11 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   guiDuyet() {
     if (this.isCuc()) {
       this.formData.controls["soCongVan"].clearValidators();
-      this.formData.controls["soQuyetDinh"].clearValidators();
+      if (this.thongTinChiTieuKeHoachNam.trangThai !== STATUS.DA_DUYET_LDC) {
+        this.formData.controls["soQuyetDinh"].clearValidators();
+        this.formData.controls["ngayKy"].clearValidators();
+        this.formData.controls["ngayHieuLuc"].clearValidators();
+      }
     }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -1932,6 +1936,20 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   pheDuyet() {
+    if (this.isCuc()) {
+      this.formData.controls["soCongVan"].clearValidators();
+      if (this.thongTinChiTieuKeHoachNam.trangThai !== STATUS.DA_DUYET_LDC) {
+        this.formData.controls["soQuyetDinh"].clearValidators();
+        this.formData.controls["ngayKy"].clearValidators();
+        this.formData.controls["ngayHieuLuc"].clearValidators();
+      }
+    }
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+      return;
+    }
+
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -1974,10 +1992,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             }
           }
           body.trangThai = trangThai;
-          if (this.isCuc()) {
-            this.formData.controls["soCongVan"].clearValidators();
-          }
-          this.helperService.markFormGroupTouched(this.formData);
+
+
           this.spinner.show();
           const res = await this.quyetDinhDieuChinhCTKHService.duyet(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -2109,7 +2125,11 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   save(isGuiDuyet?: boolean, kbh?: boolean) {
     if (this.isCuc()) {
       this.formData.controls["soCongVan"].clearValidators();
-      this.formData.controls["soQuyetDinh"].clearValidators();
+      if (this.thongTinChiTieuKeHoachNam.trangThai !== STATUS.DA_DUYET_LDC) {
+        this.formData.controls["soQuyetDinh"].clearValidators();
+        this.formData.controls["ngayKy"].clearValidators();
+        this.formData.controls["ngayHieuLuc"].clearValidators();
+      }
     }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
