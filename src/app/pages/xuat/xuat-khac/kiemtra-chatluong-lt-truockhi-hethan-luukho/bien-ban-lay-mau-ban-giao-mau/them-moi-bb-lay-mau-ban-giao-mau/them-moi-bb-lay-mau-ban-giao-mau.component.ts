@@ -135,8 +135,8 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   }
 
   async ngOnInit() {
+    this.spinner.show();
     try {
-      this.spinner.show();
       await Promise.all([
         this.loadMaDs(),
       ])

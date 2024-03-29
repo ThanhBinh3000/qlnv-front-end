@@ -1,0 +1,224 @@
+<div class="header header-green-background mg-t-16">
+  <div class="header-text">
+    <div class="title-chi-tieu">
+        <span>
+        </span>
+      <span> THÊM ĐỊA ĐIỂM GIAO XUẤT BÁN </span>
+    </div>
+  </div>
+</div>
+<nz-card class="mg-t-16 flex-card p-lr16 mb16 table-card scroll-modal">
+  <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+    <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+      <div nz-col [nzSpan]="24">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Chi cục</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="maDvi" (ngModelChange)="changeChiCuc($event, true)"
+                       [nzDisabled]='selectedChiCuc'>
+              <nz-option *ngFor="let item of listChiCuc" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+  <nz-table nzBordered class="pd-10 overflow-auto" [nzData]="listOfData">
+    <thead>
+    <tr>
+      <th class="text-center"> STT</th>
+      <th nzWidth="150px"><span style='color: red'>*</span> Điểm kho</th>
+      <th nzWidth="150px" ><span style='color: red'>*</span> Nhà kho</th>
+      <th nzWidth="150px" ><span style='color: red'>*</span> Ngăn kho</th>
+      <th nzWidth="150px" ><span style='color: red'>*</span> Lô Kho</th>
+      <th ><span style='color: red'>*</span> Chủng loại hàng DTQG</th>
+      <th ><span style='color: red'>*</span> Mã đơn vị tài sản</th>
+      <th nzWidth="40px"> ĐVT</th>
+      <th > SL bán đấu giá</th>
+      <th > Đơn giá VAT</th>
+      <th > Giá khởi điểm</th>
+      <th > Số tiền đặt trước</th>
+      <th nzWidth="100px" class="text-center wrap"> Hành động</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th >
+        <nz-select [(ngModel)]="thongtinPhanLo.maDiemKho" (ngModelChange)="changeDiemKho()">
+          <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
+        </nz-select>
+      </th>
+      <th>
+        <nz-select [(ngModel)]="thongtinPhanLo.maNhaKho" (ngModelChange)="changeNhaKho()">
+          <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
+        </nz-select>
+      </th>
+      <th >
+        <nz-select [(ngModel)]="thongtinPhanLo.maNganKho" (ngModelChange)="changeNganKho()">
+          <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
+        </nz-select>
+      </th>
+      <th >
+        <nz-select [(ngModel)]="thongtinPhanLo.maLoKho" (ngModelChange)="changeLoKho()">
+          <nz-option *ngFor="let item of listLoKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
+        </nz-select>
+      </th>
+      <th >
+        <nz-select [(ngModel)]="thongtinPhanLo.tenCloaiVthh" (ngModelChange)="changeCloai($event)">
+          <nz-option *ngFor="let item of listCloaiVthh" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
+        </nz-select>
+      </th>
+      <th >
+        <input nz-input [(ngModel)]="thongtinPhanLo.maDviTsan" class="w-150"/>
+      </th>
+      <th nzWidth="40px">
+        <input nz-input [(ngModel)]="thongtinPhanLo.donViTinh" class="w-150" [disabled]="true"/>
+      </th>
+      <th>
+        <input class="money-input" currencyMask [options]="amount" [min]="0"
+               [(ngModel)]="thongtinPhanLo.soLuongDeXuat"/>
+      </th>
+      <th>
+        <input class="money-input" currencyMask [options]="amount" [min]="0"
+               [(ngModel)]="thongtinPhanLo.donGiaDeXuat"/>
+      </th>
+      <th>
+        <input class="money-input" currencyMask [options]="amount" [min]="0"
+               [(ngModel)]="thongtinPhanLo.giaKhoiDiemDx"/>
+      </th>
+      <th>
+        <input class="money-input" currencyMask [options]="amount" [min]="0"
+               [(ngModel)]="thongtinPhanLo.thanhTienDuocDuyet"/>
+      </th>
+      <th class="text-center">
+        <a (click)="addDiemKho()">
+          <i class="icon htvbdh_dau-cong xanhla"></i>
+        </a>
+        <a (click)="clearDiemKho()">
+          <i class="fa fa-refresh"></i>
+        </a>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of listOfData, let idx = index" class="editable-row">
+      <ng-container *ngIf="(editCache && editCache[idx] && !editCache[idx].edit); else editTemplate ">
+        <td class="text-left">{{ idx + 1 }}</td>
+        <td class="text-left">{{ data.tenDiemKho }}</td>
+        <td class="text-left">{{ data.tenNhaKho }}</td>
+        <td class="text-left">{{ data.tenNganKho }}</td>
+        <td class="text-left">{{ data.tenLoKho }}</td>
+        <td class="text-left">{{ data.tenCloaiVthh }}</td>
+        <td class="text-center">{{ data.maDviTsan }}</td>
+        <td class="text-left">{{ data.donViTinh }}</td>
+        <td class="text-right">{{ data.soLuongDeXuat|number:'1.0-0' : 'vi_VN'}}</td>
+        <td class="text-right">{{ data.donGiaDeXuat|number:'1.0-0' : 'vi_VN'}}</td>
+        <td class="text-right">{{ data.giaKhoiDiemDx|number:'1.0-0' : 'vi_VN'}}</td>
+        <td class="text-right">{{ data.thanhTienDuocDuyet|number:'1.0-0' : 'vi_VN'}}</td>
+        <td class="text-center">
+          <a (click)="startEdit(idx)">
+            <i class="fa fa-pencil" title="Sửa"></i>
+          </a>
+          <a (click)="deleteRow(idx)">
+            <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
+          </a>
+        </td>
+      </ng-container>
+      <ng-template #editTemplate>
+        <td class="text-left">{{ idx + 1 }}</td>
+        <td class="text-left">
+          <nz-select [(ngModel)]="editCache[idx].data.maDiemKho" (ngModelChange)="changeDiemKho(idx, true)">
+            <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
+          </nz-select>
+        </td>
+        <td class="text-left">
+          <nz-select [(ngModel)]="editCache[idx].data.maNhaKho" (ngModelChange)="changeNhaKho(idx,true)">
+            <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
+          </nz-select>
+        </td>
+        <td class="text-left">
+          <nz-select [(ngModel)]="editCache[idx].data.maNganKho" (ngModelChange)="changeNganKho(idx,true)">
+            <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
+          </nz-select>
+        </td>
+        <td class="text-left">
+          <nz-select [(ngModel)]="editCache[idx].data.maLoKho" (ngModelChange)="changeLoKho(idx,true)">
+            <nz-option *ngFor="let item of listLoKho" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
+          </nz-select>
+        </td>
+        <td class="text-left">
+          <input nz-input [(ngModel)]="editCache[idx].data.tenCloaiVthh" class="w-150" />
+        </td>
+        <td class="text-left">
+          <input nz-input [(ngModel)]="editCache[idx].data.maDviTsan" class="w-150"/>
+        </td>
+        <td class="text-left">
+          <input nz-input [(ngModel)]="editCache[idx].data.donViTinh" [disabled]="true" class="w-150"/>
+        </td>
+        <td>
+          <input class="money-input" currencyMask [options]="amount" [min]="0"
+                 [(ngModel)]="editCache[idx].data.soLuongDeXuat" />
+        </td>
+        <td>
+          <input class="money-input" currencyMask [options]="amount" [min]="0"
+                 [(ngModel)]="editCache[idx].data.donGiaDeXuat" />
+        </td>
+        <td class="text-right">
+          <input class="money-input" currencyMask [options]="amount" [min]="0"
+                 [(ngModel)]="editCache[idx].data.giaKhoiDiemDx" />
+        </td>
+        <td>
+          <input class="money-input" currencyMask [options]="amount" [min]="0"
+                 [(ngModel)]="editCache[idx].data.thanhTienDuocDuyet" />
+        </td>
+
+        <td class="text-center">
+          <a (click)="saveEdit(idx)" class="save">
+            <i class="icon htvbdh_tcdt_save"></i>
+          </a>
+          <a (click)="cancelEdit(idx)">
+            <i class="fa fa-ban do"></i>
+          </a>
+        </td>
+      </ng-template>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr *ngIf="listOfData.length > 0">
+      <th></th>
+      <th class="text-left bold"> Cộng</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th class="text-right text-blue">
+        {{ calcTong('soLuongDeXuat')|number:'1.0-0' : 'vi_VN'}}
+      </th>
+      <th></th>
+      <th></th>
+      <th class="text-right text-blue">
+        {{ calcTong('thanhTienDuocDuyet')|number:'1.0-0' : 'vi_VN'}}
+      </th>
+      <th></th>
+    </tr>
+    </tfoot>
+  </nz-table>
+</nz-card>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="onCancel()" class="btn btn-sub do">
+        <i nz-icon nzType="close" class="icon-close"></i>
+        Hủy bỏ
+      </button>
+      &nbsp;
+      <button nz-button (click)="save()" class="modal__button--save">
+        <i nz-icon nzType="save"></i>
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>
