@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
@@ -366,6 +367,17 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     })
     await this.createUpdate(body);
     this.helperService.restoreRequiredForm(this.formData)
+  }
+  async saveAndSend(data, status, warningMessage, successMessage) {
+    if ((Array.isArray(this.listPhieuXuatKho) && this.listPhieuXuatKho.length > 0)) {
+      this.listPhieuXuatKho.forEach(s => {
+        s.id = null;
+      })
+      data.listPhieuXuatKho = cloneDeep(this.listPhieuXuatKho);
+      super.saveAndSend(data, status, warningMessage, successMessage);
+    } else {
+      this.notification.warning(MESSAGE.WARNING, 'Phiếu xuất kho đang để trống');
+    }
   }
 
   pheDuyet() {
