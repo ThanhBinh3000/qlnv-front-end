@@ -120,8 +120,8 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
       tenLoaiVthh: ["", [Validators.required]],
       tchuanCluong: [""],
       ykienThamGia: [""],
-      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
-      tenTrangThai: ["Đang nhập dữ liệu"],
+      trangThai: [STATUS.DU_THAO],
+      tenTrangThai: ["Dự thảo"],
       tgianThienHd: [null],
       tenDuAn: [""],
       dienGiaiTongMucDt: [""],
@@ -352,7 +352,12 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
     let mesg = "";
     // Vật tư
     switch (this.formData.get("trangThai").value) {
-      case STATUS.DANG_NHAP_DU_LIEU: {
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_LDV;
+        mesg = "Bạn có chắc chắn muốn gửi duyệt?";
+        break;
+      }
+      case STATUS.DA_DUYET_LDV: {
         trangThai = STATUS.BAN_HANH;
         mesg = "Văn bản sẵn sàng ban hành ?";
         break;

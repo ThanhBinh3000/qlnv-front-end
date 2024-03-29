@@ -215,15 +215,22 @@
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="goDetail(data.id, 'NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')"
-                *ngIf="data.trangThai == STATUS.BAN_HANH || (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM') && !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') && (data.trangThai == STATUS.DANG_NHAP_DU_LIEU || data.trangThai == STATUS.BAN_HANH))">
+                *ngIf="data.trangThai == STATUS.BAN_HANH || (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM') && !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') && (data.trangThai == STATUS.DANG_NHAP_DU_LIEU || data.trangThai == STATUS.BAN_HANH || data.trangThai == STATUS.DU_THAO))">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
-              <a *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
+              <a *ngIf="loaiVthh === '02' &&
+              ((userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_DUYET') && formData.value.trangThai == STATUS.CHO_DUYET_LDV)
+                 || (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && formData.value.trangThai == STATUS.DA_DUYET_LDV))"
+                 (click)="goDetail(data.id, 'NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
+              </a>
+              <a *ngIf="((loaiVthh === '02' ?data.trangThai == STATUS.DU_THAO : data.trangThai == STATUS.DANG_NHAP_DU_LIEU)
+              || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
                 && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM')) && userService.isTongCuc()"
                 (click)="goDetail(data.id, 'NHDTQG_PTDT_KHLCNT_QDLCNT_THEM')">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DANG_NHAP_DU_LIEU
+              <a *ngIf="(loaiVthh === '02' ?data.trangThai == STATUS.DU_THAO: data.trangThai == STATUS.DANG_NHAP_DU_LIEU)
                 && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XOA')) && userService.isTongCuc()"
                 (click)="delete(data)">
                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>

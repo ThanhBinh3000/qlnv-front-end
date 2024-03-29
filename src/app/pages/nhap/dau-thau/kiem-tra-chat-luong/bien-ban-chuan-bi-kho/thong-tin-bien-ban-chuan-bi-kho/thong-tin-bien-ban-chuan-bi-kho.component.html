@@ -20,7 +20,7 @@
     </button>
     <button type="button" class="btn btn-sub do"
             *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TK && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_THUKHO'))
-            || (formData.value.trangThai ==STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_KT'))
+            || (formData.value.trangThai ==STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_KETOAN'))
       || (formData.value.trangThai ==STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_LDCCUC'))"
       (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi "></i>
@@ -28,7 +28,7 @@
     </button>
     <button class="btn btn-sub btn-sm waves-effect waves-light xanh-nhat"
       *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TK && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_THUKHO'))
-      || (formData.value.trangThai ==STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_KT'))
+      || (formData.value.trangThai ==STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_KETOAN'))
       || (formData.value.trangThai ==STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBCBK_DUYET_LDCCUC'))"
       (click)=" pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
