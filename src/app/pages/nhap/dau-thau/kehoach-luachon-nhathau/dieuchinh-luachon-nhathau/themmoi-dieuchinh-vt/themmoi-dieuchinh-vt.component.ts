@@ -240,14 +240,10 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
       loaiVthh: this.loaiVthh,
       namKhoach: this.formData.get("nam").value,
       lastest: 0,
-      paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: 0
-      },
     };
-    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
+    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.dsQdDuocDieuChinh(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listQdGoc = res.data.content;
+      this.listQdGoc = res.data;
       this.listQdGoc.forEach(item => {
         if (item.soQdDc != null) {
           item.soQd = item.soQdDc
@@ -267,8 +263,8 @@ export class ThemmoiDieuchinhVtComponent extends Base2Component implements OnIni
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdGoc,
-        dataHeader: ["Số QĐ cần điều chỉnh", "Ngày ký QĐ", 'Trạng thái', 'Loại'],
-        dataColumn: ["soQd", "thoiDiemKy", 'trangThaiGia', 'loai']
+        dataHeader: ["Số QĐ cần điều chỉnh", "Ngày ký QĐ", 'Trạng thái', 'Ngày chốt điều chỉnh giá', 'Ngày hiệu lực'],
+        dataColumn: ["soQd", "thoiDiemKy", 'trangThaiGia', '', '']
       }
     });
     modalQD.afterClose.subscribe(async (data) => {

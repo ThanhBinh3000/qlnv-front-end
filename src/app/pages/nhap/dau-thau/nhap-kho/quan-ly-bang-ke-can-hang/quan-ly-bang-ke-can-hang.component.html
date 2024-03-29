@@ -2,22 +2,34 @@
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div class="search__body" nz-row [nzGutter]="20">
+        <div nz-col nzSpan="2">
+          <label class="search__label"> Năm kế hoạch </label>
+          <nz-select [(ngModel)]="searchFilter.namKhoach">
+            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+          </nz-select>
+        </div>
         <div nz-col nzSpan="4">
-          <label class="search__label">Số Quyết định nhập</label>
+          <label class="search__label">Số QĐ giao NV nhập hàng</label>
           <input class="search__input" placeholder="Nhập Số Quyết định nhập" nz-input
             [(ngModel)]="searchFilter.soQuyetDinh" />
         </div>
         <div nz-col nzSpan="4">
-          <label class="search__label">Số bảng kê</label>
+          <label class="search__label">Số bảng kê cân hàng</label>
           <input class="search__input" placeholder="Số bảng kê" nz-input [(ngModel)]="searchFilter.soBangKe" />
         </div>
         <div nz-col nzSpan="4">
-          <label class="search__label">Ngày nhập xuất</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayNhap" nzFormat="dd/MM/yyyy"></nz-range-picker>
-        </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Số hợp đồng</label>
-          <input class="search__input" placeholder="Số hợp đồng" nz-input [(ngModel)]="searchFilter.soHopDong" />
+          <label class="search__label">Ngày lập bảng kê</label>
+          <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="12" class="cus-start-date">
+              <nz-date-picker [nzDisabledDate]="disabledTuNgayTao" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayTao"
+                              nzPlaceHolder="Ngày bắt đầu">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="12" class="cus-end-date">
+              <nz-date-picker [nzDisabledDate]="disabledDenNgayTao" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayTao"
+                              nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+            </div>
+          </div>
         </div>
       </div>
       <div class="cangiua group-button-search">
@@ -57,16 +69,16 @@
             <th width="60px">STT</th>
             <th width="30px"></th>
             <th width="30px"></th>
-            <th>Số QĐ giao NVNH</th>
-            <th>Năm kế hoạch</th>
-            <th>Thời gian NH trước ngày</th>
-            <th>Điểm kho</th>
-            <th>Ngăn/Lô kho</th>
-            <th>Số bảng kê</th>
-            <th>Số phiếu nhập kho</th>
-            <th>Ngày nhập kho</th>
-            <th>Trạng thái</th>
-            <th>Hành động</th>
+            <th class="text-center">Số QĐ giao NVNH</th>
+            <th class="text-center">Năm KH</th>
+            <th class="text-center">Thời gian NH</th>
+            <th class="text-center">Điểm kho</th>
+            <th class="text-center">Ngăn/Lô kho</th>
+            <th class="text-center">Số bảng kê</th>
+            <th class="text-center">Số phiếu nhập kho</th>
+            <th class="text-center">Ngày lập bảng kê</th>
+            <th class="text-center">Trạng thái</th>
+            <th class="text-center">Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -105,7 +117,7 @@
                     <td colspan="6"></td>
                     <td class="bold">{{dataPhieu.soBangKe}}</td>
                     <td>{{dataPhieu.phieuNhapKho?.soPhieuNhapKho}}</td>
-                    <td>{{dataPhieu.phieuNhapKho?.ngayTao | date: 'dd/MM/yyyy'}}</td> <!-- //Data fake -->
+                    <td>{{dataPhieu.ngayTao | date: 'dd/MM/yyyy'}}</td> <!-- //Data fake -->
                     <td>{{dataPhieu.tenTrangThai}}</td>
                     <td>
                       <a *ngIf="hienThiXem(dataPhieu)"

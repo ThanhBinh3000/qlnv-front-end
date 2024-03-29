@@ -4,10 +4,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { ComponentsModule } from './components/components.module';
 import { AppRoutingModule } from './app-routing.module';
-
 import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
-
 import { CommonInterceptor } from './interceptor/common.interceptor';
 import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
 import { NZ_I18N, NzI18nService, vi_VN } from 'ng-zorro-antd/i18n';

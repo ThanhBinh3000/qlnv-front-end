@@ -217,6 +217,11 @@ export class BangKeNhapVatTuComponent extends Base2Component implements OnInit {
       soBangKe: '',
       ngayTaoBangKe: '',
     };
+    this.tuNgayNhapHang = null;
+    this.tuNgayNk = null;
+    this.denNgayNhapHang = null;
+    this.denNgayNk = null;
+    this.search()
   }
 
   xoaItem(item: any) {

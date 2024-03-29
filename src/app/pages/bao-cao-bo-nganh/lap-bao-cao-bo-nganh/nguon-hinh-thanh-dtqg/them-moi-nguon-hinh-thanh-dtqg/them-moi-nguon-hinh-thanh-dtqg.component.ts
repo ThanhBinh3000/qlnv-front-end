@@ -195,18 +195,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
         ...this.dataNguonNgoaiNsnn,
         this.itemRowNgoaiNguon
       ];
-      if (this.dataNguonNgoaiNsnn.length > 1) {
-        let tongChi = 0;
-        let tongLuyKe = 0;
-        for (let item of this.dataNguonNgoaiNsnn) {
-          if (item.dmLevel == 2) {
-            tongChi += item.tongTrongKy;
-            tongLuyKe += item.tongLuyKe;
-          }
-        }
-        this.dataNguonNgoaiNsnn[0].tongTrongKy = tongChi;
-        this.dataNguonNgoaiNsnn[0].tongLuyKe = tongLuyKe;
-      }
+      this.tongRowNgoaiNguon()
       this.clearItemRowNn();
     }
   }
@@ -280,6 +269,21 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     this.dataNguonNsnn[0].muaBuLuyKe = muaBuLuyKe
     this.dataNguonNsnn[0].muaBsungLuyKe = muaBsungLuyKe
     this.dataNguonNsnn[0].khacLuyKe = khacLuyKe
+  }
+
+  tongRowNgoaiNguon () {
+    if (this.dataNguonNgoaiNsnn.length > 1) {
+      let tongChi = 0;
+      let tongLuyKe = 0;
+      for (let item of this.dataNguonNgoaiNsnn) {
+        if (item.dmLevel == 2) {
+          tongChi += item.tongTrongKy;
+          tongLuyKe += item.tongLuyKe;
+        }
+      }
+      this.dataNguonNgoaiNsnn[0].tongTrongKy = tongChi;
+      this.dataNguonNgoaiNsnn[0].tongLuyKe = tongLuyKe;
+    }
   }
 
   cancelEditRowNguon(index: number) {
@@ -401,6 +405,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
       item.tongTrongKy = this.nvl(item.muaTangTrongKy) + this.nvl(item.muaBuTrongKy) + this.nvl(item.muaBsungTrongKy) + this.nvl(item.khacTrongKy);
       item.tongLuyKe = this.nvl(item.muaTangLuyKe) + this.nvl(item.muaBuLuyKe) + this.nvl(item.muaBsungLuyKe) + this.nvl(item.khacLuyKe);
     })
+    this.tongRowNgoaiNguon()
     this.tongRowNguon();
   }
   calTongChi() {

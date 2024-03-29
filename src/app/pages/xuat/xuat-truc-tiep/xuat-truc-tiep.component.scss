@@ -1,1 +1,3 @@
-@import '../../../../assets/scss/tab-content.scss'
+:host ::ng-deep nz-select-placeholder {
+  color: #bcbbbf;
+}

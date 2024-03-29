@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, sortBy } from 'lodash';
 import { DonviService } from './../../../../services/donvi.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
@@ -166,7 +166,7 @@ export class BaoCaoHienTrangKhoTangComponent extends Base2Component implements O
   async getLoaiVthh() {
     const res = await this.danhMucSerVice.getAllVthhByCap(2);
     if (res.msg === MESSAGE.SUCCESS) {
-      this.listHangHoa = res.data.map(f => ({ tenLoaiVthh: f.ten, loaiVthh: f.ma, loaiHang: f.loaiHang, donViTinh: f.maDviTinh }))
+      this.listHangHoa = res.data.filter(f => ['01', '02', '03', '04'].includes(f.ma.substring(0, 2))).map(f => ({ tenLoaiVthh: f.ten, loaiVthh: f.ma, loaiHang: f.loaiHang, donViTinh: f.maDviTinh, stt: f.ma?.startsWith('01') ? 1 : f.ma?.startsWith('04') ? 2 : f.ma?.startsWith('02') ? 3 : 4 })).sort((a, b) => (a.stt - b.stt) || a.loaiVthh.localeCompare(b.loaiVthh));
     }
   }
   clearSearch() {

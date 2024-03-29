@@ -141,10 +141,11 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   }
 
   async initForm() {
-    let idThongBao = await this.helperService.getId("XH_TC_TTIN_BDG_HDR_SEQ");
+    // let idThongBao = await this.helperService.getId("XH_TC_TTIN_BDG_HDR_SEQ");
     // const newMaThongBao = idThongBao + "/" + this.dataDetail.nam + "/TB-ĐG";
     // const newSoBienBan = idThongBao + "/" + this.dataDetail.nam + "/BB-ĐG";
     this.formData.patchValue({
+      // id:idThongBao,
       nam: this.dataDetail.nam,
       idQdPd: this.dataDetail.idQdPd,
       soQdPd: this.dataDetail.soQdPd,
@@ -189,12 +190,14 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         return;
       }
       const data = res.data;
+      this.dataTableAll = data.children;
       this.formData.patchValue({
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
         moTaHangHoa: data.moTaHangHoa,
         khoanTienDatTruoc: data.khoanTienDatTruoc
       });
+
       if (data.listTtinDg && data.listTtinDg.length > 0) {
         const tTinDthauLastest = data.listTtinDg.pop();
         const tTinDthau = tTinDthauLastest.id > 0 ? await this.thongTinDauGiaService.getDetail(tTinDthauLastest.id) : null;
@@ -224,15 +227,21 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   }
 
   async calculatorTable() {
-    this.dataTable.forEach((item) => {
-      item.soLuongXuatBan = item.children.reduce((total, child) => {
-        child.soTienDatTruoc = child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
-        return total + child.soLuongDeXuat;
-      }, 0);
-      item.tienDatTruoc = item.children.reduce((total, child) => {
-        return total + child.soTienDatTruoc;
-      }, 0);
-    });
+    this.dataTableAll.forEach(s => {
+      this.dataTable.forEach((item) => {
+        item.soLuongXuatBan = item.children.reduce((total, child) => {
+          const fiterSl = s.children.filter(s1 => s1.maDviTsan === child.maDviTsan && s1.namNhap === child.namNhap && s1.maDiemKho === child.maDiemKho && s1.maNhaKho === child.maNhaKho && s1.maNganKho === child.maNganKho && s1.maLoKho === child.maLoKho);
+          if (fiterSl && fiterSl.length > 0) {
+            child.soLuongDeXuat = fiterSl[0].soLuongDeXuat || 0
+          }
+          child.soTienDatTruoc = child.soLuongDeXuat != 0 ? child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100 : 0;
+          return total + child.soLuongDeXuat;
+        }, 0);
+        item.tienDatTruoc = item.children.reduce((total, child) => {
+          return total + child.soTienDatTruoc;
+        }, 0);
+      });
+    })
   }
 
   async getDetail(id) {
@@ -303,10 +312,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     }
   }
 
-  getDateRange(start, end) {
-    return (start && end) ? [start, end] : null;
-  }
-
   async handleCancel() {
     this.modal.closeAll();
   }
@@ -316,6 +321,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       await this.helperService.ignoreRequiredForm(this.formData);
       this.formData.controls["maThongBao"].setValidators([Validators.required]);
       const body = this.prepareFormData();
+      console.log(body)
       await this.createUpdate(body);
     } catch (e) {
       console.error('Error: ', e);

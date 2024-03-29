@@ -128,7 +128,7 @@ export class ThemMoiQdPdHsMtComponent extends Base2Component implements OnInit {
         data.children.forEach(chiCuc => {
           if (chiCuc.maDvi == this.userInfo.MA_DVI) {
             this.formData.patchValue({
-              soQdPdKhlcnt: data.soQd,
+              soQdPdKhlcnt: data.soQdDc != null ? data.soQdDc : data.soQd,
               idQdPdKhlcnt: data.id,
               idQdPdKhlcntDtl: chiCuc.id,
               tenDuAn: chiCuc.tenDuAn,

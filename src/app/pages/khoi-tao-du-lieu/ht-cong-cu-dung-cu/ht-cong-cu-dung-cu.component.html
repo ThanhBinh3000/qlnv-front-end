@@ -63,106 +63,116 @@
 
 <!--    <nz-card class="mt-2px flex-card data-table card-border-content table-card">-->
       <nz-table #basicTable nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
-                [nzScroll]="dataTable && dataTable.length ? { x: '2500px' } : null"
-                [nzData]="dataTable" class='mt-2'>
+                [nzScroll]="dataTable && dataTable.length ? { x: '2000px' } : null"
+                [nzData]="dataTable" class='mt-2 text-wrap'>
         <thead>
         <tr>
           <th nzWidth="40px">STT</th>
-          <th nzWidth="250px" *ngIf="userService.isTongCuc()">Cục DTNN KV</th>
-          <th nzWidth="250px" *ngIf="!userService.isChiCuc()">Chi cục DTNN</th>
-          <th nzWidth="120px">Mã CCDC</th>
-          <th nzWidth="120px">Tên CCDC</th>
+          <th nzWidth="200px" *ngIf="userService.isTongCuc()">Cục DTNN KV</th>
+          <th nzWidth="200px" *ngIf="!userService.isChiCuc()">Chi cục DTNN</th>
+          <th nzWidth="200px">Mã CCDC</th>
+          <th nzWidth="200px">Tên CCDC</th>
           <th nzWidth="100px">Đơn vị tính</th>
-          <th nzWidth="120px">Năm kế hoạch</th>
-          <th nzWidth="200px">Số dư năm trước(1)</th>
-          <th nzWidth="200px">Số lượng nhập(2)</th>
-          <th nzWidth="200px">Số lượng điều chỉnh tăng(3)</th>
-          <th nzWidth="200px">Số lượng điều chỉnh giảm(4)</th>
-          <th nzWidth="200px">Số lượng đã sử dụng(5)</th>
-          <th nzWidth="200px">Số lượng cần sửa chữa(6)</th>
-          <th nzWidth="200px">Số lượng phải thanh lý(7)</th>
-          <th nzWidth="200px">Số lượng tồn(7)=1+2+3-4-5-7</th>
-          <th nzWidth="100px" nzRight>Hành động</th>
+          <th nzWidth="100px">Năm kế hoạch</th>
+          <th nzWidth="100px">Số dư <br/> năm trước(1)</th>
+          <th nzWidth="100px">Số lượng <br/> nhập(2)</th>
+          <th nzWidth="100px">Số lượng <br/>điều chỉnh <br/> tăng(3)</th>
+          <th nzWidth="100px">Số lượng <br/>điều chỉnh <br/>giảm(4)</th>
+          <th nzWidth="100px">Số lượng <br/>đã sử <br/>dụng(5)</th>
+          <th nzWidth="100px">Số lượng <br/>cần sửa <br/>chữa(6)</th>
+          <th nzWidth="100px">Số lượng <br/>phải thanh<br/> lý(7)</th>
+          <th nzWidth="100px">Số lượng <br/>tồn(7)</th>
+          <th nzWidth="100px">Hành động</th>
         </tr>
         </thead>
         <tbody>
         <tr>
           <td></td>
+          <td *ngIf="userService.isTongCuc()"></td>
+          <td *ngIf="!userService.isChiCuc()"></td>
           <td>
             <nz-input-group>
-<!--              <input nz-input [(ngModel)]='rowItem.noiDung' />-->
+               <nz-select [(ngModel)]='rowItem.maTaiSan' (ngModelChange)='onChangeCcdc($event)' nzAllowClear nzShowSearch
+                                       [nzShowArrow]='false'>
+                      <nz-option nzValue='{{item.maCcdc}}' nzLabel='{{item.tenCcdc}}' *ngFor='let item of listMatHang'>
+                  </nz-option>
+               </nz-select>
             </nz-input-group>
           </td>
           <td>
-<!--            <nz-input-group>-->
-<!--              <input nz-input [(ngModel)]='rowItem.sanPham' />-->
-<!--            </nz-input-group>-->
+            <nz-input-group>
+                            <input nz-input [(ngModel)]='rowItem.tenTaiSan' [disabled]='true' />
+            </nz-input-group>
           </td>
           <td>
-<!--            <nz-input-group>-->
-<!--              <nz-date-picker nzFormat='dd/MM/yyyy' nz-input [(ngModel)]='rowItem.tuNgay'>-->
-<!--              </nz-date-picker>-->
-<!--            </nz-input-group>-->
+            <nz-input-group>
+              <input nz-input [(ngModel)]='rowItem.donViTinh'  [disabled]='true' />
+            </nz-input-group>
           </td>
           <td>
-<!--            <nz-input-group>-->
-<!--              <nz-date-picker nzFormat='dd/MM/yyyy' nz-input [(ngModel)]='rowItem.denNgay'>-->
-<!--              </nz-date-picker>-->
-<!--            </nz-input-group>-->
+            <nz-input-group>
+              <nz-select [(ngModel)]='rowItem.namKeHoach'
+                         [nzShowArrow]='true'>
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                </nz-option>
+              </nz-select>
+            </nz-input-group>
           </td>
           <td>
-<!--            <nz-input-group>-->
-<!--              <input nz-input [(ngModel)]='rowItem.nguoiThucHien' />-->
-<!--            </nz-input-group>-->
+              <nz-input-group>
+                <nz-input-number nz-input [(ngModel)]='rowItem.soDuNamTruoc' [nzMin]='0' [nzSize]="'small'"
+                                           [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                </nz-input-number>
+              </nz-input-group>
           </td>
           <td>
-<!--            <nz-input-group>-->
-<!--              <nz-select [(ngModel)]='rowItem.trangThaiTd' (ngModelChange)='onChangeTrangThai($event)'-->
-<!--                         [nzShowArrow]='false'>-->
-<!--                <nz-option nzValue='{{item.ma}}' nzLabel='{{item.giaTri}}' *ngFor='let item of listTrangThai1'>-->
-<!--                </nz-option>-->
-<!--              </nz-select>-->
-<!--            </nz-input-group>-->
+            <nz-input-group>
+              <nz-input-number nz-input [(ngModel)]='rowItem.slNhap' [nzMin]='0' [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-input-group>
           </td>
           <td>
-            <!--            <nz-input-group>-->
-            <!--              <input nz-input [(ngModel)]='rowItem.nguoiThucHien' />-->
-            <!--            </nz-input-group>-->
+            <nz-input-group>
+              <nz-input-number nz-input [(ngModel)]='rowItem.dieuChinhTang' [nzMin]='0' [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-input-group>
           </td>
           <td>
-            <!--            <nz-input-group>-->
-            <!--              <input nz-input [(ngModel)]='rowItem.nguoiThucHien' />-->
-            <!--            </nz-input-group>-->
+            <nz-input-group>
+              <nz-input-number nz-input [(ngModel)]='rowItem.dieuChinhGiam' [nzMin]='0' [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-input-group>
           </td>
           <td>
-            <!--            <nz-input-group>-->
-            <!--              <input nz-input [(ngModel)]='rowItem.nguoiThucHien' />-->
-            <!--            </nz-input-group>-->
+            <nz-input-group>
+              <nz-input-number nz-input [(ngModel)]='rowItem.slDaSuDung' [nzMin]='0' [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-input-group>
           </td>
           <td>
-            <!--            <nz-input-group>-->
-            <!--              <input nz-input [(ngModel)]='rowItem.nguoiThucHien' />-->
-            <!--            </nz-input-group>-->
+            <nz-input-group>
+              <nz-input-number nz-input [(ngModel)]='rowItem.slCanSuaChua' [nzMin]='0' [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-input-group>
           </td>
           <td>
-            <!--            <nz-input-group>-->
-            <!--              <input nz-input [(ngModel)]='rowItem.nguoiThucHien' />-->
-            <!--            </nz-input-group>-->
+            <nz-input-group>
+              <nz-input-number nz-input [(ngModel)]='rowItem.slCanThanhLy' [nzMin]='0' [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-input-group>
           </td>
           <td>
-            <!--            <nz-input-group>-->
-            <!--              <input nz-input [(ngModel)]='rowItem.nguoiThucHien' />-->
-            <!--            </nz-input-group>-->
-          </td>
-          <td>
-            <!--            <nz-input-group>-->
-            <!--              <input nz-input [(ngModel)]='rowItem.nguoiThucHien' />-->
-            <!--            </nz-input-group>-->
-          </td>
-          <td>
-            <!--            <nz-input-group>-->
-            <!--              <input nz-input [(ngModel)]='rowItem.nguoiThucHien' />-->
-            <!--            </nz-input-group>-->
+            <nz-input-group>
+              <nz-input-number nz-input [(ngModel)]='rowItem.slTon' [nzMin]='0' [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-input-group>
           </td>
           <td>
             <a (click)='themMoiItem()'>
@@ -189,12 +199,12 @@
           <td class="text-right">{{ data.slCanSuaChua | number : '1.0-1' : 'vi_VN' }}</td>
           <td class="text-right">{{ data.slCanThanhLy | number : '1.0-1' : 'vi_VN' }}</td>
           <td class="text-right">{{ data.slTon | number : '1.0-1' : 'vi_VN' }}</td>
-          <td nzRight>
-            <a  (click)="openDialog(data, true)"  *ngIf="(data.trangThai == statusMm.DA_CHOT || !userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HTCCDC_XEM')" >
-              <i class="fa fa-eye" title="Xem chi tiết"></i>
+          <td>
+            <a  (click)="hoanThanh(data.id)"  *ngIf="(data.trangThai == statusMm.CHUA_CHOT || !userService.isChiCuc()) && data.trangThaiKt =='01' " >
+              <i class="fa fa-adjust" title="Hoàn thành"></i>
             </a>
             <a
-              (click)="openDialog(data, false)" *ngIf="(data.trangThai == statusMm.CHUA_CHOT && userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HTCCDC_SUA') ">
+              (click)="openDialog(data, false)" *ngIf="(data.trangThai == statusMm.CHUA_CHOT && userService.isChiCuc()) && data.trangThaiKt =='01' && userService.isAccessPermisson('QLĐMNXBQ_MANGPVCVACCDC_HTCCDC_SUA') ">
               <i class="fa fa-pencil" title="Sửa"></i>
             </a>
           </td>

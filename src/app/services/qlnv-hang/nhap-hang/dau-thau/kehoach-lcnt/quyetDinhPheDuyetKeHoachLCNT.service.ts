@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../../environments/environment';
 import { BaseService } from '../../../../base.service';
 import { Observable } from 'rxjs';
+import {OldResponseData} from "../../../../../interfaces/response";
 
 @Injectable({
   providedIn: 'root',
@@ -26,5 +27,9 @@ export class QuyetDinhPheDuyetKeHoachLCNTService extends BaseService {
   exportList(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
+  }
+  dsQdDuocDieuChinh(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ds-dieu-chinh`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 }

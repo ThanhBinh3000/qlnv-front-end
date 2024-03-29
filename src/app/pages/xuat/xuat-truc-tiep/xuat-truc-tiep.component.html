@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level1">
   <ul nz-menu nzMode="horizontal">
     <li [nzSelected]="tabSelected==0" nz-menu-item (click)="selectTab(0)"
         *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_KHBTT') && !userService.isChiCuc()">
