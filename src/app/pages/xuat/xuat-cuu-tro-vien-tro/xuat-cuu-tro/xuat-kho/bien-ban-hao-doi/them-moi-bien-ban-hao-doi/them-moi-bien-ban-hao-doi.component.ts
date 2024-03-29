@@ -378,9 +378,9 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     if (resDmhh.msg === MESSAGE.SUCCESS) {
       const data = Array.isArray(resDmhh.data?.content) ? resDmhh.data.content : [];
       const listDmhh = data.filter(f => {
-        return hinhThucBq.some(item => f.hinhThucBq.split(",").includes(item.ma)) &&
-          loaiHinhBq.some(item => f.loaiHinhBq.split(",").includes(item.ma)) &&
-          phuongPhapBq.some(item => f.phuongThucBq.split(",").includes(item.ma)) &&
+        return hinhThucBq.some(item => f.hinhThucBq?.split(",").includes(item.ma)) &&
+          loaiHinhBq.some(item => f.loaiHinhBq?.split(",").includes(item.ma)) &&
+          phuongPhapBq.some(item => f.phuongThucBq?.split(",").includes(item.ma)) &&
           f.apDungTai.split(",").includes(this.userInfo.MA_DVI.slice(0, -2));
       }).sort((a, b) => a.tgBaoQuanTu - b.tgBaoQuanTu);
       const dinhMucHaoHut = Array.isArray(listDmhh) && listDmhh.length > 0 ? this.tinhDinhMucHaoHut(listDmhh, soThangBaoQuanHang, loaiVthh) : ""
