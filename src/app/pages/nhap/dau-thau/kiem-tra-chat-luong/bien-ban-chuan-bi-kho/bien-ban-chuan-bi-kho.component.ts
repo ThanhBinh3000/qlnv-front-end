@@ -237,7 +237,7 @@ export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit
   }
 
   xoaItem(item: any) {
-    if (this.checkPrice.boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }

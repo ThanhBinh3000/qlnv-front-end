@@ -242,7 +242,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     let soLuongDaLenKhByIdQd = await this.soLuongNhapHangService.getSoLuongCtkhTheoQdByIdQd(body);
     let resChiTieu = this.dataChiTieu?.khLuongThuc.find(x => x.maDonVi == event);
     console.log(this.dataAll, "dataAll")
-    let chiCuc = this.dataAll.find(item => item.maDvi == event);
+    let chiCuc = this.listChiCuc.find(item => item.maDvi == event);
     const res = await this.donViService.getDonVi({ str: event })
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {

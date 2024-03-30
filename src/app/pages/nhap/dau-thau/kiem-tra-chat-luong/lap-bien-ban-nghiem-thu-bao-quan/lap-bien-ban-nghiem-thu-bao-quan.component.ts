@@ -315,7 +315,7 @@ export class LapBienBanNghiemThuBaoQuanComponent extends Base2Component implemen
   }
 
   xoaItem(item: any) {
-    if (this.checkPrice.boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
