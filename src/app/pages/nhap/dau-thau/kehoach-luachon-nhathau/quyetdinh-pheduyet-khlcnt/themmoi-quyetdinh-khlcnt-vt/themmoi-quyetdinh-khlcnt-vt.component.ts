@@ -357,6 +357,16 @@ export class ThemmoiQuyetdinhKhlcntVtComponent extends Base2Component implements
         mesg = "Bạn có chắc chắn muốn gửi duyệt?";
         break;
       }
+      case STATUS.TU_CHOI_LDV: {
+        trangThai = STATUS.CHO_DUYET_LDV;
+        mesg = "Bạn có chắc chắn muốn gửi duyệt?";
+        break;
+      }
+      case STATUS.CHO_DUYET_LDV: {
+        trangThai = STATUS.DA_DUYET_LDV;
+        mesg = "Bạn có chắc chắn muốn phê duyệt?";
+        break;
+      }
       case STATUS.DA_DUYET_LDV: {
         trangThai = STATUS.BAN_HANH;
         mesg = "Văn bản sẵn sàng ban hành ?";

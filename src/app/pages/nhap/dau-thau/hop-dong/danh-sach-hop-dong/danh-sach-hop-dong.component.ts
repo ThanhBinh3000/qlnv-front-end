@@ -215,7 +215,7 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   }
 
   xoaItem(item: any) {
-    if (this.checkPrice.boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
@@ -279,7 +279,7 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   }
 
   themMoi(isView: boolean, data: any) {
-    if (this.checkPrice.boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }

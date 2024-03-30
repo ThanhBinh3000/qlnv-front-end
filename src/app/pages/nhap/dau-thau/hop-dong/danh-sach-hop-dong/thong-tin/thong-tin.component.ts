@@ -378,7 +378,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
     }
 
     async save(isKy?) {
-      if (this.checkPrice.boolean) {
+      if (this.checkPrice && this.checkPrice.boolean) {
         this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
         return;
       }
