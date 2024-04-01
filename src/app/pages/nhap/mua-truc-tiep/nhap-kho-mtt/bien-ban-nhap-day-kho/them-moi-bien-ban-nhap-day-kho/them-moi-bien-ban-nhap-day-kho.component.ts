@@ -260,7 +260,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
     this.dataTable.forEach(item => {
       item.soPhieuKtraCl = item.soPhieu;
       this.formData.patchValue({
-        ktvBanQuan: item.ktvBaoQuan,
+        // ktvBanQuan: item.ktvBaoQuan,
         idDdiemGiaoNvNh: data.id,
         maDiemKho: data.maDiemKho,
         tenDiemKho: data.tenDiemKho,
@@ -332,10 +332,8 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
           } else {
             if (this.formData.get('id').value) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-              this.back();
             } else {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.back();
             }
             await this.spinner.hide();
           }

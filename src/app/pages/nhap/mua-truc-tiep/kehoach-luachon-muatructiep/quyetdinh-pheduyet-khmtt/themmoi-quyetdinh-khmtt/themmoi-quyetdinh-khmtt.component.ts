@@ -269,8 +269,8 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
         soQd: data.soQd?.split('/')[0],
         soQuyetDinhDieuBDG: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT ?? null,
         ngayQuyetDinhDieuBDG: data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT ?? null,
-        chotDcGia: !!data.qthtChotGiaInfoRes?.qthtChotDieuChinhGia.length,
-        quyetDinhDcGia: !!data.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia.length,
+        chotDcGia: !!data.qthtChotGiaInfoRes?.qthtChotDieuChinhGia?.length,
+        quyetDinhDcGia: !!data.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia?.length,
         quyetDinhDc: !!(data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT && data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT),
       })
       this.idSoQdCc = data.idSoQdCc

@@ -306,7 +306,7 @@
                 </div>
                 <div nz-col nzSpan="4">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true">
+                        <nz-form-label [nzNoColon]="true">
                             Tổng số lượng nhập
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
@@ -318,7 +318,7 @@
                 </div>
                 <div nz-col nzSpan="4">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true">
+                        <nz-form-label [nzNoColon]="true">
                             Đơn giá
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
@@ -330,7 +330,7 @@
                 </div>
                 <div nz-col nzSpan="4">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true">
+                        <nz-form-label [nzNoColon]="true">
                             Thành tiền
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
@@ -342,7 +342,7 @@
                 </div>
                 <div nz-col [nzSpan]="24">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true" nzRequired> Ghi chú</nz-form-label>
+                        <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <textarea rows="3" formControlName="ghiChu" nz-input></textarea>
                         </nz-form-control>
@@ -386,7 +386,7 @@
                     File đính kèm biên bản đã ký
                   </nz-form-label>
                   <div class="list-file">
-                    <file-list [data]="fileDinhKems"></file-list>
+                    <file-list [isViewDetail]="isView" [data]="fileDinhKems"></file-list>
                   </div>
                 </nz-form-item>
               </div>

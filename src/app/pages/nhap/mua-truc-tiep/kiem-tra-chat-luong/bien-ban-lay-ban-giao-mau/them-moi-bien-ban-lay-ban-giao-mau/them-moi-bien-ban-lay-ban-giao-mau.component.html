@@ -123,7 +123,7 @@
                                 <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ giao nhiệm vụ nhập
                                     hàng</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
+                                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogSoQd()">
                                         <input [readonly]="true" nz-input formControlName="soQdGiaoNvNh" readonly />
                                     </nz-input-group>
                                 </nz-form-control>
@@ -321,14 +321,74 @@
 </ng-template>
 
 <nz-card nzTitle="" class="mt-16 flex-card p-lr16">
-    <div class="mg-t-16 header header-green-background">
-        <div class="header-text">
-            <div class="title-chi-tieu">
-                <span></span>
-                <span>I. Thành phần lấy mẫu</span>
-            </div>
-        </div>
-    </div>
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel nzHeader="I.THÀNH PHẦN LẤY MẪU" [nzActive]="true">
+      <nz-table class="nowrap pd-10" [nzData]="viewTableDaiDien" nzBordered>
+        <thead>
+        <tr>
+          <th class="text-center" nzWidth="5%">STT</th>
+          <th nzWidth="40%"><span style='color: red;'>*</span> Họ và tên</th>
+          <th nzWidth="40%"><span style='color: red;'>*</span> Đại diện</th>
+          <th *ngIf="!isView" nzWidth="15%"></th>
+        </tr>
+        <tr>
+          <th></th>
+          <th><input [disabled]="isView" nz-input [(ngModel)]="daiDienRow.daiDien"/></th>
+          <th>
+            <nz-select [nzDisabled]="isView" [(ngModel)]="daiDienRow.loaiDaiDien">
+              <nz-option *ngFor="let p of listDaiDien" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+              </nz-option>
+            </nz-select>
+          </th>
+          <th *ngIf="!isView">
+            <a (click)="themDaiDien()">
+              <i class="fa fa-plus"></i>
+            </a>
+            <a (click)="nhapLaiDaiDien()">
+              <i class="fa fa-refresh"></i>
+            </a>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of viewTableDaiDien;let i = index">
+          <ng-container *ngIf="!data.edit;else editTemplate ">
+            <td class="text-center">{{i + 1}}</td>
+            <td>{{data.daiDien}}</td>
+            <td>{{data.tenLoaiDaiDien}}</td>
+            <td *ngIf="!isView">
+              <a (click)="suaDaiDien(i)">
+                <i class="fa fa-edit"></i>
+              </a>
+              <a (click)="xoaDaiDien(i)">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplate>
+            <td class="text-center">{{i + 1}}</td>
+            <td><input nz-input [(ngModel)]="daiDienRowEdit[i].daiDien"/></td>
+            <td>
+              <nz-select [(ngModel)]="daiDienRowEdit[i].loaiDaiDien">
+                <nz-option *ngFor="let p of listDaiDien" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+            </td>
+            <td>
+              <a (click)="luuDaiDien(i)">
+                <i class="fa fa-save"  nz-button></i>
+              </a>
+              <a (click)="huySuaDaiDien(i)">
+                <i class="fa fa-ban do"></i>
+              </a>
+            </td>
+          </ng-template>
+        </tr>
+        </tbody>
+      </nz-table>
+    </nz-collapse-panel>
+  </nz-collapse>
+</nz-card>
 <!--    <div nz-row [nzGutter]="[18,6]">-->
 <!--        <div nz-col nzSpan="12">-->
 <!--            <nz-form-item>-->
@@ -348,77 +408,9 @@
 <!--                [(dataTable)]="listDaiDienChiCuc"></app-thanh-phan-lay-mau>-->
 <!--        </div>-->
 <!--    </div>-->
-  <nz-table class="nowrap pd-10" [nzData]="viewTableDaiDien" nzBordered>
-    <thead>
-    <tr>
-      <th class="text-center" nzWidth="5%">STT</th>
-      <th nzWidth="40%"><span style='color: red;'>*</span> Họ và tên</th>
-      <th nzWidth="40%"><span style='color: red;'>*</span> Đại diện</th>
-      <th nzWidth="15%"></th>
-    </tr>
-    <tr>
-      <th></th>
-      <th><input nz-input [(ngModel)]="daiDienRow.daiDien"/></th>
-      <th>
-        <nz-select [(ngModel)]="daiDienRow.loaiDaiDien">
-          <nz-option *ngFor="let p of listDaiDien" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-          </nz-option>
-        </nz-select>
-      </th>
-      <th>
-        <a (click)="themDaiDien()">
-          <i class="fa fa-plus"></i>
-        </a>
-        <a (click)="nhapLaiDaiDien()">
-          <i class="fa fa-refresh"></i>
-        </a>
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let data of viewTableDaiDien;let i = index">
-      <ng-container *ngIf="!data.edit;else editTemplate ">
-        <td class="text-center">{{i + 1}}</td>
-        <td>{{data.daiDien}}</td>
-        <td>{{data.tenLoaiDaiDien}}</td>
-        <td>
-          <a (click)="suaDaiDien(i)">
-            <i class="fa fa-edit"></i>
-          </a>
-          <a (click)="xoaDaiDien(i)">
-            <i class="fa fa-trash-o do"></i>
-          </a>
-        </td>
-      </ng-container>
-      <ng-template #editTemplate>
-        <td class="text-center">{{i + 1}}</td>
-        <td><input nz-input [(ngModel)]="daiDienRowEdit[i].daiDien"/></td>
-        <td>
-          <nz-select [(ngModel)]="daiDienRowEdit[i].loaiDaiDien">
-            <nz-option *ngFor="let p of listDaiDien" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-            </nz-option>
-          </nz-select>
-        </td>
-        <td>
-          <a (click)="luuDaiDien(i)">
-            <i class="fa fa-save"  nz-button></i>
-          </a>
-          <a (click)="huySuaDaiDien(i)">
-            <i class="fa fa-ban do"></i>
-          </a>
-        </td>
-      </ng-template>
-    </tr>
-    </tbody>
-  </nz-table>
-    <div class="mg-t-16 header header-green-background">
-        <div class="header-text">
-            <div class="title-chi-tieu">
-                <span></span>
-                <span>II. Nội dung lấy mẫu</span>
-            </div>
-        </div>
-    </div>
+<nz-card nzTitle="" class="mt-16 flex-card p-lr16">
+  <nz-collapse nzAccordion>
+    <nz-collapse-panel nzHeader="II.NỘI DUNG LẤY MẪU" [nzActive]="true">
     <form nzLayout="vertical" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="[18, 6]">
             <div nz-col nzSpan="6">
@@ -427,7 +419,7 @@
                         Số lượng mẫu hàng kiểm tra
                     </nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
-                        <nz-input-number type="text" nz-input [nzSize]="'small'" formControlName="soLuongMau"
+                        <nz-input-number [nzDisabled]="isView" type="text" nz-input [nzSize]="'small'" formControlName="soLuongMau"
                             [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
                             [nzParser]="globals.parser">
                         </nz-input-number>
@@ -493,7 +485,7 @@
                 <nz-form-item>
                     <nz-form-label [nzNoColon]="true">
                     </nz-form-label>
-                    <label nz-checkbox formControlName="ketQuaNiemPhong" [(ngModel)]="checked">Đã niêm phong mẫu</label>
+                    <label nz-checkbox [nzDisabled]="isView" formControlName="ketQuaNiemPhong" [(ngModel)]="checked">Đã niêm phong mẫu</label>
                 </nz-form-item>
             </div>
           <div nz-col nzSpan="24">
@@ -502,10 +494,12 @@
                 File đính kèm ảnh chụp mẫu đã niêm phong
               </nz-form-label>
             </nz-form-item>
-            <file-list [data]="listFileDinhKem" [isViewDetail]="isDisableField()"></file-list>
+            <file-list  [data]="listFileDinhKem" [disabled]="isView" [isViewDetail]="isView"></file-list>
           </div>
         </div>
     </form>
+    </nz-collapse-panel>
+  </nz-collapse>
 </nz-card>
 <nz-modal [(nzVisible)]="showDlgPreview" nzTitle="PHIẾU NHẬP KHO" nzWidth="100%"
           (nzOnCancel)="closeDlg()">
