@@ -136,6 +136,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
       ngayHetHanNk: [],
       thanLuuKho: [],
       ngayHetHanLk: [],
+      tongSoLuongNhap: [],
     })
 
   }

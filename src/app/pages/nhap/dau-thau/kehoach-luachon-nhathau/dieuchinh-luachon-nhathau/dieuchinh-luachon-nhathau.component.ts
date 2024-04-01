@@ -84,7 +84,7 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
-    if (this.checkPrice.boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }

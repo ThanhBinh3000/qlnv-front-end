@@ -223,6 +223,11 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
               x.trangThai = STATUS.CHUA_THUC_HIEN;
               x.tenTrangThai = "Chưa thực hiện";
             });
+            let soLuong = 0;
+            this.dataTable.forEach(i => {
+              soLuong += i.soLuong
+            })
+            this.formData.get('soLuong').setValue(soLuong);
           } else {
             this.formData.patchValue({
               donViTinh: 'tấn',
@@ -239,12 +244,13 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
                 y.soLuong = null;
               })
             });
+            let soLuong = 0;
+            this.dataTable.forEach(i => {
+              i.soLuong = i.soLuong/1000
+              soLuong += i.soLuong
+            })
+            this.formData.get('soLuong').setValue(soLuong);
           }
-          let soLuong = 0;
-          this.dataTable.forEach(i => {
-            soLuong += i.soLuong
-          })
-          this.formData.get('soLuong').setValue(soLuong);
           await this.loadDiemKho()
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg)

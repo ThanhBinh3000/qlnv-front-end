@@ -375,7 +375,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
   }
 
   pheDuyet() {
-    if (this.checkPrice.boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
@@ -437,7 +437,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
 
 
   tuChoi() {
-    if (this.checkPrice.boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
@@ -510,7 +510,7 @@ export class ThongTinBangKeNhapVatTuComponent extends Base2Component implements 
   }
 
   async save(isGuiDuyet: boolean) {
-    if (this.checkPrice.boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
