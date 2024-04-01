@@ -22,6 +22,10 @@ import {
   BienBanHaoDoiBttService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/bien-ban-hao-doi-btt.service';
 import {FileDinhKem} from "../../../../../../models/FileDinhKem";
+import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
+import {DanhMucDinhMucHaoHutService} from "../../../../../../services/danh-muc-dinh-muc-hao-hut.service";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
 
 @Component({
   selector: 'app-them-moi-bien-ban-hao-doi-btt',
@@ -56,6 +60,9 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
     private bienBanTinhKhoBttService: BienBanTinhKhoBttService,
     private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
     private bienBanHaoDoiBttService: BienBanHaoDoiBttService,
+    private mangLuoiKhoService: MangLuoiKhoService,
+    private danhMucDinhMucHaoHutService: DanhMucDinhMucHaoHutService,
+    private danhMucService: DanhMucService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanHaoDoiBttService);
     this.formData = this.fb.group({
@@ -413,66 +420,153 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
     if (id <= 0) return;
     try {
       const res = await this.bienBanTinhKhoBttService.getDetail(id);
-      if (res.msg !== MESSAGE.SUCCESS || !res.data) {
-        return;
+      if (res.msg === MESSAGE.SUCCESS || res.data) {
+        const data = res.data;
+        let thoiGianKthucNhap = "";
+        if (data.maLoKho || data.maNganKho) {
+          const resMlk = await this.mangLuoiKhoService.getDetailByMa({maDvi: data.maLoKho || data.maNganKho});
+          if (resMlk.data?.object?.ngayNhapDay) {
+            thoiGianKthucNhap = resMlk.data?.object?.ngayNhapDay;
+          }
+        }
+        const soThangBaoQuanHang = data.ngayKetThucXuat && thoiGianKthucNhap ? +dayjs(dayjs(data.ngayKetThucXuat, "DD/MM/YYYY").format("YYYY-MM-DD")).diff(dayjs(thoiGianKthucNhap, "DD/MM/YYYY").format("YYYY-MM-DD"), 'month', true).toFixed(1) : null;
+        if (data.cloaiVthh || data.loaiVthh) {
+          await this.getDinhMucHaoHut(data.cloaiVthh, data.loaiVthh, soThangBaoQuanHang);
+        }
+        const tongSlNhap = data.tongSlNhap || 0;
+        const tongSlXuat = data.tongSlXuat || 0;
+        const slHaoThucTe = tongSlNhap - tongSlXuat;
+        const tileHaoThucTe = (slHaoThucTe / tongSlNhap) * 100;
+        const slHaoTheoDinhMuc = data.tongSlNhap ? (data.tongSlNhap * this.formData.value.dinhMucHaoHut) / 100 : 0;
+        const slHaoVuotMuc = Math.max(slHaoThucTe - slHaoTheoDinhMuc, 0);
+        const tileHaoVuotMuc = data.tongSlNhap ? (slHaoVuotMuc * 100) / data.tongSlNhap : '';
+        const slHaoThanhLy = slHaoTheoDinhMuc;
+        const tiLeHaoThanhLy = data.tongSlNhap ? (slHaoThanhLy * 100) / data.tongSlNhap : '';
+        const slHaoDuoiMuc = Math.max(slHaoTheoDinhMuc - slHaoThucTe, 0);
+        const tileHaoDuoiMuc = data.tongSlNhap ? (slHaoDuoiMuc * 100) / data.tongSlNhap : '';
+        this.formData.patchValue({
+          idKho: data.idKho,
+          idQdNvDtl: data.idQdNvDtl,
+          idBbTinhKho: data.id,
+          soBbTinhKho: data.soBbTinhKho,
+          ngayLapBbTinhKho: data.ngayLapBienBan,
+          idPhieuKiemNghiem: data.idPhieuKiemNghiem,
+          soPhieuKiemNghiem: data.soPhieuKiemNghiem,
+          ngayKiemNghiemMau: data.ngayKiemNghiemMau,
+          loaiHinhKho: data.loaiHinhKho,
+          maDiemKho: data.maDiemKho,
+          tenDiemKho: data.tenDiemKho,
+          maNhaKho: data.maNhaKho,
+          tenNhaKho: data.tenNhaKho,
+          maNganKho: data.maNganKho,
+          tenNganKho: data.tenNganKho,
+          maLoKho: data.maLoKho,
+          tenLoKho: data.tenLoKho,
+          tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
+          tgianGiaoNhan: data.tgianGiaoNhan,
+          loaiVthh: data.loaiVthh,
+          tenLoaiVthh: data.tenLoaiVthh,
+          cloaiVthh: data.cloaiVthh,
+          tenCloaiVthh: data.tenCloaiVthh,
+          tenHangHoa: data.tenHangHoa,
+          donViTinh: data.donViTinh,
+          loaiHinhNx: data.loaiHinhNx,
+          kieuNx: data.kieuNx,
+          ngayBatDauXuat: data.ngayBatDauXuat,
+          ngayKetThucXuat: data.ngayKetThucXuat,
+          phanLoai: data.phanLoai,
+          pthucBanTrucTiep: data.pthucBanTrucTiep,
+          idHopDong: data.phanLoai === TRUC_TIEP.HOP_DONG ? data.idHopDong : null,
+          soHopDong: data.phanLoai === TRUC_TIEP.HOP_DONG ? data.soHopDong : null,
+          ngayKyHopDong: data.phanLoai === TRUC_TIEP.HOP_DONG ? data.ngayKyHopDong : null,
+          soLuongHopDong: data.phanLoai == TRUC_TIEP.HOP_DONG ? data.soLuongHopDong : null,
+          idBangKeBanLe: data.phanLoai === TRUC_TIEP.BAN_LE ? data.idBangKeBanLe : null,
+          soBangKeBanLe: data.phanLoai === TRUC_TIEP.BAN_LE ? data.soBangKeBanLe : null,
+          ngayTaoBkeBanLe: data.phanLoai === TRUC_TIEP.BAN_LE ? data.ngayTaoBkeBanLe : null,
+          soLuongBkeBanLe: data.phanLoai === TRUC_TIEP.BAN_LE ? data.soLuongBkeBanLe : null,
+          tongSlNhap: tongSlNhap,
+          thoiGianKthucNhap: thoiGianKthucNhap,
+          tongSlXuat: tongSlXuat,
+          thoiGianKthucXuat: data.ngayKetThucXuat,
+          slHaoThucTe: slHaoThucTe,
+          tileHaoThucTe: tileHaoThucTe,
+          slHaoTheoDinhMuc: slHaoTheoDinhMuc,
+          slHaoVuotMuc: slHaoVuotMuc,
+          tileHaoVuotMuc: tileHaoVuotMuc,
+          slHaoThanhLy: slHaoThanhLy,
+          tileHaoThanhLy: tiLeHaoThanhLy,
+          slHaoDuoiMuc: slHaoDuoiMuc,
+          tileHaoDuoiMuc: tileHaoDuoiMuc,
+        })
+        this.dataTable = data.children
       }
-      const data = res.data;
-      const tongSlNhap = data.tongSlNhap || 0;
-      const tongSlXuat = data.tongSlXuat || 0;
-      const slHaoThucTe = tongSlNhap - tongSlXuat;
-      const tileHaoThucTe = (slHaoThucTe / tongSlNhap) * 100;
-      this.formData.patchValue({
-        idKho: data.idKho,
-        idQdNvDtl: data.idQdNvDtl,
-        idBbTinhKho: data.id,
-        soBbTinhKho: data.soBbTinhKho,
-        ngayLapBbTinhKho: data.ngayLapBienBan,
-        idPhieuKiemNghiem: data.idPhieuKiemNghiem,
-        soPhieuKiemNghiem: data.soPhieuKiemNghiem,
-        ngayKiemNghiemMau: data.ngayKiemNghiemMau,
-        loaiHinhKho: data.loaiHinhKho,
-        maDiemKho: data.maDiemKho,
-        tenDiemKho: data.tenDiemKho,
-        maNhaKho: data.maNhaKho,
-        tenNhaKho: data.tenNhaKho,
-        maNganKho: data.maNganKho,
-        tenNganKho: data.tenNganKho,
-        maLoKho: data.maLoKho,
-        tenLoKho: data.tenLoKho,
-        tenNganLoKho: data.tenLoKho ? data.tenLoKho + ' - ' + data.tenNganKho : data.tenNganKho,
-        tgianGiaoNhan: data.tgianGiaoNhan,
-        loaiVthh: data.loaiVthh,
-        tenLoaiVthh: data.tenLoaiVthh,
-        cloaiVthh: data.cloaiVthh,
-        tenCloaiVthh: data.tenCloaiVthh,
-        tenHangHoa: data.tenHangHoa,
-        donViTinh: data.donViTinh,
-        loaiHinhNx: data.loaiHinhNx,
-        kieuNx: data.kieuNx,
-        ngayBatDauXuat: data.ngayBatDauXuat,
-        ngayKetThucXuat: data.ngayKetThucXuat,
-        phanLoai: data.phanLoai,
-        pthucBanTrucTiep: data.pthucBanTrucTiep,
-        idHopDong: data.phanLoai === TRUC_TIEP.HOP_DONG ? data.idHopDong : null,
-        soHopDong: data.phanLoai === TRUC_TIEP.HOP_DONG ? data.soHopDong : null,
-        ngayKyHopDong: data.phanLoai === TRUC_TIEP.HOP_DONG ? data.ngayKyHopDong : null,
-        soLuongHopDong: data.phanLoai == TRUC_TIEP.HOP_DONG ? data.soLuongHopDong : null,
-        idBangKeBanLe: data.phanLoai === TRUC_TIEP.BAN_LE ? data.idBangKeBanLe : null,
-        soBangKeBanLe: data.phanLoai === TRUC_TIEP.BAN_LE ? data.soBangKeBanLe : null,
-        ngayTaoBkeBanLe: data.phanLoai === TRUC_TIEP.BAN_LE ? data.ngayTaoBkeBanLe : null,
-        soLuongBkeBanLe: data.phanLoai === TRUC_TIEP.BAN_LE ? data.soLuongBkeBanLe : null,
-        tongSlNhap: tongSlNhap,
-        tongSlXuat: tongSlXuat,
-        thoiGianKthucXuat: data.ngayKetThucXuat,
-        slHaoThucTe: slHaoThucTe,
-        tileHaoThucTe: tileHaoThucTe
-      })
-      this.dataTable = data.children
     } catch (e) {
       console.error('Error: ', e);
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
+    }
+  }
+
+  async getDinhMucHaoHut(cloaiVthh: string, loaiVthh: string, soThangBaoQuanHang: number) {
+    if (!soThangBaoQuanHang && ![0, "0"].includes(soThangBaoQuanHang)) {
+      return;
+    }
+    let listQuyetDinhDmhh = [];
+    let hinhThucBaoQuan = [];
+    let loaiHinhBaoQuan = [];
+    let phuongPhapBaoQuan = [];
+    const resDmhh = await this.danhMucDinhMucHaoHutService.search({loaiVthh, cloaiVthh});
+    if (resDmhh.msg === MESSAGE.SUCCESS && resDmhh.data.content) {
+      listQuyetDinhDmhh = resDmhh.data.content.filter(f =>
+        f.trangThai === STATUS.BAN_HANH && ((dayjs(f.ngayHieuLuc).isBefore(dayjs()) || dayjs(f.ngayHieuLuc).isSame(dayjs())) && (!f.ngayHetHieuLuc || dayjs().isBefore(dayjs(f.ngayHetHieuLuc))))).sort((a, b) => dayjs(b.ngayKy).valueOf() - dayjs(a.ngayKy).valueOf());
+    }
+    const idQdDmhh = listQuyetDinhDmhh[0]?.id;
+    if (idQdDmhh > 0) {
+      const [res, resDmh] = await Promise.all([
+        this.danhMucDinhMucHaoHutService.getDetail(idQdDmhh),
+        this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh || loaiVthh)
+      ]);
+      hinhThucBaoQuan = Array.isArray(resDmh.data?.hinhThucBq) ? resDmh.data?.hinhThucBq : [];
+      loaiHinhBaoQuan = Array.isArray(resDmh.data?.loaiHinhBq) ? resDmh.data?.loaiHinhBq : [];
+      phuongPhapBaoQuan = Array.isArray(resDmh.data?.phuongPhapBq) ? resDmh.data?.phuongPhapBq : [];
+      const data = Array.isArray(res.data?.details) ? res.data.details : [];
+      const filteredListDmhh = data.filter(f =>
+        hinhThucBaoQuan.some(item => f.hinhThucBq?.split(",").includes(item.ma)) &&
+        loaiHinhBaoQuan.some(item => f.loaiHinhBq?.split(",").includes(item.ma)) &&
+        phuongPhapBaoQuan.some(item => f.phuongThucBq?.split(",").includes(item.ma)) &&
+        f.apDungTai.split(",").includes(this.userInfo.MA_DVI.slice(0, -2))
+      ).sort((a, b) => a.tgBaoQuanTu - b.tgBaoQuanTu);
+      const dinhMucHaoHut = Array.isArray(filteredListDmhh) && filteredListDmhh.length > 0 ? this.tinhDinhMucHaoHut(filteredListDmhh, soThangBaoQuanHang, loaiVthh) : "";
+      this.formData.patchValue({dinhMucHaoHut: dinhMucHaoHut})
+    }
+  }
+
+  tinhDinhMucHaoHut(dsDinhMuc: any[] = [], soThangBaoQuanHang: number, loaiVthh: string) {
+    if (dsDinhMuc.length === 0) {
+      return 0;
+    }
+    const minTgBaoQuanTu = Math.min(...dsDinhMuc.map(item => item.tgBaoQuanTu));
+    const maxTgBaoQuanDen = Math.max(...dsDinhMuc.map(item => item.tgBaoQuanDen));
+    switch (loaiVthh) {
+      case LOAI_HANG_DTQG.GAO:
+        if (soThangBaoQuanHang < minTgBaoQuanTu) {
+          return dsDinhMuc.find(f => f.tgBaoQuanTu === minTgBaoQuanTu)?.dinhMuc || 0;
+        } else if (soThangBaoQuanHang < maxTgBaoQuanDen) {
+          return dsDinhMuc.find(f => soThangBaoQuanHang >= f.tgBaoQuanTu && soThangBaoQuanHang < f.tgBaoQuanDen)?.dinhMuc || 0;
+        } else {
+          return dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen)?.dinhMuc || 0;
+        }
+      default:
+        if (soThangBaoQuanHang <= minTgBaoQuanTu) {
+          return dsDinhMuc.find(f => f.tgBaoQuanTu === minTgBaoQuanTu)?.dinhMuc || 0;
+        } else if (soThangBaoQuanHang <= maxTgBaoQuanDen) {
+          return dsDinhMuc.find(f => soThangBaoQuanHang > f.tgBaoQuanTu && soThangBaoQuanHang <= f.tgBaoQuanDen)?.dinhMuc || 0;
+        } else {
+          const dinhMuc = dsDinhMuc.find(f => f.tgBaoQuanDen === maxTgBaoQuanDen)?.dinhMuc || 0;
+          const dinhMucThem = dsDinhMuc.find(f => f.tgBaoQuanTu === maxTgBaoQuanDen)?.dinhMuc || 0;
+          return dinhMuc + Math.ceil((soThangBaoQuanHang - maxTgBaoQuanDen)) * dinhMucThem;
+        }
     }
   }
 
