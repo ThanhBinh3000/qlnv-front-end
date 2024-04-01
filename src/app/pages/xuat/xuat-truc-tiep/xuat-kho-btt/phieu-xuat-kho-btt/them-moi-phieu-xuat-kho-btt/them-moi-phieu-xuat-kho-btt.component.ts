@@ -524,6 +524,9 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
           await this.createUpdate(body);
           break;
         case "saveAndSend":
+          if (!this.formData.value.soBangKeHang) {
+            return this.notification.error(MESSAGE.ERROR, `${this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? 'Bảng kê xuất vật tư' : 'Bảng kê cân hàng'} của phiếu xuất chưa được duyệt`)
+          }
           this.setValidForm();
           await this.saveAndSend(body, trangThai, msg, msgSuccess);
           break;

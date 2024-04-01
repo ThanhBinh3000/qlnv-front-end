@@ -709,7 +709,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
         value: item.id,
         chiSoCl: item.mucYeuCauXuat,
         phuongPhap: item.phuongPhapXd,
-        checked: false,
+        checked: true,
         type: BBLM_LOAI_DOI_TUONG.CHI_TIEU_CHAT_LUONG
       }));
     } catch (e) {
