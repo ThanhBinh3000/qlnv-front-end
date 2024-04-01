@@ -455,7 +455,7 @@
             <th rowSpan="2" nzWidth="50px" class="text-center wrap">STT <br>(A)</th>
             <th rowSpan="2" class="text-center">Thời gian bảo quản <br>(B)</th>
             <th rowSpan="2" class="text-center">Số Lượng bảo quản (Kg) <br>(1)</th>
-            <th rowSpan="2" class="text-center">Định mức hao hụt <br>(2)</th>
+            <th rowSpan="2" class="text-center">Định mức hao hụt (%)<br>(2)</th>
             <th rowSpan="2" class="text-center">Số lượng hao theo định mức <br>(3) = (1) x (2)</th>
           </tr>
           </thead>
@@ -466,7 +466,7 @@
               class="text-center">{{formData.value.thoiGianKthucNhap | date: 'dd/MM/yyyy' }}{{formData.value.thoiGianKthucNhap && formData.value.thoiGianKthucXuat ? "-" : ""}}{{formData.value.thoiGianKthucXuat|date: 'dd/MM/yyyy' }}
             </td>
             <td class="text-center">{{formData.value.tongSlNhap|number:'1.0-3' : 'vi_VN'}}</td>
-            <td class="text-center">{{formData.value.dinhMucHaoHut}}</td>
+            <td class="text-center">{{formData.value.dinhMucHaoHut|number:'1.0-3' : 'vi_VN'}}</td>
             <td class="text-center">{{formData.value.slHaoTheoDinhMuc|number:'1.0-3' : 'vi_VN'}}</td>
           </tr>
           </tbody>

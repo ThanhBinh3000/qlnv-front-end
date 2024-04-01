@@ -279,7 +279,7 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
         tileHaoThanhLy: null,
         slHaoDuoiMuc: null,
         tileHaoDuoiMuc: null,
-        dinhMucHaoHut: null,
+        // dinhMucHaoHut: null,
         slHaoTheoDinhMuc: null,
       })
       this.dataTable = [];
@@ -409,7 +409,7 @@ export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements 
         tileHaoThanhLy: null,
         slHaoDuoiMuc: null,
         tileHaoDuoiMuc: null,
-        dinhMucHaoHut: null,
+        // dinhMucHaoHut: null,
         slHaoTheoDinhMuc: null,
       })
       this.dataTable = [];
