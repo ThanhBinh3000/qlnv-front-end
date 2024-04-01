@@ -219,36 +219,32 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
           if (data.loaiVthh.startsWith('02')) {
             let dataUserLogin = data.details.filter(item => item.maDvi == this.userInfo.MA_DVI);
             this.dataTable = dataUserLogin[0].children;
+            let soLuong = 0;
             this.dataTable.forEach(x => {
               x.trangThai = STATUS.CHUA_THUC_HIEN;
               x.tenTrangThai = "Chưa thực hiện";
+              soLuong += x.soLuong
             });
-            let soLuong = 0;
-            this.dataTable.forEach(i => {
-              soLuong += i.soLuong
-            })
             this.formData.get('soLuong').setValue(soLuong);
           } else {
             this.formData.patchValue({
               donViTinh: 'tấn',
             })
             this.dataTable = data.details[0].children;
+            let soLuong = 0;
             this.dataTable.forEach(x => {
               x.trangThai = STATUS.CHUA_THUC_HIEN;
               x.tenTrangThai = "Chưa thực hiện";
+              x.soLuong = x.soLuong/1000
+              soLuong += x.soLuong
               x.children.forEach(y => {
                 y.maChiCuc = x.maDvi
-                y.soLuongDiemKho = y.soLuong;
+                y.soLuongDiemKho = y.soLuong/1000;
                 y.tenDiemKho = y.tenDvi;
                 y.maDiemKho = y.maDvi;
                 y.soLuong = null;
               })
             });
-            let soLuong = 0;
-            this.dataTable.forEach(i => {
-              i.soLuong = i.soLuong/1000
-              soLuong += i.soLuong
-            })
             this.formData.get('soLuong').setValue(soLuong);
           }
           await this.loadDiemKho()

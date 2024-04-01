@@ -372,7 +372,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent extends Base2Component implemen
       moTaHangHoa: data.moTaHangHoa,
       soHd: data.soHd,
       ngayHd: data.hopDong.ngayKy,
-      donGiaHd: data.hopDong.donGia
+      donGiaHd: data.hopDong?.donGia?.toFixed()
     });
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
