@@ -291,7 +291,7 @@
               </a>
             </td>
             <td class="text-left">{{ data.ngayXuatKho|date: 'dd/MM/yyyy' }}</td>
-            <td class="text-left">{{ data.soLuongXuat|number:'1.0-0' : 'vi_VN' }} </td>
+            <td class="text-right">{{ data.soLuongXuat|number:'1.0-0' : 'vi_VN' }} </td>
           </tr>
           </tbody>
           <ng-container *ngIf="dataTable.length > 0">
@@ -365,9 +365,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <div nz-row>
-              <div nz-col [nzSpan]="24" style="color: gray"> Tỷ lệ<br>
+              <div nz-col [nzSpan]="24" style="color: gray"> Tỷ lệ (%)<br>
                 <span style="color: blue" *ngIf="formData.value.tileHaoThucTe">
-                  {{formData.value.tileHaoThucTe}}
+                  {{formData.value.tileHaoThucTe|number:'1.0-3' : 'vi_VN'}}
                 </span>
               </div>
             </div>
@@ -389,9 +389,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <div nz-row>
-              <div nz-col [nzSpan]="24" style="color: gray"> Tỷ lệ<br>
+              <div nz-col [nzSpan]="24" style="color: gray"> Tỷ lệ (%)<br>
                 <span style="color: blue" *ngIf="formData.value.tileHaoVuotMuc">
-                  {{formData.value.tileHaoVuotMuc}}
+                  {{formData.value.tileHaoVuotMuc|number:'1.0-3' : 'vi_VN'}}
                 </span>
               </div>
             </div>
@@ -413,9 +413,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <div nz-row>
-              <div nz-col [nzSpan]="24" style="color: gray"> Tỷ lệ<br>
+              <div nz-col [nzSpan]="24" style="color: gray"> Tỷ lệ (%)<br>
                 <span style="color: blue" *ngIf="formData.value.tileHaoThanhLy">
-                  {{formData.value.tileHaoThanhLy}}
+                  {{formData.value.tileHaoThanhLy|number:'1.0-3' : 'vi_VN'}}
                 </span>
               </div>
             </div>
@@ -437,9 +437,9 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <div nz-row>
-              <div nz-col [nzSpan]="24" style="color: gray"> Tỷ lệ<br>
+              <div nz-col [nzSpan]="24" style="color: gray"> Tỷ lệ (%)<br>
                 <span style="color: blue" *ngIf="formData.value.tileHaoDuoiMuc">
-                  {{formData.value.tileHaoDuoiMuc}}
+                  {{formData.value.tileHaoDuoiMuc|number:'1.0-3' : 'vi_VN'}}
                 </span>
               </div>
             </div>
@@ -461,11 +461,8 @@
           <tbody>
           <tr>
             <td class="text-center">1</td>
-            <td class="text-center">
-              <ng-container *ngIf="formData.value.thoiGianKthucNhap && formData.value.thoiGianKthucXuat">
-                Từ {{ formData.value.thoiGianKthucNhap | date: 'dd/MM/yyyy' }}
-                đến {{ formData.value.thoiGianKthucXuat | date: 'dd/MM/yyyy' }}
-              </ng-container>
+            <td
+              class="text-center">{{formData.value.thoiGianKthucNhap | date: 'dd/MM/yyyy' }}{{formData.value.thoiGianKthucNhap && formData.value.thoiGianKthucXuat ? "-" : ""}}{{formData.value.thoiGianKthucXuat|date: 'dd/MM/yyyy' }}
             </td>
             <td class="text-center">{{formData.value.tongSlNhap|number:'1.0-0' : 'vi_VN'}}</td>
             <td class="text-center">{{formData.value.dinhMucHaoHut}}</td>
