@@ -86,7 +86,6 @@
             <th nzWidth="10%">Tổng mức đầu tư (đ)</th>
             <th nzWidth="5%" *ngIf="!loaiVthh.startsWith('02')">Chủ đầu tư</th>
             <th nzWidth="5%">Trạng thái ký HĐ</th>
-            <th nzWidth="5%">Trạng thái NH</th>
             <th nzWidth="3%">Hành động</th>
           </tr>
           <tr class="search-table">
@@ -174,14 +173,6 @@
                 </nz-select>
               </nz-input-group>
             </th>
-            <th>
-              <nz-input-group>
-                <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThaiNh"
-                  (ngModelChange)="filterInTable('tenTrangThaiNh',filterTable.tenTrangThaiNh)">
-                  <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-                </nz-select>
-              </nz-input-group>
-            </th>
             <th></th>
           </tr>
         </thead>
@@ -209,7 +200,6 @@
             <td class="text-right">{{ data.qdKhlcntDtl?.donGiaVat * data.qdKhlcntDtl?.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.tenDvi}}</td>
             <td>{{ data.tenTrangThaiHd }}</td>
-            <td>{{ data.tenTrangThaiNh }}</td>
             <td class="text-left">
               <div nz-row>
                 <div nz-col nzSpan="16">
@@ -248,7 +238,6 @@
             <td>{{ data.hhQdKhlcntHdr?.tenLoaiVthh }}</td>
             <td class="text-right">{{ data.hhQdKhlcntHdr?.thanhTien | number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.tenTrangThaiHd }}</td>
-            <td>{{ data.tenTrangThaiNh }}</td>
             <td class="text-left">
               <div nz-row>
                 <div nz-col nzSpan="16">

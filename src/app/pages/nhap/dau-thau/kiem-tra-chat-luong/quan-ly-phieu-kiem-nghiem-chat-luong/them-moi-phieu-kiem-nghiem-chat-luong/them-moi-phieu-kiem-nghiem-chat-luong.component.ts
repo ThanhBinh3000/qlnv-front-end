@@ -451,7 +451,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         ngayNhapDayKho: data.bbNhapDayKho?.ngayKetThucNhap,
         tenThuKho: data.bbNhapDayKho?.tenNguoiTao
       })
-      if (this.id == null) {
+      if (this.id == null || this.id == 0) {
         await this.loadDsQcTheoCloaiVthh();
       }
     }
