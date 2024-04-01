@@ -165,7 +165,7 @@
                                         <td>{{dataPhieu.hhBienBanDayKhoDtlList[0]?.ngayNkho}}</td>
                                         <td>{{dataPhieu.tenTrangThai}}</td>
                                         <td>
-                                          <a *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_XEM')"
+                                          <a *ngIf="(userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_XEM') && dataPhieu.trangThai != STATUS.DU_THAO) || (dataPhieu.trangThai == STATUS.CHO_DUYET_KTVBQ && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_DUYET_KTVBQ') || dataPhieu.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_DUYET_LDCCUC') || dataPhieu.trangThai == STATUS.CHO_DUYET_KT && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_DUYET_KETOAN'))"
                                              (click)="redirectToChiTiet(false, dataPhieu.id)">
                                             <i class="fa fa-eye" title="Xem chi tiết"></i>
                                           </a>

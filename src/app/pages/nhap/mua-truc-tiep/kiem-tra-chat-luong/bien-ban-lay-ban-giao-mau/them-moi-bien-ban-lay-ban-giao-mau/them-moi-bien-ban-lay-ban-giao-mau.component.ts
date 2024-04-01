@@ -243,10 +243,8 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
           } else {
             if (this.formData.get('id').value) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-              this.redirectBienBanLayMau();
             } else {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.redirectBienBanLayMau();
             }
             this.spinner.hide();
           }
@@ -417,7 +415,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
     let res = await this.bienBanLayMauServive.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
-      data.tenDvi = this.userInfo.TEN_DVI;
+      console.log(data, "data")
       this.helperService.bidingDataInFormGroup(this.formData, data);
       await this.bindingDataQd(data.idQdGiaoNvNh);
       this.formData.value.tenNganLoKho = data.tenLoKho ? `${data.tenLoKho} - ${data.tenNganKho}` : data.tenNganKho;
