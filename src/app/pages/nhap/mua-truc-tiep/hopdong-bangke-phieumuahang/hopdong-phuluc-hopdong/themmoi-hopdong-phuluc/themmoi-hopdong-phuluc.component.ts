@@ -661,7 +661,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       this.formData.patchValue({
         // idDviMua: dViCc.id,
         tenDviBan: dViCc.dviCungCap,
-        diaChiDviBan: dViCc.diaChi,
+        diaChiDviBan: dViCc.diaChiDviBan,
         mstDviBan: dViCc.mstDviBan,
         soLuong: dViCc.soLuong,
         dviCungCap: dViCc.dviCungCap,
