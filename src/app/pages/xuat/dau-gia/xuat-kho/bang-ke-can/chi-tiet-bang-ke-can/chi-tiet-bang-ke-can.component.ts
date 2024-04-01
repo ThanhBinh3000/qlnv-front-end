@@ -625,7 +625,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
 
   calcTong(columnName, name) {
     const data = this.dataTable.filter(({loai}) => loai === name);
-    console.log(data, 999);
     if (data.length > 0) {
       return data.reduce((sum, item) => {
         return sum + item.dataChild.reduce((acc, cur) => acc + (cur[columnName] || 0), 0);
@@ -634,26 +633,36 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     return 0;
   }
 
-  changeTinh(event, columnName, name) {
-    const sum = this.calcTong(columnName, name);
-    let patchData = {};
-    if (name === 'KQC') {
-      patchData['trongLuongBaoKcan'] = event * sum || 0;
-    } else if (name === 'CGD') {
-      patchData['tongTrongTruBi'] = (sum - event) || 0;
-    }
-    this.formData.patchValue(patchData);
-  }
-
-  calculatorTable() {
+  calculatorTable(event?) {
+    const tongSlBaoBiKqc = this.dataTableAll ?
+      this.dataTableAll
+        .filter(item => item.loai === 'KQC')
+        .reduce((prev, cur) => prev + (cur.soBaoBi || 0), 0)
+      : 0;
+    const tongSlBaoBiCgd = this.dataTableAll ?
+      this.dataTableAll
+        .filter(item => item.loai === 'CGD')
+        .reduce((prev, cur) => prev + (cur.soBaoBi || 0), 0)
+      : 0;
     const tongTrongLuongCaBi = this.dataTableAll ?
       this.dataTableAll
         .filter(item => item.loai === 'CGD')
         .reduce((prev, cur) => prev + (cur.trongLuongCaBi || 0), 0)
       : 0;
+    const tongSlBaoBi = tongSlBaoBiCgd + tongSlBaoBiKqc;
+    const trongLuongBaoKcan = event ? tongSlBaoBiKqc * event : this.formData.value.trongLuongMotBao * tongSlBaoBi;
+    const tongTrongLuongCaBiAll = tongTrongLuongCaBi + trongLuongBaoKcan
     this.formData.patchValue({
-      tongSlBaoBi: this.dataTableAll.reduce((prev, cur) => prev + cur.soBaoBi, 0),
-      tongTrongLuongCaBi: tongTrongLuongCaBi
+      trongLuongBaoKcan: trongLuongBaoKcan || 0,
+      tongSlBaoBi: tongSlBaoBi || 0,
+      tongTrongLuongCaBi: tongTrongLuongCaBiAll || 0
+    });
+  }
+
+  changeTinh(event) {
+    const tongTrongTruBi = this.formData.value.tongTrongLuongCaBi - event
+    this.formData.patchValue({
+      tongTrongTruBi: tongTrongTruBi || 0
     });
   }
 

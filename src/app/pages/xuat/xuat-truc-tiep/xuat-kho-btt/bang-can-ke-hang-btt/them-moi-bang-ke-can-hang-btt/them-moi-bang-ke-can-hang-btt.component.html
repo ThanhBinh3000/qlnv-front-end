@@ -429,7 +429,8 @@
                        [(ngModel)]="data.soBaoBi"/>
               </td>
               <td class="text-right">
-                <input nz-input class="money-input" currencyMask [options]="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? amount : amount1" [min]="0"
+                <input nz-input class="money-input" currencyMask
+                       [options]="loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? amount : amount1" [min]="0"
                        [(ngModel)]="data.trongLuongCaBi"/>
               </td>
               <td class="text-center" *ngIf="!isView">
@@ -543,7 +544,7 @@
             <nz-form-control nz-col [nzErrorTip]="error">
               <input class="money-input" currencyMask [options]="amountLeft" [min]="0"
                      formControlName="trongLuongMotBao"
-                     (ngModelChange)="isView ? null : changeTinh($event, 'soBaoBi', 'KQC')" [readonly]="isView"/>
+                     (ngModelChange)="isView ? null : calculatorTable($event)" [readonly]="isView"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -572,8 +573,8 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Tổng trọng lượng bao bì (kg)</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <input class="money-input" currencyMask [options]="amountLeft" [min]="0"
-                     formControlName="tongTrongLuongBi"
-                     (ngModelChange)="isView ? null : changeTinh($event, 'trongLuongCaBi', 'CGD')" [readonly]="isView"/>
+                     formControlName="tongTrongLuongBi" (ngModelChange)="isView ? null : changeTinh($event)"
+                     [readonly]="isView"/>
             </nz-form-control>
           </nz-form-item>
         </div>
