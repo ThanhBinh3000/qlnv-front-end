@@ -419,7 +419,7 @@ export class ThemmoiThongtinDauthauVtComponent extends Base2Component implements
   }
   async saveEditRowNt(i) {
     if (this.itemRowQd[i].thanhTienNhaThau != null) {
-      this.itemRowQd[i].donGiaVat = this.itemRowQd[i].thanhTienNhaThau /  this.danhsachDx[i].soLuong;
+      this.itemRowQd[i].donGiaVat = (this.itemRowQd[i].thanhTienNhaThau /  this.danhsachDx[i].soLuong).toFixed();
     }
 
     this.danhsachDx[i].kqlcntDtl = this.itemRowQd[i];
