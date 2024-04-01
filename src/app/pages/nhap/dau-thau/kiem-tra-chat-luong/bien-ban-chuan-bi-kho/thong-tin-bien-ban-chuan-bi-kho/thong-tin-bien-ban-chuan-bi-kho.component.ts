@@ -227,11 +227,9 @@ export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implement
       tgianGiaoDuHang: data.tgianNkho,
     });
     this.loadDataComboBox();
-    // let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
-    let dataChiCuc = data.dtlList;
+    let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
-      // this.listDiaDiemNhap = dataChiCuc[0].children.filter(i => i.bienBanChuanBiKho == null);
-      this.listDiaDiemNhap = dataChiCuc[0].children;
+      this.listDiaDiemNhap = dataChiCuc[0].children.filter(i => i.bienBanChuanBiKho == null);
     }
     if (this.maNganLoKho != null) {
       let dataDdiem = null;
