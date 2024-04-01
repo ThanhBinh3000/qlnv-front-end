@@ -265,47 +265,45 @@
       </div>
       <br>
       <span style="color: black"> Thông tin bảng kê cân hàng và phiếu xuất kho </span>
-      <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-        <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
-                  [nzShowPagination]="false">
-          <thead>
+      <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered [nzFrontPagination]="false"
+                [nzShowPagination]="false">
+        <thead>
+        <tr>
+          <th nzWidth="50px" class="text-center wrap">STT</th>
+          <th class="text-left"> Phiếu xuất kho</th>
+          <th class="text-left"> Bảng kê cân hàng</th>
+          <th class="text-left"> Ngày xuất kho</th>
+          <th class="text-left"> Số lượng xuất</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of dataTable;let i = index">
+          <td class="text-center">{{ i + 1}}</td>
+          <td class="text-left">
+            <a *ngIf="data.soPhieuXuatKho && data.idPhieuXuatKho" (click)="openModal(data.idPhieuXuatKho, 'xuatKho')"
+               style="color: blue">{{ data.soPhieuXuatKho }}
+            </a>
+          </td>
+          <td class="text-left">
+            <a *ngIf="data.soBangKeHang && data.idBangKeHang" (click)="openModal(data.idBangKeHang, 'bangKe')"
+               style="color: blue">{{ data.soBangKeHang }}
+            </a>
+          </td>
+          <td class="text-left">{{ data.ngayXuatKho|date: 'dd/MM/yyyy' }}</td>
+          <td class="text-right">{{ data.soLuongXuat|number:'1.0-3' : 'vi_VN' }} </td>
+        </tr>
+        </tbody>
+        <ng-container *ngIf="dataTable.length > 0">
+          <tfoot>
           <tr>
-            <th nzWidth="50px" class="text-center wrap">STT</th>
-            <th class="text-left"> Phiếu xuất kho</th>
-            <th class="text-left"> Bảng kê cân hàng</th>
-            <th class="text-left"> Ngày xuất kho</th>
-            <th class="text-left"> Số lượng xuất</th>
+            <th class="text-right text-blue" colspan="4"> Tổng</th>
+            <th class="text-right text-blue">
+              {{ calcTong('soLuongXuat')|number:'1.0-3' : 'vi_VN' }}
+            </th>
           </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let data of dataTable;let i = index">
-            <td class="text-center">{{ i + 1}}</td>
-            <td class="text-left">
-              <a *ngIf="data.soPhieuXuatKho && data.idPhieuXuatKho" (click)="openModal(data.idPhieuXuatKho, 'xuatKho')"
-                 style="color: blue">{{ data.soPhieuXuatKho }}
-              </a>
-            </td>
-            <td class="text-left">
-              <a *ngIf="data.soBangKeHang && data.idBangKeHang" (click)="openModal(data.idBangKeHang, 'bangKe')"
-                 style="color: blue">{{ data.soBangKeHang }}
-              </a>
-            </td>
-            <td class="text-left">{{ data.ngayXuatKho|date: 'dd/MM/yyyy' }}</td>
-            <td class="text-right">{{ data.soLuongXuat|number:'1.0-3' : 'vi_VN' }} </td>
-          </tr>
-          </tbody>
-          <ng-container *ngIf="dataTable.length > 0">
-            <tfoot>
-            <tr>
-              <th class="text-right text-blue" colspan="4"> Tổng</th>
-              <th class="text-right text-blue">
-                {{ calcTong('soLuongXuat')|number:'1.0-3' : 'vi_VN' }}
-              </th>
-            </tr>
-            </tfoot>
-          </ng-container>
-        </nz-table>
-      </nz-card>
+          </tfoot>
+        </ng-container>
+      </nz-table>
     </form>
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="[18, 6]">
