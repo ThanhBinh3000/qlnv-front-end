@@ -119,7 +119,7 @@
                   <nz-form-control>
                       <span *ngIf="formData.value.tongSlXuat">
                        <input nz-input class="text-blue bold"
-                              [value]="(formData.value.tongSlXuat | number:'1.0-0' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
+                              [value]="(formData.value.tongSlXuat | number:'1.0-3' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
                               readonly/>
                       </span>
                   </nz-form-control>
@@ -165,7 +165,7 @@
                   <nz-form-control>
                       <span *ngIf="formData.value.thanhTien">
                         <input nz-input class="text-blue bold"
-                               [value]="(formData.value.thanhTien | number:'1.0-0' : 'vi_VN') + ' (đ)'"
+                               [value]="(formData.value.thanhTien | number:'1.0-3' : 'vi_VN') + ' (đ)'"
                                readonly/>
                       </span>
                   </nz-form-control>
@@ -242,8 +242,8 @@
                 {{ data.tenHopDong}}
               </td>
               <td class="text-left">{{ data.ngayKyHopDong|date: 'dd/MM/yyyy' }}</td>
-              <td class="text-right">{{ data.soLuong|number:'1.0-0' : 'vi_VN' }} </td>
-              <td class="text-right">{{ data.thanhTien|number:'1.0-0' : 'vi_VN' }} </td>
+              <td class="text-right">{{ data.soLuong|number:'1.0-3' : 'vi_VN' }} </td>
+              <td class="text-right">{{ data.thanhTien|number:'1.0-3' : 'vi_VN' }} </td>
               <td class="text-left">{{ data.tenTrangThai}}</td>
               <td class="text-left">
                 <a *ngIf="data.soQdNv && data.idQdNv" (click)="openModal(data.idQdNv)"
@@ -277,9 +277,9 @@
             <tr>
               <th colspan="4"></th>
               <th
-                class="text-right bold text-blue"> {{ calcTong('soLuong')|number:'1.0-0' : 'vi_VN' }}</th>
+                class="text-right bold text-blue"> {{ calcTong('soLuong')|number:'1.0-3' : 'vi_VN' }}</th>
               <th
-                class="text-right bold text-blue"> {{ calcTong('thanhTien')|number:'1.0-0' : 'vi_VN' }}</th>
+                class="text-right bold text-blue"> {{ calcTong('thanhTien')|number:'1.0-3' : 'vi_VN' }}</th>
               <th></th>
               <th></th>
               <th></th>

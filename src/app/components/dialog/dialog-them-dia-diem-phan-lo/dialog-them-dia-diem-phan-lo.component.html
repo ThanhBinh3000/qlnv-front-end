@@ -26,7 +26,7 @@
           <nz-form-label [nzNoColon]="true"> SL xuất theo chỉ tiêu KH giao đầu năm</nz-form-label>
           <nz-form-control nz-col>
                   <span style="color: blue" *ngIf="formData.value.slChiTieu">
-                    {{formData.value.slChiTieu|number:'1.0-0' : 'vi_VN'}} ({{ formData.value.donViTinh }})
+                    {{formData.value.slChiTieu|number:'1.0-3' : 'vi_VN'}} ({{ formData.value.donViTinh }})
                   </span>
           </nz-form-control>
         </nz-form-item>
@@ -36,7 +36,7 @@
           <nz-form-label [nzNoColon]="true"> Tổng SL xuất bán theo KH đã được duyệt</nz-form-label>
           <nz-form-control nz-col>
                   <span style="color: blue" *ngIf="formData.value.tongSlKeHoachDd">
-                    {{formData.value.tongSlKeHoachDd|number:'1.0-0' : 'vi_VN'}} ({{ formData.value.donViTinh }})
+                    {{formData.value.tongSlKeHoachDd|number:'1.0-3' : 'vi_VN'}} ({{ formData.value.donViTinh }})
                   </span>
           </nz-form-control>
         </nz-form-item>
@@ -46,7 +46,7 @@
           <nz-form-label [nzNoColon]="true"> Tổng SL xuất bán đề xuất</nz-form-label>
           <nz-form-control nz-col>
                   <span style="color: blue" *ngIf="formData.value.tongSlXuatBanDx">
-                    {{formData.value.tongSlXuatBanDx|number:'1.0-0' : 'vi_VN'}} ({{ formData.value.donViTinh }})
+                    {{formData.value.tongSlXuatBanDx|number:'1.0-3' : 'vi_VN'}} ({{ formData.value.donViTinh }})
                   </span>
           </nz-form-control>
         </nz-form-item>
@@ -111,7 +111,7 @@
         <input nz-input [(ngModel)]="thongtinPhanLo.maDviTsan" class="w-150"/>
       </th>
       <th class="text-right">
-        {{thongtinPhanLo.tonKho|number:'1.0-0' : 'vi_VN'}}
+        {{thongtinPhanLo.tonKho|number:'1.0-3' : 'vi_VN'}}
       </th>
       <th>
         <input class="money-input" currencyMask [options]="amount" [min]="0"
@@ -123,15 +123,15 @@
       </th>
       <th class="text-right">
          <span *ngIf="thongtinPhanLo.donGiaDuocDuyet">
-           {{ thongtinPhanLo.donGiaDuocDuyet|number:'1.0-0' : 'vi_VN'}}
+           {{ thongtinPhanLo.donGiaDuocDuyet|number:'1.0-3' : 'vi_VN'}}
          </span>
       </th>
       <th class="text-right">
-        {{ thongtinPhanLo.giaKhoiDiemDx|number:'1.0-0' : 'vi_VN'}}
+        {{ thongtinPhanLo.giaKhoiDiemDx|number:'1.0-3' : 'vi_VN'}}
       </th>
       <th class="text-right">
          <span *ngIf="thongtinPhanLo.thanhTienDuocDuyet">
-           {{ thongtinPhanLo.thanhTienDuocDuyet|number:'1.0-0' : 'vi_VN'}}
+           {{ thongtinPhanLo.thanhTienDuocDuyet|number:'1.0-3' : 'vi_VN'}}
          </span>
       </th>
       <th class="text-center">
@@ -154,18 +154,18 @@
         <td class="text-left">{{ data.tenCloaiVthh }}</td>
         <td class="text-center">{{ data.namNhap }}</td>
         <td class="text-left">{{ data.maDviTsan }}</td>
-        <td class="text-right">{{ data.tonKho|number:'1.0-0' : 'vi_VN'}}</td>
-        <td class="text-right">{{ data.soLuongDeXuat|number:'1.0-0' : 'vi_VN'}}</td>
-        <td class="text-right">{{ data.donGiaDeXuat|number:'1.0-0' : 'vi_VN'}}</td>
+        <td class="text-right">{{ data.tonKho|number:'1.0-3' : 'vi_VN'}}</td>
+        <td class="text-right">{{ data.soLuongDeXuat|number:'1.0-3' : 'vi_VN'}}</td>
+        <td class="text-right">{{ data.donGiaDeXuat|number:'1.0-3' : 'vi_VN'}}</td>
         <td class="text-right">
               <span *ngIf="data.donGiaDuocDuyet">
-                {{ data.donGiaDuocDuyet|number:'1.0-0' : 'vi_VN'}}
+                {{ data.donGiaDuocDuyet|number:'1.0-3' : 'vi_VN'}}
               </span>
         </td>
-        <td class="text-right">{{ data.giaKhoiDiemDx|number:'1.0-0' : 'vi_VN'}}</td>
+        <td class="text-right">{{ data.giaKhoiDiemDx|number:'1.0-3' : 'vi_VN'}}</td>
         <td class="text-right">
               <span *ngIf="data.thanhTienDuocDuyet">
-                {{ data.thanhTienDuocDuyet|number:'1.0-0' : 'vi_VN'}}
+                {{ data.thanhTienDuocDuyet|number:'1.0-3' : 'vi_VN'}}
               </span>
         </td>
         <td class="text-center">
@@ -208,7 +208,7 @@
           <input nz-input [(ngModel)]="editCache[idx].data.maDviTsan" class="w-150"/>
         </td>
         <td class="text-right">
-          {{ editCache[idx].data.tonKho|number:'1.0-0' : 'vi_VN'}}
+          {{ editCache[idx].data.tonKho|number:'1.0-3' : 'vi_VN'}}
         </td>
         <td>
           <input class="money-input" currencyMask [options]="amount" [min]="0"
@@ -220,15 +220,15 @@
         </td>
         <td class="text-right">
           <span *ngIf="editCache[idx].data.donGiaDuocDuyet">
-            {{ editCache[idx].data.donGiaDuocDuyet|number:'1.0-0' : 'vi_VN'}}
+            {{ editCache[idx].data.donGiaDuocDuyet|number:'1.0-3' : 'vi_VN'}}
           </span>
         </td>
         <td class="text-right">
-          {{ editCache[idx].data.giaKhoiDiemDx|number:'1.0-0' : 'vi_VN'}}
+          {{ editCache[idx].data.giaKhoiDiemDx|number:'1.0-3' : 'vi_VN'}}
         </td>
         <td class="text-right">
           <span *ngIf="editCache[idx].data.thanhTienDuocDuyet">
-            {{ editCache[idx].data.thanhTienDuocDuyet|number:'1.0-0' : 'vi_VN'}}
+            {{ editCache[idx].data.thanhTienDuocDuyet|number:'1.0-3' : 'vi_VN'}}
           </span>
         </td>
         <td class="text-center">
@@ -251,10 +251,10 @@
       <th></th>
       <th></th>
       <th class="text-right text-blue">
-        {{ calcTong('tonKho')|number:'1.0-0' : 'vi_VN'}}
+        {{ calcTong('tonKho')|number:'1.0-3' : 'vi_VN'}}
       </th>
       <th class="text-right text-blue">
-        {{ calcTong('soLuongDeXuat')|number:'1.0-0' : 'vi_VN'}}
+        {{ calcTong('soLuongDeXuat')|number:'1.0-3' : 'vi_VN'}}
       </th>
       <th></th>
       <th></th>

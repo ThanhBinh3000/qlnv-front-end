@@ -251,7 +251,7 @@
                   </nz-form-label>
                   <nz-form-control nz-col>
                     <span style="color: blue">
-                      {{formData.value.tgianTinhPhat|number:'1.0-0' : 'vi_VN'}}
+                      {{formData.value.tgianTinhPhat|number:'1.0-3' : 'vi_VN'}}
                     </span>
                   </nz-form-control>
                 </nz-form-item>
@@ -262,7 +262,7 @@
                   </nz-form-label>
                   <nz-form-control nz-col>
                     <span style="color: blue">
-                      {{formData.value.soLuongHangCham|number:'1.0-0' : 'vi_VN'}}
+                      {{formData.value.soLuongHangCham|number:'1.0-3' : 'vi_VN'}}
                     </span>
                   </nz-form-control>
                 </nz-form-item>
@@ -550,7 +550,7 @@
                   <nz-form-label [nzNoColon]="true"> Số lượng</nz-form-label>
                   <nz-form-control nz-col>
                     <span style="color: blue">
-                      {{formData.value.soLuong|number:'1.0-0' : 'vi_VN'}}
+                      {{formData.value.soLuong|number:'1.0-3' : 'vi_VN'}}
                     </span>
                   </nz-form-control>
                 </nz-form-item>
@@ -568,7 +568,7 @@
                   <nz-form-label [nzNoColon]="true"> Thành tiền</nz-form-label>
                   <nz-form-control nz-col>
                     <span style="color: blue" *ngIf="formData.value.thanhTien">
-                      {{ formData.value.thanhTien | number:'1.0-0' : 'vi_VN' }} (đ)
+                      {{ formData.value.thanhTien | number:'1.0-3' : 'vi_VN' }} (đ)
                     </span>
                   </nz-form-control>
                 </nz-form-item>
@@ -631,7 +631,7 @@
                 <td nzShowExpand="true" [nzExpand]="data.expandSetAll"
                     (nzExpandChange)="onExpandChangeAll(data, $event)"></td>
                 <td colspan="6" class="text-left bold">{{data.tenDvi}}</td>
-                <td class="text-right bold">{{data.soLuongXuatBan|number:'1.0-0' : 'vi_VN' }}</td>
+                <td class="text-right bold">{{data.soLuongXuatBan|number:'1.0-3' : 'vi_VN' }}</td>
                 <td></td>
                 <td></td>
               </tr>
@@ -646,9 +646,9 @@
                   </td>
                   <td class="text-left">{{ children.namNhap }}</td>
                   <td class="text-left">{{ children.maDviTsan }}</td>
-                  <td class="text-right">{{ children.soLuong|number:'1.0-0' : 'vi_VN' }}</td>
-                  <td class="text-right">{{ children.donGiaTraGia|number:'1.0-0' : 'vi_VN' }}</td>
-                  <td class="text-right">{{ children.thanhTien|number:'1.0-0' : 'vi_VN' }}</td>
+                  <td class="text-right">{{ children.soLuong|number:'1.0-3' : 'vi_VN' }}</td>
+                  <td class="text-right">{{ children.donGiaTraGia|number:'1.0-3' : 'vi_VN' }}</td>
+                  <td class="text-right">{{ children.thanhTien|number:'1.0-3' : 'vi_VN' }}</td>
                 </tr>
               </ng-container>
             </ng-container>
@@ -657,10 +657,10 @@
               <tfoot>
               <tr>
                 <td colspan="7"></td>
-                <td class="text-right bold text-blue">{{formData.value.soLuong|number:'1.0-0' : 'vi_VN'}}</td>
+                <td class="text-right bold text-blue">{{formData.value.soLuong|number:'1.0-3' : 'vi_VN'}}</td>
                 <td></td>
                 <td
-                  class="text-right bold text-blue">{{formData.value.thanhTien|number:'1.0-0' : 'vi_VN'}}</td>
+                  class="text-right bold text-blue">{{formData.value.thanhTien|number:'1.0-3' : 'vi_VN'}}</td>
               </tr>
               </tfoot>
             </ng-container>
