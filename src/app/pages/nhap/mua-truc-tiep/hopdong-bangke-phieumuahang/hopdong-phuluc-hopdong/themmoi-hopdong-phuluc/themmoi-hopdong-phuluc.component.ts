@@ -500,6 +500,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
         .then(async (resKq) => {
           const dataKq = resKq.data;
           if (resKq.data) {
+            console.log(resKq.data, "resKq")
             this.slDaKy = 0;
             this.slChuaKy = 0;
             this.listDviLquan = [];
@@ -533,9 +534,9 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
               dviTinh: "tấn",
               tongSoLuongQdKh: this.slChuaKy + this.slDaKy
             });
-            // if(this.id){
-            //   this.changeDviCungCap(this.id)
-            // }
+            if(this.listDviLquan){
+              this.changeDviCungCap(this.id)
+            }
           }
         })
     }
@@ -659,14 +660,14 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     if (dViCc) {
       this.formData.patchValue({
         // idDviMua: dViCc.id,
-        tenDviBan: dViCc.canhanTochuc,
+        tenDviBan: dViCc.dviCungCap,
         diaChiDviBan: dViCc.diaChi,
-        mstDviBan: dViCc.mst,
+        mstDviBan: dViCc.mstDviBan,
         soLuong: dViCc.soLuong,
         dviCungCap: dViCc.dviCungCap,
         donGia: dViCc.donGia,
         donGiaGomThue: dViCc.donGiaGomThue,
-        sdtDviBan: dViCc.sdt,
+        sdtDviBan: dViCc.sdtDviBan,
         thanhTien: Math.round(dViCc.soLuong * dViCc.donGia * 1000),
       })
     }
