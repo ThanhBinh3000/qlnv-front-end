@@ -123,6 +123,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       tenThuKho: [''],
       tenTphongKtvBaoQuan: [''],
       tenTrangThai: [''],
+      soHieuQuyChuan: [''],
       fileDinhKem: [new Array<FileDinhKem>()],
     })
   }
@@ -435,7 +436,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
             .filter(value => value !== '');
           this.formData.get('ketQua').setValue(ketQuaValues.join(''));
         }
-        this.formData.get('soHieuQuyChuan').setValue(this.dataTable[0].soHieuQuyChuan)
+        this.formData.get('soHieuQuyChuan').setValue(this.dataTable[0]?.soHieuQuyChuan || '');
       }
     } catch (e) {
       console.error('Error: ', e);
@@ -538,7 +539,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
           console.error("Invalid action: ", action);
           break;
       }
-    }catch (error) {
+    } catch (error) {
       console.error('Error: ', error);
     } finally {
       await this.helperService.restoreRequiredForm(this.formData);
