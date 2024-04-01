@@ -28,6 +28,7 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import {KhCnQuyChuanKyThuat} from "../../../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat";
 import {cloneDeep} from 'lodash';
+import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 @Component({
   selector: 'them-moi-bien-ban-lay-mau',
   templateUrl: './them-moi-bien-ban-lay-mau.component.html',
@@ -45,9 +46,9 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
 
   maSuffix: string = '/BBLM-CCDTVP';
   viewTableDaiDien: any[] = [];
-  listFileDinhKemBb: any[] = [];
-  listFileDinhKemAnh: any[] = [];
-  listCcPhapLy: any[] = [];
+  listFileDinhKemBb: FileDinhKem[] = [];
+  listFileDinhKemAnh: FileDinhKem[] = [];
+  listCcPhapLy: FileDinhKem[] = [];
   listDaiDienCuc: any[] = [];
   listDaiDienChiCuc: any[] = [];
   userInfo: UserLogin;
@@ -223,16 +224,16 @@ export class ThemMoiBienBanLayMauKhoComponent extends Base2Component implements 
       return;
     }
     if (isGuiDuyet) {
-      if(this.listFileDinhKemBb.length <= 0) {
-        this.notification.error(MESSAGE.ERROR, 'File đính kèm biên bản đã ký không được để trống.');
-        this.spinner.hide();
-        return;
-      }
-      if(this.listFileDinhKemAnh.length <= 0) {
-        this.notification.error(MESSAGE.ERROR, 'File đính kèm ảnh chụp mẫu đã niêm phong không được để trống.');
-        this.spinner.hide();
-        return;
-      }
+      // if(this.listFileDinhKemBb.length <= 0) {
+      //   this.notification.error(MESSAGE.ERROR, 'File đính kèm biên bản đã ký không được để trống.');
+      //   this.spinner.hide();
+      //   return;
+      // }
+      // if(this.listFileDinhKemAnh.length <= 0) {
+      //   this.notification.error(MESSAGE.ERROR, 'File đính kèm ảnh chụp mẫu đã niêm phong không được để trống.');
+      //   this.spinner.hide();
+      //   return;
+      // }
       if (this.phuongPhapLayMaus.filter(item => item.checked).length <= 0) {
         this.notification.error(MESSAGE.ERROR, 'Phương pháp lấy mẫu không được để trống.');
         this.spinner.hide();

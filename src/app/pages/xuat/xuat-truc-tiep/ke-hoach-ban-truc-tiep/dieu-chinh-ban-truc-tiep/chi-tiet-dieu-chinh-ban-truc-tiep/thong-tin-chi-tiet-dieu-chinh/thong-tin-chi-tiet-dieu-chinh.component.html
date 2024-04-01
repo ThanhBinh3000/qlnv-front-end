@@ -138,7 +138,7 @@
             </nz-form-label>
             <nz-form-control nz-col>
               <span style="color: blue" *ngIf="formData.value.tongSoLuong">
-                {{ formData.value.tongSoLuong | number:'1.0-0' : 'vi_VN' }} ({{ formData.value.donViTinh }})
+                {{ formData.value.tongSoLuong | number:'1.0-3' : 'vi_VN' }} ({{ formData.value.donViTinh }})
               </span>
             </nz-form-control>
           </nz-form-item>
@@ -173,7 +173,7 @@
           <td nzShowExpand="true" [nzExpand]="data.expandSetAll"
               (nzExpandChange)="onExpandChangeAll(data, $event)"></td>
           <td class="text-left" colspan="5">{{ data.tenDvi }}</td>
-          <td class="text-right bold">{{ data.soLuongChiCuc|number:'1.0-0' : 'vi_VN' }}</td>
+          <td class="text-right bold">{{ data.soLuongChiCuc|number:'1.0-3' : 'vi_VN' }}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -189,11 +189,11 @@
             <td class="text-left">{{ children.namNhap}}</td>
             <td class="text-left">{{ children.maDviTsan}}</td>
             <td class="text-right">
-              {{ children.soLuongDeXuat|number:'1.0-0' : 'vi_VN' }}
+              {{ children.soLuongDeXuat|number:'1.0-3' : 'vi_VN' }}
             </td>
             <td class="text-left">{{ children.donViTinh}}</td>
-            <td class="text-right">{{ children.donGiaDuocDuyet|number:'1.0-0' : 'vi_VN' }}</td>
-            <td class="text-right">{{ children.thanhTienDuocDuyet|number:'1.0-0' : 'vi_VN' }}</td>
+            <td class="text-right">{{ children.donGiaDuocDuyet|number:'1.0-3' : 'vi_VN' }}</td>
+            <td class="text-right">{{ children.thanhTienDuocDuyet|number:'1.0-3' : 'vi_VN' }}</td>
           </tr>
         </ng-container>
       </ng-container>
@@ -223,7 +223,7 @@
           <td nzShowExpand="true" [nzExpand]="data.expandSetAll"
               (nzExpandChange)="onExpandChangeAll(data, $event)"></td>
           <td class="text-left" colspan="5">{{ data.tenDvi }}</td>
-          <td class="text-right bold">{{ data.soLuongChiCuc|number:'1.0-0' : 'vi_VN' }}</td>
+          <td class="text-right bold">{{ data.soLuongChiCuc|number:'1.0-3' : 'vi_VN' }}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -243,8 +243,8 @@
                      (ngModelChange)="changeTable($event, idx, i)" [options]="amount" [readOnly]="trangThaiDc"/>
             </td>
             <td class="text-left">{{ children.donViTinh}}</td>
-            <td class="text-right">{{ children.donGiaDuocDuyet|number:'1.0-0' : 'vi_VN' }}</td>
-            <td class="text-right">{{ children.thanhTienDuocDuyet|number:'1.0-0' : 'vi_VN' }}</td>
+            <td class="text-right">{{ children.donGiaDuocDuyet|number:'1.0-3' : 'vi_VN' }}</td>
+            <td class="text-right">{{ children.thanhTienDuocDuyet|number:'1.0-3' : 'vi_VN' }}</td>
           </tr>
         </ng-container>
       </ng-container>

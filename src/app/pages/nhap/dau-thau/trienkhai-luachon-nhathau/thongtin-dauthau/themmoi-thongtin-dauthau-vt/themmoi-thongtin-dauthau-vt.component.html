@@ -337,7 +337,7 @@
                   <td class="text-right">{{item.donGiaVat | number : '1.2-2': 'vi_VN'}}</td>
                   <td class="text-right">{{item.soLuong * item.donGiaVat | number: '1.2-2' : 'vi_VN'}}
                   <td  *ngIf="item.kqlcntDtl?.trangThai == STATUS.THANH_CONG">{{item.kqlcntDtl?.tenNhaThau}}</td>
-                  <td class="text-right" *ngIf="item.kqlcntDtl?.trangThai == STATUS.THANH_CONG">{{item.kqlcntDtl?.donGiaVat | number: '1.2-2' : 'vi_VN'}}</td>
+                  <td class="text-right" *ngIf="item.kqlcntDtl?.trangThai == STATUS.THANH_CONG">{{item.kqlcntDtl?.donGiaVat | number: '1.0-2' : 'vi_VN'}}</td>
                   <td class="text-right" *ngIf="item.kqlcntDtl?.trangThai == STATUS.THANH_CONG">{{item.kqlcntDtl?.donGiaVat * item.soLuong | number : '1.2-2': 'vi_VN'}}</td>
                   <td class="text-right" *ngIf="item.kqlcntDtl?.trangThai == STATUS.THANH_CONG">{{item.kqlcntDtl?.donGiaVat?((item.soLuong * item.donGiaVat) - (item.kqlcntDtl?.donGiaVat * item.soLuong)  | number : '1.2-2': 'vi_VN'): ''}}</td>
                   <td *ngIf="item.kqlcntDtl?.trangThai != STATUS.THANH_CONG"></td>
@@ -359,7 +359,7 @@
                   <td></td>
                   <td class="text-right">{{item.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
                   <td class="text-center">{{item.dviTinh}}</td>
-                  <td class="text-right">{{item.donGiaVat | number : '1.2-2': 'vi_VN'}}</td>
+                  <td class="text-right">{{item.donGiaVat | number : '1.0-2': 'vi_VN'}}</td>
                   <td class="text-right">{{item.soLuong * item.donGiaVat | number: '1.2-2' : 'vi_VN'}}
                   <td>
                     <nz-select [(ngModel)]="itemRowQd[i].idNhaThau" (ngModelChange)="selectNhaThau(i, $event)">
@@ -397,7 +397,7 @@
                 <td>{{cuc.tenDvi}}</td>
                 <td class="text-right">{{cuc.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
                 <td class="text-center">{{item.dviTinh}}</td>
-                <td class="text-right">{{item.donGiaVat | number :'1.2-2' : 'vi_VN'}}</td>
+                <td class="text-right">{{item.donGiaVat | number :'1.0-2' : 'vi_VN'}}</td>
                 <td class="text-right">{{cuc.soLuong * item.donGiaVat | number: '1.2-2' : 'vi_VN'}}
                 <td></td>
                 <td></td>
