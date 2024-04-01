@@ -504,6 +504,32 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
       }
     }
   }
+  // async getDinhMucHaoHut(cloaiVthh: string, loaiVthh: string, soThangBaoQuanHang: number) {
+  //   if (!soThangBaoQuanHang && ![0, "0"].includes(soThangBaoQuanHang)) return;
+  //   const body = {
+  //     loaiVthh, cloaiVthh
+  //   }
+  //   let hinhThucBq = [];
+  //   let loaiHinhBq = [];
+  //   let phuongPhapBq = [];
+  //   const [resDmh, resDmhh] = await Promise.all([this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh || loaiVthh), this.danhMucDinhMucHaoHutService.search(body)]);
+  //   if (resDmh.msg === MESSAGE.SUCCESS) {
+  //     hinhThucBq = Array.isArray(resDmh.data?.hinhThucBq) ? resDmh.data?.hinhThucBq : [];
+  //     loaiHinhBq = Array.isArray(resDmh.data?.loaiHinhBq) ? resDmh.data?.loaiHinhBq : [];
+  //     phuongPhapBq = Array.isArray(resDmh.data?.phuongPhapBq) ? resDmh.data?.phuongPhapBq : [];
+  //   }
+  //   if (resDmhh.msg === MESSAGE.SUCCESS) {
+  //     const data = Array.isArray(resDmhh.data?.content) ? resDmhh.data.content : [];
+  //     const listDmhh = data.filter(f => {
+  //       return hinhThucBq.some(item => f.hinhThucBq.split(",").includes(item.ma)) &&
+  //         loaiHinhBq.some(item => f.loaiHinhBq.split(",").includes(item.ma)) &&
+  //         phuongPhapBq.some(item => f.phuongThucBq.split(",").includes(item.ma)) &&
+  //         f.apDungTai.split(",").includes(this.userInfo.MA_DVI.slice(0, -2));
+  //     }).sort((a, b) => a.tgBaoQuanTu - b.tgBaoQuanTu);
+  //     const dinhMucHaoHut = Array.isArray(listDmhh) && listDmhh.length > 0 ? this.tinhDinhMucHaoHut(listDmhh, soThangBaoQuanHang, loaiVthh) : ""
+  //     this.formData.patchValue({ dinhMucHaoHut })
+  //   }
+  // }
   async getDinhMucHaoHut(cloaiVthh: string, loaiVthh: string, soThangBaoQuanHang: number) {
     if (!soThangBaoQuanHang && ![0, "0"].includes(soThangBaoQuanHang)) return;
     const body = {
@@ -512,23 +538,30 @@ export class ThemMoiBienBanHaoDoiDieuChuyenComponent extends Base2Component impl
     let hinhThucBq = [];
     let loaiHinhBq = [];
     let phuongPhapBq = [];
-    const [resDmh, resDmhh] = await Promise.all([this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh || loaiVthh), this.danhMucDinhMucHaoHutService.search(body)]);
+    let listQuyetDinhDmhh = []
+    const resDmhh = await this.danhMucDinhMucHaoHutService.search(body);
+    if (resDmhh?.msg !== MESSAGE.SUCCESS) return;
+    listQuyetDinhDmhh = Array.isArray(resDmhh.data.content) ? resDmhh.data.content : [];
+    const idQddmhh = listQuyetDinhDmhh.filter(f => f.trangThai === STATUS.BAN_HANH && ((dayjs(f.ngayHieuLuc).isBefore(dayjs()) || dayjs(f.ngayHieuLuc).isSame(dayjs())) && (!f.ngayHetHieuLuc || dayjs().isBefore(dayjs(f.ngayHetHieuLuc))))).sort((a, b) => dayjs(b.ngayKy).valueOf() - dayjs(a.ngayKy).valueOf())[0]?.id;
+    if (!idQddmhh) return;
+    const resDmhh2 = await this.danhMucDinhMucHaoHutService.getDetail(idQddmhh);
+    if (resDmhh2?.msg !== MESSAGE.SUCCESS) return;
+    const resDmh = await this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh || loaiVthh);
     if (resDmh.msg === MESSAGE.SUCCESS) {
       hinhThucBq = Array.isArray(resDmh.data?.hinhThucBq) ? resDmh.data?.hinhThucBq : [];
       loaiHinhBq = Array.isArray(resDmh.data?.loaiHinhBq) ? resDmh.data?.loaiHinhBq : [];
       phuongPhapBq = Array.isArray(resDmh.data?.phuongPhapBq) ? resDmh.data?.phuongPhapBq : [];
     }
-    if (resDmhh.msg === MESSAGE.SUCCESS) {
-      const data = Array.isArray(resDmhh.data?.content) ? resDmhh.data.content : [];
-      const listDmhh = data.filter(f => {
-        return hinhThucBq.some(item => f.hinhThucBq.split(",").includes(item.ma)) &&
-          loaiHinhBq.some(item => f.loaiHinhBq.split(",").includes(item.ma)) &&
-          phuongPhapBq.some(item => f.phuongThucBq.split(",").includes(item.ma)) &&
-          f.apDungTai.split(",").includes(this.userInfo.MA_DVI.slice(0, -2));
-      }).sort((a, b) => a.tgBaoQuanTu - b.tgBaoQuanTu);
-      const dinhMucHaoHut = Array.isArray(listDmhh) && listDmhh.length > 0 ? this.tinhDinhMucHaoHut(listDmhh, soThangBaoQuanHang, loaiVthh) : ""
-      this.formData.patchValue({ dinhMucHaoHut })
-    }
+    const data = Array.isArray(resDmhh2.data?.details) ? resDmhh2.data.details : [];
+    const listDmhh = data.filter(f => {
+      return hinhThucBq.some(item => f.hinhThucBq?.split(",").includes(item.ma)) &&
+        loaiHinhBq.some(item => f.loaiHinhBq?.split(",").includes(item.ma)) &&
+        phuongPhapBq.some(item => f.phuongThucBq?.split(",").includes(item.ma)) &&
+        f.apDungTai.split(",").includes(this.userInfo.MA_DVI.slice(0, -2));
+    }).sort((a, b) => a.tgBaoQuanTu - b.tgBaoQuanTu);
+    const dinhMucHaoHut = Array.isArray(listDmhh) && listDmhh.length > 0 ? this.tinhDinhMucHaoHut(listDmhh, soThangBaoQuanHang, loaiVthh) : ""
+    this.formData.patchValue({ dinhMucHaoHut })
+
   }
   async getChiTietNganLoKho() {
     const maNganLo = this.formData.value.maLoKho || this.formData.value.maNganKho;

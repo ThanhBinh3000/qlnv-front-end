@@ -57,6 +57,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   idBangKe: number = 0;
   openBangKe = false;
   templateName = "Biên bản hao dôi";
+  dataTableListPhieuXuatKho: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -109,7 +110,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         slHaoDuoiDm: [],
         tiLeHaoDuoiDm: [],
         dinhMucHaoHut: [],
-        sLHaoHutTheoDm: [],
+        slhaoHutTheoDm: [],
         nguyenNhan: [],
         kienNghi: [],
         ghiChu: [],
@@ -141,6 +142,9 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     );
     this.maBb = '-BBHD';
     // this.setTitle();
+    this.formData.get('soBbTinhKho').valueChanges.subscribe(value => {
+      this.onSelectSoBbTinhKho(value)
+    })
   }
 
   async ngOnInit() {
@@ -166,10 +170,15 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       try {
         const res = await this.bienBanHaoDoiService.getDetail(idInput);
         if (res.msg == MESSAGE.SUCCESS) {
-          this.formData.patchValue({ ...res.data, donViTinh: res.data.dviTinh, tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
+          // this.formData.patchValue({ ...res.data, donViTinh: res.data.dviTinh, tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho });
+          this.helperService.bidingDataInFormGroupAndNotTrigger(this.formData, { ...res.data, ngayKetThucNhap: res.data.ngayKtNhap, donViTinh: res.data.dviTinh, tenNganLoKho: res.data.tenLoKho ? `${res.data.tenLoKho} - ${res.data.tenNganKho}` : res.data.tenNganKho }, ['soBbTinhKho'])
+          this.formData.controls['soBbTinhKho'].setValue(res.data.soBbTinhKho, { emitEvent: false })
           const data = res.data;
           this.fileDinhKems = data.fileDinhKems;
-          this.dataTable = data.listPhieuXuatKho;
+          this.dataTableListPhieuXuatKho = data.listPhieuXuatKho;
+          if (res.data.soBbTinhKho) {
+            await this.getDetailBbTinhKho(res.data.soBbTinhKho)
+          }
         }
       } catch (e) {
         console.log('error: ', e);
@@ -276,7 +285,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       ngayKetThucXuat: '',
       ngayBatDauXuat: '',
       tongSlXuat: '',
-      sLHaoHutTheoDm: '',
+      slhaoHutTheoDm: '',
 
       maDiemKho: '',
       tenDiemKho: '',
@@ -369,102 +378,128 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     let hinhThucBq = [];
     let loaiHinhBq = [];
     let phuongPhapBq = [];
-    const [resDmh, resDmhh] = await Promise.all([this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh || loaiVthh), this.danhMucDinhMucHaoHutService.search(body)]);
+    let listQuyetDinhDmhh = []
+    const resDmhh = await this.danhMucDinhMucHaoHutService.search(body);
+    if (resDmhh?.msg !== MESSAGE.SUCCESS) return;
+    listQuyetDinhDmhh = Array.isArray(resDmhh.data.content) ? resDmhh.data.content : [];
+    const idQddmhh = listQuyetDinhDmhh.filter(f => f.trangThai === STATUS.BAN_HANH && ((dayjs(f.ngayHieuLuc).isBefore(dayjs()) || dayjs(f.ngayHieuLuc).isSame(dayjs())) && (!f.ngayHetHieuLuc || dayjs().isBefore(dayjs(f.ngayHetHieuLuc))))).sort((a, b) => dayjs(b.ngayKy).valueOf() - dayjs(a.ngayKy).valueOf())[0]?.id;
+    if (!idQddmhh) return;
+    const resDmhh2 = await this.danhMucDinhMucHaoHutService.getDetail(idQddmhh);
+    if (resDmhh2?.msg !== MESSAGE.SUCCESS) return;
+    const resDmh = await this.danhMucService.loadDanhMucHangChiTiet(cloaiVthh || loaiVthh);
     if (resDmh.msg === MESSAGE.SUCCESS) {
       hinhThucBq = Array.isArray(resDmh.data?.hinhThucBq) ? resDmh.data?.hinhThucBq : [];
       loaiHinhBq = Array.isArray(resDmh.data?.loaiHinhBq) ? resDmh.data?.loaiHinhBq : [];
       phuongPhapBq = Array.isArray(resDmh.data?.phuongPhapBq) ? resDmh.data?.phuongPhapBq : [];
     }
-    if (resDmhh.msg === MESSAGE.SUCCESS) {
-      const data = Array.isArray(resDmhh.data?.content) ? resDmhh.data.content : [];
-      const listDmhh = data.filter(f => {
-        return hinhThucBq.some(item => f.hinhThucBq?.split(",").includes(item.ma)) &&
-          loaiHinhBq.some(item => f.loaiHinhBq?.split(",").includes(item.ma)) &&
-          phuongPhapBq.some(item => f.phuongThucBq?.split(",").includes(item.ma)) &&
-          f.apDungTai.split(",").includes(this.userInfo.MA_DVI.slice(0, -2));
-      }).sort((a, b) => a.tgBaoQuanTu - b.tgBaoQuanTu);
-      const dinhMucHaoHut = Array.isArray(listDmhh) && listDmhh.length > 0 ? this.tinhDinhMucHaoHut(listDmhh, soThangBaoQuanHang, loaiVthh) : ""
-      this.formData.patchValue({ dinhMucHaoHut })
-    }
+    const data = Array.isArray(resDmhh2.data?.details) ? resDmhh2.data.details : [];
+    const listDmhh = data.filter(f => {
+      return hinhThucBq.some(item => f.hinhThucBq?.split(",").includes(item.ma)) &&
+        loaiHinhBq.some(item => f.loaiHinhBq?.split(",").includes(item.ma)) &&
+        phuongPhapBq.some(item => f.phuongThucBq?.split(",").includes(item.ma)) &&
+        f.apDungTai.split(",").includes(this.userInfo.MA_DVI.slice(0, -2));
+    }).sort((a, b) => a.tgBaoQuanTu - b.tgBaoQuanTu);
+    const dinhMucHaoHut = Array.isArray(listDmhh) && listDmhh.length > 0 ? this.tinhDinhMucHaoHut(listDmhh, soThangBaoQuanHang, loaiVthh) : ""
+    this.formData.patchValue({ dinhMucHaoHut })
+
+  }
+  async getDetailBbTinhKho(soBbTinhKho: string) {
+    if (!soBbTinhKho) return;
+    const bienBan = this.listBbTinhKho.find(f => f.soBbTinhKho === soBbTinhKho);
+    if (!bienBan.id) return;
+    const res = await this.bienBanTinhKhoService.getDetail(bienBan.id);
+    if (!res || res.msg !== MESSAGE.SUCCESS) return;
+    this.formData.patchValue({
+      soPhieuKnCl: res.data.listPhieuXuatKho[0]?.soPhieuKnCl,
+      idPhieuKnCl: res.data.listPhieuXuatKho[0]?.idPhieuKnCl,
+      donViTinh: res.data.dviTinh,
+    })
+    return res.data
   }
   async onSelectSoBbTinhKho(event: any): Promise<void> {
-    console.log(event, "event")
-    if (!event) return;
-    let idBbTinhKho = this.listBbTinhKho.find(f => f.soBbTinhKho == event)?.id;
-    if (!idBbTinhKho) return;
-    const res = await this.bienBanTinhKhoService.getDetail(idBbTinhKho);
-    if (res.msg !== MESSAGE.SUCCESS) return;
-    const bienBan = res.data;
-    let ngayKetThucNhap = "";
-    if (bienBan.maLoKho || bienBan.maNganKho) {
-      const res = await this.mangLuoiKhoService.getDetailByMa({ maDvi: bienBan.maLoKho || bienBan.maNganKho });
-      if (res.data?.object?.ngayNhapDay) {
-        ngayKetThucNhap = res.data?.object?.ngayNhapDay;
+    await this.spinner.show();
+    try {
+      if (!event) return;
+      let idBbTinhKho = this.listBbTinhKho.find(f => f.soBbTinhKho == event)?.id;
+      if (!idBbTinhKho) return;
+      const res = await this.bienBanTinhKhoService.getDetail(idBbTinhKho);
+      if (res.msg !== MESSAGE.SUCCESS) return;
+      const bienBan = res.data;
+      let ngayKetThucNhap = "";
+      if (bienBan.maLoKho || bienBan.maNganKho) {
+        const res = await this.mangLuoiKhoService.getDetailByMa({ maDvi: bienBan.maLoKho || bienBan.maNganKho });
+        if (res.data?.object?.ngayNhapDay) {
+          ngayKetThucNhap = res.data?.object?.ngayNhapDay;
+        }
+      };
+      const soThangBaoQuanHang = bienBan.ngayKetThucXuat && ngayKetThucNhap ? +dayjs(dayjs(bienBan.ngayKetThucXuat, "DD/MM/YYYY").format("YYYY-MM-DD")).diff(dayjs(ngayKetThucNhap, "DD/MM/YYYY").format("YYYY-MM-DD"), 'month', true).toFixed(1) : null;
+      //TODO: call api danh muc dinh muc hao hut
+      if (bienBan.cloaiVthh || bienBan.loaiVthh) {
+        await this.getDinhMucHaoHut(bienBan.cloaiVthh, bienBan.loaiVthh, soThangBaoQuanHang);
       }
-    };
-    const soThangBaoQuanHang = bienBan.ngayKetThucXuat && ngayKetThucNhap ? +dayjs(dayjs(bienBan.ngayKetThucXuat, "DD/MM/YYYY").format("YYYY-MM-DD")).diff(dayjs(ngayKetThucNhap, "DD/MM/YYYY").format("YYYY-MM-DD"), 'month', true).toFixed(1) : null;
-    //TODO: call api danh muc dinh muc hao hut
-    if (bienBan.cloaiVthh || bienBan.loaiVthh) {
-      await this.getDinhMucHaoHut(bienBan.cloaiVthh, bienBan.loaiVthh, soThangBaoQuanHang);
-    }
 
-    if (this.listBbTinhKho) {
-      this.dataTable = bienBan.listPhieuXuatKho
-    }
-    // this.tongSoLuongXk = this.dataTable.reduce((prev, cur) => prev + cur.slXuat, 0);
-    const sLHaoHutTheoDm = bienBan.tongSlNhap * this.formData.value.dinhMucHaoHut / 100;
-    const slHaoThucTe = bienBan.slConLai - bienBan.slThucTeCon;
-    const tiLeHaoThucTe = bienBan.tongSlNhap ? slHaoThucTe * 100 / bienBan.tongSlNhap : '';
-    const slHaoThanhLy = sLHaoHutTheoDm;
-    const tiLeHaoThanhLy = bienBan.tongSlNhap ? slHaoThanhLy * 100 / bienBan.tongSlNhap : '';
-    const slHaoVuotDm = slHaoThucTe - sLHaoHutTheoDm > 0 ? slHaoThucTe - sLHaoHutTheoDm : '';
-    const tiLeHaoVuotDm = bienBan.tongSlNhap && slHaoVuotDm ? slHaoVuotDm * 100 / bienBan.tongSlNhap : '';
-    const slHaoDuoiDm = sLHaoHutTheoDm - slHaoThucTe > 0 ? sLHaoHutTheoDm - slHaoThucTe : '';
-    const tiLeHaoDuoiDm = bienBan.tongSlNhap && slHaoDuoiDm ? slHaoDuoiDm * 100 / bienBan.tongSlNhap : '';
-    this.formData.patchValue({
-      // ngayKetThucXuat: this.dataTable[0].ngayXuatKho,
-      // ngayBatDauXuat: this.dataTable[this.dataTable.length - 1].ngayXuatKho,
-      ngayBatDauXuat: bienBan.ngayBatDauXuat,
-      ngayKetThucXuat: bienBan.ngayKetThucXuat,
-      ngayKetThucNhap,
-      soThangBaoQuanHang,
-      tongSlNhap: bienBan.tongSlNhap,
-      tongSlXuat: bienBan.tongSlXuat,
-      // tongSlXuat: this.tongSoLuongXk,
-      sLHaoHutTheoDm,
-      //Thanh lý
-      slHaoThanhLy,
-      tiLeHaoThanhLy,
-      //Thực tế
-      slHaoThucTe,
-      tiLeHaoThucTe,
-      //Vượt định mức
-      slHaoVuotDm,
-      tiLeHaoVuotDm,
-      //Dưới định mức
-      slHaoDuoiDm,
-      tiLeHaoDuoiDm,
+      if (this.listBbTinhKho) {
+        this.dataTableListPhieuXuatKho = bienBan.listPhieuXuatKho
+      }
+      // this.tongSoLuongXk = this.dataTable.reduce((prev, cur) => prev + cur.slXuat, 0);
+      const slhaoHutTheoDm = bienBan.tongSlNhap * this.formData.value.dinhMucHaoHut / 100;
+      const slHaoThucTe = bienBan.slConLai - bienBan.slThucTeCon;
+      const tiLeHaoThucTe = bienBan.tongSlNhap ? slHaoThucTe * 100 / bienBan.tongSlNhap : '';
+      const slHaoThanhLy = slhaoHutTheoDm;
+      const tiLeHaoThanhLy = bienBan.tongSlNhap ? slHaoThanhLy * 100 / bienBan.tongSlNhap : '';
+      const slHaoVuotDm = slHaoThucTe - slhaoHutTheoDm > 0 ? slHaoThucTe - slhaoHutTheoDm : '';
+      const tiLeHaoVuotDm = bienBan.tongSlNhap && slHaoVuotDm ? slHaoVuotDm * 100 / bienBan.tongSlNhap : '';
+      const slHaoDuoiDm = slhaoHutTheoDm - slHaoThucTe > 0 ? slhaoHutTheoDm - slHaoThucTe : '';
+      const tiLeHaoDuoiDm = bienBan.tongSlNhap && slHaoDuoiDm ? slHaoDuoiDm * 100 / bienBan.tongSlNhap : '';
+      this.formData.patchValue({
+        // ngayKetThucXuat: this.dataTable[0].ngayXuatKho,
+        // ngayBatDauXuat: this.dataTable[this.dataTable.length - 1].ngayXuatKho,
+        ngayBatDauXuat: bienBan.ngayBatDauXuat,
+        ngayKetThucXuat: bienBan.ngayKetThucXuat,
+        ngayKetThucNhap,
+        soThangBaoQuanHang,
+        tongSlNhap: bienBan.tongSlNhap,
+        tongSlXuat: bienBan.tongSlXuat,
+        // tongSlXuat: this.tongSoLuongXk,
+        slhaoHutTheoDm,
+        //Thanh lý
+        slHaoThanhLy,
+        tiLeHaoThanhLy,
+        //Thực tế
+        slHaoThucTe,
+        tiLeHaoThucTe,
+        //Vượt định mức
+        slHaoVuotDm,
+        tiLeHaoVuotDm,
+        //Dưới định mức
+        slHaoDuoiDm,
+        tiLeHaoDuoiDm,
 
-      maDiemKho: bienBan.maDiemKho,
-      tenDiemKho: bienBan.tenDiemKho,
-      maNhaKho: bienBan.maNhaKho,
-      tenNhaKho: bienBan.tenNhaKho,
-      maNganKho: bienBan.maNganKho,
-      tenNganKho: bienBan.tenNganKho,
-      maLoKho: bienBan.maLoKho,
-      tenLoKho: bienBan.tenLoKho,
-      // soPhieuKnCl: bienBan.soPhieuKnCl,
-      // idPhieuKnCl: bienBan.idPhieuKnCl,
-      soPhieuKnCl: bienBan.listPhieuXuatKho[0]?.soPhieuKnCl,
-      idPhieuKnCl: bienBan.listPhieuXuatKho[0]?.idPhieuKnCl,
-      loaiVthh: bienBan.loaiVthh,
-      cloaiVthh: bienBan.cloaiVthh,
-      tenLoaiVthh: bienBan.tenLoaiVthh,
-      tenCloaiVthh: bienBan.tenCloaiVthh,
-      moTaHangHoa: bienBan.moTaHangHoa,
-      tenNganLoKho: bienBan.tenLoKho ? `${bienBan.tenLoKho} - ${bienBan.tenNganKho}` : bienBan.tenNganKho,
-      donViTinh: bienBan.donViTinh,
-    })
+        maDiemKho: bienBan.maDiemKho,
+        tenDiemKho: bienBan.tenDiemKho,
+        maNhaKho: bienBan.maNhaKho,
+        tenNhaKho: bienBan.tenNhaKho,
+        maNganKho: bienBan.maNganKho,
+        tenNganKho: bienBan.tenNganKho,
+        maLoKho: bienBan.maLoKho,
+        tenLoKho: bienBan.tenLoKho,
+        // soPhieuKnCl: bienBan.soPhieuKnCl,
+        // idPhieuKnCl: bienBan.idPhieuKnCl,
+        soPhieuKnCl: bienBan.listPhieuXuatKho[0]?.soPhieuKnCl,
+        idPhieuKnCl: bienBan.listPhieuXuatKho[0]?.idPhieuKnCl,
+        loaiVthh: bienBan.loaiVthh,
+        cloaiVthh: bienBan.cloaiVthh,
+        tenLoaiVthh: bienBan.tenLoaiVthh,
+        tenCloaiVthh: bienBan.tenCloaiVthh,
+        moTaHangHoa: bienBan.moTaHangHoa,
+        tenNganLoKho: bienBan.tenLoKho ? `${bienBan.tenLoKho} - ${bienBan.tenNganKho}` : bienBan.tenNganKho,
+        donViTinh: bienBan.dviTinh,
+      })
+    } catch (error) {
+      console.log(error);
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
 
@@ -473,7 +508,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     this.formData.controls['soBbHaoDoi'].setValidators(Validators.required);
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;
-    body.listPhieuXuatKho = this.dataTable;
+    body.listPhieuXuatKho = this.dataTableListPhieuXuatKho;
     await this.createUpdate(body);
     this.helperService.restoreRequiredForm(this.formData)
   }
