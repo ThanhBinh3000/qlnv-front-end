@@ -152,8 +152,7 @@
             <nz-form-label nzRequired [nzNoColon]="true">
               Số BB tịnh kho
             </nz-form-label>
-            <nz-select formControlName="soBbTinhKho" [nzDisabled]="isView"
-              (ngModelChange)="onSelectSoBbTinhKho($event)">
+            <nz-select formControlName="soBbTinhKho" [nzDisabled]="isView">
               <nz-option *ngFor="let p of listBbTinhKho" [nzValue]="p.soBbTinhKho" [nzLabel]="p.soBbTinhKho">
               </nz-option>
             </nz-select>
@@ -261,8 +260,8 @@
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <nz-card class="mg-t-16 flex-card p-lr16 table-card">
         <span>Thông tin bảng kê cân hàng và phiếu xuất kho</span>
-        <nz-table #basicTable nzBordered class="pd-10" [nzData]="dataTable" class="nowrap" [nzFrontPagination]="false"
-          [nzShowPagination]="false">
+        <nz-table #basicTable nzBordered class="pd-10" [nzData]="dataTableListPhieuXuatKho" class="nowrap"
+          [nzFrontPagination]="false" [nzShowPagination]="false">
           <thead>
             <tr>
               <th>STT</th>
@@ -492,7 +491,7 @@
                     <td class="text-right">{{formData.value.soThangBaoQuanHang|number:'1.0-1' : 'vi_VN'}}</td>
                     <td class="text-right">{{formData.value.tongSlNhap |number:'1.0-1' : 'vi_VN'}}</td>
                     <td class="text-right">{{formData.value.dinhMucHaoHut}}</td>
-                    <td class="text-right">{{formData.value.sLHaoHutTheoDm |number:'1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{formData.value.slhaoHutTheoDm |number:'1.0-1' : 'vi_VN'}}</td>
                   </tr>
                 </ng-container>
               </tbody>
