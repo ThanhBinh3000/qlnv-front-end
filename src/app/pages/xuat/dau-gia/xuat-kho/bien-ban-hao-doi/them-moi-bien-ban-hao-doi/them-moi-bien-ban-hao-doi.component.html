@@ -291,7 +291,7 @@
               </a>
             </td>
             <td class="text-left">{{ data.ngayXuatKho|date: 'dd/MM/yyyy' }}</td>
-            <td class="text-right">{{ data.soLuongXuat|number:'1.0-0' : 'vi_VN' }} </td>
+            <td class="text-right">{{ data.soLuongXuat|number:'1.0-3' : 'vi_VN' }} </td>
           </tr>
           </tbody>
           <ng-container *ngIf="dataTable.length > 0">
@@ -299,7 +299,7 @@
             <tr>
               <th class="text-right text-blue" colspan="4"> Tổng</th>
               <th class="text-right text-blue">
-                {{ calcTong('soLuongXuat')|number:'1.0-0' : 'vi_VN' }}
+                {{ calcTong('soLuongXuat')|number:'1.0-3' : 'vi_VN' }}
               </th>
             </tr>
             </tfoot>
@@ -314,7 +314,7 @@
             <nz-form-label [nzNoColon]="true"> Tổng số lượng nhập</nz-form-label>
             <nz-form-control nz-col>
                   <span style="color: blue" *ngIf="formData.value.tongSlNhap">
-                    {{formData.value.tongSlNhap|number:'1.0-0' : 'vi_VN'}} {{formData.value.donViTinh}}
+                    {{formData.value.tongSlNhap|number:'1.0-3' : 'vi_VN'}} {{formData.value.donViTinh}}
                   </span>
             </nz-form-control>
           </nz-form-item>
@@ -334,7 +334,7 @@
             <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất</nz-form-label>
             <nz-form-control nz-col>
               <span style="color: blue" *ngIf="formData.value.tongSlXuat">
-                {{formData.value.tongSlXuat|number:'1.0-0' : 'vi_VN'}} {{formData.value.donViTinh}}
+                {{formData.value.tongSlXuat|number:'1.0-3' : 'vi_VN'}} {{formData.value.donViTinh}}
               </span>
             </nz-form-control>
           </nz-form-item>
@@ -355,7 +355,7 @@
             <div nz-row>
               <div nz-col [nzSpan]="24" style="color: gray"> Số lượng <br>
                 <span style="color: blue" *ngIf="formData.value.slHaoThucTe">
-                  {{formData.value.slHaoThucTe|number:'1.0-0' : 'vi_VN'}}
+                  {{formData.value.slHaoThucTe|number:'1.0-3' : 'vi_VN'}}
                 </span>
               </div>
             </div>
@@ -379,7 +379,7 @@
             <div nz-row>
               <div nz-col [nzSpan]="24" style="color: gray"> Số lượng <br>
                 <span style="color: blue" *ngIf="formData.value.slHaoVuotMuc">
-                  {{formData.value.slHaoVuotMuc|number:'1.0-0' : 'vi_VN'}}
+                  {{formData.value.slHaoVuotMuc|number:'1.0-3' : 'vi_VN'}}
                 </span>
               </div>
             </div>
@@ -403,7 +403,7 @@
             <div nz-row>
               <div nz-col [nzSpan]="24" style="color: gray"> Số lượng <br>
                 <span style="color: blue" *ngIf="formData.value.slHaoThanhLy">
-                  {{formData.value.slHaoThanhLy|number:'1.0-0' : 'vi_VN'}}
+                  {{formData.value.slHaoThanhLy|number:'1.0-3' : 'vi_VN'}}
                 </span>
               </div>
             </div>
@@ -427,7 +427,7 @@
             <div nz-row>
               <div nz-col [nzSpan]="24" style="color: gray"> Số lượng <br>
                 <span style="color: blue" *ngIf="formData.value.slHaoDuoiMuc">
-                  {{formData.value.slHaoDuoiMuc|number:'1.0-0' : 'vi_VN'}}
+                  {{formData.value.slHaoDuoiMuc|number:'1.0-3' : 'vi_VN'}}
                 </span>
               </div>
             </div>
@@ -464,9 +464,9 @@
             <td
               class="text-center">{{formData.value.thoiGianKthucNhap | date: 'dd/MM/yyyy' }}{{formData.value.thoiGianKthucNhap && formData.value.thoiGianKthucXuat ? "-" : ""}}{{formData.value.thoiGianKthucXuat|date: 'dd/MM/yyyy' }}
             </td>
-            <td class="text-center">{{formData.value.tongSlNhap|number:'1.0-0' : 'vi_VN'}}</td>
+            <td class="text-center">{{formData.value.tongSlNhap|number:'1.0-3' : 'vi_VN'}}</td>
             <td class="text-center">{{formData.value.dinhMucHaoHut}}</td>
-            <td class="text-center">{{formData.value.slHaoTheoDinhMuc|number:'1.0-0' : 'vi_VN'}}</td>
+            <td class="text-center">{{formData.value.slHaoTheoDinhMuc|number:'1.0-3' : 'vi_VN'}}</td>
           </tr>
           </tbody>
         </nz-table>

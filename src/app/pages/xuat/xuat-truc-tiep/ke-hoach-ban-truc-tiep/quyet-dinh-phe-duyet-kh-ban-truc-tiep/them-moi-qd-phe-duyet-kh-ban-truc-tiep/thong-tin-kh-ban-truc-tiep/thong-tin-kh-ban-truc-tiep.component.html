@@ -138,7 +138,7 @@
             </nz-form-label>
             <nz-form-control nz-col>
               <span style="color: blue" *ngIf="formData.value.tongSoLuong">
-                {{ formData.value.tongSoLuong | number:'1.0-0' : 'vi_VN' }} ({{ formData.value.donViTinh }})
+                {{ formData.value.tongSoLuong | number:'1.0-3' : 'vi_VN' }} ({{ formData.value.donViTinh }})
               </span>
             </nz-form-control>
           </nz-form-item>
@@ -173,12 +173,12 @@
           <td nzShowExpand="true" [nzExpand]="item.expandSetAll"
               (nzExpandChange)="onExpandChangeAll(item, $event)"></td>
           <td class="text-left" colspan="5">{{item.tenDvi}}</td>
-          <td class="text-right bold"> {{item.soLuongChiCuc|number:'1.0-0' : 'vi_VN' }}</td>
+          <td class="text-right bold"> {{item.soLuongChiCuc|number:'1.0-3' : 'vi_VN' }}</td>
           <td></td>
           <td></td>
           <td class="text-right bold">
             <span *ngIf="item.tienDuocDuyet">
-            {{item.tienDuocDuyet|number:'1.0-0' : 'vi_VN' }}
+            {{item.tienDuocDuyet|number:'1.0-3' : 'vi_VN' }}
             </span>
           </td>
         </tr>
@@ -193,17 +193,17 @@
             <td class="text-left">{{ children.namNhap}}</td>
             <td class="text-left">{{ children.maDviTsan}}</td>
             <td class="text-right">
-              {{ children.soLuongDeXuat|number:'1.0-0' : 'vi_VN' }}
+              {{ children.soLuongDeXuat|number:'1.0-3' : 'vi_VN' }}
             </td>
             <td class="text-left">{{ children.donViTinh}}</td>
             <td class="text-right">
               <span *ngIf="children.donGiaDuocDuyet">
-                {{ children.donGiaDuocDuyet | number:'1.0-0' : 'vi_VN' }}
+                {{ children.donGiaDuocDuyet | number:'1.0-3' : 'vi_VN' }}
               </span>
             </td>
             <td class="text-right">
               <span *ngIf="children.thanhTienDuocDuyet">
-                {{ children.thanhTienDuocDuyet | number:'1.0-0' : 'vi_VN' }}
+                {{ children.thanhTienDuocDuyet | number:'1.0-3' : 'vi_VN' }}
               </span>
             </td>
           </tr>
@@ -235,12 +235,12 @@
           <td nzShowExpand="true" [nzExpand]="item.expandSetAll"
               (nzExpandChange)="onExpandChangeAll(item, $event)"></td>
           <td class="text-left" colspan="5">{{item.tenDvi}}</td>
-          <td class="text-right bold"> {{item.soLuongChiCuc|number:'1.0-0' : 'vi_VN' }}</td>
+          <td class="text-right bold"> {{item.soLuongChiCuc|number:'1.0-3' : 'vi_VN' }}</td>
           <td></td>
           <td></td>
           <td class="text-right bold">
             <span *ngIf="item.tienDuocDuyet">
-            {{item.tienDuocDuyet|number:'1.0-0' : 'vi_VN' }}
+            {{item.tienDuocDuyet|number:'1.0-3' : 'vi_VN' }}
             </span>
           </td>
         </tr>
@@ -261,12 +261,12 @@
             <td class="text-left">{{ children.donViTinh}}</td>
             <td class="text-right">
               <span *ngIf="children.donGiaDuocDuyet">
-                {{ children.donGiaDuocDuyet | number:'1.0-0' : 'vi_VN' }}
+                {{ children.donGiaDuocDuyet | number:'1.0-3' : 'vi_VN' }}
               </span>
             </td>
             <td class="text-right">
               <span *ngIf="children.thanhTienDuocDuyet">
-                {{ children.thanhTienDuocDuyet | number:'1.0-0' : 'vi_VN' }}
+                {{ children.thanhTienDuocDuyet | number:'1.0-3' : 'vi_VN' }}
               </span>
             </td>
           </tr>

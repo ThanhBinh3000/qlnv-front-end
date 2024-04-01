@@ -378,8 +378,8 @@
                    formControlName="thucXuat" (ngModelChange)="onChangeTien($event)"
                    [readonly]="isView"/>
           </td>
-          <td class="text-right">{{formData.value.donGia|number:'1.0-0' : 'vi_VN'}}</td>
-          <td class="text-right">{{formData.value.thanhTien|number:'1.0-0' : 'vi_VN'}}</td>
+          <td class="text-right">{{formData.value.donGia|number:'1.0-3' : 'vi_VN'}}</td>
+          <td class="text-right">{{formData.value.thanhTien|number:'1.0-3' : 'vi_VN'}}</td>
           <td class="text-center" *ngIf="!isView">
             <a (click)="clear()">
               <i class="fa fa-refresh"></i>

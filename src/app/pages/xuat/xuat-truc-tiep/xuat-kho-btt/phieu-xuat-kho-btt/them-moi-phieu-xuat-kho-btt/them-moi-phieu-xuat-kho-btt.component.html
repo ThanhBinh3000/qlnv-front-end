@@ -345,7 +345,7 @@
             <nz-form-label [nzNoColon]="true"> Số lượng theo hợp đồng</nz-form-label>
             <nz-form-control nz-col>
               <span style="color: blue" *ngIf="formData.value.soLuongHopDong">
-                {{formData.value.soLuongHopDong|number:'1.0-0' : 'vi_VN'}} {{formData.value.donViTinh}}
+                {{formData.value.soLuongHopDong|number:'1.0-3' : 'vi_VN'}} {{formData.value.donViTinh}}
               </span>
             </nz-form-control>
           </nz-form-item>
@@ -375,7 +375,7 @@
             <nz-form-label [nzNoColon]="true"> Số lượng theo bảng kê bảng kê bán lẻ</nz-form-label>
             <nz-form-control nz-col>
               <span style="color: blue" *ngIf="formData.value.soLuongBkeBanLe">
-                {{formData.value.soLuongBkeBanLe|number:'1.0-0' : 'vi_VN'}} {{formData.value.donViTinh}}
+                {{formData.value.soLuongBkeBanLe|number:'1.0-3' : 'vi_VN'}} {{formData.value.donViTinh}}
               </span>
             </nz-form-control>
           </nz-form-item>
@@ -421,8 +421,8 @@
               <input class="money-input" currencyMask [options]="amount" [min]="0"
                      formControlName="thucXuat" (ngModelChange)="onChangeTien($event)" [readonly]="isView"/>
             </td>
-            <td class="text-right">{{formData.value.donGia|number:'1.0-0' : 'vi_VN'}}</td>
-            <td class="text-right">{{formData.value.thanhTien|number:'1.0-0' : 'vi_VN'}}</td>
+            <td class="text-right">{{formData.value.donGia|number:'1.0-3' : 'vi_VN'}}</td>
+            <td class="text-right">{{formData.value.thanhTien|number:'1.0-3' : 'vi_VN'}}</td>
             <td class="text-center" *ngIf="!isView">
               <a (click)="clear()">
                 <i class="fa fa-refresh"></i>

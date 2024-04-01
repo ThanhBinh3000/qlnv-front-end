@@ -91,7 +91,7 @@
                   <nz-form-control>
                       <span *ngIf="formData.value.tongGiaTriHdong">
                         <input nz-input class="text-blue bold"
-                               [value]="(formData.value.tongGiaTriHdong | number:'1.0-0' : 'vi_VN') + ' (đ)'"
+                               [value]="(formData.value.tongGiaTriHdong | number:'1.0-3' : 'vi_VN') + ' (đ)'"
                                readonly/>
                       </span>
                   </nz-form-control>
@@ -103,7 +103,7 @@
                   <nz-form-control>
                       <span *ngIf="formData.value.tongSlXuatBanQdKh">
                        <input nz-input
-                              [value]="(formData.value.tongSlXuatBanQdKh | number:'1.0-0' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
+                              [value]="(formData.value.tongSlXuatBanQdKh | number:'1.0-3' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
                               readonly/>
                       </span>
                   </nz-form-control>
@@ -115,7 +115,7 @@
                   <nz-form-control>
                       <span *ngIf="formData.value.tongSlDaKyHdong">
                        <input nz-input class="text-blue bold"
-                              [value]="(formData.value.tongSlDaKyHdong | number:'1.0-0' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
+                              [value]="(formData.value.tongSlDaKyHdong | number:'1.0-3' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
                               readonly/>
                       </span>
                   </nz-form-control>
@@ -127,7 +127,7 @@
                   <nz-form-control>
                       <span *ngIf="formData.value.tongSlChuaKyHdong">
                        <input nz-input class="text-red bold"
-                              [value]="(formData.value.tongSlChuaKyHdong | number:'1.0-0' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
+                              [value]="(formData.value.tongSlChuaKyHdong | number:'1.0-3' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
                               readonly/>
                       </span>
                   </nz-form-control>
@@ -236,7 +236,7 @@
                   <nz-form-control>
                       <span *ngIf="formData.value.tongGiaTriHdong">
                         <input nz-input class="text-blue bold"
-                               [value]="(formData.value.tongGiaTriHdong | number:'1.0-0' : 'vi_VN') + ' (đ)'"
+                               [value]="(formData.value.tongGiaTriHdong | number:'1.0-3' : 'vi_VN') + ' (đ)'"
                                readonly/>
                       </span>
                   </nz-form-control>
@@ -248,7 +248,7 @@
                   <nz-form-control>
                       <span *ngIf="formData.value.tongSlXuatBanQdKh">
                        <input nz-input
-                              [value]="(formData.value.tongSlXuatBanQdKh | number:'1.0-0' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
+                              [value]="(formData.value.tongSlXuatBanQdKh | number:'1.0-3' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
                               readonly/>
                       </span>
                   </nz-form-control>
@@ -260,7 +260,7 @@
                   <nz-form-control>
                       <span *ngIf="formData.value.tongSlDaKyHdong">
                        <input nz-input class="text-blue bold"
-                              [value]="(formData.value.tongSlDaKyHdong | number:'1.0-0' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
+                              [value]="(formData.value.tongSlDaKyHdong | number:'1.0-3' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
                               readonly/>
                       </span>
                   </nz-form-control>
@@ -273,7 +273,7 @@
                   <nz-form-control>
                       <span *ngIf="formData.value.tongSlChuaKyHdong">
                        <input nz-input class="text-red bold"
-                              [value]="(formData.value.tongSlChuaKyHdong | number:'1.0-0' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
+                              [value]="(formData.value.tongSlChuaKyHdong | number:'1.0-3' : 'vi_VN') + ' (' + formData.value.donViTinh + ')'"
                               readonly/>
                       </span>
                   </nz-form-control>
@@ -375,11 +375,11 @@
               <td class="text-left">{{data.tenHopDong}}</td>
               <td class="text-left">{{data.ngayKyHopDong|date: 'dd/MM/yyyy' }}</td>
               <td class="text-left">{{data.tenBenMua }}</td>
-              <td class="text-right">{{data.soLuong|number:'1.0-0' : 'vi_VN' }}</td>
+              <td class="text-right">{{data.soLuong|number:'1.0-3' : 'vi_VN' }}</td>
               <td class="text-right" *ngIf="userService.isChiCuc()">
-                {{data.donGia|number:'1.0-0' : 'vi_VN' }}
+                {{data.donGia|number:'1.0-3' : 'vi_VN' }}
               </td>
-              <td class="text-right">{{data.thanhTien|number:'1.0-0' : 'vi_VN' }}</td>
+              <td class="text-right">{{data.thanhTien|number:'1.0-3' : 'vi_VN' }}</td>
               <td class="text-left">{{data.tenTrangThai}}</td>
               <td class="text-left">
                 <a *ngIf="data.soQdNv && data.idQdNv" (click)="openModal(data.idQdNv)"
@@ -413,11 +413,11 @@
             <tr>
               <th colspan="5" class="text-right bold text-blue"> Tổng</th>
               <th class="text-right bold text-blue">
-                {{ calcTong('soLuong')|number:'1.0-0' : 'vi_VN' }}
+                {{ calcTong('soLuong')|number:'1.0-3' : 'vi_VN' }}
               </th>
               <th *ngIf="userService.isChiCuc()"></th>
               <th class="text-right bold text-blue">
-                {{ calcTong('thanhTien')|number:'1.0-0' : 'vi_VN' }}
+                {{ calcTong('thanhTien')|number:'1.0-3' : 'vi_VN' }}
               </th>
               <th></th>
               <th></th>
