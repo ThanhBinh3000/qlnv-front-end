@@ -227,10 +227,12 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       return;
     }
     this.dataTableChiTieu.forEach(item => {
-      item.maChiTieu = item.maTchuan;
-      item.tenChiTieu = item.tenTchuan;
-      item.mucYeuCauNhap = item.chiSoNhap;
-      item.phuongPhapXd = item.phuongPhap;
+      if (item.maTchuan != null && item.tenTchuan != null && item.chiSoNhap != null && item.phuongPhap != null){
+        item.maChiTieu = item.maTchuan;
+        item.tenChiTieu = item.tenTchuan;
+        item.mucYeuCauNhap = item.chiSoNhap;
+        item.phuongPhapXd = item.phuongPhap;
+      }
     })
     let body = this.formData.value;
     body.kquaKnghiem = this.dataTableChiTieu;
