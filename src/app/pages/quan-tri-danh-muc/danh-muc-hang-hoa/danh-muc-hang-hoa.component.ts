@@ -208,7 +208,7 @@ export class DanhMucHangHoaComponent implements OnInit {
   parentNodeSelected: any = [];
 
   nzClickNodeTree(event: any): void {
-    if (event.keys.length > 0) {
+    if (event && event.keys && event.keys.length > 0) {
       this.nodeSelected = event.node.origin;
       this.parentNodeSelected = event?.parentNode?.origin
       if (this.nodeSelected.ma != null) {
