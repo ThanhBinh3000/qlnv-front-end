@@ -615,7 +615,12 @@
             <nz-form-label nzRequired [nzNoColon]="true"> % thuế VAT
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <span class="blue-text">{{formData.value.thueVat ? formData.value.thueVat + '%' : ''}}</span>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-select formControlName="maThueVat" [nzDisabled]="isView" nzAllowClear (ngModelChange)="handleChoose($event)">
+                  <nz-option *ngFor="let p of listVat" [nzValue]="p.ma" [nzLabel]="(p.giaTri * 100) + '%' ">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
             </nz-form-control>
           </nz-form-item>
         </div>
