@@ -665,10 +665,10 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
         mstDviBan: dViCc.mstDviBan,
         soLuong: dViCc.soLuong,
         dviCungCap: dViCc.dviCungCap,
-        donGia: dViCc.donGia,
+        donGia: dViCc.donGiaGomThue,
         donGiaGomThue: dViCc.donGiaGomThue,
         sdtDviBan: dViCc.sdtDviBan,
-        thanhTien: Math.round(dViCc.soLuong * dViCc.donGia * 1000),
+        thanhTien: Math.round(dViCc.soLuong * dViCc.donGiaGomThue * 1000),
       })
     }
   }
