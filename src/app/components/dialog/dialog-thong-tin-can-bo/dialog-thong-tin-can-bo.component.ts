@@ -28,6 +28,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
   sysTypeList: any[] = [];
   optionsDonVi: any[] = [];
   optionsChucVu: any[] = [];
+  listChucVu: any[] = [];
   options: any[] = [];
   optionsBoNganh: any[] = [];
   optionsPhongBan: any[] = [];
@@ -213,6 +214,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
   async getListChucVu() {
     let res = await this.dmService.danhMucChungGetAll('VAI_TRO_CHUC_VU');
     this.optionsChucVu = res.data;
+    this.listChucVu = res.data;
   }
 
   async getSysType() {
@@ -238,6 +240,16 @@ export class DialogThongTinCanBoComponent implements OnInit {
       fullName: data.name,
       email: data.email,
       domain: `${lab}.${local}`
+    })
+  }
+
+  async getPosition(position) {
+    this.listChucVu = this.optionsChucVu.filter(item => item.giaTri.includes(position))
+  }
+
+  selectPosition(data) {
+    this.formData.patchValue({
+      position: data.ma
     })
   }
 
