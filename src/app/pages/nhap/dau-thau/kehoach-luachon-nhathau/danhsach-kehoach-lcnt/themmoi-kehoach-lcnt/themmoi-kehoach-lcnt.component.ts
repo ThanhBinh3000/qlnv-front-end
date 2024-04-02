@@ -67,6 +67,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   listNam: any[] = [];
   listThuHoachVu: any[] = [];
   listQuocGia: any[] = [];
+  listVat: any[] = [];
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   listOfMapData: VatTu[];
@@ -198,6 +199,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       tgianDthauTime: [null],
       tgianMoHoSoTime: [null],
       idChiTieuKhNam: [],
+      maThueVat: [],
     });
   }
 
@@ -289,9 +291,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     if (resQg.msg == MESSAGE.SUCCESS) {
       this.listQuocGia = resQg.data;
     }
-    let resVat = await this.danhMucService.danhMucChungGetAll('DM_THUE_SUAT_VAT');
+    let resVat = await this.danhMucService.danhMucChungGetAll('THUE_SUAT_VAT');
     if (resVat.msg == MESSAGE.SUCCESS) {
-      console.log(resVat, 'resVat')
+      this.listVat = resVat.data;
     }
   }
 
@@ -547,9 +549,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       if (!res) {
         return;
       }
-      this.formData.patchValue({
-        thueVat: res.value.thueVat
-      })
+      // this.formData.patchValue({
+      //   thueVat: res.value.thueVat
+      // })
       let isReplace = false;
       if (res.value.goiThau && res.value.goiThau != '') {
         for (let i = 0; i < this.listOfData.length; i++) {
@@ -1394,5 +1396,12 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
+  }
+
+  handleChoose(event) {
+    let vat = this.listVat.find(item=> item.ma = event)
+    this.formData.patchValue({
+      thueVat: vat?.giaTri * 100
+    })
   }
 }
