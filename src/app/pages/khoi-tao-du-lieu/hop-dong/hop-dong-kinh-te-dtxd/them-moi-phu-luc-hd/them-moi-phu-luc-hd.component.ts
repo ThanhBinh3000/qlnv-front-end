@@ -66,7 +66,8 @@ export class ThemMoiPhuLucHdComponent extends Base2Component implements OnInit {
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       hdHdrId: [null],
-      loai: ['01']
+      loai: ['01'],
+      isKhoiTao: [1],
     });
   }
 

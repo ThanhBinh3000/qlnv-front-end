@@ -138,7 +138,8 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
       idDuAn: [null],
       thanhTienBangChu: [],
       fileDinhKems: [null],
-      listKtTdxdHopDongKlcv: [[]]
+      listKtTdxdHopDongKlcv: [[]],
+      isKhoiTao: [1],
     });
   }
 

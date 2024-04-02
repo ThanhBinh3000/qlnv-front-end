@@ -51,7 +51,7 @@ export class HopDongKinhTeDtxdComponent extends Base2Component implements OnInit
     super.ngOnInit();
     this.formData = this.fb.group({
       maDvi: [null],
-      namKeHoach: [null],
+      namKh: [null],
       soHd: [null],
       tenHd: [null],
       cdtTen: [null],
