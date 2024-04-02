@@ -95,10 +95,10 @@
         <th nzWidth="130px" class="text-center" *ngIf="!showFromQd">Đơn giá đề xuất<br/>có VAT (đ/kg)</th>
         <th nzWidth="130px" class="text-center" *ngIf="showFromQd">Đơn giá có VAT<br/> (đ/kg)</th>
         <th nzWidth="150px" class="text-center">Đơn giá mua tối đa<br/>được duyệt có VAT (đ/kg)</th>
-        <th nzWidth="170px" class="text-center">Đơn giá được duyệt<br/>có VAT (đ/kg)</th>
+        <th nzWidth="170px" class="text-center" *ngIf="showFromQd">Đơn giá được duyệt<br/>có VAT (đ/kg)</th>
         <th nzWidth="170px" class="text-center wrap-text" *ngIf="!showFromQd">Thành tiền tạm tính <br/>theo giá đề xuất (đ)</th>
         <th nzWidth="170px" class="text-center wrap-text" *ngIf="showFromQd">Thành tiền theo đơn giá <br/>có VAT (đ)</th>
-        <th nzWidth="170px" class="text-center wrap-text">Thành tiền theo đơn giá <br/>được duyệt có VAT (đ)</th>
+        <th nzWidth="170px" class="text-center wrap-text" *ngIf="showFromQd">Thành tiền theo đơn giá <br/>được duyệt có VAT (đ)</th>
         <th nzWidth="90px" [nzRight]="true" class="text-center">Hành động</th>
       </tr>
     </thead>
@@ -123,9 +123,9 @@
                   [(ngModel)]="thongTinChiCuc.donGiaTamTinh"/>
         </td>
         <td class="text-right">{{thongTinChiCuc.giaToiDa}}</td>
-        <td class="text-right">{{thongTinChiCuc.donGia}}</td>
+        <td class="text-right" *ngIf="showFromQd">{{thongTinChiCuc.donGia}}</td>
         <td></td>
-        <td></td>
+        <td *ngIf="showFromQd"></td>
         <td class="text-left" [nzRight]="true">
           <a (click)="addChiCuc()">
             <i class="icon htvbdh_dau-cong xanhla"></i>
@@ -147,10 +147,10 @@
             <td class="text-right">{{ dataChiCuc.soLuong | number : '1.2-2' : 'vi_VN' }}</td>
             <td class="text-right">{{ dataChiCuc.donGiaTamTinh | number : '1.2-2' : 'vi_VN' }}</td>
             <td class="text-right">{{ dataChiCuc.giaToiDa | number : '1.2-2' : 'vi_VN' }}</td>
-            <td class="text-right">{{ dataChiCuc.donGia | number : '1.2-2' : 'vi_VN' }}</td>
+            <td class="text-right" *ngIf="showFromQd">{{ dataChiCuc.donGia | number : '1.2-2' : 'vi_VN' }}</td>
             <td
               class="text-right">{{ dataChiCuc.soLuong * dataChiCuc.donGiaTamTinh * 1000 | number : '1.2-2' : 'vi_VN' }}</td>
-            <td class="text-right">{{ dataChiCuc.soLuong * dataChiCuc.donGia * 1000 | number : '1.2-2' : 'vi_VN' }}</td>
+            <td class="text-right" *ngIf="showFromQd">{{ dataChiCuc.soLuong * dataChiCuc.donGia * 1000 | number : '1.2-2' : 'vi_VN' }}</td>
             <td *ngIf="!isReadOnly" class="text-left" [nzRight]="true">
               <a (click)="editRowCc(i)" *ngIf="showFromQd">
                 <i class="fa fa-pencil" title="Sửa"></i>
@@ -173,10 +173,10 @@
                      [(ngModel)]="dataChiCuc.donGiaTamTinhEdit"/>
             </td>
             <td class="text-right">{{ dataChiCuc.giaToiDa | number : '1.2-2' : 'vi_VN' }}</td>
-            <td class="text-right">{{ dataChiCuc.donGia | number : '1.2-2' : 'vi_VN' }}</td>
+            <td class="text-right" *ngIf="showFromQd">{{ dataChiCuc.donGia | number : '1.2-2' : 'vi_VN' }}</td>
             <td
               class="text-right">{{ dataChiCuc.soLuong * dataChiCuc.donGiaTamTinh * 1000 | number : '1.2-2' : 'vi_VN' }}</td>
-            <td class="text-right">{{ dataChiCuc.soLuong * dataChiCuc.donGia * 1000 | number : '1.2-2' : 'vi_VN' }}</td>
+            <td class="text-right" *ngIf="showFromQd">{{ dataChiCuc.soLuong * dataChiCuc.donGia * 1000 | number : '1.2-2' : 'vi_VN' }}</td>
             <td [nzRight]="true">
               <a (click)="saveEditCc(i)">
                 <i class="fa fa-save"></i>
@@ -207,9 +207,9 @@
             </td>
             <td></td>
             <td></td>
+            <td *ngIf="showFromQd"></td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td *ngIf="showFromQd"></td>
             <td class="text-left" [nzRight]="true">
               <a (click)="addDiemKho(i)">
                 <i class="icon htvbdh_dau-cong xanhla"></i>
@@ -230,9 +230,9 @@
             <td class="text-right">{{itemChild.soLuong}}</td>
               <td class="text-right">{{ dataChiCuc.donGiaTamTinh | number : '1.2-2' : 'vi_VN' }}</td>
               <td class="text-right">{{ dataChiCuc.giaToiDa | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ dataChiCuc.donGia | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right" *ngIf="showFromQd">{{ dataChiCuc.donGia | number : '1.2-2' : 'vi_VN' }}</td>
             <td class="text-right">{{ itemChild.soLuong * dataChiCuc.donGiaTamTinh * 1000 | number : '1.2-2' : 'vi_VN' }}</td>
-            <td class="text-right">{{ itemChild.soLuong * dataChiCuc.donGia * 1000 | number : '1.2-2' : 'vi_VN' }}</td>
+            <td class="text-right" *ngIf="showFromQd">{{ itemChild.soLuong * dataChiCuc.donGia * 1000 | number : '1.2-2' : 'vi_VN' }}</td>
             <td [nzRight]="true">
               <a (click)="editRow(i, y)">
                 <i class="fa fa-pencil" title="Sửa"></i>
@@ -256,9 +256,9 @@
               </td>
               <td class="text-right">{{ dataChiCuc.donGiaTamTinh | number : '1.2-2' : 'vi_VN' }}</td>
               <td class="text-right">{{ dataChiCuc.giaToiDa | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ dataChiCuc.donGia | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right" *ngIf="showFromQd">{{ dataChiCuc.donGia | number : '1.2-2' : 'vi_VN' }}</td>
               <td class="text-right">{{ itemChild.soLuong * dataChiCuc.donGiaTamTinh * 1000 | number : '1.2-2' : 'vi_VN' }}</td>
-              <td class="text-right">{{ itemChild.soLuong * dataChiCuc.donGia * 1000 | number : '1.2-2' : 'vi_VN' }}</td>
+              <td class="text-right" *ngIf="showFromQd">{{ itemChild.soLuong * dataChiCuc.donGia * 1000 | number : '1.2-2' : 'vi_VN' }}</td>
               <td [nzRight]="true">
                 <a (click)="saveEdit(i, y)">
                 <i class="fa fa-save"></i>
