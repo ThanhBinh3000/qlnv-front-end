@@ -289,6 +289,10 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     if (resQg.msg == MESSAGE.SUCCESS) {
       this.listQuocGia = resQg.data;
     }
+    let resVat = await this.danhMucService.danhMucChungGetAll('DM_THUE_SUAT_VAT');
+    if (resVat.msg == MESSAGE.SUCCESS) {
+      console.log(resVat, 'resVat')
+    }
   }
 
   async loadDanhMucHang() {

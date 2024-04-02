@@ -230,7 +230,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Chi tiết về tiêu chuẩn chất lượng
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Chi tiết về tiêu chuẩn chất lượng
             </nz-form-label>
             <nz-form-control>
               <nz-radio-group formControlName="ctietTccl" [nzDisabled]="isView" nzName="radiogroup">
@@ -288,6 +288,8 @@
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="18">
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
@@ -553,22 +555,22 @@
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="3">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt giá cụ thể
-            </nz-form-label>
-            <nz-form-control>
-              <span class="blue-text">{{formData.value.soQdPdGiaCuThe}}</span>
-            </nz-form-control>
-          </nz-form-item>
+<!--          <nz-form-item>-->
+<!--            <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt giá cụ thể-->
+<!--            </nz-form-label>-->
+<!--            <nz-form-control>-->
+<!--              <span class="blue-text">{{formData.value.soQdPdGiaCuThe}}</span>-->
+<!--            </nz-form-control>-->
+<!--          </nz-form-item>-->
         </div>
         <div nz-col [nzSpan]="3">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Ngày ký QĐ phê duyệt giá cụ thể
-            </nz-form-label>
-            <nz-form-control>
-              <span class="blue-text">{{formData.value.ngayKyQdPdGiaCuThe}}</span>
-            </nz-form-control>
-          </nz-form-item>
+<!--          <nz-form-item>-->
+<!--            <nz-form-label [nzNoColon]="true"> Ngày ký QĐ phê duyệt giá cụ thể-->
+<!--            </nz-form-label>-->
+<!--            <nz-form-control>-->
+<!--              <span class="blue-text">{{formData.value.ngayKyQdPdGiaCuThe}}</span>-->
+<!--            </nz-form-control>-->
+<!--          </nz-form-item>-->
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
@@ -641,8 +643,8 @@
           <th>Số đề xuất (Tấn)</th>
           <th>Đơn giá đề xuất có VAT (đ/kg)</th>
           <th>Thành tiền tạm tính <br/>theo giá đề xuất (đ)</th>
-          <th>Đơn giá được duyệt <br/>có VAT (đ/kg)</th>
-          <th>Thành tiền theo đơn giá <br/>được duyệt có VAT (đ)</th>
+<!--          <th>Đơn giá được duyệt <br/>có VAT (đ/kg)</th>-->
+<!--          <th>Thành tiền theo đơn giá <br/>được duyệt có VAT (đ)</th>-->
           <th>Tiền bão lãnh <br/>dự thầu (đ)</th>
           <th>Trạng thái <br/>đấu thầu</th>
           <th style="width: 5%;" *ngIf="userService.isCuc() && !isView">Hành động</th>
@@ -661,8 +663,8 @@
             <td class="text-right blue-text bold-700">{{ dtGoiThau.soLuong | number : '1.2-2' : 'vi_VN' }}</td>
             <td class="text-right"></td>
             <td class="text-right bold-700">{{ dtGoiThau.thanhTienDx | number : '1.2-2' : 'vi_VN'}}</td>
-            <td></td>
-            <td class="text-right bold-700">{{ dtGoiThau.thanhTien | number : '1.2-2' : 'vi_VN'}}</td>
+<!--            <td></td>-->
+<!--            <td class="text-right bold-700">{{ dtGoiThau.thanhTien | number : '1.2-2' : 'vi_VN'}}</td>-->
             <td class="text-right bold-700">{{ dtGoiThau.thanhTienDx * formData.value.gtriDthau / 100 | number : '1.2-2' : 'vi_VN'}}</td>
             <td>{{ dtGoiThau.trangThaiDt}}</td>
             <td class="text-right" *ngIf="userService.isCuc() && !isView">
@@ -687,8 +689,8 @@
                 <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.2-2' : 'vi_VN' }}</td>
                 <td class="text-right">{{chiCuc.donGiaTamTinh | number : '1.2-2' : 'vi_VN'}}</td>
                 <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGiaTamTinh *1000| number :'1.2-2' : 'vi_VN' }}</td>
-                <td class="text-right">{{chiCuc.donGia | number : '1.2-2' : 'vi_VN'}}</td>
-                <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.2-2' : 'vi_VN' }}</td>
+<!--                <td class="text-right">{{chiCuc.donGia | number : '1.2-2' : 'vi_VN'}}</td>-->
+<!--                <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.2-2' : 'vi_VN' }}</td>-->
                 <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGiaTamTinh *1000 * formData.value.gtriDthau / 100| number :'1.2-2' : 'vi_VN' }}</td>
                 <td></td>
                 <td *ngIf="userService.isCuc() && !isView"></td>
@@ -706,8 +708,8 @@
                     <td class="text-right blue-text">{{diemKho.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
                     <td class="text-right">{{chiCuc.donGiaTamTinh | number : '1.2-2' : 'vi_VN'}}</td>
                     <td class="text-right">{{diemKho.soLuong * chiCuc.donGiaTamTinh * 1000 | number : '1.2-2' : 'vi_VN'}}</td>
-                    <td class="text-right">{{chiCuc.donGia | number : '1.2-2' : 'vi_VN'}}</td>
-                    <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number: '1.2-2' : 'vi_VN'}}</td>
+<!--                    <td class="text-right">{{chiCuc.donGia | number : '1.2-2' : 'vi_VN'}}</td>-->
+<!--                    <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number: '1.2-2' : 'vi_VN'}}</td>-->
                     <td class="text-right">{{ diemKho.soLuong * chiCuc.donGiaTamTinh *1000 * formData.value.gtriDthau / 100| number :'1.2-2' : 'vi_VN' }}</td>
                     <td></td>
                     <td class="text-right" *ngIf="userService.isCuc() && !isView">
@@ -735,8 +737,8 @@
           <td class="text-right blue-text bold-700">{{ calcTongSl() | number : '1.2-2' : 'vi_VN' }}</td>
           <td></td>
           <td class="text-right blue-text bold-700">{{ calcTongThanhTienDx() | number : '1.2-2' : 'vi_VN' }}</td>
-          <td></td>
-          <td class="text-right blue-text bold-700">{{ calcTongThanhTien() | number : '1.2-2' : 'vi_VN' }}</td>
+<!--          <td></td>-->
+<!--          <td class="text-right blue-text bold-700">{{ calcTongThanhTien() | number : '1.2-2' : 'vi_VN' }}</td>-->
           <td class="text-right blue-text bold-700">{{ calcTongThanhTienBaoLanh() | number : '1.2-2' : 'vi_VN' }}</td>
           <td></td>
           <td *ngIf="userService.isCuc() && !isView">
