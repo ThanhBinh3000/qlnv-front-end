@@ -56,29 +56,32 @@ export class FileListComponent implements OnInit {
         time: new Date().getTime(),
       };
       const folder = new Date().getFullYear() + '/' + (new Date().getMonth() + 1) + '/' + this.getCurrentWeek();
-      this.uploadFileService
-        .uploadFile(itemFile.file, itemFile.name, folder)
-        .then((resUpload) => {
-          if (item) {
-            item.fileName = resUpload.filename;
-            item.fileSize = resUpload.size;
-            item.fileUrl = resUpload.url;
-          } else {
-            if (!this.fileAdd) {
-              this.fileAdd = new FileDinhKem();
-            }
-            const lastPeriodIndex = resUpload.filename.lastIndexOf('.');
-            if (lastPeriodIndex !== -1) {
-              this.fileAdd.noiDung = resUpload.filename.slice(0, lastPeriodIndex);
+        this.uploadFileService
+          .uploadFile(itemFile.file, itemFile.name, folder)
+          .then((resUpload) => {
+            if (item) {
+              item.fileName = resUpload.filename;
+              item.fileSize = resUpload.size;
+              item.fileUrl = resUpload.url;
             } else {
-              this.fileAdd.noiDung = resUpload.filename;
+              if (!this.fileAdd) {
+                this.fileAdd = new FileDinhKem();
+              }
+              const lastPeriodIndex = resUpload.filename.lastIndexOf('.');
+              if (lastPeriodIndex !== -1) {
+                this.fileAdd.noiDung = resUpload.filename.slice(0, lastPeriodIndex);
+              } else {
+                this.fileAdd.noiDung = resUpload.filename;
+              }
+              this.fileAdd.fileName = resUpload.filename;
+              this.fileAdd.fileSize = resUpload.size;
+              this.fileAdd.fileUrl = resUpload.url;
+              this.fileAdd.idVirtual = new Date().getTime();
             }
-            this.fileAdd.fileName = resUpload.filename;
-            this.fileAdd.fileSize = resUpload.size;
-            this.fileAdd.fileUrl = resUpload.url;
-            this.fileAdd.idVirtual = new Date().getTime();
-          }
-        });
+          })
+          .catch(error => {
+            console.error('Có lỗi xảy ra:', error);
+          });
     }
   }
 
