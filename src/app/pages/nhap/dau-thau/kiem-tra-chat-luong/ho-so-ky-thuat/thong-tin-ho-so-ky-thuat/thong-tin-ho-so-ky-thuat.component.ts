@@ -136,6 +136,7 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
       tgianKtra: [],
       loaiBb: [''],
       ketLuan: [''],
+      tenNhaThau: [''],
     })
   }
 
@@ -205,7 +206,8 @@ export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnIn
         soQdGiaoNvNh: data.soQdGiaoNvNh,
         idQdGiaoNvNh: data.idQdGiaoNvNh,
         soHd: data.soHd,
-        ngayHd: data.ngayHd,
+        ngayHd: data.qdGiaoNvuNhapxuatHdr?.hopDong?.ngayKy,
+        tenNhaThau: data.qdGiaoNvuNhapxuatHdr?.hopDong?.tenNhaThau,
         diaDiemKiemTra: dataBbLm.data?.diaDiemLayMau,
         loaiBb: this.sufffix
       })
