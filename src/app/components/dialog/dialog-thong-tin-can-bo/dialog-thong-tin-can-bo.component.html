@@ -113,18 +113,35 @@
 
     </ng-template>
 
-    <div nz-col [nzSpan]="12">
+    <!-- <div nz-col [nzSpan]="12">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Chức vụ</nz-form-label>
-        <!--          <nz-input-group>-->
-        <!--            <input nz-input formControlName="position" [readOnly]="isView">-->
-        <!--          </nz-input-group>-->
         <nz-select formControlName="position" nzAllowClear [nzDisabled]="isView">
           <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of optionsChucVu">
           </nz-option>
         </nz-select>
       </nz-form-item>
+    </div> -->
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Chức vụ</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group [nzSuffix]="suffixIcon">
+            <input nz-input formControlName="position" [nzAutocomplete]="auto" [readOnly]="isView"
+              (ngModelChange)="getPosition($event)" />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #suffixIcon>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+        <nz-autocomplete #auto>
+          <nz-auto-option *ngFor="let option of listChucVu" [nzValue]="option.ma" (click)="selectPosition(option)">{{
+            option.giaTri }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-item>
     </div>
+
     <div nz-col [nzSpan]="12">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> SĐT di động</nz-form-label>

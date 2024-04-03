@@ -1713,6 +1713,17 @@
                           </nz-form-control>
                         </nz-form-item>
                       </div>
+                      <div nz-col [nzSpan]="4">
+                        <nz-form-item>
+                          <nz-form-label>Ngày xuất dốc (cuối cùng)</nz-form-label>
+                          <nz-form-control>
+                            <nz-input-group>
+                              <nz-date-picker formControlName="ngayXuatDoc" [nzDisabled]="true"
+                                              nzFormat="dd/MM/yyyy"></nz-date-picker>
+                            </nz-input-group>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
                       <div nz-col [nzSpan]="20"></div>
                       <div nz-col [nzSpan]="12">
                         <nz-form-item>

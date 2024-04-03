@@ -140,7 +140,7 @@
                   <nz-form-label [nzNoColon]="true" nzRequired>
                     Chọn các hợp đồng đã ký cấp Cục
                   </nz-form-label>
-                  <nz-select [nzDisabled]="formData.value.id != null" [(ngModel)]="dsHongDong" [ngModelOptions]="{standalone: true}" [nzSize]="size" nzMode="tags" (ngModelChange)="handleTagValueChange()">
+                  <nz-select  [(ngModel)]="dsHongDong" [ngModelOptions]="{standalone: true}" [nzSize]="size" nzMode="tags" (ngModelChange)="handleTagValueChange()">
                     <nz-option *ngFor="let option of listHopDong" [nzLabel]="option.soHd" [nzValue]="option.id"></nz-option>
                   </nz-select>
                 </div>

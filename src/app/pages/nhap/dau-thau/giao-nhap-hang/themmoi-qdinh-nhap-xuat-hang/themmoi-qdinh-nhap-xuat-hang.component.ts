@@ -149,7 +149,8 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
       this.initForm();
     }
     await Promise.all([
-      await this.loadDiemKho()
+      await this.loadDiemKho(),
+      await this.setSoLuongDiemKho()
     ])
 
     this.spinner.hide();
@@ -787,6 +788,16 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
     // else {
     //   this.notification.error(MESSAGE.ERROR, res.msg);
     // }
+  }
+  async setSoLuongDiemKho () {
+    this.listDiemKho.forEach(item => {
+      item.forEach(x => {
+        this.dataTable.forEach(y => {
+          let ttDk = y.children.filter(k => k.maDiemKho == x.key)[0];
+          x.soLuongDiemKho = ttDk?.soLuongDiemKho
+        })
+      })
+    })
   }
 
   changeDiemKho(index, isEdit?) {

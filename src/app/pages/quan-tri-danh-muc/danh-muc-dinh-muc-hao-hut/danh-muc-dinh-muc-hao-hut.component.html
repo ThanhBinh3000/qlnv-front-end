@@ -73,7 +73,8 @@
   </nz-card>
   <div class="group-button">
     <h3 class="label_dm">DANH SÁCH THÔNG TƯ/QUYẾT ĐỊNH VỀ ĐỊNH MỨC HAO HỤT</h3>
-      <button type="button" class="btn btn-sub" (click)="export()">
+    <div class="buttons">
+    <button type="button" class="btn btn-sub xanh" (click)="export()">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
@@ -82,6 +83,7 @@
       <i class="icon htvbdh_dau-cong"></i>
       <span>Thêm</span>
     </button>
+    </div>
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <nz-table class="no wrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"

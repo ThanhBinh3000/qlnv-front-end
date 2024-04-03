@@ -381,7 +381,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
-    if (this.checkPrice.boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
@@ -571,6 +571,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         quyetDinhDcGia: !!data.qthtChotGiaInfoRes?.qthtQuyetDinhChinhGia?.length,
         quyetDinhDc: !!(data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.soQuyetDinhDieuKHLCNT && data.qthtChotGiaInfoRes?.qthtDieuChinhKHLCNT?.ngayQuyetDinhDieuKHLCNT),
       });
+      this.maQd = data.soQd?.split("/")[1]
       if (!this.userService.isTongCuc()) {
         this.danhsachDx = data.children.filter(item => this.userInfo.MA_DVI.startsWith(item.maDvi));
       } else {

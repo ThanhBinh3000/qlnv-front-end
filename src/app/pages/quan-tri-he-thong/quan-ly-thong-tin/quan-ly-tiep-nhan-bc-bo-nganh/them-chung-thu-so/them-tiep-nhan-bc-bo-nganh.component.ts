@@ -11,42 +11,24 @@ import { HttpClient } from "@angular/common/http";
 import { StorageService } from "src/app/services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { Base2Component } from "src/app/components/base2/base2.component";
-import moment from "moment";
 import dayjs from "dayjs";
+import moment from "moment";
 import { DanhMucService } from "src/app/services/danhmuc.service";
-// import "froala-editor/js/plugins.pkgd.min.js";
+import { QlNguoiSuDungService } from "src/app/services/quantri-nguoidung/qlNguoiSuDung.service";
 
 @Component({
-  selector: 'app-them-thong-tin-tien-ich',
-  templateUrl: './them-thong-tin-tien-ich.component.html',
-  styleUrls: ['./them-thong-tin-tien-ich.component.scss']
+  selector: 'app-tiep-nhan-bc-bo-nganh',
+  templateUrl: './them-tiep-nhan-bc-bo-nganh.component.html',
+  styleUrls: ['./them-tiep-nhan-bc-bo-nganh.component.scss']
 })
-export class ThemThongTinTienIchComponent extends Base2Component implements OnInit {
+export class ThemTiepNhanBcBoNganhComponent extends Base2Component implements OnInit {
 
   formData: FormGroup
   fb: FormBuilder = new FormBuilder();
   isView = false
-  fileDinhKems: any[] = [];
-  dsPLTT: any[] = [];
   data?: any
-  apiKeyEditor : string = "v8ofvpe4z5ygsgab6nw0c1yz9ouvusfayup7d79zllehjavj";
-  configEditor :{
-    height: 400,
-    menubar: 'file edit view insert format tools table help',
-    menu: {
-      insert: {title: 'Insert', items: 'link media table | charmap emoticons hr | pagebreak nonbreaking anchor'}
-    },
-    plugins: [
-      'advlist autolink lists link image charmap print preview anchor',
-      'searchreplace visualblocks code fullscreen',
-      'insertdatetime media table paste code help wordcount'
-    ],
-    toolbar: 'undo redo | formatselect | bold italic backcolor | \
-                 alignleft aligncenter alignright alignjustify | \
-                 bullist numlist outdent indent | removeformat | help',
-    image_advtab: true,
-    image_caption: true,
-  }
+  dsCT: any[] = [];
+  userList: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -59,38 +41,64 @@ export class ThemThongTinTienIchComponent extends Base2Component implements OnIn
     private donViService: DonviService,
     private mangLuoiKhoService: MangLuoiKhoService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
-
+    private qlNsdService: QlNguoiSuDungService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLyHangTrongKhoService);
     this.formData = this.fb.group({
-      createBy: [],
-      dateCreated: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-      classify: [, [Validators.required]],
-      title: [, [Validators.required]],
-      link: [, [Validators.required]],
-      linkName: [, [Validators.required]],
-      content: [],
+      certificateNumber: [, [Validators.required]],
+      startDate: [, [Validators.required]],
+      endDate: [, [Validators.required]],
+      userId: [, [Validators.required]],
+      userName: [, [Validators.required]],
+      description: [],
+      loaiChungThu: [, [Validators.required]],
+      note: [],
       status: [true],
     }
     );
   }
 
   ngOnInit(): void {
-
-    this.formData.patchValue({ createBy: this.userInfo.TEN_DAY_DU })
-    if (this.data) {
-      this.fileDinhKems = this.data.fileDinhKems
-      this.formData.patchValue({ ...this.data, dateCreated: moment(this.data.dateCreated, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD') })
-    }
-    this.loadDsPLTT();
-
+    this.loadDsChungThu()
+    if (this.data)
+      this.formData.patchValue({ ...this.data, startDate: moment(this.data.startDate, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD'), endDate: moment(this.data.endDate, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD') })
   }
 
-  async loadDsPLTT() {
-    let res = await this.danhMucService.danhMucChungGetAll("PHAN_LOAI_THONG_TIN");
+  async loadDsChungThu() {
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_CHUNG_THU");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsPLTT = res.data
+      this.dsCT = res.data
     }
+  }
+
+  async search(username) {
+    this.spinner.show();
+    let body: any = {
+      userType: 'ALL',
+      username
+    };
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1,
+    }
+    let res = await this.qlNsdService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+
+      this.userList = data.content.map(user => {
+        return {
+          userId: user.id,
+          username: user.username
+        }
+      });
+    }
+    this.spinner.hide();
+  }
+
+  selectUserLDap(data) {
+    this.formData.patchValue({
+      userId: data.userId
+    })
   }
 
   handleOk(item: any) {
@@ -98,7 +106,6 @@ export class ThemThongTinTienIchComponent extends Base2Component implements OnIn
     if (!this.formData.valid) return
     this._modalRef.close({
       ...item,
-      fileDinhKems: this.fileDinhKems,
       isUpdate: !!this.data
     });
   }

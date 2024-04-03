@@ -315,7 +315,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
   validateForm(isOther?){
     if (isOther) {
       this.formData.controls["namHd"].setValidators([Validators.required]);
-      this.formData.controls["soQdKh"].setValidators([Validators.required]);
+      // this.formData.controls["soQdKh"].setValidators([Validators.required]);
       this.formData.controls["ngayMkho"].setValidators([Validators.required]);
       this.formData.controls["soQd"].setValidators([Validators.required]);
       this.formData.controls["soHd"].setValidators([Validators.required]);
@@ -345,7 +345,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
       // this.formData.controls["ghiChu"].setValidators([Validators.required]);
     } else {
       this.formData.controls["namHd"].clearValidators();
-      this.formData.controls["soQdKh"].clearValidators();
+      // this.formData.controls["soQdKh"].clearValidators();
       this.formData.controls["ngayMkho"].clearValidators();
       this.formData.controls["soQd"].clearValidators();
       this.formData.controls["soHd"].clearValidators();
@@ -382,7 +382,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
     let sumSlNhapTt = 0;
     this.dataTable.forEach(item =>{
       item.children.forEach(x =>{
-        sumSlKyHd += x.soLuongHd ? Number.parseInt(x.soLuongHd) : 0
+        sumSlKyHd += x.soLuong ? Number.parseInt(x.soLuong) : 0
         sumSlNhapTt += x.soLuong
       })
     })
@@ -665,10 +665,10 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnC
         mstDviBan: dViCc.mstDviBan,
         soLuong: dViCc.soLuong,
         dviCungCap: dViCc.dviCungCap,
-        donGia: dViCc.donGia,
+        donGia: dViCc.donGiaGomThue,
         donGiaGomThue: dViCc.donGiaGomThue,
         sdtDviBan: dViCc.sdtDviBan,
-        thanhTien: Math.round(dViCc.soLuong * dViCc.donGia * 1000),
+        thanhTien: Math.round(dViCc.soLuong * dViCc.donGiaGomThue * 1000),
       })
     }
   }
