@@ -44,8 +44,7 @@
             ],
             "scripts": [
               "src/assets/js/flow.js",
-              "src/assets/js/vgcaplugin.js",
-              "node_modules/tinymce/tinymce.min.js"
+              "src/assets/js/vgcaplugin.js"
             ]
           },
           "configurations": {
@@ -122,8 +121,7 @@
   },
   "defaultProject": "qlnv",
   "scripts": [
-    "node_modules/apexcharts/dist/apexcharts.min.js",
-    "node_modules/tinymce/tinymce.min.js"
+    "node_modules/apexcharts/dist/apexcharts.min.js"
   ],
   "styles": [
     "src/theme.less",
