@@ -108,7 +108,7 @@
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Ngày tạo HSKT</nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                    <nz-date-picker nzDisabled formControlName="ngayTao" nzFormat="dd/MM/yyyy">
+                    <nz-date-picker [nzDisabled]="isView" formControlName="ngayTao" nzFormat="dd/MM/yyyy">
                     </nz-date-picker>
                   </nz-form-control>
                 </nz-form-item>
@@ -243,7 +243,7 @@
               </div>
               <div nz-col [nzSpan]="5">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Lãnh đạo chi cục</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Lãnh đạo Chi cục</nz-form-label>
                   <nz-form-control nz-col [nzSpan]="24">
                     <input readonly nz-input formControlName="lanhDaoChiCuc"/>
                   </nz-form-control>
@@ -400,7 +400,7 @@
                  (click)="redirectToBienBan(false,item)">
                 <i class="fa fa-eye" title="Xem chi tiết"></i>
               </a>
-              <a *ngIf="formData.value.id > 0 && item.trangThai != STATUS.DA_KY && !isView"
+              <a *ngIf="formData.value.id > 0 && item.trangThai != STATUS.DA_KY"
                  (click)="redirectToBienBan(false,item)">
                 <i class="fa fa-pencil" title="Sửa"></i>
               </a>
