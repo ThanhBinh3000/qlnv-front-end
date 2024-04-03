@@ -32,15 +32,18 @@ export class ThemThongTinTienIchComponent extends Base2Component implements OnIn
   apiKeyEditor : string = "v8ofvpe4z5ygsgab6nw0c1yz9ouvusfayup7d79zllehjavj";
   configEditor :{
     height: 400,
+    menubar: 'file edit view insert format tools table help',
+    menu: {
+      insert: {title: 'Insert', items: 'link media table | charmap emoticons hr | pagebreak nonbreaking anchor'}
+    },
     plugins: [
-      'lists', 'image', 'table', 'codesample', 'fullscreen', 'code',
-      'wordcount', 'quickbars', 'preview', 'searchreplace',
-      'directionality', 'visualblocks', 'visualchars', 'image', 'link', 'media',
-      'template', 'charmap', 'hr', 'pagebreak', 'nonbreaking', 'anchor',
-      'insertdatetime', 'advlist', 'textpattern', 'noneditable', 'help',
-      'charmap quickbars emoticons'
+      'advlist autolink lists link image charmap print preview anchor',
+      'searchreplace visualblocks code fullscreen',
+      'insertdatetime media table paste code help wordcount'
     ],
-    toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+    toolbar: 'undo redo | formatselect | bold italic backcolor | \
+                 alignleft aligncenter alignright alignjustify | \
+                 bullist numlist outdent indent | removeformat | help',
     image_advtab: true,
     image_caption: true,
   }
