@@ -79,7 +79,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Tổng tiền giá khởi điểm</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-input-number formControlName="tongTienDatTruoc" [nzMin]="1"
+                <nz-input-number formControlName="tongTienDuocDuyet" [nzMin]="1"
                                  [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
@@ -90,7 +90,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> % Khoản tiền đặt trước</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-input-number formControlName="khoanTienDatTruocHienThi" [nzMin]="1"
+                <nz-input-number formControlName="khoanTienDatTruoc" [nzMin]="1"
                                  [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
@@ -104,13 +104,13 @@
                 <nz-input-group>
                   <div nz-row>
                     <div nz-col [nzSpan]="12" class="cus-start-date">
-                      <nz-date-picker formControlName="tgianDauGiaTu" nzShowTime
+                      <nz-date-picker formControlName="tgianDkienTu" nzShowTime
                                       nzFormat="dd/MM/yyyy HH:mm:ss" nzPlaceHolder="Ngày bắt đầu"
                                       [nzDisabled]="isView">
                       </nz-date-picker>
                     </div>
                     <div nz-col [nzSpan]="12" class="cus-end-date">
-                      <nz-date-picker formControlName="tgianDauGiaDen" nzShowTime
+                      <nz-date-picker formControlName="tgianDkienDen" nzShowTime
                                       nzFormat="dd/MM/yyyy HH:mm:ss" nzPlaceHolder="Ngày kết thúc"
                                       [nzDisabled]="isView">
                       </nz-date-picker>
@@ -134,7 +134,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Phương thức thanh toán</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select formControlName="phuongThucTt" nzAllowClear
+                <nz-select formControlName="pthucTtoan" nzAllowClear
                            [disabled]="isView">
                   <nz-option *ngFor="let p of listHinhThucThanhToan" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                   </nz-option>
@@ -156,8 +156,10 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Phương thức lựa chọn nhà thầu</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select formControlName="nam" [nzDisabled]="isView">
-                  <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
+                <nz-select formControlName="pthucLcnt"
+                           [nzDisabled]="isView">
+                  <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                  </nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -166,7 +168,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Phương thức giao nhận</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select formControlName="pthucGnhan" [nzDisabled]="true">
+                <nz-select formControlName="pthucGnhan" [nzDisabled]="isView">
                   <nz-option *ngFor="let p of listPhuongThucGiaoNhanBDG" [nzValue]="p.ma"
                              [nzLabel]="p.giaTri">
                   </nz-option>
@@ -179,7 +181,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Tổng khoản tiền đặt trước theo đơn giá được duyệt
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-input-number formControlName="tongTienDatTruocDd" [nzMin]="1"
+                <nz-input-number formControlName="tongKtienDtruocDduyet" [nzMin]="1"
                                  [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
@@ -198,8 +200,8 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select formControlName="pthucGnhan" [nzDisabled]="isView">
-                  <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
+                <nz-select formControlName="cloaiVthh" [nzDisabled]="isView">
+                  <nz-option *ngFor="let item of listCloaiVthh" [nzValue]="item.key" [nzLabel]="item.title"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -208,7 +210,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Tổng số lượng xuất bán</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-input-number formControlName="tongTienDatTruocDd" [nzMin]="1"
+                <nz-input-number formControlName="tongSoLuong" [nzMin]="1"
                                  [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
@@ -231,7 +233,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select formControlName="kieuNx" [nzDisabled]="true">
+                <nz-select formControlName="kieuNx" [nzDisabled]="isView">
                   <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                   </nz-option>
                 </nz-select>
@@ -253,7 +255,7 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Lần đấu giá</nz-form-label>
                     <nz-form-control nz-col>
-                      <input nz-input formControlName="lanDauGia" readonly/>
+                      <input nz-input formControlName="lanDauGia" [readonly]="isView"/>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -364,8 +366,8 @@
                             </nz-form-label>
                             <nz-form-control nz-col [nzErrorTip]="error">
                               <nz-select formControlName="hthucTchuc" [nzDisabled]="isView">
-                                <nz-option *ngFor="let item of listNam" [nzValue]="item.ma"
-                                           [nzLabel]="item.giaTri">
+                                <nz-option *ngFor="let p of listPhuongThucGiaoNhanBDG" [nzValue]="p.ma"
+                                           [nzLabel]="p.giaTri">
                                 </nz-option>
                               </nz-select>
                             </nz-form-control>
