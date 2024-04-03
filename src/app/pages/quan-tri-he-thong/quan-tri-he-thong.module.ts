@@ -22,7 +22,6 @@ import { CauHinhDangNhapComponent } from './cau-hinh-dang-nhap/cau-hinh-dang-nha
 import { CauHinhHeThongComponent } from './kiem-soat-quyen-truy-cap/cau-hinh-he-thong/cau-hinh-he-thong.component';
 import { CauHinhKetNoiKtnbComponent } from './cau-hinh-ket-noi-ktnb/cau-hinh-ket-noi-ktnb.component';
 import { TmKetChuyenComponent } from './chot-du-lieu/ket-chuyen/tm-ket-chuyen/tm-ket-chuyen.component';
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import {
   QuanLyTiepNhanBcBoNganhComponent
 } from "./quan-ly-thong-tin/quan-ly-tiep-nhan-bc-bo-nganh/quan-ly-tiep-nhan-bc-bo-nganh.component";
