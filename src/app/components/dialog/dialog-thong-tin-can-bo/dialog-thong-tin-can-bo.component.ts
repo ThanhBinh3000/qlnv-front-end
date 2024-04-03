@@ -59,6 +59,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
       password: [null, [Validators.required]],
       domain: [null],
       userType: ['DT', [Validators.required]],
+      positionName: [null, [Validators.required]],
       position: [null, [Validators.required]],
       phoneNo: [null,],
       status: ['01', [Validators.required]],
@@ -249,6 +250,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
 
   selectPosition(data) {
     this.formData.patchValue({
+      positionName: data.giaTri,
       position: data.ma
     })
   }
