@@ -29,6 +29,7 @@ import {
 import {
   ThemTiepNhanBcBoNganhComponent
 } from "./quan-ly-thong-tin/quan-ly-tiep-nhan-bc-bo-nganh/them-chung-thu-so/them-tiep-nhan-bc-bo-nganh.component";
+import { EditorModule } from '@tinymce/tinymce-angular';
 @NgModule({
   declarations: [
     QuanLyCanBoComponent,
@@ -51,7 +52,7 @@ import {
     ThemTiepNhanBcBoNganhComponent,
     TmKetChuyenComponent
   ],
-  imports: [CommonModule, QuanTriHeThongNewRoutingModule, ComponentsModule, MainModule, NzTreeViewModule, NgApexchartsModule, FroalaEditorModule.forRoot(), FroalaViewModule.forRoot()],
+  imports: [CommonModule, QuanTriHeThongNewRoutingModule, ComponentsModule, MainModule, NzTreeViewModule, NgApexchartsModule, FroalaEditorModule.forRoot(), FroalaViewModule.forRoot(),EditorModule],
 
 })
 export class QuanTriHeThongNewModule { }

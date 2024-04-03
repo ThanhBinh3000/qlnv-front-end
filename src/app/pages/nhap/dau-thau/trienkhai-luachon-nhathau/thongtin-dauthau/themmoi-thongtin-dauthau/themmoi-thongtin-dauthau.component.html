@@ -342,7 +342,7 @@
                 </div>
             </div>
             <div class="buttons">
-              <button
+              <button *ngIf="idGoiThau > 0 && !isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && !isView && !daCoKqLcnt"
                 class="btn btn-sub xanh-nhat" (click)="updateGia()">
                 <i class="icon htvbdh_checkfile2"></i>
                 <span>Cập nhật giá gói thầu</span>

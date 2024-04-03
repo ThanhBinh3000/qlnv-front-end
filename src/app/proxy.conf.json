@@ -1,7 +1,19 @@
 {
-  "/api": {
-    "target": "http://192.168.1.77",
+  "/api/qlnv-khoach": {
+    "target": "http://localhost:3333",
     "secure": false,
+    "pathRewrite": {
+      "^/api/qlnv-khoach": "/"
+    },
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/api": {
+    "target": "http://192.168.1.80:8888",
+    "secure": false,
+    "pathRewrite": {
+      "^/api": "/"
+    },
     "changeOrigin": true,
     "logLevel": "debug"
   }

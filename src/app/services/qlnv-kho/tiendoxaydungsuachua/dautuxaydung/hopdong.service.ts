@@ -15,7 +15,7 @@ export class HopdongService extends BaseService {
   }
 
   search(body) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tim-kiem`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
