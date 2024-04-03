@@ -608,7 +608,7 @@ export class ThongTinDieuChuyenKhoSapNhapComponent extends Base2Component implem
     })
   }
   checkRoleSave(trangThai: string) {
-    return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_DCK_THEM") && this.userService.isCuc()
+    return !this.isView && trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_DCK_THEM") && this.userService.isCuc()
   }
   amountFn(max: number) {
     return { ...this.AMOUNT, max }
