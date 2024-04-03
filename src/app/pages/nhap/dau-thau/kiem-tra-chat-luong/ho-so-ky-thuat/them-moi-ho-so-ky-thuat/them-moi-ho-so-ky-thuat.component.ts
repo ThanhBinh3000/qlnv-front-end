@@ -22,6 +22,7 @@ import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {saveAs} from 'file-saver';
 import {v4 as uuidv4} from "uuid";
 import {Validators} from "@angular/forms";
+import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
 @Component({
   selector: 'app-them-moi-ho-so-ky-thuat',
   templateUrl: './them-moi-ho-so-ky-thuat.component.html',
@@ -110,7 +111,8 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     public userService: UserService,
     private hoSoKyThuatService: HoSoKyThuatService,
-    private bienBanLayMauService: QuanLyBienBanLayMauService
+    private bienBanLayMauService: QuanLyBienBanLayMauService,
+    private mangLuoiKhoService: MangLuoiKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatService);
     this.formData = this.fb.group({
@@ -182,6 +184,7 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
           tenNganLoKho: data.bienBanLayMau?.tenNganLoKho,
           tenNhaKho: data.bienBanLayMau?.tenNhaKho,
           tenDiemKho: data.bienBanLayMau?.tenDiemKho,
+          lanhDaoChiCuc: data.bienBanLayMau?.tenNguoiPduyet,
           tenChiCuc: data.bienBanLayMau?.tenDvi,
         })
         if (this.formData.value.loaiVthh.startsWith('0205') || this.formData.value.loaiVthh.startsWith('0206')){
@@ -253,7 +256,9 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
           tenNhaKho: dataChose.tenNhaKho,
           tenDiemKho: dataChose.tenDiemKho,
           tenChiCuc: dataChose.tenDvi,
+          soLuong: dataChose.bienBanGuiHang?.soLuongDdiemGiaoNvNh,
         });
+        await this.thongTinKho(dataChose.maNhaKho)
       }
     });
   };
@@ -560,5 +565,19 @@ export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnIni
 
   async xoaHoSo(i) {
     this.dataTable.splice(i, 1);
+  }
+
+  async thongTinKho(event) {
+    if (!event) return;
+    let body = {
+      maDvi: event,
+      capDvi: (event?.length / 2 - 1),
+    };
+    const detail = await this.mangLuoiKhoService.getDetailByMa(body);
+    if (detail.statusCode == 0) {
+      this.formData.patchValue({
+        diaDiemKho: detail.data.object.diaChi
+      });
+    }
   }
 }

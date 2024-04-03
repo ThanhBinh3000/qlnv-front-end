@@ -593,15 +593,15 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt (tỷ đồng)
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <span class="blue-text">{{formData.value.tongMucDtLamTron | number : '1.2-299' : 'vi_VN'}}</span>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
+<!--        <div nz-col [nzSpan]="6">-->
+<!--          <nz-form-item>-->
+<!--            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt (tỷ đồng)-->
+<!--            </nz-form-label>-->
+<!--            <nz-form-control [nzErrorTip]="error">-->
+<!--              <span class="blue-text">{{formData.value.tongMucDtLamTron | number : '1.2-299' : 'vi_VN'}}</span>-->
+<!--            </nz-form-control>-->
+<!--          </nz-form-item>-->
+<!--        </div>-->
         <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư đề xuất (tỷ đồng) </nz-form-label>
@@ -651,7 +651,7 @@
 <!--          <th>Đơn giá được duyệt <br/>có VAT (đ/kg)</th>-->
 <!--          <th>Thành tiền theo đơn giá <br/>được duyệt có VAT (đ)</th>-->
           <th>Tiền bão lãnh <br/>dự thầu (đ)</th>
-          <th>Trạng thái <br/>đấu thầu</th>
+<!--          <th>Trạng thái <br/>đấu thầu</th>-->
           <th style="width: 5%;" *ngIf="userService.isCuc() && !isView">Hành động</th>
         </tr>
       </thead>
@@ -671,7 +671,7 @@
 <!--            <td></td>-->
 <!--            <td class="text-right bold-700">{{ dtGoiThau.thanhTien | number : '1.2-2' : 'vi_VN'}}</td>-->
             <td class="text-right bold-700">{{ dtGoiThau.thanhTienDx * formData.value.gtriDthau / 100 | number : '1.2-2' : 'vi_VN'}}</td>
-            <td>{{ dtGoiThau.trangThaiDt}}</td>
+<!--            <td>{{ dtGoiThau.trangThaiDt}}</td>-->
             <td class="text-right" *ngIf="userService.isCuc() && !isView">
               <a *ngIf="!isDisbleForm()" (click)="themMoiCuc($event, dtGoiThau.goiThau)">
                 <i class="fa fa-pencil" title="Sửa"></i>
@@ -697,7 +697,7 @@
 <!--                <td class="text-right">{{chiCuc.donGia | number : '1.2-2' : 'vi_VN'}}</td>-->
 <!--                <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.2-2' : 'vi_VN' }}</td>-->
                 <td class="text-right">{{ chiCuc.soLuong * chiCuc.donGiaTamTinh *1000 * formData.value.gtriDthau / 100| number :'1.2-2' : 'vi_VN' }}</td>
-                <td></td>
+<!--                <td></td>-->
                 <td *ngIf="userService.isCuc() && !isView"></td>
               </tr>
               <ng-container *ngIf="expandSet2.has(y)">
@@ -716,7 +716,7 @@
 <!--                    <td class="text-right">{{chiCuc.donGia | number : '1.2-2' : 'vi_VN'}}</td>-->
 <!--                    <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number: '1.2-2' : 'vi_VN'}}</td>-->
                     <td class="text-right">{{ diemKho.soLuong * chiCuc.donGiaTamTinh *1000 * formData.value.gtriDthau / 100| number :'1.2-2' : 'vi_VN' }}</td>
-                    <td></td>
+<!--                    <td></td>-->
                     <td class="text-right" *ngIf="userService.isCuc() && !isView">
                       <a *ngIf="!isDisbleForm()" (click)="themMoiCuc($event, dtGoiThau.goiThau)">
                         <i class="fa fa-pencil" title="Sửa"></i>
@@ -745,7 +745,7 @@
 <!--          <td></td>-->
 <!--          <td class="text-right blue-text bold-700">{{ calcTongThanhTien() | number : '1.2-2' : 'vi_VN' }}</td>-->
           <td class="text-right blue-text bold-700">{{ calcTongThanhTienBaoLanh() | number : '1.2-2' : 'vi_VN' }}</td>
-          <td></td>
+<!--          <td></td>-->
           <td *ngIf="userService.isCuc() && !isView">
         </tr>
       </tbody>
