@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'htvbdh';
-  src:  url('fonts/htvbdh.eot?f3kkqt');
-  src:  url('fonts/htvbdh.eot?f3kkqt#iefix') format('embedded-opentype'),
-    url('fonts/htvbdh.ttf?f3kkqt') format('truetype'),
-    url('fonts/htvbdh.woff?f3kkqt') format('woff'),
-    url('fonts/htvbdh.svg?f3kkqt#htvbdh') format('svg');
+  src:  url('fonts/htvbdh.eot?kwh5s9');
+  src:  url('fonts/htvbdh.eot?kwh5s9#iefix') format('embedded-opentype'),
+    url('fonts/htvbdh.ttf?kwh5s9') format('truetype'),
+    url('fonts/htvbdh.woff?kwh5s9') format('woff'),
+    url('fonts/htvbdh.svg?kwh5s9#htvbdh') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,198 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.htvbdh_cau-hoi:before {
+  content: "\eb2e";
+}
+.htvbdh_tcdt_tao-ttrinh:before {
+  content: "\eb26";
+}
+.htvbdh_tcdt_phan-quyen:before {
+  content: "\eb27";
+}
+.htvbdh_tcdt_canh-bao:before {
+  content: "\eb24";
+}
+.htvbdh_tcdt_lien-ket:before {
+  content: "\eb25";
+}
+.htvbdh_tcdt_viewdetail2:before {
+  content: "\eb23";
+}
+.htvbdh_tcdt_tao-qd:before {
+  content: "\eb22";
+}
+.htvbdh_tcdt_vien_tro:before {
+  content: "\eb21";
+}
+.htvbdh_tcdt_het_han:before {
+  content: "\eb20";
+}
+.htvbdh_tcdt_kiem_tra_chat_luong:before {
+  content: "\eb1f";
+}
+.htvbdh_tcdt_dieu_chuyen:before {
+  content: "\eb1e";
+}
+.htvbdh_tcdt_tat_ca:before {
+  content: "\eb1d";
+}
+.htvbdh_tcdt_kehoachvonphi:before {
+  content: "\eb1c";
+}
+.htvbdh_tcdt_quanlychitieu:before {
+  content: "\eb1b";
+}
+.htvbdh_tcdt_bienbangiaonhan:before {
+  content: "\eb18";
+}
+.htvbdh_tcdt_phuluc:before {
+  content: "\eb19";
+}
+.htvbdh_tcdt_de_xuat_dieu_chinh:before {
+  content: "\eb17";
+}
+.htvbdh_tcdt_ngan-kho-2:before {
+  content: "\eb10";
+}
+.htvbdh_tcdt_quytrinhkythuat:before {
+  content: "\eb11";
+}
+.htvbdh_tcdt_congtrinhnghiencuu:before {
+  content: "\eb12";
+}
+.htvbdh_tcdt_kiemtrachatluong:before {
+  content: "\eb13";
+}
+.htvbdh_tcdt_dungcuchuyendung:before {
+  content: "\eb14";
+}
+.htvbdh_tcdt_congcudungcu:before {
+  content: "\eb15";
+}
+.htvbdh_tcdt_dinhmucdungcu:before {
+  content: "\eb16";
+}
+.htvbdh_tcdt_dinhmuc2:before {
+  content: "\eb1a";
+}
+.htvbdh_tcdt_saphethanluukho:before {
+  content: "\eb0f";
+}
+.htvbdh_tcdt_bienbannghiemthukelot2:before {
+  content: "\eb0e";
+}
+.htvbdh_tcdt_cucdutru3:before {
+  content: "\eb0c";
+}
+.htvbdh_tcdt_cucdutru2:before {
+  content: "\eb0d";
+}
+.htvbdh_tcdt_xuatkhac:before {
+  content: "\eb0a";
+}
+.htvbdh_tcdt_xuatkhoban:before {
+  content: "\eb0b";
+}
+.htvbdh_tcdt_tochucthuchien:before {
+  content: "\eb09";
+}
+.htvbdh_tcdt_muoi:before {
+  content: "\eb08";
+}
+.htvbdh_tcdt_honghoccanbaohanh:before {
+  content: "\eafe";
+}
+.htvbdh_tcdt_honghocgiamchatluong:before {
+  content: "\eb01";
+}
+.htvbdh_tcdt_saphethan:before {
+  content: "\eb02";
+}
+.htvbdh_tcdt_hethanbaohanh:before {
+  content: "\eb03";
+}
+.htvbdh_tcdt_tieuhuy:before {
+  content: "\eb04";
+}
+.htvbdh_tcdt_Thanhly:before {
+  content: "\eb05";
+}
+.htvbdh_tcdt_theodoibaoquan:before {
+  content: "\eb06";
+}
+.htvbdh_tcdt_ngan-kho:before {
+  content: "\eafd";
+}
+.htvbdh_tcdt_baogao:before {
+  content: "\eaff";
+}
+.htvbdh_tcdt_baothoc:before {
+  content: "\eb00";
+}
+.htvbdh_tcdt_nhapkhac2:before {
+  content: "\eafb";
+}
+.htvbdh_tcdt_nhaptheokehoach:before {
+  content: "\eafc";
+}
+.htvbdh_tcdt_nhomquyen2:before {
+  content: "\eaf9";
+}
+.htvbdh_tcdt_nhomquyen:before {
+  content: "\eafa";
+}
+.htvbdh_tcdt_kynhay:before {
+  content: "\eaf6";
+}
+.htvbdh_tcdt_muatructiep:before {
+  content: "\eaf7";
+}
+.htvbdh_tcdt_dauthau:before {
+  content: "\eaf8";
+}
+.htvbdh_tcdt_baocao2:before {
+  content: "\eaf3";
+}
+.htvbdh_tcdt_chitieukehoachnam:before {
+  content: "\eaf4";
+}
+.htvbdh_tcdt_dieuchinhkehoachnam:before {
+  content: "\eaf5";
+}
+.htvbdh_tcdt_phuong-an-trinh-tong-cuc-da-duyet:before {
+  content: "\eaf1";
+}
+.htvbdh_tcdt_tong-hop-de-xuat-tu-cuc:before {
+  content: "\eaf2";
+}
+.htvbdh_tcdt_icon-common:before {
+  content: "\eb07";
+}
+.htvbdh_tcdt_pheduyet:before {
+  content: "\eae8";
+}
+.htvbdh_tcdt_delete:before {
+  content: "\eae9";
+}
+.htvbdh_tcdt_import:before {
+  content: "\eaea";
+}
+.htvbdh_tcdt_print:before {
+  content: "\eaeb";
+}
+.htvbdh_tcdt_save:before {
+  content: "\eaec";
+}
+.htvbdh_tcdt_tep:before {
+  content: "\eaed";
+}
+.htvbdh_tcdt_tuchoi:before {
+  content: "\eaee";
+}
+.htvbdh_tcdt_guiduyet:before {
+  content: "\eaef";
+}
 .htvbdh_tonghopkhdc:before {
   content: "\eb2d";
 }
@@ -550,7 +742,7 @@
 .htvbdh_card:before {
   content: "\e9ed";
 }
-.htvbdh_cau-hoi:before {
+.htvbdh_cau-hoi1:before {
   content: "\e9ee";
 }
 .htvbdh_check-use:before {
@@ -1509,193 +1701,4 @@
 }
 .htvbdh_libreoffice1:before {
   content: "\eae4";
-}
-.htvbdh_tcdt_tao-ttrinh:before {
-  content: "\eb26";
-}
-.htvbdh_tcdt_phan-quyen:before {
-  content: "\eb27";
-}
-.htvbdh_tcdt_canh-bao:before {
-  content: "\eb24";
-}
-.htvbdh_tcdt_lien-ket:before {
-  content: "\eb25";
-}
-.htvbdh_tcdt_viewdetail2:before {
-  content: "\eb23";
-}
-.htvbdh_tcdt_tao-qd:before {
-  content: "\eb22";
-}
-.htvbdh_tcdt_vien_tro:before {
-  content: "\eb21";
-}
-.htvbdh_tcdt_het_han:before {
-  content: "\eb20";
-}
-.htvbdh_tcdt_kiem_tra_chat_luong:before {
-  content: "\eb1f";
-}
-.htvbdh_tcdt_dieu_chuyen:before {
-  content: "\eb1e";
-}
-.htvbdh_tcdt_tat_ca:before {
-  content: "\eb1d";
-}
-.htvbdh_tcdt_kehoachvonphi:before {
-  content: "\eb1c";
-}
-.htvbdh_tcdt_quanlychitieu:before {
-  content: "\eb1b";
-}
-.htvbdh_tcdt_bienbangiaonhan:before {
-  content: "\eb18";
-}
-.htvbdh_tcdt_phuluc:before {
-  content: "\eb19";
-}
-.htvbdh_tcdt_de_xuat_dieu_chinh:before {
-  content: "\eb17";
-}
-.htvbdh_tcdt_ngan-kho-2:before {
-  content: "\eb10";
-}
-.htvbdh_tcdt_quytrinhkythuat:before {
-  content: "\eb11";
-}
-.htvbdh_tcdt_congtrinhnghiencuu:before {
-  content: "\eb12";
-}
-.htvbdh_tcdt_kiemtrachatluong:before {
-  content: "\eb13";
-}
-.htvbdh_tcdt_dungcuchuyendung:before {
-  content: "\eb14";
-}
-.htvbdh_tcdt_congcudungcu:before {
-  content: "\eb15";
-}
-.htvbdh_tcdt_dinhmucdungcu:before {
-  content: "\eb16";
-}
-.htvbdh_tcdt_dinhmuc2:before {
-  content: "\eb1a";
-}
-.htvbdh_tcdt_saphethanluukho:before {
-  content: "\eb0f";
-}
-.htvbdh_tcdt_bienbannghiemthukelot2:before {
-  content: "\eb0e";
-}
-.htvbdh_tcdt_cucdutru3:before {
-  content: "\eb0c";
-}
-.htvbdh_tcdt_cucdutru2:before {
-  content: "\eb0d";
-}
-.htvbdh_tcdt_xuatkhac:before {
-  content: "\eb0a";
-}
-.htvbdh_tcdt_xuatkhoban:before {
-  content: "\eb0b";
-}
-.htvbdh_tcdt_tochucthuchien:before {
-  content: "\eb09";
-}
-.htvbdh_tcdt_muoi:before {
-  content: "\eb08";
-}
-.htvbdh_tcdt_honghoccanbaohanh:before {
-  content: "\eafe";
-}
-.htvbdh_tcdt_honghocgiamchatluong:before {
-  content: "\eb01";
-}
-.htvbdh_tcdt_saphethan:before {
-  content: "\eb02";
-}
-.htvbdh_tcdt_hethanbaohanh:before {
-  content: "\eb03";
-}
-.htvbdh_tcdt_tieuhuy:before {
-  content: "\eb04";
-}
-.htvbdh_tcdt_Thanhly:before {
-  content: "\eb05";
-}
-.htvbdh_tcdt_theodoibaoquan:before {
-  content: "\eb06";
-}
-.htvbdh_tcdt_ngan-kho:before {
-  content: "\eafd";
-}
-.htvbdh_tcdt_baogao:before {
-  content: "\eaff";
-}
-.htvbdh_tcdt_baothoc:before {
-  content: "\eb00";
-}
-.htvbdh_tcdt_nhapkhac2:before {
-  content: "\eafb";
-}
-.htvbdh_tcdt_nhaptheokehoach:before {
-  content: "\eafc";
-}
-.htvbdh_tcdt_nhomquyen2:before {
-  content: "\eaf9";
-}
-.htvbdh_tcdt_nhomquyen:before {
-  content: "\eafa";
-}
-.htvbdh_tcdt_kynhay:before {
-  content: "\eaf6";
-}
-.htvbdh_tcdt_muatructiep:before {
-  content: "\eaf7";
-}
-.htvbdh_tcdt_dauthau:before {
-  content: "\eaf8";
-}
-.htvbdh_tcdt_baocao2:before {
-  content: "\eaf3";
-}
-.htvbdh_tcdt_chitieukehoachnam:before {
-  content: "\eaf4";
-}
-.htvbdh_tcdt_dieuchinhkehoachnam:before {
-  content: "\eaf5";
-}
-.htvbdh_tcdt_phuong-an-trinh-tong-cuc-da-duyet:before {
-  content: "\eaf1";
-}
-.htvbdh_tcdt_tong-hop-de-xuat-tu-cuc:before {
-  content: "\eaf2";
-}
-.htvbdh_tcdt_icon-common:before {
-  content: "\eb07";
-}
-.htvbdh_tcdt_pheduyet:before {
-  content: "\eae8";
-}
-.htvbdh_tcdt_delete:before {
-  content: "\eae9";
-}
-.htvbdh_tcdt_import:before {
-  content: "\eaea";
-}
-.htvbdh_tcdt_print:before {
-  content: "\eaeb";
-}
-.htvbdh_tcdt_save:before {
-  content: "\eaec";
-}
-.htvbdh_tcdt_tep:before {
-  content: "\eaed";
-}
-.htvbdh_tcdt_tuchoi:before {
-  content: "\eaee";
-}
-.htvbdh_tcdt_guiduyet:before {
-  content: "\eaef";
 }
