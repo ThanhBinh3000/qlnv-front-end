@@ -158,7 +158,7 @@
                           ": " + (lv2.slTon|number: '1.0-1':'vi_VN' || "") }}</td>
                         <td>
                           <nz-input-group nzAddOnAfterIcon="down"
-                            (click)="openModelHangHoa(formData.value.loai === 'SN_DIEM_KHO' ? lv2.maDiemKhoDen: lv2.maChiCucDen, lv2)">
+                            (click)=" !isView && openModelHangHoa(formData.value.loai === 'SN_DIEM_KHO' ? lv2.maDiemKhoDen: lv2.maChiCucDen, lv2)">
                             <input nz-input [(ngModel)]="lv2.title" [readOnly]="true" />
                           </nz-input-group>
                         </td>
@@ -229,7 +229,7 @@
                         <td>{{lv2.donViTinh}}</td>
                         <td>
                           <input class="money-input" currencyMask [(ngModel)]='lv2.slDieuChuyen'
-                            [options]="amountFn(lv2.slTon)" />
+                            [options]="amountFn(lv2.slTon)" [readonly]="isView" />
                         </td>
                       </tr>
                     </ng-container>

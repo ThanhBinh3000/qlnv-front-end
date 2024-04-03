@@ -134,13 +134,19 @@ export class DieuChuyenKhoSapNhapComponent extends Base2Component implements OnI
     checkRoleDeleteAll() {
         return this.userService.isAccessPermisson("QLKT_THSDK_DCK_XOA") && this.userService.isCuc();
     }
-    checkRoleView(trangThai: string) {
-        return !this.checkRoleEdit(trangThai) && !this.checkRoleDelete(trangThai) && this.userService.isAccessPermisson("QLKT_THSDK_DCK_XEM")
+    checkRoleView(trangThai: string, data: any) {
+        return !this.checkRoleEdit(trangThai, data) && !this.checkRoleDelete(trangThai, data) && this.userService.isAccessPermisson("QLKT_THSDK_DCK_XEM")
     };
-    checkRoleEdit(trangThai: string) {
+    checkRoleEdit(trangThai: string, data: any) {
+        if ((Array.isArray(data.phieuXuatHaoHutHdrs) && data.phieuXuatHaoHutHdrs.length > 0) || (Array.isArray(data.bienBanSapNhapHdrs) && data.bienBanSapNhapHdrs.length > 0)) {
+            return false
+        }
         return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_DCK_THEM") && this.userService.isCuc();
     };
-    checkRoleDelete(trangThai: string) {
+    checkRoleDelete(trangThai: string, data: any) {
+        if ((Array.isArray(data.phieuXuatHaoHutHdrs) && data.phieuXuatHaoHutHdrs.length > 0) || (Array.isArray(data.bienBanSapNhapHdrs) && data.bienBanSapNhapHdrs.length > 0)) {
+            return false
+        }
         return trangThai === STATUS.DANG_NHAP_DU_LIEU && this.userService.isAccessPermisson("QLKT_THSDK_DCK_XOA") && this.userService.isCuc();
     };
     checkRoleExport() {

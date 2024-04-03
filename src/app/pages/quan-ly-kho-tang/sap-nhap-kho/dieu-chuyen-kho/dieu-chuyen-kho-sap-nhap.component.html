@@ -143,13 +143,13 @@
                         <td>{{ data.ngayKy | date:globals.dateFormat }}</td>
                         <td>{{ ObTrangThaiSn[data.trangThaiSn] }}</td>
                         <td class="text-left">
-                            <a *ngIf="checkRoleView(data.trangThai)" (click)="redirectDetail(data.id, true)">
+                            <a *ngIf="checkRoleView(data.trangThai, data)" (click)="redirectDetail(data.id, true)">
                                 <i class="fa fa-eye" title="Xem chi tiết"></i>
                             </a>
-                            <a *ngIf="checkRoleEdit(data.trangThai)" (click)="redirectDetail(data.id, false)">
+                            <a *ngIf="checkRoleEdit(data.trangThai, data)" (click)="redirectDetail(data.id, false)">
                                 <i class="fa fa-pencil" title="Sửa"></i>
                             </a>
-                            <a *ngIf="checkRoleDelete(data.trangThai)" (click)="delete(data)">
+                            <a *ngIf="checkRoleDelete(data.trangThai, data)" (click)="delete(data)">
                                 <i class="fa fa-trash-o do" title="Xóa bản ghi"></i>
                             </a>
                         </td>
