@@ -47,6 +47,8 @@ import { EditorModule } from '@tinymce/tinymce-angular';
     CauHinhDangNhapComponent,
     CauHinhHeThongComponent,
     CauHinhKetNoiKtnbComponent,
+    ThemTiepNhanBcBoNganhComponent,
+    QuanLyTiepNhanBcBoNganhComponent,
     TmKetChuyenComponent
   ],
   imports: [CommonModule, QuanTriHeThongNewRoutingModule, ComponentsModule, MainModule, NzTreeViewModule, NgApexchartsModule,EditorModule],
