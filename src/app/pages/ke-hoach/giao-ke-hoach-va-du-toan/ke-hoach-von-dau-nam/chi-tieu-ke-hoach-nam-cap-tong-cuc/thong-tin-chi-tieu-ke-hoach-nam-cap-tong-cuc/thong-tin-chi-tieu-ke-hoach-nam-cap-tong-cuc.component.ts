@@ -165,6 +165,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   arrayDonVi: any[] = [];
   dataQdTtcpOrBtc: any;
   dataQdTCDTGiaoCuc: any;
+  detailQdTcdtGiao: any;
   expandSet = new Set<number>();
   AMOUNT = {
     allowZero: true,
@@ -275,6 +276,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                 loaiCanCu: 'QD-TCDT',
                 soQdTtcpBtc: dataQd.soQuyetDinh,
               });
+              this.detailQdTcdtGiao = dataQd;
               // Lấy kế hoạch tổng cục giao cho cục đang login
               let dataLuongThuc = dataQd.khLuongThuc.find(item => item.maDonVi == chiTieuKhNam.maDvi);
               if (dataLuongThuc) {
@@ -367,6 +369,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                   loaiCanCu: 'QD-TCDT',
                   soQdTtcpBtc: dataQd.soQuyetDinh,
                 });
+                this.detailQdTcdtGiao = dataQd;
+                console.log(this.detailQdTcdtGiao,'dataQddataQddataQddataQd');
               } else {
                 this.notification.warning(MESSAGE.WARNING, 'Quyết định giao chỉ tiêu của tổng cục năm ' + year + ' chưa được tạo hoặc chưa được duyệt,vui lòng kiểm tra lại.');
               }
@@ -493,6 +497,27 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     } finally {
       this.spinner.hide();
     }
+  }
+
+
+  getListVthhTongCucGiao(donVi : any,dataTcdtGiao :any,tab:string){
+    let maCuc =(donVi && donVi.maDvi && donVi.maDvi.length >= 6) ?  donVi.maDvi.substring(0, 6) : null;
+    let listVthh = [];
+    let listVthhTcGiao = [];
+    if(tab && tab == 'NHAP'){
+      if(donVi && dataTcdtGiao && maCuc){
+        listVthh = dataTcdtGiao.khVatTuNhap ? dataTcdtGiao.khVatTuNhap.filter(it => it.maDvi == maCuc) : [];
+        const uniqueVthh = new Set(listVthh.map(obj => obj.maVatTuCha));
+        listVthhTcGiao = [...uniqueVthh].filter((item) => item !== null);
+      }
+    }else if(tab && tab == 'XUAT'){
+      if(donVi && dataTcdtGiao && maCuc){
+        listVthh = dataTcdtGiao.khVatTuXuat ? dataTcdtGiao.khVatTuXuat.filter(it => it.maDvi == maCuc) : [];
+        const uniqueVthh = new Set(listVthh.map(obj => obj.maVatTuCha));
+        listVthhTcGiao = [...uniqueVthh].filter((item) => item !== null);
+      }
+    }
+  return listVthhTcGiao;
   }
 
   calculateAndConvertDataKHLT() {
@@ -3367,6 +3392,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
 
   async themSuaVatTu(data: any, type: string, tab: string, isRoot, sttDonVi: any, donViId?: number) {
+    let listVthhTcGiao = this.getListVthhTongCucGiao(data,this.detailQdTcdtGiao,tab);
+    if(listVthhTcGiao && listVthhTcGiao.length > 0){
+      let uniqueList = [];
+      uniqueList = this.dataVatTuChaShow.filter(item1 => listVthhTcGiao.some(item2 => item2 === item1.maHang));
+      this.dataVatTuChaShow = uniqueList;
+    }
     const modalGT = this.modal.create({
       nzTitle: tab == 'NHAP' ? 'CHỈ TIÊU NHẬP VẬT TƯ, THIẾT BỊ' : 'CHỈ TIÊU XUẤT VẬT TƯ, THIẾT BỊ ',
       nzContent: ThemSuaKeHoachVatTuComponent,
