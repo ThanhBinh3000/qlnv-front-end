@@ -1,0 +1,58 @@
+<div *ngIf="!isDetail" class="luong-thuc__danh-sach">
+  <div class="bg-trang">
+    <nz-card class="mt16 flex-card p-lr16">
+<!--      <div class="cangiua group-button-search">-->
+<!--        <button nz-button class="search__button&#45;&#45;clear" (click)="clearFilter()">-->
+<!--          <i class="icon  htvbdh_nhap-lai1"></i>-->
+<!--          <span>Xóa điều kiện</span>-->
+<!--        </button>-->
+<!--        <button nz-button class="search__button&#45;&#45;search" (click)="search()">-->
+<!--          <i nz-icon nzType="search"></i>-->
+<!--          Tìm kiếm-->
+<!--        </button>-->
+<!--      </div>-->
+    </nz-card>
+    <div class="group-button">
+      <h3 class="text-uppercase">{{tenBc}}</h3>
+    </div>
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+        <thead>
+        <tr>
+          <th class="text-center" nzWidth="5%">STT</th>
+          <th class="text-center" nzWidth="10%">Năm</th>
+          <th class="text-center" nzWidth="40%">Bộ/Ngành</th>
+          <th class="text-center" nzWidth="10%">Thời gian tạo</th>
+          <th class="text-center" nzWidth="10%">Thời gian TCDT nhận báo cáo</th>
+          <th class="text-center" nzWidth="10%">Trạng thái</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of dataTable; let i = index">
+          <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+          <td>{{ data.nam ? data.nam : data.namBc }}</td>
+          <td>{{ data.boNganh ? data.boNganh : data.tenDonViGui }}</td>
+          <td>{{ (data.tgianTao ? data.tgianTao : data.ngayTao) | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ (data.tgianBanHanh ? data.tgianBanHanh : data.ngayBanHanh) | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ data.tenTrangThai }}</td>
+        </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+        <i class="icon htvbdh_tcdt_delete"></i>
+        Đóng
+      </button>
+    </div>
+  </div>
+</div>
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+</ng-template>

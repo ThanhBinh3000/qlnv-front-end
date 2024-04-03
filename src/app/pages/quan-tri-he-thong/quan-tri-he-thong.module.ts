@@ -23,6 +23,12 @@ import { CauHinhHeThongComponent } from './kiem-soat-quyen-truy-cap/cau-hinh-he-
 import { CauHinhKetNoiKtnbComponent } from './cau-hinh-ket-noi-ktnb/cau-hinh-ket-noi-ktnb.component';
 import { TmKetChuyenComponent } from './chot-du-lieu/ket-chuyen/tm-ket-chuyen/tm-ket-chuyen.component';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import {
+  QuanLyTiepNhanBcBoNganhComponent
+} from "./quan-ly-thong-tin/quan-ly-tiep-nhan-bc-bo-nganh/quan-ly-tiep-nhan-bc-bo-nganh.component";
+import {
+  ThemTiepNhanBcBoNganhComponent
+} from "./quan-ly-thong-tin/quan-ly-tiep-nhan-bc-bo-nganh/them-chung-thu-so/them-tiep-nhan-bc-bo-nganh.component";
 @NgModule({
   declarations: [
     QuanLyCanBoComponent,
@@ -41,6 +47,8 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     CauHinhDangNhapComponent,
     CauHinhHeThongComponent,
     CauHinhKetNoiKtnbComponent,
+    QuanLyTiepNhanBcBoNganhComponent,
+    ThemTiepNhanBcBoNganhComponent,
     TmKetChuyenComponent
   ],
   imports: [CommonModule, QuanTriHeThongNewRoutingModule, ComponentsModule, MainModule, NzTreeViewModule, NgApexchartsModule, FroalaEditorModule.forRoot(), FroalaViewModule.forRoot()],
