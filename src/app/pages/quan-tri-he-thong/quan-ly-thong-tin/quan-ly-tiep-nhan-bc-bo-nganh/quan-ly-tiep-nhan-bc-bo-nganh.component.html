@@ -1,0 +1,94 @@
+<div *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC')">
+  <div class="luong-thuc__danh-sach">
+    <div class="bg-trang">
+      <div class="group-button">
+        <h3 class="text-uppercase">Danh sách tiếp nhận báo cáo Bộ/Ngành</h3>
+      </div>
+
+
+      <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataTable" [nzFrontPagination]="false"
+          [nzShowPagination]="false" nzBordered>
+          <thead>
+            <tr>
+              <th width="45px">
+                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                  [nzIndeterminate]="indeterminate"></label>
+              </th>
+              <th width="60px" class="text-center">STT</th>
+              <th>Tên báo cáo</th>
+              <th>Trạng thái</th>
+              <th width="90px">Hành động</th>
+            </tr>
+            <tr class="search-table">
+              <th></th>
+              <th></th>
+              <th>
+                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.giaTri"
+                         (blur)="search()" (keydown.enter)="search()" [nzAutocomplete]="auto2" (ngModelChange)="changeGtri($event, 'giaTri')" />
+                </nz-input-group>
+                <nz-autocomplete nz #auto2>
+                  <nz-auto-option *ngFor="let option of listTenDm" [nzValue]="option">{{ option }}
+                  </nz-auto-option>
+                </nz-autocomplete>
+              </th>
+
+              <th>
+                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="formData.value.trangThai"
+                         (blur)="search()" (keydown.enter)="search()"/>
+                </nz-input-group>
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of basicTable.data; let i = index">
+              <th width="45px">
+                <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
+              </th>
+              <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+              <td><a style="color: blue; font-weight: bold;" (click)="openBc(data)">{{data.giaTri}}</a></td>
+              <td>{{ data.tenTrangThai }}</td>
+              <td class="text-center">
+                <a (click)="them(data)">
+                  <i class="fa fa-pencil"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+
+        <div class="tab-content tab-menu" id="myTabContent">
+          <div class="tab-pane fade show active justify-content-between">
+            <div class="trai">
+            </div>
+            <div class="canphai">
+              <!-- begin phân trang  -->
+              <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                (nzPageSizeChange)="changePageSize($event)">
+                <ng-template #rangeTemplate let-range="range" let-total>
+                  {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
+                </ng-template>
+              </nz-pagination>
+              <!-- end phân trang -->
+            </div>
+          </div>
+        </div>
+      </nz-card>
+
+
+    </div>
+  </div>
+
+  <!-- <div class="chi-tiet" *ngIf="isDetail">
+    <app-thong-tin-quyet-dinh-dieu-chuyen-tc [isView]="isView" [idInput]="selectedId" [idTHop]="idTHop"
+      [qdDcId]="qdDcId" [isViewOnModal]="isViewOnModal"
+      (showListEvent)="quayLai()"></app-thong-tin-quyet-dinh-dieu-chuyen-tc>
+  </div> -->
+</div>
+<ng-template #suffixTemplateInfo>
+  <i nz-icon nzType="search"></i>
+</ng-template>

@@ -1,0 +1,96 @@
+<form nz-form [formGroup]="formData" [nzLayout]="'vertical'" (ngSubmit)="save()" class="form__dm-dung-chung">
+  <div nz-row [nzGutter]="20">
+<!--    <div nz-col [nzSpan]="24">-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-label [nzNoColon]="true" nzRequired> Vùng dữ liệu </nz-form-label>-->
+<!--        <nz-form-control [nzErrorTip]="error">-->
+<!--          <nz-select formControlName="loai" [nzDisabled]="isView" [(ngModel)]="selectedValue" nzShowSearch nzAllowClear>-->
+<!--            <nz-option *ngFor="let p of danhMucList" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>-->
+<!--          </nz-select>-->
+<!--        </nz-form-control>-->
+<!--      </nz-form-item>-->
+<!--    </div>-->
+<!--    <div nz-col [nzSpan]="6">-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-label [nzNoColon]="true" nzRequired> Mã </nz-form-label>-->
+<!--        <nz-form-control [nzErrorTip]="error">-->
+<!--          <input nz-input formControlName="ma" placeholder="Nhập mã" [readOnly]="isView">-->
+<!--        </nz-form-control>-->
+<!--      </nz-form-item>-->
+<!--    </div>-->
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" nzRequired> Giá trị </nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <input nz-input formControlName="giaTri" placeholder="Nhập giá trị" [disabled]="true" [readOnly]="true">
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+<!--    <div nz-col [nzSpan]="6">-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-label [nzNoColon]="true" > Phân loại </nz-form-label>-->
+<!--        <input nz-input formControlName="phanLoai" [disabled]="isView" [readOnly]="isView">-->
+<!--      </nz-form-item>-->
+<!--    </div>-->
+<!--    <div nz-col [nzSpan]="6">-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-label [nzNoColon]="true" > Thứ tự hiển thị </nz-form-label>-->
+<!--        <nz-input-number formControlName="thuTuHienThi" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"-->
+<!--                         [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView"></nz-input-number>-->
+<!--      </nz-form-item>-->
+<!--    </div>-->
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" nzRequired> Trạng thái </nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-select formControlName="trangThai" [nzDisabled]="isView">
+            <nz-option nzValue="01" nzLabel="Hoạt động"></nz-option>
+            <nz-option nzValue="00" nzLabel="Không hoạt động"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+<!--    <div nz-col [nzSpan]="6">-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-label [nzNoColon]="true" > Áp dụng cho tính năng </nz-form-label>-->
+<!--        <nz-form-control [nzErrorTip]="error">-->
+<!--         <nz-select formControlName="apDung" nzMode="multiple" nzAllowClear [nzDisabled]="isView">-->
+<!--           <nz-option *ngFor="let item of listApDungCn" [nzValue]="item.ma" [nzLabel]="item.giaTri" ></nz-option>-->
+<!--         </nz-select>-->
+<!--        </nz-form-control>-->
+<!--      </nz-form-item>-->
+<!--    </div>-->
+<!--    <div nz-col [nzSpan]="24">-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-label [nzNoColon]="true"> Mô tả </nz-form-label>-->
+<!--        <textarea rows="3" class="search__input" nz-input formControlName="ghiChu" [readOnly]="isView"></textarea>-->
+<!--      </nz-form-item>-->
+<!--    </div>-->
+  </div>
+</form>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai" *ngIf="!isView">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+        <i class="icon htvbdh_tcdt_delete"></i>
+        Hủy
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save() ">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </button>
+    </div>
+    <div class="canphai" *ngIf="isView">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+        <i class="icon htvbdh_tcdt_delete"></i>
+        Đóng
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+</ng-template>

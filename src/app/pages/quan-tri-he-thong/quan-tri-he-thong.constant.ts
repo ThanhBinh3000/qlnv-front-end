@@ -103,6 +103,15 @@ export const NHAP_ROUTE_LIST = [
         dropdown: 'quan-ly-thong-tin-va-tien-ich',
         idHover: 'quan-ly-thong-tin-va-tien-ich',
         isSelected: false
+      },
+      {
+        id: 3,
+        icon: 'htvbdh_tcdt_icon-common',
+        title: 'Quản lý tiếp nhận báo cáo Bộ/Ngành',
+        url: `/${NHAP_MAIN_ROUTE}/quan-ly-thong-tin/quan-ly-tiep-nhan-bc-bo-nganh`,
+        dropdown: 'quan-ly-tiep-nhan-bc-bo-nganh',
+        idHover: 'quan-ly-tiep-nhan-bc-bo-nganh',
+        isSelected: false
       }
     ],
     isSelected: false
