@@ -23,6 +23,7 @@ export const MAIN_ROUTES = {
   khaiThacBaoCao: 'khai-thac-bao-cao',
   baoCaoBoNganh: 'bao-cao-bo-nganh',
   khoiTaoDuLieu: 'khoi-tao-du-lieu',
+  troGiup: 'tro-giup'
 };
 
 export const LIST_PAGES: RouteInfo[] = [
@@ -105,5 +106,10 @@ export const LIST_PAGES: RouteInfo[] = [
     title: 'Khởi tạo dữ liệu',
     route: MAIN_ROUTES.khoiTaoDuLieu,
     code: 'QLKT'
+  },
+  {
+    title: 'Trợ giúp',
+    route: MAIN_ROUTES.troGiup,
+    code: ''
   },
 ];

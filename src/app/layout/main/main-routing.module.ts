@@ -6,7 +6,7 @@ import { ErrorComponent } from './error/error.component';
 import { NotAuthenComponent } from './error/not-authen/not-authen.component';
 import { AuthGuard } from 'src/app/guard/auth.guard';
 import { NotFoundComponent } from './error/not-found/not-found.component';
-import {HtCongCuDungCuComponent} from "../../pages/khoi-tao-du-lieu/ht-cong-cu-dung-cu/ht-cong-cu-dung-cu.component";
+import { HtCongCuDungCuComponent } from "../../pages/khoi-tao-du-lieu/ht-cong-cu-dung-cu/ht-cong-cu-dung-cu.component";
 
 const routes: Routes = [
   {
@@ -132,6 +132,12 @@ const routes: Routes = [
           import('../../pages/khoi-tao-du-lieu/khoi-tao-du-lieu.module').then((m) => m.KhoiTaoDuLieuModule),
         canActivate: [AuthGuard],
       },
+      {
+        path: MAIN_ROUTES.troGiup,
+        loadChildren: () =>
+          import('../../pages/tro-giup/tro-giup.module').then((m) => m.TroGiupModule),
+        canActivate: [AuthGuard],
+      }
     ],
   },
   {
