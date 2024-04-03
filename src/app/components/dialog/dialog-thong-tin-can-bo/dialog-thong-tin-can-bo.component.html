@@ -38,14 +38,14 @@
         <nz-form-label nzRequired [nzNoColon]="true"> Tài khoản</nz-form-label>
         <nz-form-control [nzErrorTip]="error">
           <nz-input-group [nzSuffix]="suffixIcon">
-            <input nz-input formControlName="username" [nzAutocomplete]="auto" [readOnly]="isView"
+            <input nz-input formControlName="username" [nzAutocomplete]="autoUser" [readOnly]="isView"
               (ngModelChange)="getUserLDap($event)" />
           </nz-input-group>
         </nz-form-control>
         <ng-template #suffixIcon>
           <i nz-icon nzType="search"></i>
         </ng-template>
-        <nz-autocomplete #auto>
+        <nz-autocomplete #autoUser>
           <nz-auto-option *ngFor="let option of userLDapList" [nzValue]="option.username"
             (click)="selectUserLDap(option)">{{ option.username }}
           </nz-auto-option>
@@ -127,14 +127,14 @@
         <nz-form-label nzRequired [nzNoColon]="true"> Chức vụ</nz-form-label>
         <nz-form-control [nzErrorTip]="error">
           <nz-input-group [nzSuffix]="suffixIcon">
-            <input nz-input formControlName="positionName" [nzAutocomplete]="auto" [readOnly]="isView"
+            <input nz-input formControlName="positionName" [nzAutocomplete]="autoChucVu" [readOnly]="isView"
               (ngModelChange)="getPosition($event)" />
           </nz-input-group>
         </nz-form-control>
         <ng-template #suffixIcon>
           <i nz-icon nzType="search"></i>
         </ng-template>
-        <nz-autocomplete #auto>
+        <nz-autocomplete #autoChucVu>
           <nz-auto-option *ngFor="let option of listChucVu" [nzValue]="option.ma" (click)="selectPosition(option)">{{
             option.giaTri }}
           </nz-auto-option>
