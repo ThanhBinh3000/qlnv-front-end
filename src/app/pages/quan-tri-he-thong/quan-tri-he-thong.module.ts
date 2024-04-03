@@ -23,6 +23,7 @@ import { CauHinhHeThongComponent } from './kiem-soat-quyen-truy-cap/cau-hinh-he-
 import { CauHinhKetNoiKtnbComponent } from './cau-hinh-ket-noi-ktnb/cau-hinh-ket-noi-ktnb.component';
 import { TmKetChuyenComponent } from './chot-du-lieu/ket-chuyen/tm-ket-chuyen/tm-ket-chuyen.component';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { EditorModule } from '@tinymce/tinymce-angular';
 @NgModule({
   declarations: [
     QuanLyCanBoComponent,
@@ -43,7 +44,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     CauHinhKetNoiKtnbComponent,
     TmKetChuyenComponent
   ],
-  imports: [CommonModule, QuanTriHeThongNewRoutingModule, ComponentsModule, MainModule, NzTreeViewModule, NgApexchartsModule, FroalaEditorModule.forRoot(), FroalaViewModule.forRoot()],
+  imports: [CommonModule, QuanTriHeThongNewRoutingModule, ComponentsModule, MainModule, NzTreeViewModule, NgApexchartsModule, FroalaEditorModule.forRoot(), FroalaViewModule.forRoot(),EditorModule],
 
 })
 export class QuanTriHeThongNewModule { }
