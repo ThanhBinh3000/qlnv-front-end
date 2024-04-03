@@ -48,11 +48,9 @@ import { EditorModule } from '@tinymce/tinymce-angular';
     CauHinhDangNhapComponent,
     CauHinhHeThongComponent,
     CauHinhKetNoiKtnbComponent,
-    QuanLyTiepNhanBcBoNganhComponent,
-    ThemTiepNhanBcBoNganhComponent,
     TmKetChuyenComponent
   ],
-  imports: [CommonModule, QuanTriHeThongNewRoutingModule, ComponentsModule, MainModule, NzTreeViewModule, NgApexchartsModule, FroalaEditorModule.forRoot(), FroalaViewModule.forRoot(),EditorModule],
+  imports: [CommonModule, QuanTriHeThongNewRoutingModule, ComponentsModule, MainModule, NzTreeViewModule, NgApexchartsModule,EditorModule],
 
 })
 export class QuanTriHeThongNewModule { }
