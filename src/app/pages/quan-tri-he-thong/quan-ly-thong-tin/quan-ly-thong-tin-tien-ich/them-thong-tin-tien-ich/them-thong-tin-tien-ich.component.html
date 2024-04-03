@@ -66,11 +66,9 @@
               Nội dung
             </nz-form-label>
             <nz-form-control>
-              <textarea [froalaEditor]='editorConfig' nz-input placeholder="Nhập nội dung" [readonly]="isView"
-                formControlName="content"></textarea>
-<!--              <editor formControlName="content"-->
-<!--                      [disabled]="false"></editor>-->
-<!--              <ngx-editor formControlName="content"></ngx-editor>-->
+<!--              <textarea [froalaEditor]='editorConfig' nz-input placeholder="Nhập nội dung" [readonly]="isView"-->
+<!--                formControlName="content"></textarea>-->
+              <editor [apiKey]="apiKeyEditor" formControlName="content" [init]="configEditor"></editor>
             </nz-form-control>
           </nz-form-item>
         </div>

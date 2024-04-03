@@ -14,7 +14,7 @@ import { Base2Component } from "src/app/components/base2/base2.component";
 import moment from "moment";
 import dayjs from "dayjs";
 import { DanhMucService } from "src/app/services/danhmuc.service";
-import "froala-editor/js/plugins.pkgd.min.js";
+// import "froala-editor/js/plugins.pkgd.min.js";
 
 @Component({
   selector: 'app-them-thong-tin-tien-ich',
@@ -29,16 +29,22 @@ export class ThemThongTinTienIchComponent extends Base2Component implements OnIn
   fileDinhKems: any[] = [];
   dsPLTT: any[] = [];
   data?: any
-  editorConfig = {
-    insertTable: true,
-    toolbarButtons:
-      ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'insertTable', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting', 'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'indent', 'outdent', 'paragraphFormat', 'formatOL', 'formatUL', 'quote', 'insertLink', 'insertImage', 'insertVideo', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertFile', 'insertHR', 'undo', 'redo', 'fullscreen', 'print', 'getPDF', 'spellChecker', 'selectAll', 'html', 'help']
-    , height: '280px',
-    placeholderText: 'Nhập vào đây...',
-    autoScroll: true,
-    // imageUploadURL: '/upload/image',
-    // imageAllowedTypes: ['jpeg', 'jpg', 'png', 'gif']
-  };
+  apiKeyEditor : string = "v8ofvpe4z5ygsgab6nw0c1yz9ouvusfayup7d79zllehjavj";
+  configEditor :{
+    height: 400,
+    plugins: [
+      'lists', 'image', 'table', 'codesample', 'fullscreen', 'code',
+      'wordcount', 'quickbars', 'preview', 'searchreplace',
+      'directionality', 'visualblocks', 'visualchars', 'image', 'link', 'media',
+      'template', 'charmap', 'hr', 'pagebreak', 'nonbreaking', 'anchor',
+      'insertdatetime', 'advlist', 'textpattern', 'noneditable', 'help',
+      'charmap quickbars emoticons'
+    ],
+    toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+    image_advtab: true,
+    image_caption: true,
+  }
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
