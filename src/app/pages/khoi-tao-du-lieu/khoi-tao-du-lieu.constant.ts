@@ -16,19 +16,19 @@ export const KHOI_TAO_DU_LIEU_ROUTE_LIST: Array<ChiTietMenu> = [
   },
   {
     icon: 'htvbdh_tcdt_congtrinhnghiencuu',
-    title: 'Công tác đấu giá',
-    url: `/${KHOI_TAO_DU_LIEU_ROUTE}/cong-tac-dau-gia`,
-    dropdown: 'cong-tac-dau-gia',
-    idHover: 'cong-tac-dau-gia',
+    title: 'Công tác đấu thầu',
+    url: `/${KHOI_TAO_DU_LIEU_ROUTE}/cong-tac-dau-thau`,
+    dropdown: 'hop-dong',
+    idHover: 'hop-dong',
     hasTab: false,
     accessPermisson: "QTDM"
   },
   {
     icon: 'htvbdh_tcdt_congtrinhnghiencuu',
-    title: 'Công tác đấu thầu',
-    url: `/${KHOI_TAO_DU_LIEU_ROUTE}/cong-tac-dau-thau`,
-    dropdown: 'hop-dong',
-    idHover: 'hop-dong',
+    title: 'Công tác đấu giá',
+    url: `/${KHOI_TAO_DU_LIEU_ROUTE}/cong-tac-dau-gia`,
+    dropdown: 'cong-tac-dau-gia',
+    idHover: 'cong-tac-dau-gia',
     hasTab: false,
     accessPermisson: "QTDM"
   },

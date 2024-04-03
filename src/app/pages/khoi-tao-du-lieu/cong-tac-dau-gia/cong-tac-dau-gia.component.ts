@@ -25,6 +25,7 @@ import {cloneDeep} from 'lodash';
 export class CongTacDauGiaComponent extends Base2Component implements OnInit {
   tabs: any[] = [];
   loaiVthhSelected: string
+  tenLoaiVthh: string
   dsDonvi: any[] = [];
 
   listTrangThai: any[] = [
@@ -111,6 +112,7 @@ export class CongTacDauGiaComponent extends Base2Component implements OnInit {
 
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;
+    this.tenLoaiVthh = this.tabs.find(i=>i.ma == this.loaiVthhSelected)?.giaTri;
   }
 
   async loadDsDonVi() {

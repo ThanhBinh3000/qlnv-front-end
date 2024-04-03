@@ -30,6 +30,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() loaiVthh: string;
+  @Input() tenLoaiVthh: string;
   listHinhThucBDG: any[] = [];
   listPhuongThucBDG: any[] = [];
   xhQdPdKhBdgDtl: FormGroup;
@@ -38,9 +39,12 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
     HOAN_THANH: "01"
   };
   listHinhThucThanhToan: any[] = []
+  listPhuongThucDauThau: any[] = []
   listPhuongThucGiaoNhanBDG: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
+  listCloaiVthh: any[] = [];
+  listHinhThucLuaChon: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -133,22 +137,25 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
         idQdPdDtl: [],
         soQdKq: [''],
         tenDvi: [''],
+        loaiVthh: [''],
+        cloaiVthh: [''],
         tongTienDatTruoc: [],
         khoanTienDatTruoc: [],
-        khoanTienDatTruocHienThi: [''],
         tgianDauGia: [''],
-        tgianDauGiaTu: [''],
-        tgianDauGiaDen: [''],
+        tgianDkienTu: [''],
+        tgianDkienDen: [''],
         tgianTtoan: [],
-        tenPthucTtoan: [''],
+        pthucTtoan: [''],
         tgianGnhan: [],
+        pthucLcnt: [''],
         pthucGnhan: [''],
-        tongTienDatTruocDd: [],
+        tongTienDuocDuyet: [],
+        tongKtienDtruocDduyet: [],
         tenLoaiVthh: [''],
         tenCloaiVthh: [''],
         tongSoLuong: [],
-        tenLoaiHinhNx: [''],
-        tenKieuNx: [''],
+        loaiHinhNx: [''],
+        kieuNx: [''],
         trangThai: [''],
         tenTrangThai: [''],
         trangThaiNhapLieu: [''],
@@ -165,7 +172,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
     this.spinner.show();
     try {
       await Promise.all([
-         this.loadHinhThucThanhToan(),
+         this.loadDataComboBox(),
       ])
       await this.loadDetail(this.idInput)
       await this.spinner.hide();
@@ -195,7 +202,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
       console.log(body)
       let res = null
       if (body.id && body.id > 0) {
-        res = await this.thongTinDauGiaService.capNhatKhoiTao(body.xhQdPdKhBdgDtl);
+        res = await this.thongTinDauGiaService.capNhatKhoiTao(body);
       } else {
         res = await this.thongTinDauGiaService.khoiTaoDuLieu(body);
       }
@@ -332,8 +339,8 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
             const data = res.data;
             this.xhQdPdKhBdgDtl.patchValue(data);
             this.formData.patchValue(data.listTtinDg[0]);
-            console.log(data, 'data')
           }
+          console.log(this.xhQdPdKhBdgDtl.value,'123')
         })
         .catch((e) => {
           console.log('error: ', e);
@@ -344,12 +351,14 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
-        loaiVthh: this.loaiVthh
+        loaiVthh: this.loaiVthh,
+        tenLoaVthh: this.tenLoaiVthh,
       });
       this.xhQdPdKhBdgDtl.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
-        loaiVthh: this.loaiVthh
+        loaiVthh: this.loaiVthh,
+        tenLoaiVthh: this.tenLoaiVthh
       });
     }
 
@@ -379,7 +388,6 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
           item.expandSetAll = true;
         });
       }
-      console.log(this.dataTable, "this.dataTable")
       // this.calculatorTable()
     })
   }
@@ -390,24 +398,54 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
     })
   }
 
-  async loadHinhThucThanhToan() {
-    this.listHinhThucThanhToan = [];
-    let res = await this.danhMucService.danhMucChungGetAll('PHUONG_THUC_TT');
+  async loadDataComboBox() {
+    let body = {
+      "str": this.loaiVthh
+    };
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+    this.listCloaiVthh = [];
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listHinhThucThanhToan = res.data;
+      this.listCloaiVthh = res.data;
     }
+    this.listHinhThucThanhToan = [];
+    let resTt = await this.danhMucService.danhMucChungGetAll('PHUONG_THUC_TT');
+    if (resTt.msg == MESSAGE.SUCCESS) {
+      this.listHinhThucThanhToan = resTt.data;
+    }
+    this.listPhuongThucDauThau = [];
+    let resDt = await this.danhMucService.danhMucChungGetAll('PT_DTHAU');
+    if (resDt.msg == MESSAGE.SUCCESS) {
+      this.listPhuongThucDauThau = resDt.data;
+    }
+    this.listPhuongThucGiaoNhanBDG = [];
     let resPtGnBdg = await this.danhMucService.danhMucChungGetAll('PT_GIAO_HANG');
     if (resPtGnBdg.msg == MESSAGE.SUCCESS) {
       this.listPhuongThucGiaoNhanBDG = resPtGnBdg.data
     }
+    this.listLoaiHinhNx = [];
     let resNx = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
     if (resNx.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == "NHAP_KHAC");
+      this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == "XUAT_DG");
     }
     this.listKieuNx = [];
     let resKieuNx = await this.danhMucService.danhMucChungGetAll("KIEU_NHAP_XUAT");
     if (resKieuNx.msg == MESSAGE.SUCCESS) {
       this.listKieuNx = resKieuNx.data;
+    }
+    this.listHinhThucLuaChon = [];
+    let resHinhThuc = await this.danhMucService.danhMucChungGetAll("HT_LCNT");
+    if (resHinhThuc.msg == MESSAGE.SUCCESS) {
+      this.listHinhThucLuaChon = resHinhThuc.data;
+    }
+    this.listHinhThucBDG = [];
+    let resHtBdg = await this.danhMucService.danhMucChungGetAll('HINH_THUC_DG');
+    if (resHtBdg.msg == MESSAGE.SUCCESS) {
+      this.listHinhThucBDG = resHtBdg.data;
+    }
+    this.listPhuongThucBDG = [];
+    let resPtBdg = await this.danhMucService.danhMucChungGetAll('PHUONG_THUC_DG');
+    if (resPtBdg.msg == MESSAGE.SUCCESS) {
+      this.listPhuongThucBDG = resPtBdg.data
     }
   }
   onChangeLhNx($event) {

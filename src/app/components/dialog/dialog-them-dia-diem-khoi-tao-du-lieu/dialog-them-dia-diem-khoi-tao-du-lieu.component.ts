@@ -146,7 +146,6 @@ export class DialogThemDiaDiemKhoiTaoDuLieuComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listCloaiVthh = res.data;
-        console.log(this.listCloaiVthh,"this.listCloaiVthh")
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
