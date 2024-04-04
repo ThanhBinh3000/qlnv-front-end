@@ -370,7 +370,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                   soQdTtcpBtc: dataQd.soQuyetDinh,
                 });
                 this.detailQdTcdtGiao = dataQd;
-                console.log(this.detailQdTcdtGiao,'dataQddataQddataQddataQd');
               } else {
                 this.notification.warning(MESSAGE.WARNING, 'Quyết định giao chỉ tiêu của tổng cục năm ' + year + ' chưa được tạo hoặc chưa được duyệt,vui lòng kiểm tra lại.');
               }

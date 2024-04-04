@@ -146,6 +146,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
   arrayDonVi: any[] = [];
   dataQdCanCu: any;
   dataQdTCDTGiaoCuc: any;
+  detailQdTcdtGiao: any;
   expandSetNhap = new Set<string>();
   expandSetXuat = new Set<string>();
   AMOUNT = {
@@ -254,6 +255,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
               canCu: data.soQuyetDinh,
               chiTieuId: data.id,
             });
+            this.detailQdTcdtGiao = data;
             // Lấy kế hoạch tổng cục giao cho cục đang login
             let dataLuongThuc = data.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
             if (dataLuongThuc) {
@@ -338,6 +340,7 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
               loaiCanCu: 'QD-TCDT',
               idCanCu: data.id,
             });
+            this.detailQdTcdtGiao = data;
             // Lấy kế hoạch tổng cục giao cho cục đang login
             let dataLuongThuc = data.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
             if (dataLuongThuc) {
@@ -2341,6 +2344,12 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
   }
 
   async themSuaVatTu(data: any, type: string, tab: string, isRoot, sttDonVi: any, donViId?: number) {
+    let listVthhTcGiao = this.getListVthhTongCucGiao(data,this.detailQdTcdtGiao,tab);
+    if(listVthhTcGiao && listVthhTcGiao.length > 0){
+      let uniqueList = [];
+      uniqueList = this.dataVatTuChaShow.filter(item1 => listVthhTcGiao.some(item2 => item2 === item1.maHang));
+      this.dataVatTuChaShow = uniqueList;
+    }
     const modalGT = this.modal.create({
       nzTitle: tab == 'NHAP' ? 'CHỈ TIÊU NHẬP VẬT TƯ, THIẾT BỊ' : 'CHỈ TIÊU XUẤT VẬT TƯ, THIẾT BỊ ',
       nzContent: ThemSuaKeHoachVatTuComponent,
@@ -2636,5 +2645,26 @@ export class ThongTinPaGiaoChiTieuKeHoachComponent implements OnInit {
     } finally {
       await this.spinner.hide();
     }
+  }
+
+
+  getListVthhTongCucGiao(donVi : any,dataTcdtGiao :any,tab:string){
+    let maCuc =(donVi && donVi.maDvi && donVi.maDvi.length >= 6) ?  donVi.maDvi.substring(0, 6) : null;
+    let listVthh = [];
+    let listVthhTcGiao = [];
+    if(tab && tab == 'NHAP'){
+      if(donVi && dataTcdtGiao && maCuc){
+        listVthh = dataTcdtGiao.khVatTuNhap ? dataTcdtGiao.khVatTuNhap.filter(it => it.maDvi == maCuc) : [];
+        const uniqueVthh = new Set(listVthh.map(obj => obj.maVatTuCha));
+        listVthhTcGiao = [...uniqueVthh].filter((item) => item !== null);
+      }
+    }else if(tab && tab == 'XUAT'){
+      if(donVi && dataTcdtGiao && maCuc){
+        listVthh = dataTcdtGiao.khVatTuXuat ? dataTcdtGiao.khVatTuXuat.filter(it => it.maDvi == maCuc) : [];
+        const uniqueVthh = new Set(listVthh.map(obj => obj.maVatTuCha));
+        listVthhTcGiao = [...uniqueVthh].filter((item) => item !== null);
+      }
+    }
+    return listVthhTcGiao;
   }
 }
