@@ -190,13 +190,6 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     } else {
       this.errorBn = false;
     }
-    //
-    // if (!this.keHoach.tongTien) {
-    //   this.errorTt = true;
-    //   return false;
-    // } else {
-    //   this.errorTt = false;
-    // }
     return true;
   }
 
@@ -215,6 +208,14 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   }
 
   async preview() {
+    let tongSoVt = 0 ;
+    if(this.keHoach && this.keHoach.maBoNganh && this.keHoach.maBoNganh  == '01'){
+      for (let item of this.dataToanBn) {
+        if (item.maBn == '01' && !item.isSum && item.tenBn.indexOf('Vật tư') != -1) {
+          tongSoVt = item.tongSo;
+        }
+      }
+    }
     this.spinner.show();
     this.muaTangView = this.convertDataPreview(this.keHoach.muaTangList)
     this.xuatBanView = this.convertDataPreview(this.keHoach.xuatBanList)
@@ -241,7 +242,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       xuatBanList:  this.xuatBanView,
       luanPhienList: this.luanPhienView,
       tenBoNganh: this.keHoach.tenBoNganh,
-      ttMuaTang: this.keHoach.ttMuaTang,
+      ttMuaTang: (this.keHoach && this.keHoach.maBoNganh && this.keHoach.maBoNganh  == '01') ? tongSoVt : this.keHoach.ttMuaTang,
       ttXuatBan: this.keHoach.ttXuatBan,
       ttXuatGiam: this.keHoach.ttXuatGiam,
       ghiChuLt: this.keHoach.ghiChuLt,
