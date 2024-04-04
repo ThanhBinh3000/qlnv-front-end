@@ -252,7 +252,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
     this.formData.patchValue({
       positionName: data.giaTri,
       position: data.ma
-    })
+    });
   }
 
   async save() {

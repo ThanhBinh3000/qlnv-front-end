@@ -18,7 +18,7 @@
                         <span>Quay lại</span>
                     </button>
                     <button type="button" class="btn btn-sub" (click)=" yeuCauXacDinhDiemNhap($event)"
-                        *ngIf="isTongHop && !isViewDetail && !daXdinhDiemNhap && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0)) && formData.value.loaiDieuChuyen=='CHI_CUC' && (!formData.value.trangThai || formData.value.trangThai==STATUS.DU_THAO || 
+                        *ngIf="isTongHop && !isViewDetail && !daXdinhDiemNhap && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0)) && formData.value.loaiDieuChuyen=='CHI_CUC' && (!formData.value.trangThai || formData.value.trangThai==STATUS.DU_THAO ||
                         formData.value.trangThai==STATUS.YC_CHICUC_PHANBO_DC) && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_YCPHANBO')">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Y/c Chi cục xác định điểm nhập ĐC</span>
@@ -170,7 +170,7 @@
                                         văn
                                     </nz-form-label>
                                     <nz-form-control nzErrorTip="Vui lòng nhập số đề xuất">
-                                        <nz-input-group nzAddOnAfter="/DCNB">
+                                        <nz-input-group >
                                             <input nz-input formControlName="soDeXuat"
                                                 [readonly]="checkDisabledSoDxcv()" />
                                             <!-- <nz-input-number formControlName="soDeXuat" [nzDisabled]="isViewDetail"
