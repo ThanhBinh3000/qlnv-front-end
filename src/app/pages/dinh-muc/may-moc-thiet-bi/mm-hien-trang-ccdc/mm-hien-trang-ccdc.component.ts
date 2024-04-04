@@ -154,6 +154,12 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
   }
 
   chotDuLieu() {
+    const today: Date = new Date();
+    const endOfYear: Date = new Date(today.getFullYear(), 11, 31);
+    let currentYear = dayjs().get('year');
+    if (today.getTime() < endOfYear.getTime()) {
+      currentYear = currentYear - 1;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -165,7 +171,7 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
       nzOnOk: async () => {
         try {
           let body = {
-            namKeHoach : dayjs().get('year'),
+            namKeHoach : currentYear,
             paggingReq : {
               limit: this.pageSize,
               page: this.page - 1
@@ -176,7 +182,7 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
             this.notification.success(MESSAGE.SUCCESS, 'Chốt dữ liệu thành công!');
             await this.searchData()
           } else {
-            this.notification.error(MESSAGE.ERROR, 'Thao tác thất bại!');
+            this.notification.error(MESSAGE.ERROR, res.msg);
           }
         } catch (e) {
           console.log('error', e);

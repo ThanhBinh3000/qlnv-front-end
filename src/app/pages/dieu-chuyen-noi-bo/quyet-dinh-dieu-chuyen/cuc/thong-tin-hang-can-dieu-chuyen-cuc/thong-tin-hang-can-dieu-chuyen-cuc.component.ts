@@ -510,6 +510,11 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
             this.dsLoKhoNhan = []
 
             const detailThuKho = detail.data.object.detailThuKho
+            const cloaiVthhNhan = detail.data.object.cloaiVthh
+            if (cloaiVthhNhan !== this.formData.value.cloaiVthh) {
+              this.notification.warning(MESSAGE.WARNING, "Hai kho không cùng chủng loại hàng hoá");
+              return
+            }
             if (detailThuKho) {
               this.formData.patchValue({
                 maThuKhoNhan: detailThuKho.id,
@@ -572,7 +577,11 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
 
         const detail = await this.mangLuoiKhoService.getDetailByMa(body);
         if (detail.statusCode == 0) {
-
+          const cloaiVthhNhan = detail.data.object.cloaiVthh
+          if (cloaiVthhNhan !== this.formData.value.cloaiVthh) {
+            this.notification.warning(MESSAGE.WARNING, "Hai kho không cùng chủng loại hàng hoá");
+            return
+          }
           const detailThuKho = detail.data.object.detailThuKho
           if (detailThuKho) {
             this.formData.patchValue({
