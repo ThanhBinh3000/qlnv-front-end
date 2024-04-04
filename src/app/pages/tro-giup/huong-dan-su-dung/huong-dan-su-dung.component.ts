@@ -75,7 +75,7 @@ export class HuongDanSuDungComponent extends Base2Component implements OnInit {
     async loadDsPhanLoai() {
         const res = await this.danhMucDungChungService.search({ loai: "PHAN_LOAI_THONG_TIN" });
         if (res.msg !== MESSAGE.SUCCESS) return;
-        this.listPhanLoai = Array.isArray(res?.data?.content) ? res.data.content : [];
+        this.listPhanLoai = Array.isArray(res?.data?.content) ? res.data.content.filter(f => f.ma !== "1") : [];
     }
     downloadFile(item: FileDinhKem) {
         this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {

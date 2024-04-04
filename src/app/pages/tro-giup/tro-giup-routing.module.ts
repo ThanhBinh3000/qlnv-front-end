@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TroGiupComponent } from './tro-giup.component';
 import { AuthGuard } from '../auth/auth.guard';
 import { HuongDanSuDungComponent } from './huong-dan-su-dung/huong-dan-su-dung.component';
+import { GioiThieuHeThongComponent } from './gioi-thieu-he-thong/gioi-thieu-he-thong.component';
 
 const routes: Routes = [
     {
@@ -18,6 +19,10 @@ const routes: Routes = [
                 path: 'huong-dan-su-dung',
                 component: HuongDanSuDungComponent,
             },
+            {
+                path: 'gioi-thieu-he-thong',
+                component: GioiThieuHeThongComponent
+            }
         ]
     }]
 
