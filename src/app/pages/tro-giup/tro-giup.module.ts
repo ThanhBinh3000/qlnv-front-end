@@ -8,10 +8,11 @@ import { ComponentsModule } from "src/app/components/components.module";
 import { TroGiupComponent } from './tro-giup.component';
 import { TroGiupRoutingModule } from './tro-giup-routing.module';
 import { HuongDanSuDungComponent } from './huong-dan-su-dung/huong-dan-su-dung.component';
+import { GioiThieuHeThongComponent } from './gioi-thieu-he-thong/gioi-thieu-he-thong.component';
 
 @NgModule({
     declarations: [
-        TroGiupComponent, HuongDanSuDungComponent
+        TroGiupComponent, HuongDanSuDungComponent, GioiThieuHeThongComponent
     ],
     imports: [
         CommonModule,
@@ -21,8 +22,7 @@ import { HuongDanSuDungComponent } from './huong-dan-su-dung/huong-dan-su-dung.c
         DirectivesModule,
         NzStatisticModule,
         NzPipesModule,
-    ],
-    providers: [DatePipe],
+    ]
 })
 export class TroGiupModule {
 }

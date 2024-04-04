@@ -7,7 +7,15 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
         url: `/${MAIN_ROUTE_TROGIUP}/huong-dan-su-dung`,
         dropdown: 'huong-dan-su-dung',
         idHover: 'huong-dan-su-dung',
-        caps: [1, 2, 3],
+        hasTab: false,
+        accessPermisson: ''
+    },
+    {
+        icon: 'htvbdh_cau-hoi',
+        title: 'Giới thiệu hệ thống',
+        url: `/${MAIN_ROUTE_TROGIUP}/gioi-thieu-he-thong`,
+        dropdown: 'gioi-thi-trong-he-thong',
+        idHover: 'gioi-thi-trong-he-thong',
         hasTab: false,
         accessPermisson: ''
     },

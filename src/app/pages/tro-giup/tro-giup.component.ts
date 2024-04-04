@@ -16,7 +16,6 @@ export class TroGiupComponent implements OnInit, OnDestroy {
     @ViewChild('myTab') myTab: ElementRef;
     routes: any[] = ROUTE_LIST;
     routerUrl: string = "";
-    defaultUrl: string = '/tro-giup'
     userService: UserService;
     $routerChange: Subscription;
 
@@ -102,9 +101,8 @@ export class TroGiupComponent implements OnInit, OnDestroy {
     }
 
     redirect(url: string) {
-        this.routerUrl = this.defaultUrl + url;
-        console.log("adada", this.defaultUrl + url)
-        this.router.navigate([this.defaultUrl + url]);
+        this.routerUrl = url;
+        this.router.navigate([url]);
     }
 
     ngOnDestroy(): void {
