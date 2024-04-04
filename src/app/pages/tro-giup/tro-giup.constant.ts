@@ -11,7 +11,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
         accessPermisson: ''
     },
     {
-        icon: 'htvbdh_cau-hoi',
+        icon: 'htvbdh_chi-tiet-2',
         title: 'Giới thiệu hệ thống',
         url: `/${MAIN_ROUTE_TROGIUP}/gioi-thieu-he-thong`,
         dropdown: 'gioi-thi-trong-he-thong',
