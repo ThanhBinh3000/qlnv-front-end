@@ -282,8 +282,8 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       });
       if (this.loaiVthh.startsWith('02')) {
         this.formData.patchValue({
-          nguoiTaoPhieuKtraCl: data.bienBanGuiHang.tenNguoiTao,
-          soBienBanGuiHang: data.bienBanGuiHang.soBienBanGuiHang,
+          nguoiTaoPhieuKtraCl: data.bienBanGuiHang?.tenNguoiTao,
+          soBienBanGuiHang: data.bienBanGuiHang?.soBienBanGuiHang,
           soHoSoKyThuat: data.hoSoKyThuat?.soHoSoKyThuat,
         });
       } else {

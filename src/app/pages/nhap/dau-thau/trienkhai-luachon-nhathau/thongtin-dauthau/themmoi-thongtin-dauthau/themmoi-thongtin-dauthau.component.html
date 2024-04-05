@@ -416,8 +416,8 @@
                           <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.2-2' : 'vi_VN'}}</td>
                           <td class="text-center">Tấn</td>
                           <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.2-2' : 'vi_VN' }}</td>
-                          <td class="text-right">{{chiCuc.donGia | number : '1.2-2' : 'vi_VN'}}</td>
-                          <td class="text-right bold-700">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.2-2' : 'vi_VN' }}</td>
+                          <td class="text-right">{{chiCuc.donGiaLastest | number : '1.2-2' : 'vi_VN'}}</td>
+                          <td class="text-right bold-700">{{ chiCuc.soLuong * chiCuc.donGiaLastest *1000| number :'1.2-2' : 'vi_VN' }}</td>
                           <td></td>
                           <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.2-2' : 'vi_VN'}}</td>
                           <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? chiCuc.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.2-2' : 'vi_VN' }}</td>
@@ -437,8 +437,8 @@
                               <td></td>
                               <td class="text-center">Tấn</td>
                               <td class="text-right blue-text">{{diemKho.soLuong | number : '1.2-2' : 'vi_VN'}}</td>
-                              <td class="text-right">{{chiCuc.donGia | number : '1.2-2' : 'vi_VN'}}</td>
-                              <td class="text-right">{{diemKho.soLuong * chiCuc.donGia * 1000 | number : '1.2-2' : 'vi_VN'}}</td>
+                              <td class="text-right">{{chiCuc.donGiaLastest | number : '1.2-2' : 'vi_VN'}}</td>
+                              <td class="text-right">{{diemKho.soLuong * chiCuc.donGiaLastest * 1000 | number : '1.2-2' : 'vi_VN'}}</td>
                               <td></td>
                               <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? dtGoiThau.donGiaNhaThau : null) | number : '1.2-2' : 'vi_VN'}}</td>
                               <td class="text-right">{{(dtGoiThau.donGiaNhaThau ? diemKho.soLuong * dtGoiThau.donGiaNhaThau * 1000 : null) | number:'1.2-2' : 'vi_VN' }}</td>
@@ -527,8 +527,8 @@
                           <td class="text-right red-text">{{chiCuc.soLuongTheoChiTieu| number : '1.2-2' : 'vi_VN'}}</td>
                           <td class="text-center">Tấn</td>
                           <td class="text-right blue-text bold-700">{{ chiCuc.soLuong | number : '1.2-2' : 'vi_VN' }}</td>
-                          <td class="text-right">{{chiCuc.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                          <td class="text-right bold-700">{{ chiCuc.soLuong * chiCuc.donGia *1000| number :'1.2-2' : 'vi_VN' }}</td>
+                          <td class="text-right">{{chiCuc.donGiaLastest | number : '1.0-1' : 'vi_VN'}}</td>
+                          <td class="text-right bold-700">{{ chiCuc.soLuong * chiCuc.donGiaLastest *1000| number :'1.2-2' : 'vi_VN' }}</td>
                           <td></td>
                           <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? dtGoiThau.kqlcntDtl?.donGiaVat : null) | number : '1.2-2' : 'vi_VN'}}</td>
                           <td class="text-right">{{(dtGoiThau.kqlcntDtl?.donGiaVat ? chiCuc.soLuong * dtGoiThau.kqlcntDtl?.donGiaVat * 1000 : null) | number:'1.2-2' : 'vi_VN' }}</td>
