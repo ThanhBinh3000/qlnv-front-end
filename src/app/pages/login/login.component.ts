@@ -114,6 +114,7 @@ export class LoginComponent implements OnInit {
           } else {
             this.notification.error(MESSAGE.ERROR, permission.msg);
           }
+          this.storageService.set(STORAGE_KEY.PERMISSION, jsonData);
           this.router.navigate([this.setDefultModule(allRoles)]);
           if (allRoles) {
             this.router.navigate([this.setDefultModule(allRoles)]);
