@@ -21,6 +21,7 @@ import {Base2Component} from "../../../../../components/base2/base2.component";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
+import {el} from "date-fns/locale";
 @Component({
   selector: 'app-ho-so-ky-thuat',
   templateUrl: './ho-so-ky-thuat.component.html',
@@ -30,7 +31,14 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
-
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' }
+  ];
   searchFilter = {
     soHoSoKyThuat: '',
     soBbKtraNgoaiQuan: '',
@@ -61,13 +69,17 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
   indeterminate = false;
 
   filterTable: any = {
-    soBienBan: '',
-    soQuyetDinhNhap: '',
-    ngayKiemTra: '',
-    tenVatTuCha: '',
-    tenVatTu: '',
-    ketLuan: '',
-    tenTrangThai: '',
+    soHoSoKyThuat: '',
+    ngayTao: '',
+    tenDiemKho: '',
+    tenNganLoKho: '',
+    soBbLayMau: '',
+    soQdGiaoNvNh: '',
+    soHd: '',
+    soBbKtnq: '',
+    soBbKtvh: '',
+    soBbKthskt: '',
+    trangThai: '',
   };
   tuNgayTao: Date | null = null;
   denNgayTao: Date | null = null;
@@ -219,7 +231,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
   }
 
   xoaItem(item: any) {
-    if (this.checkPrice.boolean) {
+    if (this.checkPrice && this.checkPrice.boolean) {
       this.notification.error(MESSAGE.ERROR, this.checkPrice.msgSuccess);
       return;
     }
@@ -341,7 +353,15 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+          if (['ngayTao'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else if (['tenDiemKho', 'tenNganLoKho'].includes(key)) {
+            if (item['bienBanLayMau'][key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+              temp.push(item)
+            }
+          } else if (item[key] && item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
             temp.push(item)
           }
         });
