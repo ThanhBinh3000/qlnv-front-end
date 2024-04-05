@@ -208,13 +208,16 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   }
 
   async preview() {
-    let tongSoVt = 0 ;
+    let tongSo = 0 ;
     if(this.keHoach && this.keHoach.maBoNganh && this.keHoach.maBoNganh  == '01'){
       for (let item of this.dataToanBn) {
         if (item.maBn == '01' && !item.isSum && item.tenBn.indexOf('Vật tư') != -1) {
-          tongSoVt = item.tongSo;
+          tongSo = item.tongSo;
         }
       }
+    }else if(this.keHoach && this.keHoach.maBoNganh && this.keHoach.maBoNganh  !== '01'){
+      let itemBn = this.dataToanBn.find(item => item.maBn === this.keHoach.maBoNganh);
+      tongSo = itemBn ? itemBn.tongSo : 0;
     }
     this.spinner.show();
     this.muaTangView = this.convertDataPreview(this.keHoach.muaTangList)
@@ -242,7 +245,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       xuatBanList:  this.xuatBanView,
       luanPhienList: this.luanPhienView,
       tenBoNganh: this.keHoach.tenBoNganh,
-      ttMuaTang: (this.keHoach && this.keHoach.maBoNganh && this.keHoach.maBoNganh  == '01') ? tongSoVt : this.keHoach.ttMuaTang,
+      ttMuaTang: tongSo,
       ttXuatBan: this.keHoach.ttXuatBan,
       ttXuatGiam: this.keHoach.ttXuatGiam,
       ghiChuLt: this.keHoach.ghiChuLt,
